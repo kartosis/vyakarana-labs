@@ -20,7 +20,7 @@
 
 | Field | Value |
 |---|---|
-| **Phase** | M1 — Scaffold + design system + first lessons (architecture done) |
+| **Phase** | M2 code complete — awaiting user bootstrap (docs/DEPLOY.md); next M3 |
 | **Rounds answered** | 4 / 4 ✅ |
 | **Repo** | `kartosis/vyakarana-labs` — **attached, push verified 2026-10-29**; working copy `/home/claude/vyakarana-labs` |
 | **Last updated** | 2026-10-29 |
@@ -29,7 +29,9 @@
 - ✅ pnpm monorepo root + `@vl/engine` (lipi: IAST/Deva/SLP1/HK; varṇa: Śivasūtras, 1.1.71 pratyāhāra incl. ṇ ambiguity, savarṇa 1.1.9–10, guṇa/vṛddhi, SK articulation table) — 81 Vitest tests green.
 - ✅ Astro 7 web app builds (44 pages): tokens/layers (Manuscript), shell, header (script switch deva/both/iast + theme), CourseRail, SutraFolio, Voice (Bhāṣya/Darśana sidenotes), SutraRef, SoundGrid, Practice gate; islands ShivaBoard, SavarnaChart, LipiPad, Steps; pages home/course/lesson/sutra/sutras/tools×3/signin/sources/about/privacy/404; 9 lessons (primer 3 + Saṃjñā LSK 1–14 in 6).
 - ✅ Visual QA (Playwright: desktop/mobile, light/dark, script modes) + fixes (script switch layout, step labels); **axe: 0 violations** on 11 pages × 2 themes (WCAG 2.2 AA tags).
-- **NEXT: M2** — Terraform (`infra/terraform`: bootstrap state+OIDC, site module S3/CloudFront/OAC/CF Function/headers/ACM), GitHub Actions ci.yml + deploy.yml, user-side checklist with PowerShell commands. Original M1 list: pnpm monorepo scaffold (`apps/web` Astro + Preact, `packages/engine`, `services/api`, `infra/terraform`) → design tokens/layers (Manuscript) → app shell layout (§8.2) → `@vl/engine` lipi + varṇa (Śivasūtra, pratyāhāra) with tests → sūtra data for Saṃjñā → Primer + Saṃjñā lessons → sūtra pages → local build passes.
+- ✅ **M2 code**: Terraform `bootstrap/` (state bucket, GitHub OIDC, plan + deploy roles; deploy IAM scoped to `vl-*`), `modules/site` (S3+OAC, CloudFront, ES5 rewrite fn tested, strict CSP from build hashes, 403→/404.html only, 2-phase ACM), `modules/guardrails` (Budgets $0.01 alert, SNS), `envs/prod`; workflows `ci.yml`, `deploy.yml` (dormant until repo vars exist); `scripts/csp-hashes.mjs` (+ --merge previous deploy); `docs/DEPLOY.md` (PowerShell), `README.md`.
+  - Verified here: HCL parses (python-hcl2); CSP tested in Chromium (0 violations, islands hydrate, 1121/1783 chars). **Not verifiable here** (terraform/Go downloads blocked): `terraform validate`/`fmt` → runs in CI and on user's PC.
+- **NEXT**: user runs DEPLOY.md steps 1–5 (AWS account, bootstrap, GitHub vars) → first deploy. Meanwhile: **M3** (Cognito + Python API + sign-in UI) and **M4** content/engine (Ac-sandhi lessons, vidyut WASM). Original M1 list: pnpm monorepo scaffold (`apps/web` Astro + Preact, `packages/engine`, `services/api`, `infra/terraform`) → design tokens/layers (Manuscript) → app shell layout (§8.2) → `@vl/engine` lipi + varṇa (Śivasūtra, pratyāhāra) with tests → sūtra data for Saṃjñā → Primer + Saṃjñā lessons → sūtra pages → local build passes.
 - Checkpoint after each bullet.
 
 ---
@@ -187,3 +189,4 @@ IaC: Terraform (remote state S3 + lock) · CI/CD: GitHub Actions + OIDC role · 
 - **2026-10-29 · S1** — Verified LSK Saṃjñā order + vṛttis; found Pramāṇa gap (1.1.46–75 missing) → `data/pramana.json` + fallback rule.
 - **2026-10-29 · S1** — Web app scaffolded and building (44 pages). Next: visual QA + fixes, then M2 infra.
 - **2026-10-29 · S1** — Visual QA + axe clean. Next: M2 infra + CI/CD.
+- **2026-10-29 · S1** — M2 infra + CI/CD written; CSP verified in browser. Waiting on user AWS bootstrap.

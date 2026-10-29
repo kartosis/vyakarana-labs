@@ -13,3 +13,6 @@ coverage/
 playwright-report/
 test-results/
 .DS_Store
+
+# generated at deploy time
+infra/terraform/envs/prod/csp.auto.tfvars*.json

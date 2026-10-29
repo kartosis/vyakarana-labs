@@ -1,0 +1,86 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  web:
+    name: Engine tests and site build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Engine — type check
+        run: pnpm --filter @vl/engine check
+      - name: Engine — tests
+        run: pnpm --filter @vl/engine test
+      - name: Site — build (validates content schemas, sūtra references, MDX)
+        run: pnpm --filter @vl/web build
+      - name: CSP — inline hashes fit CloudFront's header limit
+        run: node scripts/csp-hashes.mjs apps/web/dist /tmp/csp.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: apps/web/dist
+          retention-days: 7
+
+  terraform:
+    name: Terraform validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "<2.0.0"
+      - name: Format (advisory)
+        continue-on-error: true
+        run: terraform fmt -check -recursive -diff infra/terraform
+      - name: Validate bootstrap
+        run: |
+          terraform -chdir=infra/terraform/bootstrap init -backend=false -input=false
+          terraform -chdir=infra/terraform/bootstrap validate
+      - name: Validate prod
+        run: |
+          terraform -chdir=infra/terraform/envs/prod init -backend=false -input=false
+          terraform -chdir=infra/terraform/envs/prod validate
+
+  plan:
+    name: Terraform plan (pull requests)
+    if: github.event_name == 'pull_request' && vars.AWS_PLAN_ROLE != ''
+    needs: [terraform]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      TF_VAR_alert_email: ${{ vars.ALERT_EMAIL }}
+      TF_VAR_cf_beacon_token: ${{ vars.CF_BEACON_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_PLAN_ROLE }}
+          aws-region: ${{ vars.AWS_REGION }}
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "<2.0.0"
+          terraform_wrapper: false
+      - working-directory: infra/terraform/envs/prod
+        run: |
+          terraform init -input=false -backend-config="bucket=${{ vars.TF_STATE_BUCKET }}"
+          terraform plan -input=false -lock=false -no-color | tee plan.txt
+          { echo '### Terraform plan'; echo '```'; tail -n 60 plan.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
