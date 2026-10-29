@@ -27,7 +27,6 @@
 
 ### ▶ NEXT ACTION
 - Write `docs/ARCHITECTURE.md` (flow map, service flows, system setup, data model, API, layout/IA, user-side setup) → push → present to user.
-- Then ask the one open engineering question: **adopt vidyut-prakriya (MIT, Rust→WASM) as the derivation core under a TS API?** (see §4.3)
 
 ---
 
@@ -68,6 +67,11 @@
 ---
 
 ## 3. Pending questions (pre-designed — ask these, don't redesign)
+
+### Post-Round-4 engineering decision (2026-10-29)
+| # | Question | Answer |
+|---|---|---|
+| 5.1 | Grammar engine | **Hybrid**: own **TS** for teaching pieces (Śivasūtra/pratyāhāra expansion, savarṇa, step animations, transliteration helpers) + **vidyut-prakriya via WASM** (TS wrapper) for Prakriyā stepper, form generators, sandhi validation |
 
 *(all rounds answered — nothing pending)*
 
@@ -167,3 +171,4 @@ IaC: Terraform (remote state S3 + lock) · CI/CD: GitHub Actions + OIDC role · 
 - **2026-10-29 · S1** — Round 2 answered (§2). Repo name `vyakarana-labs`; add_repo failed (repo not created yet). Next: Round 3, retry repo.
 - **2026-10-29 · S1** — Round 3 answered (§2). User created repo; add_repo still denied (app lacks access) → asked user to grant Claude GitHub App access. Next: Round 4.
 - **2026-10-29 · S1** — Round 4 answered (§2). Repo access fixed by user; first push OK. Verified Cognito/API GW/Function URL/vidyut facts (§4.3). Next: ARCHITECTURE.md.
+- **2026-10-29 · S1** — Engine decision: hybrid TS + vidyut WASM (§2 5.1). Next: ARCHITECTURE.md.
