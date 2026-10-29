@@ -20,7 +20,7 @@
 
 | Field | Value |
 |---|---|
-| **Phase** | M3 code complete (API + auth + practice/review UI) — awaiting user AWS bootstrap; next CI e2e, then M4 content |
+| **Phase** | M3 complete + CI green (incl. e2e) — awaiting user AWS bootstrap; **M4 Ac-sandhi in progress** (engine done) |
 | **Rounds answered** | 4 / 4 ✅ |
 | **Repo** | `kartosis/vyakarana-labs` — **attached, push verified 2026-10-29**; working copy `/home/claude/vyakarana-labs` |
 | **Last updated** | 2026-10-29 |
@@ -37,7 +37,9 @@
 - ✅ M3 terraform validated in CI (Cognito ESSENTIALS, sesv2, Function URL OAC all accepted by provider ~>6).
 - ✅ M3 web: `lib/config|auth|api.ts` (Cognito fetch, sessionStorage access token + localStorage flag, OAC body hash), islands SignIn, PracticeSession (shuffle, timing, SLP1 grading, pass 60%), ReviewSession (FSRS ratings), Dashboard (stats, lessons, settings PATCH, export, sign out, delete via <dialog>), Leaderboard; pages /signin /me /review /leaderboard; header "Your progress"; **72 exercises + 39 cards** in `data/exercises/**` (zod-validated collection). 47 pages build.
 - ✅ Browser e2e with stubbed Cognito/API under strict CSP: 11/11 pass (scratch script; to be moved into repo CI).
-- **NEXT**: e2e + axe into CI (`apps/web/e2e`), DEPLOY.md accounts section (SES DKIM, prod access, enable accounts, admin group), then M4 content: Ac-sandhi lessons + vidyut WASM tools. Original M1 list: pnpm monorepo scaffold (`apps/web` Astro + Preact, `packages/engine`, `services/api`, `infra/terraform`) → design tokens/layers (Manuscript) → app shell layout (§8.2) → `@vl/engine` lipi + varṇa (Śivasūtra, pratyāhāra) with tests → sūtra data for Saṃjñā → Primer + Saṃjñā lessons → sūtra pages → local build passes.
+- ✅ e2e + axe in CI (`apps/web/e2e/a11y.cjs`, `accounts.cjs`) — CI run 40954206159 all green. DEPLOY.md §7 accounts (SES DKIM → prod access → `accounts_enabled` → admin group).
+- ✅ M4 engine: `packages/engine/src/sandhi.ts` `vowelSandhi(first, second, {padanta, pragrhya})` → {result, alternatives, steps[{sutra, form, note}], untouched}; order 1.1.11/6.1.125 → 6.1.109 → 6.1.101 → 6.1.88 → 6.1.87 (+1.1.50/1.1.51) → 6.1.77 → 6.1.78 (+8.3.19 alt). 103 engine tests green.
+- **NEXT (M4 content)**: (a) `data/sutras/ac-sandhi.yaml` (6.1.72, 6.1.77, 6.1.78, 6.1.84, 1.1.1, 1.1.2, 6.1.87, 6.1.88, 1.1.50, 1.1.51, 6.1.101, 6.1.109, 8.3.19, 1.1.11, 6.1.125; lsk null) → (b) `/tools/sandhi/` playground island (SandhiPad) → (c) 3 Ac-sandhi lessons (yaṇ & ayādi; guṇa/vṛddhi; dīrgha, pūrvarūpa, pragṛhya) → (d) exercises → (e) course.yaml ac-sandhi open → build, axe, checkpoint. Then vidyut WASM (CI wasm-pack) for prakriyā stepper.
 - Checkpoint after each bullet.
 
 ---
@@ -124,7 +126,9 @@
 - **Pramāṇa coverage gap**: pāda **1.1 lists only 1.1.1–1.1.45** (standard 75); `…astadhyayi.1.1.71` → client error. Adhyāya 1 other pādas: 1.2=73, 1.3=93, 1.4=110 (complete). → citation chip = sūtra URL if available, else **pāda URL** (`…astadhyayi.1.1`); always also link our `/sutra/a.p.s/`. Manifest: `data/pramana.json`.
 - **LSK numbering verified** via sanskritdocuments.org learning_tools pages (LSK vṛtti shown per sūtra; note that site's 1.1.x refs are sometimes off by one): LSK **1 = 1.3.3** हलन्त्यम् ("उपदेशेऽन्त्यं हलित्स्यात्। उपदेश आद्योच्चारणम्। सूत्रेष्वदृष्टं पदं सूत्रान्तरादनुवर्तनीयं सर्वत्र॥"), **2 = 1.1.60** अदर्शनं लोपः ("प्रसक्तस्यादर्शनं लोपसंज्ञं स्यात्।"), **3 = 1.3.9** तस्य लोपः ("तस्येतो लोपः स्यात्। णादयोऽणाद्यर्थाः।"), **5 = 1.2.27** ऊकालोऽज्झ्रस्वदीर्घप्लुतः ("उश्च ऊश्च ऊ३श्च वः; वां कालो यस्य सोऽच् क्रमाद् ह्रस्वदीर्घप्लुतसंज्ञः स्यात्। स प्रत्येकमुदात्तादि भेदेन त्रिधा।"), **10 = 1.1.9** तुल्यास्यप्रयत्नं सवर्णम् ("ताल्वादिस्थानमाभ्यन्तरप्रयत्नश्चेत्येतद्द्वयं यस्य येन तुल्यं तन्मिथः सवर्णसंज्ञं स्यात्।" + sthāna/prayatna lines), **13 = 1.1.7** हलोऽनन्तराः संयोगः ("अज्भिरव्यवहिता हलः संयोगसंज्ञाः स्युः॥"), **14 = 1.4.14** सुप्तिङन्तं पदम् ("सुबन्तं तिङन्तं च पदसंज्ञं स्यात्॥"). Inferred (unverified): 4 = 1.1.71, 6–8 = 1.2.29–31, 9 = 1.1.8, 11 = 1.1.10, 12 = 1.1.69. ⇒ **LSK Saṃjñā-prakaraṇa = 14 sūtras**; 1.1.1/1.1.2/1.1.70 arrive later in Ac-sandhi.
 - **LSK prayatna model**: four ābhyantara efforts — spṛṣṭa (sparśa), īṣatspṛṣṭa (antaḥstha), **vivṛta (ūṣman + vowels)**, saṃvṛta (short a in use). (SK says īṣadvivṛta for ūṣman.) ⇒ under LSK, i/ś and a/h share place+effort — exactly what **1.1.10 nājjhalau** blocks (Kāśikā: *dadhi śītam*, *daṇḍa-hastaḥ*).
-- sanskritdocuments `~sanskrit/` paths are robots-disallowed; the non-tilde `learning_tools/ashtadhyayi/vyakhya/{a}/{a.p.s}.htm` paths are fetchable when surfaced by search.
+- sanskritdocuments `~sanskrit/` paths are robots-disallowed; the non-tilde `learning_tools/ashtadhyayi/vyakhya/{a}/{a.p.s}.htm` paths are fetchable when surfaced by search. **6.x vyakhya pages (6.1.87, 6.1.101) now robots-disallowed** — don't retry.
+- **Ac-sandhi (learnsanskrit.org/vyakarana/sandhi/ac-sandhi, checked 2026-10-29)**: rule order 6.1.77, 6.1.72, 6.1.78, 6.1.84 (adhikāra), 1.1.2, 6.1.87, 1.1.1, 6.1.88, 1.1.50, 1.1.51, 6.1.101. Examples: द्रौपदी इन्द्रम् → द्रौपदीन्द्रम् (not *द्रौपद्यिन्द्रम्); ने+अ → नय, भो+अ → भव; सीता इन्द्रम् → सीतेन्द्रम्; सीता ऋच्छति → सीतर्च्छति. Page does not cover 8.3.19, 6.1.109, pragṛhya.
+- **Not verified (excluded from site)**: Mahābhāṣya maṅgala passage on 1.1.1 (“माङ्गलिक आचार्यो…वृद्धिशब्दमादितः प्रयुङ्क्ते”), “so 'yam akṣarasamāmnāyaḥ”.
 
 ---
 
@@ -199,3 +203,4 @@ IaC: Terraform (remote state S3 + lock) · CI/CD: GitHub Actions + OIDC role · 
 - **2026-10-29 · S1** — M3 API written + tested (22 tests). Found & fixed DynamoDB reserved-word bug via tests. Next: M3 infra modules.
 - **2026-10-29 · S1** — M3 Terraform modules written and wired behind toggles. Next: web auth + practice.
 - **2026-10-29 · S1** — M3 web done: sign-in, practice, reviews, dashboard, leaderboard; 72 exercises; e2e 11/11 under CSP.
+- **2026-10-29 · S1** — e2e+axe CI job green; DEPLOY.md §7 accounts. M4 started: vowel-sandhi engine with sūtra traces (103 engine tests). Next: ac-sandhi sūtra data → sandhi playground → lessons.

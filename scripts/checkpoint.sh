@@ -8,7 +8,8 @@ git add -A
 if git diff --cached --quiet; then
   echo "checkpoint: nothing to commit"
 else
-  git commit -q -m "checkpoint: ${msg}"
+  # optional trailers (e.g. Co-Authored-By) as a separate paragraph
+  git commit -q -m "checkpoint: ${msg}" ${CHECKPOINT_TRAILERS:+-m "$CHECKPOINT_TRAILERS"}
 fi
 git push -q origin HEAD
 echo "checkpoint pushed: ${msg}"

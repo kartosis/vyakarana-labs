@@ -109,13 +109,44 @@ Then set the repository variable `SITE_URL` to `https://sanskrit.identifyragas.c
 > Keep both records **DNS only**. Proxying through Cloudflare would put a second CDN in front of CloudFront
 > and break certificate validation.
 
-## 7. Later milestones (you'll be told when)
+## 7. Turn on accounts (sign-in, practice, reviews, leaderboard)
+
+Accounts need a verified email sender (Amazon SES) because sign-in codes are emailed.
+
+**Step 1 — email identity.** In `infra/terraform/envs/prod/terraform.tfvars` set
+`ses_domain = "sanskrit.identifyragas.com"`, commit, push. Then:
+
+```powershell
+cd infra\terraform\envs\prod
+terraform init -backend-config="bucket=<state bucket>"
+terraform output ses_dkim_records
+```
+
+Add the **three CNAME records** in Cloudflare (DNS only). In a few minutes
+`terraform output ses_verified` shows `true` (or check SES → Identities in the console).
+
+**Step 2 — production access.** New AWS accounts start in the SES *sandbox*, where mail only goes to
+verified addresses. In the console: **SES → Account dashboard → Request production access**.
+Use case: *Transactional — one-time sign-in codes for a free Sanskrit course; expected volume under
+1,000 emails a day; no marketing mail.* Approval usually takes about a day. While you wait, you can test
+by verifying your own email address under SES → Identities.
+
+**Step 3 — switch on.** Set `accounts_enabled = true`, commit, push. The deploy creates Cognito,
+DynamoDB and the API, routes `/api/*` through CloudFront, and writes `/config.json` so the site shows
+the sign-in form.
+
+**Step 4 — make yourself an admin** (after your first sign-in on the site):
+
+```powershell
+$pool = terraform output -json web_config | ConvertFrom-Json | Select-Object -ExpandProperty userPoolId
+aws cognito-idp admin-add-user-to-group --user-pool-id $pool --username <your email> --group-name admin
+```
+
+## 8. Later
 
 | When | What you do |
 |---|---|
-| M3 (accounts) | SES: verify the sending domain (3 DKIM CNAMEs in Cloudflare, printed by Terraform) and **request production access** (SES → Account dashboard). Until approved, SES only sends to verified addresses. |
-| M5 (admin) | After your first sign-in, add yourself to the Cognito group `admin` (command will be printed). |
-| M6 (analytics) | Cloudflare → Web Analytics → Add site → copy the token into repository variable `CF_BEACON_TOKEN`. |
+| Analytics | Cloudflare → Web Analytics → Add site → copy the token into the repository variable `CF_BEACON_TOKEN`. |
 
 ## What it costs
 
