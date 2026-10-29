@@ -2,6 +2,7 @@
 /** Inline citation of a sūtra by its Aṣṭādhyāyī number; links to the sūtra page on this site. */
 import { getEntry } from "astro:content";
 import { devaToIast } from "../lib/sanskrit";
+import { pramanaLink } from "../lib/pramana";
 
 interface Props {
   id: string;
@@ -11,7 +12,7 @@ interface Props {
 const { id, text = false } = Astro.props;
 const entry = await getEntry("sutras", id);
 const title = entry ? `${devaToIast(entry.data.deva)} — ${entry.data.meaning}` : `Aṣṭādhyāyī ${id}`;
-const href = entry ? `/sutra/${id}/` : `https://indike.org/pramana/in.vedanga.vyakarana.astadhyayi.${id}`;
+const href = entry ? `/sutra/${id}/` : pramanaLink(id).href;
 ---
 <a class="sref" href={href} title={title}
   ><span class="sref-n">{id}</span>{

@@ -1,0 +1,129 @@
+# Ac-sandhi-prakaraṇa: the vowel-junction rules, plus the saṃjñās and paribhāṣās they lean on.
+# LSK numbers for this prakaraṇa are not yet checked against a source, so lsk is null (PROGRESS §4.4).
+# 6.1.72 and 6.1.77 live in core.yaml. Field meanings: see samjna.yaml.
+- id: "1.1.1"
+  lsk: null
+  lskVerified: false
+  deva: वृद्धिरादैच्
+  pada: [वृद्धिः, आत्-ऐच्]
+  anuvrtti: []
+  vrttiVerified: false
+  kind: saṃjñā
+  meaning: The vowels ā, ai and au are called vṛddhi.
+- id: "1.1.2"
+  lsk: null
+  lskVerified: false
+  deva: अदेङ्गुणः
+  pada: [अत्-एङ्, गुणः]
+  anuvrtti: []
+  vrttiVerified: false
+  kind: saṃjñā
+  meaning: The vowels a, e and o are called guṇa. The t after a limits it to short a (1.1.70).
+- id: "1.1.11"
+  lsk: null
+  lskVerified: false
+  deva: ईदूदेद्द्विवचनं प्रगृह्यम्
+  pada: [ईत्-ऊत्-एत्, द्विवचनम्, प्रगृह्यम्]
+  anuvrtti: []
+  vrttiVerified: false
+  kind: saṃjñā
+  meaning: A dual form ending in ī, ū or e is called pragṛhya — "to be held apart".
+- id: "1.1.51"
+  lsk: null
+  lskVerified: false
+  deva: उरण् रपरः
+  pada: [उः, अण्, रपरः]
+  anuvrtti: [[स्थाने, "1.1.50"]]
+  vrttiVerified: false
+  kind: paribhāṣā
+  meaning: When an aṇ vowel (a, i, u) replaces ṛ or ḷ, it is followed by r (or l for ḷ). So the guṇa of ṛ is ar, its vṛddhi ār.
+- id: "1.1.70"
+  lsk: null
+  lskVerified: false
+  deva: तपरस्तत्कालस्य
+  pada: [तपरः, तत्कालस्य]
+  anuvrtti: []
+  vrttiVerified: false
+  kind: paribhāṣā
+  meaning: A vowel followed (or preceded) by t in a rule stands only for vowels of its own length. So "at" in 6.1.109 means short a only.
+- id: "6.1.78"
+  lsk: null
+  lskVerified: false
+  deva: एचोऽयवायावः
+  pada: [एचः, अय्-अव्-आय्-आवः]
+  anuvrtti: [[अचि, "6.1.77"], [संहितायाम्, "6.1.72"]]
+  vrttiVerified: false
+  kind: vidhi
+  meaning: Before a vowel, e, o, ai and au are replaced by ay, av, āy and āv respectively.
+- id: "6.1.84"
+  lsk: null
+  lskVerified: false
+  deva: एकः पूर्वपरयोः
+  pada: [एकः, पूर्वपरयोः]
+  anuvrtti: [[संहितायाम्, "6.1.72"]]
+  vrttiVerified: false
+  kind: adhikāra
+  meaning: Heading — in the rules that follow, a single substitute replaces both the earlier and the later sound (ekādeśa).
+- id: "6.1.87"
+  lsk: null
+  lskVerified: false
+  deva: आद्गुणः
+  pada: [आत्, गुणः]
+  anuvrtti: [[अचि, "6.1.77"], [एकः पूर्वपरयोः, "6.1.84"]]
+  vrttiVerified: false
+  kind: vidhi
+  meaning: When a or ā is followed by a vowel, both are replaced by a single guṇa vowel — the one closest to them (1.1.50).
+- id: "6.1.88"
+  lsk: null
+  lskVerified: false
+  deva: वृद्धिरेचि
+  pada: [वृद्धिः, एचि]
+  anuvrtti: [[आत्, "6.1.87"], [एकः पूर्वपरयोः, "6.1.84"]]
+  vrttiVerified: false
+  kind: vidhi
+  meaning: When a or ā is followed by e, ai, o or au, both are replaced by a single vṛddhi vowel. An exception to 6.1.87.
+- id: "6.1.101"
+  lsk: null
+  lskVerified: false
+  deva: अकः सवर्णे दीर्घः
+  pada: [अकः, सवर्णे, दीर्घः]
+  anuvrtti: [[अचि, "6.1.77"], [एकः पूर्वपरयोः, "6.1.84"]]
+  vrttiVerified: false
+  kind: vidhi
+  meaning: When an ak vowel (a i u ṛ ḷ, short or long) is followed by a vowel of the same class, both are replaced by a single long vowel.
+- id: "6.1.109"
+  lsk: null
+  lskVerified: false
+  deva: एङः पदान्तादति
+  pada: [एङः, पदान्तात्, अति]
+  anuvrtti: [[पूर्वः, "6.1.107"], [एकः पूर्वपरयोः, "6.1.84"]]
+  vrttiVerified: false
+  kind: vidhi
+  meaning: When a word-final e or o is followed by short a, the earlier vowel alone replaces both (pūrvarūpa). In writing, the lost a is shown by an avagraha (ऽ).
+- id: "6.1.125"
+  lsk: null
+  lskVerified: false
+  deva: प्लुतप्रगृह्या अचि नित्यम्
+  pada: [प्लुत-प्रगृह्याः, अचि, नित्यम्]
+  anuvrtti: [[प्रकृत्या, "6.1.115"]]
+  vrttiVerified: false
+  kind: vidhi
+  meaning: Before a vowel, a pluta vowel or a pragṛhya vowel always stays as it is (prakṛtibhāva) — no sandhi.
+- id: "8.2.1"
+  lsk: null
+  lskVerified: false
+  deva: पूर्वत्रासिद्धम्
+  pada: [पूर्वत्र, असिद्धम्]
+  anuvrtti: []
+  vrttiVerified: false
+  kind: adhikāra
+  meaning: Heading — from here to the end of the Aṣṭādhyāyī, a rule is treated as not having applied when the rules before it are considered.
+- id: "8.3.19"
+  lsk: null
+  lskVerified: false
+  deva: लोपः शाकल्यस्य
+  pada: [लोपः, शाकल्यस्य]
+  anuvrtti: [[व्योः, "8.3.18"], [अपूर्वस्य, "8.3.17"], [अशि, "8.3.17"]]
+  vrttiVerified: false
+  kind: vidhi
+  meaning: In Śākalya's view, a word-final y or v after a or ā is dropped before a vowel or voiced consonant. Since it is an optional view, both forms are correct.

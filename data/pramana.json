@@ -2,10 +2,22 @@
   "$comment": "Which Aṣṭādhyāyī sūtras have their own page on Pramāṇa (indike.org). Checked by hand 2026-10-29; refresh with a CI job later. Sūtras not listed fall back to the pāda page.",
   "checked": "2026-10-29",
   "base": "https://indike.org/pramana/in.vedanga.vyakarana.astadhyayi",
-  "padaCounts": { "1.1": 45, "1.2": 73, "1.3": 93, "1.4": 110 },
-  "standardPadaCounts": { "1.1": 75, "1.2": 73, "1.3": 93, "1.4": 110 },
+  "padaCounts": {
+    "1.1": 45,
+    "1.2": 73,
+    "1.3": 93,
+    "1.4": 110
+  },
+  "standardPadaCounts": {
+    "1.1": 75,
+    "1.2": 73,
+    "1.3": 93,
+    "1.4": 110
+  },
   "notes": [
     "Pāda 1.1 on Pramāṇa lists only 1.1.1–1.1.45; 1.1.46–1.1.75 (incl. 1.1.60, 1.1.69, 1.1.70, 1.1.71) return a client error.",
-    "Pramāṇa prints 1.1.9 as 'tulya-āsya-prayarnaṃ' (typo for prayatnaṃ)."
+    "Pramāṇa prints 1.1.9 as 'tulya-āsya-prayarnaṃ' (typo for prayatnaṃ).",
+    "Pāda 6.1 is paginated (224 passages; the first page shows 6.1.1–111). 6.1.125 has its own page; Pramāṇa prints it 'pluta-pragṛhyā aci' without nityam (Kāśikā/SK read प्लुतप्रगृह्या अचि नित्यम्). Checked 2026-10-29.",
+    "Pāda 8.3: 8.3.1–117 listed, 8.3.19 present. 1.1.11 present. Checked 2026-10-29."
   ]
 }

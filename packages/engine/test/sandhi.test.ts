@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { vowelSandhi } from "../src/sandhi.js";
+import { sandhiChecks, vowelSandhi } from "../src/sandhi.js";
 import { toSlp1, fromSlp1 } from "../src/lipi.js";
 
 /** Join two IAST words and return IAST. */
@@ -60,5 +60,42 @@ describe("ac-sandhi (vowel junctions)", () => {
   it("every step names a sūtra", () => {
     const r = vowelSandhi("sItA", "fcCati");
     expect(r.steps.map((s) => s.sutra)).toEqual(["6.1.84", "6.1.87", "1.1.50", "1.1.51"]);
+  });
+
+  it("reports the meeting vowels and their substitute", () => {
+    expect(vowelSandhi("deva", "indraH").junction).toEqual({ left: "a", right: "i", out: "e" });
+    expect(vowelSandhi("daDi", "atra").junction).toEqual({ left: "i", right: "a", out: "ya" });
+    expect(vowelSandhi("hare", "iha").junction).toEqual({ left: "e", right: "i", out: "ayi" });
+    expect(vowelSandhi("vAk", "atra").junction).toBeNull();
+  });
+});
+
+describe("rule checks explain the choice", () => {
+  const cases: Array<[string, string, object]> = [
+    ["daDi", "atra", {}], ["daDi", "iha", {}], ["deva", "indraH", {}], ["sadA", "eva", {}], ["te", "atra", {}],
+    ["hare", "iha", {}], ["harI", "etO", { pragrhya: true }], ["harI", "etO", {}], ["ne", "a", { padanta: false }],
+    ["pitf", "fRam", {}], ["mahA", "fziH", {}], ["guru", "AjYA", {}], ["SrI", "Isa", {}],
+  ];
+  it.each(cases)("%s + %s: the first applicable check is the sūtra the engine used", (a, b, o) => {
+    const checks = sandhiChecks(a, b, o);
+    const used = vowelSandhi(a, b, o).steps.map((s) => s.sutra);
+    const winners = checks.filter((c) => c.status === "applies");
+    expect(winners).toHaveLength(1);
+    expect(used).toContain(winners[0]!.sutra);
+    // nothing before the winner applies
+    const idx = checks.findIndex((c) => c.status === "applies");
+    expect(checks.slice(0, idx).every((c) => c.status === "no")).toBe(true);
+  });
+
+  it("dadhi + iha: 6.1.101 sets aside 6.1.77", () => {
+    const c = sandhiChecks("daDi", "iha");
+    expect(c.find((r) => r.sutra === "6.1.101")?.status).toBe("applies");
+    expect(c.find((r) => r.sutra === "6.1.77")?.status).toBe("set-aside");
+  });
+
+  it("sadā + eva: 6.1.88 sets aside 6.1.87", () => {
+    const c = sandhiChecks("sadA", "eva");
+    expect(c.find((r) => r.sutra === "6.1.88")?.status).toBe("applies");
+    expect(c.find((r) => r.sutra === "6.1.87")?.status).toBe("set-aside");
   });
 });
