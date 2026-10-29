@@ -38,6 +38,33 @@ jobs:
           path: apps/web/dist
           retention-days: 7
 
+  e2e:
+    name: Browser tests (accessibility, CSP, account flows)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @vl/web build
+      - run: node scripts/csp-hashes.mjs apps/web/dist /tmp/csp.json
+      - run: pnpm --filter @vl/web exec playwright install --with-deps chromium
+      - name: Serve the built site
+        working-directory: apps/web
+        run: |
+          nohup pnpm exec astro preview --port 4321 > /tmp/preview.log 2>&1 &
+          for i in $(seq 1 30); do curl -sf http://localhost:4321/ > /dev/null && exit 0; sleep 1; done
+          cat /tmp/preview.log; exit 1
+      - name: axe (WCAG 2.2 AA rules), every page type, light and dark
+        working-directory: apps/web
+        run: node e2e/a11y.cjs
+      - name: Account flows with stubbed Cognito and API, production CSP enforced
+        working-directory: apps/web
+        run: node e2e/accounts.cjs /tmp/csp.json
+
   api:
     name: API lint and tests
     runs-on: ubuntu-latest
