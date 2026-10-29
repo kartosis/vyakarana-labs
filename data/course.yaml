@@ -1,0 +1,130 @@
+# Course structure in Laghusiddhāntakaumudī (Varadarāja) order.
+# status: open = lessons published · soon = in preparation
+# Lessons live in apps/web/src/content/lessons/{module}/{lesson}.mdx
+modules:
+  - id: varnamala
+    order: 0
+    deva: वर्णमाला
+    title: Sounds and script
+    summary: The sounds of Sanskrit, how Devanagari writes them, and how to read a sūtra.
+    lsk: false
+    status: open
+  - id: samjna
+    order: 1
+    deva: संज्ञाप्रकरणम्
+    title: Technical terms
+    summary: The fourteen sound-lists, markers, sound-classes, length, accent, savarṇa, clusters and words — LSK 1–14.
+    lsk: true
+    status: open
+  - id: ac-sandhi
+    order: 2
+    deva: अच्सन्धिप्रकरणम्
+    title: Vowel sandhi
+    summary: What happens when vowels meet — yaṇ, guṇa, vṛddhi, savarṇa-dīrgha, ayādi, pūrvarūpa, prakṛtibhāva.
+    lsk: true
+    status: soon
+  - id: hal-sandhi
+    order: 3
+    deva: हल्सन्धिप्रकरणम्
+    title: Consonant sandhi
+    summary: Assimilation of consonants at word junctions — ścutva, ṣṭutva, jaśtva, anunāsika and more.
+    lsk: true
+    status: soon
+  - id: visarga-sandhi
+    order: 4
+    deva: विसर्गसन्धिप्रकरणम्
+    title: Visarga sandhi
+    summary: How visarga changes before vowels and consonants.
+    lsk: true
+    status: soon
+  - id: ajanta-pum
+    order: 5
+    deva: अजन्तपुंलिङ्गाः
+    title: Masculine vowel stems
+    summary: Declining rāma, hari, guru, pitṛ and their kin through all seven cases.
+    lsk: true
+    status: soon
+  - id: ajanta-stri
+    order: 6
+    deva: अजन्तस्त्रीलिङ्गाः
+    title: Feminine vowel stems
+    summary: ramā, mati, nadī, dhenu, vadhū and others.
+    lsk: true
+    status: soon
+  - id: ajanta-napumsaka
+    order: 7
+    deva: अजन्तनपुंसकलिङ्गाः
+    title: Neuter vowel stems
+    summary: jñāna, vāri, madhu and others.
+    lsk: true
+    status: soon
+  - id: halanta-pum
+    order: 8
+    deva: हलन्तपुंलिङ्गाः
+    title: Masculine consonant stems
+    summary: Stems ending in consonants, masculine.
+    lsk: true
+    status: soon
+  - id: halanta-stri
+    order: 9
+    deva: हलन्तस्त्रीलिङ्गाः
+    title: Feminine consonant stems
+    summary: Stems ending in consonants, feminine.
+    lsk: true
+    status: soon
+  - id: halanta-napumsaka
+    order: 10
+    deva: हलन्तनपुंसकलिङ्गाः
+    title: Neuter consonant stems
+    summary: Stems ending in consonants, neuter.
+    lsk: true
+    status: soon
+  - id: avyaya
+    order: 11
+    deva: अव्ययप्रकरणम्
+    title: Indeclinables
+    summary: Words that never change form.
+    lsk: true
+    status: soon
+  - id: tinanta
+    order: 12
+    deva: तिङन्तप्रकरणम्
+    title: Verbs
+    summary: The ten lakāras and ten verb classes (bhvādi … curādi), then causatives, desideratives and voice.
+    lsk: true
+    status: soon
+  - id: krdanta
+    order: 13
+    deva: कृदन्तप्रकरणम्
+    title: Primary derivatives
+    summary: Participles, gerunds, infinitives and nouns formed directly from roots.
+    lsk: true
+    status: soon
+  - id: karaka
+    order: 14
+    deva: विभक्त्यर्थप्रकरणम्
+    title: Cases and their meanings
+    summary: Kāraka — how Pāṇini links the participants of an action to the seven cases.
+    lsk: true
+    status: soon
+  - id: samasa
+    order: 15
+    deva: समासप्रकरणम्
+    title: Compounds
+    summary: Avyayībhāva, tatpuruṣa, bahuvrīhi, dvandva.
+    lsk: true
+    status: soon
+  - id: taddhita
+    order: 16
+    deva: तद्धितप्रकरणम्
+    title: Secondary derivatives
+    summary: Nouns and adjectives formed from nouns.
+    lsk: true
+    status: soon
+  - id: stripratyaya
+    order: 17
+    deva: स्त्रीप्रत्ययप्रकरणम्
+    title: Feminine suffixes
+    summary: How feminine stems are formed — ṭāp, ṅīp, ṅīṣ, ūṅ.
+    lsk: true
+    status: soon

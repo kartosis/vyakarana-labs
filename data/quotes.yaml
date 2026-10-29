@@ -1,0 +1,115 @@
+# Primary-source passages used in Bhāṣya (Patañjali / Kātyāyana / Kāśikā) and Darśana (Bhartṛhari) panels.
+# Only passages whose wording was checked against a source are published (verified: true).
+# Translations are original to this project.
+- id: mbh-atha
+  author: Patañjali
+  work: Mahābhāṣya
+  ref: Paspaśāhnika, opening
+  deva: अथ शब्दानुशासनम्।
+  translation: Now begins the instruction in words.
+  verified: true
+  checkedAt: https://advocatetanmoy.com/patanjali-mahabhasyam/
+- id: mbh-laukika
+  author: Patañjali
+  work: Mahābhāṣya
+  ref: Paspaśāhnika
+  deva: लौकिकानां वैदिकानां च। तत्र लौकिकास्तावत्- गोरश्वः पुरुषो हस्ती शकुनिः मृगो ब्राह्मण इति।
+  translation: "(Which words?) Those of everyday speech and those of the Veda. Everyday ones first: gauḥ ‘cow’, aśvaḥ ‘horse’, puruṣaḥ ‘man’, hastī ‘elephant’, śakuniḥ ‘bird’, mṛgaḥ ‘deer’, brāhmaṇaḥ ‘brahmin’."
+  verified: true
+  checkedAt: https://advocatetanmoy.com/patanjali-mahabhasyam/
+- id: mbh-sabda
+  author: Patañjali
+  work: Mahābhāṣya
+  ref: Paspaśāhnika
+  deva: अथ गौरित्यत्र कः शब्दः? … येनोच्चारितेन सास्नालाङ्गूलककुदखुरविषाणिनां सम्प्रत्ययो भवति स शब्दः।
+  translation: In ‘gauḥ’, what exactly is the word? … That which, once uttered, makes us understand a thing with dewlap, tail, hump, hooves and horns — that is the word.
+  verified: true
+  checkedAt: https://advocatetanmoy.com/patanjali-mahabhasyam/
+- id: mbh-prayojana
+  author: Patañjali
+  work: Mahābhāṣya
+  ref: Paspaśāhnika
+  deva: रक्षोहागमलघ्वसन्देहाः प्रयोजनम्।
+  translation: Preservation, adaptation, scripture, economy and freedom from doubt — these are the purposes (of studying grammar).
+  verified: true
+  checkedAt: https://advocatetanmoy.com/patanjali-mahabhasyam/
+- id: mbh-raksa
+  author: Patañjali
+  work: Mahābhāṣya
+  ref: Paspaśāhnika
+  deva: रक्षार्थं वेदानामध्येयं व्याकरणम्। लोपागमवर्णविकारज्ञो हि सम्यग्वेदान् परिपालयिष्यतीति।
+  translation: Grammar is to be studied to preserve the Vedas — for one who knows deletion, augmentation and sound-change will guard the Vedas properly.
+  verified: true
+  checkedAt: https://advocatetanmoy.com/patanjali-mahabhasyam/
+- id: mbh-laghu
+  author: Patañjali
+  work: Mahābhāṣya
+  ref: Paspaśāhnika
+  deva: लघ्वर्थं चाध्येयं व्याकरणम्।
+  translation: And grammar is to be studied for the sake of economy (laghu).
+  verified: true
+  checkedAt: https://advocatetanmoy.com/patanjali-mahabhasyam/
+- id: mbh-brhaspati
+  author: Patañjali
+  work: Mahābhāṣya
+  ref: Paspaśāhnika
+  deva: बृहस्पतिरिन्द्राय दिव्यं वर्षसहस्रं प्रतिपदोक्तानां शब्दानां शब्दपारायणं प्रोवाच नान्तं जगाम।
+  translation: For a thousand divine years Bṛhaspati recited to Indra the words one by one, each stated on its own — and never reached the end.
+  verified: true
+  checkedAt: https://advocatetanmoy.com/patanjali-mahabhasyam/
+- id: vt-siddhe
+  author: Kātyāyana
+  work: Vārttika 1, in the Mahābhāṣya
+  ref: Paspaśāhnika
+  deva: सिद्धे शब्दार्थसम्बन्धे
+  translation: Since word, meaning and the relation between them are established (siddha) …
+  verified: true
+  checkedAt: https://advocatetanmoy.com/patanjali-mahabhasyam/
+- id: kas-1.3.9
+  author: Jayāditya & Vāmana
+  work: Kāśikāvṛtti
+  ref: on 1.3.9
+  deva: तस्य ग्रहणं सर्वलोपार्थम्।
+  translation: The word tasya ‘of that’ is there so that the whole marker is deleted — not just its last sound, as 1.1.52 would otherwise give.
+  verified: true
+  checkedAt: https://sanskritdocuments.org/learning_tools/ashtadhyayi/vyakhya/1/1.3.9.htm
+- id: kas-1.1.10
+  author: Jayāditya & Vāmana
+  work: Kāśikāvṛtti
+  ref: on 1.1.10
+  deva: तुल्याऽस्यप्रयत्नावपि अज्झलौ परस्परं सवर्णसंज्ञौ न भवतः। अवर्णहकारौ दण्डहस्तः, इवर्णशकारौ दधि शीतम्, सवर्णदीर्घत्वं न भवति।
+  translation: "Even when they match in place and effort, a vowel and a consonant are not savarṇa with each other. a and h — daṇḍa-hastaḥ; i and ś — dadhi śītam: no merging into a long vowel happens."
+  verified: true
+  checkedAt: https://sanskritdocuments.org/learning_tools/ashtadhyayi/vyakhya/1/1.1.10.htm
+- id: kas-1.1.9-18
+  author: Jayāditya & Vāmana
+  work: Kāśikāvṛtti
+  ref: on 1.1.9
+  deva: ह्रस्वदीर्घप्लुतभेदादष्टादशधा भिद्यन्ते।
+  translation: Through the distinctions of short, long and prolated (with accent and nasality) they divide eighteen ways.
+  verified: true
+  checkedAt: https://sanskritdocuments.org/learning_tools/ashtadhyayi/vyakhya/1/1.1.9.htm
+- id: vp-1.1
+  author: Bhartṛhari
+  work: Vākyapadīya
+  ref: 1.1 (Brahmakāṇḍa)
+  deva: अनादिनिधनं ब्रह्म शब्दतत्त्वं यदक्षरम्। विवर्ततेऽर्थभावेन प्रक्रिया जगतो यतः॥
+  translation: Without beginning or end is brahman, the imperishable reality that is the Word. It appears in the form of things, and from it the whole process of the world unfolds.
+  verified: true
+  checkedAt: https://qbz506-vakya-vallari.static.hf.space/kanda-1.html
+- id: vp-1.14
+  author: Bhartṛhari
+  work: Vākyapadīya
+  ref: 1.14 (Brahmakāṇḍa)
+  deva: तद् द्वारमपवर्गस्य वाङ्मलानां चिकित्सितम्। पवित्रं सर्वविद्यानामधिविद्यं प्रकाशते॥
+  translation: "(Grammar) is the door to liberation, the cure for the flaws of speech, the purifier of every discipline; it shines as the science that underlies the sciences."
+  verified: true
+  checkedAt: https://qbz506-vakya-vallari.static.hf.space/kanda-1.html
+- id: vp-1.44
+  author: Bhartṛhari
+  work: Vākyapadīya
+  ref: 1.44 (Brahmakāṇḍa)
+  deva: द्वावुपादानशब्देषु शब्दौ शब्दविदो विदुः। एको निमित्तं शब्दानामपरोऽर्थे प्रयुज्यते॥
+  translation: In every word we use, those who know language recognise two ‘words’ — one is the cause that brings words about, the other is put to work for meaning.
+  verified: true
+  checkedAt: https://qbz506-vakya-vallari.static.hf.space/kanda-1.html
