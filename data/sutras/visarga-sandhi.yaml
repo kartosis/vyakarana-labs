@@ -1,0 +1,152 @@
+# Visarga-sandhi-prakaraṇa of the Laghusiddhāntakaumudī: LSK 103–114, in LSK order.
+#
+# Hand-written fields: id (Aṣṭādhyāyī a.p.s), kind, meaning (plain English, original to this project), note.
+# Every other field is filled from the ashtadhyayi.com dataset by scripts/import-sutras.py and checked by
+# scripts/check-sutras.py: deva (sūtra text), pada (padaccheda), anuvrtti / adhikara ([word, from a.p.s]),
+# lsk / sk (Laghusiddhāntakaumudī / Siddhāntakaumudī numbers), vrtti (Varadarāja's LSK vṛtti).
+# Source: https://github.com/ashtadhyayi-com/data (sutraani/), used with credit as its README asks.
+# kind: saṃjñā | paribhāṣā | vidhi | niṣedha | niyama | atideśa | adhikāra
+- id: "8.3.36"
+  lsk: 103
+  lskVerified: true
+  sk: 151
+  deva: "वा शरि"
+  pada: ["वा", "शरि"]
+  anuvrtti: [["विसर्जनीयस्य", "8.3.34"], ["विसर्जनीयः", "8.3.35"]]
+  adhikara: [["पदस्य", "8.1.16"], ["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "शरि विसर्गस्य विसर्गो वा। हरिः शेते, हरिश्शेते॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "Before a sibilant (śar), visarga may also stay visarga: hariḥ śete or hariś śete."
+- id: "8.2.66"
+  lsk: 104
+  lskVerified: true
+  sk: 162
+  deva: "ससजुषो रुः"
+  pada: ["ससजुषोः", "रुः"]
+  anuvrtti: []
+  adhikara: [["पदस्य", "8.1.16"], ["पूर्वत्रासिद्धम्", "8.2.1"]]
+  vrtti: "पदान्तस्य सस्य सजुषश्च रुः स्यात्॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "A word-final s, and the s of sajuṣ, becomes ru (r)."
+- id: "6.1.113"
+  lsk: 105
+  lskVerified: true
+  sk: 163
+  deva: "अतो रोरप्लुतादप्लुते"
+  pada: ["अतः", "रोः", "अप्लुतात्", "अप्लुते"]
+  anuvrtti: [["अति", "6.1.109"], ["उत्", "6.1.111"]]
+  adhikara: [["संहितायाम्", "6.1.72"]]
+  vrtti: "अप्लुतादतः परस्य रोरुः स्यादप्लुतेऽति। शिवोऽर्च्यः॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "After short a, ru becomes u before short a (neither of them pluta): śiva + ru + arcyaḥ → śivo 'rcyaḥ."
+- id: "6.1.114"
+  lsk: 106
+  lskVerified: true
+  sk: 166
+  deva: "हशि च"
+  pada: ["हशि", "च"]
+  anuvrtti: [["उत्", "6.1.111"], ["अतः", "6.1.113"], ["रोः", "6.1.113"], ["अप्लुतात्", "6.1.113"]]
+  adhikara: [["संहितायाम्", "6.1.72"]]
+  vrtti: "तथा। शिवो वन्द्यः॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "After short a, ru becomes u before a voiced consonant (haś) as well: śivo vandyaḥ."
+- id: "8.3.17"
+  lsk: 107
+  lskVerified: true
+  sk: 167
+  deva: "भोभगोअघोअपूर्वस्य योऽशि"
+  pada: ["भो-भगो-अघो-अपूर्वस्य", "यः", "अशि"]
+  anuvrtti: [["रोः", "8.3.16"]]
+  adhikara: [["पदस्य", "8.1.16"], ["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "एतत्पूर्वस्य रोर्यादेशोऽशि। देवा इह, देवायिह। भोस् भगोस् अघोस् इति सान्ता निपाताः। तेषां रोर्यत्वे कृते॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "After bhos, bhagos, aghos, or after a or ā, a word-final r that comes from s becomes y before a vowel or voiced consonant."
+- id: "8.3.22"
+  lsk: 108
+  lskVerified: true
+  sk: 171
+  deva: "हलि सर्वेषाम्"
+  pada: ["हलि", "सर्वेषाम्"]
+  anuvrtti: [["भो-भगो-अघो-अपूर्वस्य", "8.3.17"], ["अशि", "8.3.17"], ["व्योः", "8.3.18"], ["लोपः", "8.3.19"]]
+  adhikara: [["पदस्य", "8.1.16"], ["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "भोभगोअघोअपूर्वस्य यस्य लोपः स्याद्धलि। भो देवाः। भगो नमस्ते। अघो याहि॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "In every teacher's view, that y is dropped before a consonant: bho devāḥ, bhago namas te, agho yāhi."
+- id: "8.2.69"
+  lsk: 109
+  lskVerified: true
+  sk: 172
+  deva: "रोऽसुपि"
+  pada: ["रः", "असुपि"]
+  anuvrtti: [["अहन्", "8.2.68"]]
+  adhikara: [["पदस्य", "8.1.16"], ["पूर्वत्रासिद्धम्", "8.2.1"]]
+  vrtti: "अह्नो रेफादेशो न तु सुपि। अहरहः। अहर्गणः॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "The final n of ahan becomes r, except before a case ending (sup): ahar ahaḥ, ahargaṇaḥ."
+- id: "8.3.14"
+  lsk: 110
+  lskVerified: true
+  sk: 173
+  deva: "रो रि"
+  pada: ["रः", "रि"]
+  anuvrtti: [["लोपः", "8.3.13"]]
+  adhikara: [["पदस्य", "8.1.16"], ["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "रेफस्य रेफे परे लोपः ॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "r is dropped before r."
+- id: "6.3.111"
+  lsk: 111
+  lskVerified: true
+  sk: 174
+  deva: "ढ्रलोपे पूर्वस्य दीर्घोऽणः"
+  pada: ["ढ्रलोपे", "पूर्वस्य", "दीर्घः", "अणः"]
+  anuvrtti: []
+  adhikara: [["उत्तरपदे", "6.3.1"]]
+  vrtti: "ढरेफयोर्लोपनिमित्तयोः पूर्वस्याणो दीर्घः। पुना रमते। हरी रम्यः। शम्भू राजते। अणः किम्? तृढः। वृढः। मनस् रथ इत्यत्र रुत्वे कृते हशि चेत्युत्वे रोरीति लोपे च प्राप्ते -"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "When ḍh or r is dropped before ḍh or r, the a, i or u before it becomes long: punā ramate, harī ramyaḥ, śambhū rājate."
+- id: "1.4.2"
+  lsk: 112
+  lskVerified: true
+  sk: 175
+  deva: "विप्रतिषेधे परं कार्यम्"
+  pada: ["विप्रतिषेधे", "परम्", "कार्यम्"]
+  anuvrtti: []
+  adhikara: [["आकडारात् एका संज्ञा", "1.4.1"]]
+  vrtti: "तुल्यबलविरोधे परं कार्यं स्यात्। इति लोपे प्राप्ते। पूर्वत्रासिद्धमिति रोरीत्यस्यासिद्धत्वादुत्वमेव। मनोरथः॥"
+  vrttiVerified: true
+  kind: paribhāṣā
+  meaning: "When two rules of equal strength conflict, the later one in the grammar applies."
+- id: "6.1.132"
+  lsk: 113
+  lskVerified: true
+  sk: 176
+  deva: "एतत्तदोः सुलोपोऽकोरनञ्समासे हलि"
+  pada: ["एतत्-तदोः", "सुलोपः", "अकोः", "अ-नञ्समासे", "हलि"]
+  anuvrtti: []
+  adhikara: [["संहितायाम्", "6.1.72"]]
+  vrtti: "अककारयोरेतत्तदोर्यः सुस्तस्य लोपो हलि न तु नञ्समासे। एष विष्णुः। स शम्भुः। अकोः किम्? एषको रुद्रः। अनञ्समासे किम्? असः शिवः। हलि किम्? एषोऽत्र॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "The nominative ending s of etad and tad (forms without k) is dropped before a consonant, except in a negative compound: eṣa viṣṇuḥ, sa śambhuḥ."
+- id: "6.1.134"
+  lsk: 114
+  lskVerified: true
+  sk: 177
+  deva: "सोऽचि लोपे चेत् पादपूरणम्"
+  pada: ["सः", "अचि", "लोपे", "चेत्", "पादपूरणम्"]
+  anuvrtti: [["सुलोपः", "6.1.132"]]
+  adhikara: [["संहितायाम्", "6.1.72"]]
+  vrtti: "स इत्यस्य सोर्लोपः स्यादचि पादश्चेल्लोपे सत्येव पूर्य्येत । सेमामविड्ढि प्रभृतिम् । सैष दाशरथी रामः ॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "The s of saḥ is dropped before a vowel when that is needed to complete a line of verse: saiṣa dāśarathī rāmaḥ."

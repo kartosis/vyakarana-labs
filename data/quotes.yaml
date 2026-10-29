@@ -216,13 +216,13 @@
   work: Vākyapadīya
   ref: Vākyakāṇḍa 2.58 (verse numbering of the ashtadhyayi.com text)
   deva: पदप्रकृतिभावश्च वृत्तिभेदेन वर्ण्यते । पदानां संहिता योनिः संहिता वा पदाश्रया ॥
-  translation: Which is the base is described differently by different schools. Either the continuous text (saṃhitā) is the source of the separate words, or the continuous text rests on the words.
+  translation: The phrase "the words are its base" (padaprakṛti) is explained by two different analyses of the compound. Either the continuous text (saṃhitā) is the source of the words, or the continuous text rests on the words.
   verified: true
   checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/vakyapadeeyam/data.txt
 - id: vp-1.73
   author: Bhartṛhari
   work: Vākyapadīya
-  ref: 1.73 (Brahmakāṇḍa)
+  ref: 1.73 (Brahmakāṇḍa; 1.74 in the ashtadhyayi.com text, which reads pravibhāgaḥ for pravivekaḥ)
   deva: पदे न वर्णा विद्यन्ते वर्णेष्ववयवा न च । वाक्यात् पदानामत्यन्तं प्रविवेको न कश्चन ॥
   translation: There are no sounds within the word, and no parts within the sounds. Words have no absolute separation from the sentence.
   verified: true
@@ -232,7 +232,7 @@
   work: Vākyapadīya
   ref: Vākyakāṇḍa 2.104 (verse numbering of the ashtadhyayi.com text)
   deva: संहिताविषये वर्णाः स्वरूपेणाविकारिणः । शब्दान्तरत्वं यान्तीव शक्त्यन्तरपरिग्रहात् ॥
-  translation: Where sounds are joined (saṃhitā), they do not change in their own nature. They only seem to become other sounds, because they take on a different capacity.
+  translation: Where sounds are joined (saṃhitā), they do not change in their own form. They only seem to become a different word, because they take on a different capacity.
   verified: true
   checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/vakyapadeeyam/data.txt
 - id: mbh-1.1.1-mangala
@@ -240,7 +240,7 @@
   work: Mahābhāṣya
   ref: on 1.1.1
   deva: कथं वृद्धिरादैज् इति । एतदेकमाचार्यस्य मङ्गलार्थं मृष्यताम् । माङ्गलिक आचार्यो महतः शास्त्रौघस्य मङ्गलार्थं वृद्धिशब्दमादितः प्रयुङ्क्ते । मङ्गलादीनि हि शास्त्राणि प्रथन्ते वीरपुरुषकाणि भवन्त्यायुष्मत्पुरुषकाणि चाध्येतारश्च वृद्धियुक्ता यथा स्युरिति । सर्वत्रैव हि व्याकरणे पूर्वोच्चारिता संज्ञी, परोच्चारिता संज्ञा अदेङ् गुण इति यथा ॥
-  translation: "Then how can he say vṛddhir ādaic? Let this one case be pardoned: it is for the sake of good fortune. The teacher cares about good beginnings, and puts the word vṛddhi, ‘growth’, at the head of his great flood of teaching. For sciences that begin auspiciously spread far and have heroic and long-lived men among them, and he wants those who study it to be blessed with growth. Everywhere else in grammar, what is named is stated first and its name after it, as in adeṅ guṇaḥ."
+  translation: "Then how can he say vṛddhir ādaic? Let this one case be pardoned: it is for the sake of good fortune. The teacher cares about good beginnings, and puts the word vṛddhi, ‘growth’, at the head of his great flood of teaching. For sciences that begin auspiciously spread far and have heroic and long-lived men among them, and he wants those who study it to be blessed with growth. Everywhere in grammar, what is named is stated first and its name after it, as in adeṅ guṇaḥ."
   verified: true
   checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/sutraani/bhashya.txt
 - id: mbh-1.1.50
@@ -319,8 +319,8 @@
   author: Jayāditya & Vāmana
   work: Kāśikāvṛtti
   ref: on 8.3.19
-  deva: अस्मा उद्धर, अस्मायुद्धर। द्वा अत्र द्वावत्र। असा आदित्यः, असावादित्यः।
-  translation: asmā uddhara or asmāyuddhara; dvā atra or dvāvatra; asā ādityaḥ or asāvādityaḥ.
+  deva: … अस्मा उद्धर, अस्मायुद्धर। द्वा अत्र द्वावत्र। असा आदित्यः, असावादित्यः।
+  translation: … asmā uddhara or asmāyuddhara; dvā atra or dvāvatra; asā ādityaḥ or asāvādityaḥ.
   verified: true
   checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/sutraani/kashika.txt
 - id: kas-6.1.125
@@ -369,5 +369,13 @@
   ref: Vākyakāṇḍa 2.38 (verse numbering of the ashtadhyayi.com text)
   deva: उपादायापि ये हेयास्तानुपायान्प्रचक्षते । उपायानां च नियमो नावश्यं अवतिष्ठते ॥
   translation: What is taken up only to be let go again is called a means. And among means, no single fixed rule need hold.
+  verified: true
+  checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/vakyapadeeyam/data.txt
+- id: vp-2.10
+  author: Bhartṛhari
+  work: Vākyapadīya
+  ref: Vākyakāṇḍa 2.10 (verse numbering of the ashtadhyayi.com text)
+  deva: यथा पदे विभज्यन्ते प्रकृतिप्रत्ययादयः । अपोद्धारस्तथा वाक्ये पदानां उपपद्यते ॥
+  translation: Just as stem, suffix and the rest are separated out within a word, so in a sentence the words can be drawn out by analysis.
   verified: true
   checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/vakyapadeeyam/data.txt

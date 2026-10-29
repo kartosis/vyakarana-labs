@@ -88,7 +88,7 @@ items:
     prompt: ‹manas› + ‹īṣā› gives…
     options: [‹manīṣā›, ‹manaseṣā›, ‹manaḥ īṣā›, ‹manāṣā›]
     answer: 0
-    explain: By the vārttika on 1.1.64, the ṭi (as) gives way to the following vowel.
+    explain: By the vārttika ‹śakandhvādiṣu pararūpaṃ vācyam› (on 6.1.94, placed by Varadarāja after 1.1.64), the ṭi (as) gives way to the following vowel.
   - id: vr12
     type: choice
     prompt: ‹upa› + ‹itaḥ› gives ‹upetaḥ›, not ‹upaitaḥ›. Why?

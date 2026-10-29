@@ -12,7 +12,11 @@ export async function getStaticPaths() {
 const { sutra } = Astro.props;
 const id = sutra.id;
 const [a] = id.split(".");
-const lessons = (await getCollection("lessons")).filter((l) => l.data.sutras.includes(id));
+const allLessons = await getCollection("lessons");
+const lessons = allLessons.filter((l) => l.data.sutras.includes(id));
+// lessons that cite the sūtra in passing (SutraRef / SutraFolio in the body) without teaching it
+const citedIn = allLessons.filter((l) => !lessons.includes(l) && (l.body ?? "").includes(`id="${id}"`));
+const lessonHref = (l: (typeof allLessons)[number]) => `/course/${l.data.module}/${l.id.split("/").pop()}/`;
 const link = pramanaLink(id);
 const iast = devaToIast(sutra.data.deva);
 ---
@@ -26,16 +30,20 @@ const iast = devaToIast(sutra.data.deva);
     <section class="sutra-more" aria-labelledby="taught-h">
       <h2 id="taught-h">Where it is taught</h2>
       {
-        lessons.length ? (
+        lessons.length > 0 && (
           <ul>
             {lessons.map((l) => (
-              <li><a href={`/course/${l.data.module}/${l.id.split("/").pop()}/`}>{l.data.title}</a></li>
+              <li><a href={lessonHref(l)}>{l.data.title}</a></li>
             ))}
           </ul>
-        ) : (
-          <p>Cited in lessons as a supporting rule.</p>
         )
       }
+      {
+        citedIn.length > 0 && (
+          <p>{lessons.length ? "Also cited in" : "Cited in"} {citedIn.map((l, i) => <>{i > 0 && (i === citedIn.length - 1 ? " and " : ", ")}<a href={lessonHref(l)}>{l.data.title}</a></>)}.</p>
+        )
+      }
+      {lessons.length === 0 && citedIn.length === 0 && <p>Its lesson is in preparation.</p>}
     </section>
 
     <section class="sutra-more" aria-labelledby="read-h">

@@ -1,0 +1,500 @@
+# Hal-sandhi-prakaraṇa of the Laghusiddhāntakaumudī: LSK 62–102, in LSK order.
+#
+# Hand-written fields: id (Aṣṭādhyāyī a.p.s), kind, meaning (plain English, original to this project), note.
+# Every other field is filled from the ashtadhyayi.com dataset by scripts/import-sutras.py and checked by
+# scripts/check-sutras.py: deva (sūtra text), pada (padaccheda), anuvrtti / adhikara ([word, from a.p.s]),
+# lsk / sk (Laghusiddhāntakaumudī / Siddhāntakaumudī numbers), vrtti (Varadarāja's LSK vṛtti).
+# Source: https://github.com/ashtadhyayi-com/data (sutraani/), used with credit as its README asks.
+# kind: saṃjñā | paribhāṣā | vidhi | niṣedha | niyama | atideśa | adhikāra
+- id: "8.4.40"
+  lsk: 62
+  lskVerified: true
+  sk: 111
+  deva: "स्तोः श्चुना श्चुः"
+  pada: ["स्तोः", "श्चुना", "श्चुः"]
+  anuvrtti: []
+  adhikara: [["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "सकारतवर्गयोः शकारचवर्गाभ्यां योगे शकारचवर्गौ स्तः । रामश्शेते । रामश्चिनोति । सच्चित् । शार्ङ्गिञ्जय ॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "When s or a dental stop meets ś or a palatal stop (before or after it), it becomes ś or the palatal of its row: rāmaś śete, saccit."
+- id: "8.4.44"
+  lsk: 63
+  lskVerified: true
+  sk: 112
+  deva: "शात्"
+  pada: ["शात्"]
+  anuvrtti: [["श्चुः", "8.4.40"], ["न", "8.4.42"], ["तोः", "8.4.43"]]
+  adhikara: [["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "शात्परस्य तवर्गस्य चुत्वं न स्यात्। विश्नः। प्रश्नः॥"
+  vrttiVerified: true
+  kind: niṣedha
+  meaning: "After ś, a dental does not become palatal: praśnaḥ, viśnaḥ."
+- id: "8.4.41"
+  lsk: 64
+  lskVerified: true
+  sk: 113
+  deva: "ष्टुना ष्टुः"
+  pada: ["ष्टुना", "ष्टुः"]
+  anuvrtti: [["स्तोः", "8.4.40"]]
+  adhikara: [["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "स्तोः ष्टुना योगे ष्टुः स्यात् । रामष्षष्ठः । रामष्टीकते । पेष्टा । तट्टीका । चक्रिण्ढौकसे ॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "When s or a dental stop meets ṣ or a retroflex stop, it becomes ṣ or the retroflex of its row: rāmaṣ ṣaṣṭhaḥ, taṭṭīkā."
+- id: "8.4.42"
+  lsk: 65
+  lskVerified: true
+  sk: 114
+  deva: "न पदान्ताट्टोरनाम्"
+  pada: ["न", "पदान्तात्", "टोः", "अनाम्"]
+  anuvrtti: [["स्तोः", "8.4.40"], ["ष्टुः", "8.4.41"]]
+  adhikara: [["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "पदान्ताट्टवर्गात्परस्यानामः स्तोः ष्टुर्न स्यात्। षट् सन्तः। षट् ते। पदान्तात्किम्? ईट्टे। टोः किम्? सर्पिष्टमम्। अनाम्नवतिनगरीणामिति वाच्यम् (वार्त्तिकम्) । षण्णाम् । षण्णवतिः। षण्णगर्य्यः॥"
+  vrttiVerified: true
+  kind: niṣedha
+  meaning: "After a word-final retroflex stop, s or a dental does not become retroflex — except in nām (genitive plural), and by a vārttika in navati and nagarī: ṣaṭ santaḥ, but ṣaṇṇām."
+- id: "8.4.43"
+  lsk: 66
+  lskVerified: true
+  sk: 115
+  deva: "तोः षि"
+  pada: ["तोः", "षि"]
+  anuvrtti: [["ष्टुः", "8.4.41"], ["न", "8.4.42"]]
+  adhikara: [["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "न ष्टुत्वम्। सन्षष्ठः॥"
+  vrttiVerified: true
+  kind: niṣedha
+  meaning: "A dental before ṣ does not become retroflex: san ṣaṣṭhaḥ."
+- id: "8.2.39"
+  lsk: 67
+  lskVerified: true
+  sk: 84
+  deva: "झलां जशोऽन्ते"
+  pada: ["झलाम्", "जशः", "अन्ते"]
+  anuvrtti: []
+  adhikara: [["पदस्य", "8.1.16"], ["पूर्वत्रासिद्धम्", "8.2.1"]]
+  vrtti: "पदान्ते झलां जशः स्युः। वागीशः॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "At the end of a pada, a stop or sibilant (jhal) becomes the unaspirated voiced stop of its row (jaś): vāk + īśaḥ → vāgīśaḥ."
+- id: "8.4.45"
+  lsk: 68
+  lskVerified: true
+  sk: 116
+  deva: "यरोऽनुनासिकेऽनुनासिको वा"
+  pada: ["यरः", "अनुनासिके", "अनुनासिकः", "वा"]
+  anuvrtti: [["पदान्तस्य", "8.4.42"]]
+  adhikara: [["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "यरः पदान्तस्यानुनासिके परेऽनुनासिको वा स्यात् । एतन्मुरारिः एतद् मुरारिः । प्रत्यये भाषायां नित्यम् (वार्त्तिकम्) । तन्मात्रम् । चिन्मयम् ॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "Before a nasal, a word-final consonant other than h may be replaced by a nasal."
+- id: "8.4.60"
+  lsk: 69
+  lskVerified: true
+  sk: 117
+  deva: "तोर्लि"
+  pada: ["तोः", "लि"]
+  anuvrtti: [["परसवर्णः", "8.4.58"]]
+  adhikara: [["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "तवर्गस्य लकारे परे परसवर्णः। तल्लयः। विद्वाँल्लिखति। नस्यानुनासिको लः॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "A dental before l becomes l, and n becomes a nasalised l: tal layaḥ, vidvāṃl likhati."
+- id: "8.4.61"
+  lsk: 70
+  lskVerified: true
+  sk: 118
+  deva: "उदः स्थास्तम्भोः पूर्वस्य"
+  pada: ["उदः", "स्था-स्तम्भोः", "पूर्वस्य"]
+  anuvrtti: [["सवर्णः", "8.4.58"]]
+  adhikara: [["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "उदः परयोः स्थास्तम्भोः पूर्वसवर्णः ॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "After ud, the roots sthā and stambh take on the form of the sound before them (pūrvasavarṇa): ud + sthānam → utthānam."
+- id: "1.1.67"
+  lsk: 71
+  lskVerified: true
+  sk: 41
+  deva: "तस्मादित्युत्तरस्य"
+  pada: ["तस्मात्", "इति", "उत्तरस्य"]
+  anuvrtti: [["निर्दिष्टे", "1.1.66"]]
+  adhikara: []
+  vrtti: "पञ्चमीनिर्देशेन क्रियमाणं कार्यं वर्णान्तरेणाव्यवहितस्य परस्य ज्ञेयम्॥"
+  vrttiVerified: true
+  kind: paribhāṣā
+  meaning: "When a rule names something in the ablative (fifth case), the operation applies to what comes immediately after it."
+- id: "1.1.54"
+  lsk: 72
+  lskVerified: true
+  sk: 44
+  deva: "आदेः परस्य"
+  pada: ["आदेः", "परस्य"]
+  anuvrtti: [["षष्ठी", "1.1.49"], ["स्थाने", "1.1.49"], ["अलः", "1.1.52"]]
+  adhikara: []
+  vrtti: "परस्य यद्विहितं तत्तस्यादेर्बोध्यम्। इति सस्य थः॥"
+  vrttiVerified: true
+  kind: paribhāṣā
+  meaning: "An operation taught for what follows applies to its first sound. So in 8.4.61 only the s of sthā is replaced."
+- id: "8.4.65"
+  lsk: 73
+  lskVerified: true
+  sk: 71
+  deva: "झरो झरि सवर्णे"
+  pada: ["झरः", "झरि", "सवर्णे"]
+  anuvrtti: [["परसवर्णः", "8.4.58"], ["अन्यतरस्याम्", "8.4.62"], ["हलः", "8.4.64"], ["लोपः", "8.4.64"]]
+  adhikara: [["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "हलः परस्य झरो वा लोपः सवर्णे झरि॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "After a consonant, a stop or sibilant (jhar) may be dropped before another jhar of the same class."
+- id: "8.4.55"
+  lsk: 74
+  lskVerified: true
+  sk: 121
+  deva: "खरि च"
+  pada: ["खरि", "च"]
+  anuvrtti: [["झलाम्", "8.4.53"], ["चर्", "8.4.54"]]
+  adhikara: [["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "खरि झलां चरः स्युः । इत्युदो दस्य तः। उत्थानम्। उत्तम्भनम्॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "Before a voiceless consonant (khar), a stop or sibilant (jhal) becomes the unaspirated voiceless stop of its row (car): utthānam, uttambhanam."
+- id: "8.4.62"
+  lsk: 75
+  lskVerified: true
+  sk: 119
+  deva: "झयो होऽन्यतरस्याम्"
+  pada: ["झयः", "हः", "अन्यतरस्याम्"]
+  anuvrtti: [["परसवर्णः", "8.4.58"], ["पूर्वस्य", "8.4.61"]]
+  adhikara: [["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "झयः परस्य हस्य वा पूर्वसवर्णः। नादस्य घोषस्य संवारस्य महाप्राणस्य तादृशो वर्गचतुर्थः। वाग्घरिः, वाग्हरिः॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "After a stop (jhay), h may take the form of the preceding sound — the voiced aspirate of its row: vāgghariḥ or vāg hariḥ."
+- id: "8.4.63"
+  lsk: 76
+  lskVerified: true
+  sk: 120
+  deva: "शश्छोऽटि"
+  pada: ["शः", "छः", "अटि"]
+  anuvrtti: [["झयः", "8.4.62"], ["अन्यतरस्याम्", "8.4.62"]]
+  adhikara: [["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "झयः परस्य शस्य छो वाऽटि। तद् शिव इत्यत्र दस्य श्चुत्वेन जकारे कृते खरि चेति जकारस्य चकारः। तच्छिवः, तच्शिवः। छत्वममीति वाच्यम् (वार्त्तिकम्) । तच्छ्लोकेन॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "After a stop (jhay), ś before a vowel, h, y, v or r (aṭ) may become ch: tacchivaḥ or tacśivaḥ. A vārttika extends this to am: tacchlokena."
+- id: "8.3.23"
+  lsk: 77
+  lskVerified: true
+  sk: 122
+  deva: "मोऽनुस्वारः"
+  pada: ["मः", "अनुस्वारः"]
+  anuvrtti: [["हलि", "8.3.22"]]
+  adhikara: [["पदस्य", "8.1.16"], ["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "मान्तस्य पदस्यानुस्वारो हलि । हरिं वन्दे ॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "A word-final m becomes anusvāra before a consonant: hariṃ vande."
+- id: "8.3.24"
+  lsk: 78
+  lskVerified: true
+  sk: 123
+  deva: "नश्चापदान्तस्य झलि"
+  pada: ["नः", "च", "अपदान्तस्य", "झलि"]
+  anuvrtti: [["मः", "8.3.23"], ["अनुस्वारः", "8.3.23"]]
+  adhikara: [["पदस्य", "8.1.16"], ["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "नस्य मस्य चापदान्तस्य झल्यनुस्वारः। यशांसि। आक्रंस्यते। झलि किम्? मन्यते॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "An n or m that does not end a word becomes anusvāra before a stop or sibilant (jhal): yaśāṃsi, ākraṃsyate."
+- id: "8.4.58"
+  lsk: 79
+  lskVerified: true
+  sk: 124
+  deva: "अनुस्वारस्य ययि परसवर्णः"
+  pada: ["अनुस्वारस्य", "ययि", "परसवर्णः"]
+  anuvrtti: []
+  adhikara: [["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "स्पष्टम्। शान्तः॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "Anusvāra before a consonant other than a sibilant or h (yay) becomes the nasal of that consonant's class: śāntaḥ."
+- id: "8.4.59"
+  lsk: 80
+  lskVerified: true
+  sk: 125
+  deva: "वा पदान्तस्य"
+  pada: ["वा", "पदान्तस्य"]
+  anuvrtti: [["अनुस्वारस्य", "8.4.58"], ["ययि", "8.4.58"], ["परसवर्णः", "8.4.58"]]
+  adhikara: [["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "त्वङ्करोषि, त्वं करोषि॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "When the anusvāra ends a word, this is optional: tvaṅ karoṣi or tvaṃ karoṣi."
+- id: "8.3.25"
+  lsk: 81
+  lskVerified: true
+  sk: 126
+  deva: "मो राजि समः क्वौ"
+  pada: ["मः", "राजि", "समः", "क्वौ"]
+  anuvrtti: []
+  adhikara: [["पदस्य", "8.1.16"], ["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "क्विबन्ते राजतौ परे समो मस्य म एव स्यात्। सम्राट्॥"
+  vrttiVerified: true
+  kind: niṣedha
+  meaning: "The m of sam stays m before rāj formed with kvip: samrāṭ."
+- id: "8.3.26"
+  lsk: 82
+  lskVerified: true
+  sk: 127
+  deva: "हे मपरे वा"
+  pada: ["हे", "मपरे", "वा"]
+  anuvrtti: [["मः", "8.3.25"]]
+  adhikara: [["पदस्य", "8.1.16"], ["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "मपरे हकारे परे मस्य मो वा। किम् ह्मलयति, किं ह्मलयति। यवलपरे यवला वा (वार्त्तिकम्) । किय्ँ ह्यः, किं ह्यः। किव्ँ ह्वलयति, किं ह्वलयति। किल्ँ ह्लादयति, किं ह्लादयति॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "Before h followed by m, a word-final m may stay m: kim hmalayati or kiṃ hmalayati. A vārttika lets it become nasal y, v or l before h followed by y, v or l."
+- id: "8.3.27"
+  lsk: 83
+  lskVerified: true
+  sk: 129
+  deva: "नपरे नः"
+  pada: ["नपरे", "नः"]
+  anuvrtti: [["मः", "8.3.25"], ["हे", "8.3.26"], ["वा", "8.3.26"]]
+  adhikara: [["पदस्य", "8.1.16"], ["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "नपरे हकारे मस्य नो वा। किन् ह्नुते, किं ह्नुते॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "Before h followed by n, a word-final m may become n: kin hnute or kiṃ hnute."
+- id: "1.1.46"
+  lsk: 84
+  lskVerified: true
+  sk: 36
+  deva: "आद्यन्तौ टकितौ"
+  pada: ["आदि-अन्तौ", "टकितौ"]
+  anuvrtti: []
+  adhikara: []
+  vrtti: "टित्कितौ यस्योक्तौ तस्य क्रमादाद्यन्तावयवौ स्तः॥"
+  vrttiVerified: true
+  kind: paribhāṣā
+  meaning: "An augment marked with ṭ is added at the beginning of its item, one marked with k at its end."
+- id: "8.3.28"
+  lsk: 85
+  lskVerified: true
+  sk: 130
+  deva: "ङ्णोः कुक्टुक् शरि"
+  pada: ["ङ्णोः", "कुक्टुक्", "शरि"]
+  anuvrtti: [["वा", "8.3.26"]]
+  adhikara: [["पदस्य", "8.1.16"], ["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "वा स्तः। चयो द्वितीयाः शरि पौष्करसादेरिति वाच्यम् (वार्त्तिकम्) । प्राङ्ख् षष्ठः, प्राङ्क्षष्ठः, प्राङ् षष्ठः। सुगण्ठ् षष्ठः सुगण्ट् षष्ठः, सुगण् षष्ठः॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "After a word-final ṅ or ṇ, before a sibilant, the augment k or ṭ respectively may be added: prāṅk ṣaṣṭhaḥ, sugaṇṭ ṣaṣṭhaḥ."
+- id: "8.3.29"
+  lsk: 86
+  lskVerified: true
+  sk: 131
+  deva: "डः सि धुट्"
+  pada: ["डः", "सि", "धुट्"]
+  anuvrtti: [["वा", "8.3.26"], ["शरि", "8.3.28"]]
+  adhikara: [["पदस्य", "8.1.16"], ["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "डात्परस्य सस्य धुड्वा। षट्त्सन्तः, षट् सन्तः॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "After ḍ, an s may take the augment dh (dhuṭ): ṣaṭ tsantaḥ or ṣaṭ santaḥ."
+- id: "8.3.30"
+  lsk: 87
+  lskVerified: true
+  sk: 132
+  deva: "नश्च"
+  pada: ["नः", "च"]
+  anuvrtti: [["वा", "8.3.26"], ["शरि", "8.3.28"], ["सि", "8.3.29"], ["धुट्", "8.3.29"]]
+  adhikara: [["पदस्य", "8.1.16"], ["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "नान्तात्परस्य सस्य धुड्वा। सन्त्सः, सन्सः॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "After n, too, an s may take the augment dh: san tsaḥ or san saḥ."
+- id: "8.3.31"
+  lsk: 88
+  lskVerified: true
+  sk: 133
+  deva: "शि तुक्"
+  pada: ["शि", "तुक्"]
+  anuvrtti: [["वा", "8.3.26"], ["नः", "8.3.30"], ["च", "8.3.30"]]
+  adhikara: [["पदस्य", "8.1.16"], ["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "पदान्तस्य नस्य शे परे तुग्वा। सञ्छम्भुः, सञ्च्छम्भुः, सञ्च्शम्भुः, सञ्शम्भुः॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "A word-final n before ś may take the augment t (tuk): sañc chambhuḥ, sañc śambhuḥ, sañ chambhuḥ or sañ śambhuḥ."
+- id: "8.3.32"
+  lsk: 89
+  lskVerified: true
+  sk: 134
+  deva: "ङमो ह्रस्वादचि ङमुण्नित्यम्"
+  pada: ["ङमः", "ह्रस्वात्", "अचि", "ङमुट्", "नित्यम्"]
+  anuvrtti: []
+  adhikara: [["पदस्य", "8.1.16"], ["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "ह्रस्वात्परो यो ङम् तदन्तं यत्पदं तस्मात्परस्याचो ङमुट्। प्रत्यङ्ङात्मा। सुगण्णीशः। सन्नच्युतः॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "When a word ends in ṅ, ṇ or n after a short vowel, a following vowel always takes the same nasal as an augment, so the nasal is doubled."
+- id: "8.3.5"
+  lsk: 90
+  lskVerified: true
+  sk: 135
+  deva: "समः सुटि"
+  pada: ["समः", "सुटि"]
+  anuvrtti: [["रु", "8.3.1"]]
+  adhikara: [["पदस्य", "8.1.16"], ["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"], ["अत्रानुनासिकः पूर्वस्य तु वा", "8.3.2"]]
+  vrtti: "समो रुः सुटि॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "The m of sam becomes ru before the augment s (suṭ): saṃskartā."
+- id: "8.3.2"
+  lsk: 91
+  lskVerified: true
+  sk: 136
+  deva: "अत्रानुनासिकः पूर्वस्य तु वा"
+  pada: ["अत्र", "अनुनासिकः", "पूर्वस्य", "तु", "वा"]
+  anuvrtti: [["रु", "8.3.1"]]
+  adhikara: [["पदस्य", "8.1.16"], ["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "अत्र रुप्रकरणे रोः पूर्वस्यानुनासिको वा॥"
+  vrttiVerified: true
+  kind: adhikāra
+  meaning: "Heading — wherever ru replaces a sound in this section, the vowel before it may be nasalised."
+- id: "8.3.4"
+  lsk: 92
+  lskVerified: true
+  sk: 137
+  deva: "अनुनासिकात् परोऽनुस्वारः"
+  pada: ["अनुनासिकात्", "परः", "अनुस्वारः"]
+  anuvrtti: [["रु", "8.3.1"]]
+  adhikara: [["पदस्य", "8.1.16"], ["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"], ["अत्रानुनासिकः पूर्वस्य तु वा", "8.3.2"]]
+  vrtti: "अनुनासिकं विहाय रोः पूर्वस्मात्परोऽनुस्वारागमः॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "Where that vowel is not nasalised, an anusvāra is added after it instead."
+- id: "8.3.15"
+  lsk: 93
+  lskVerified: true
+  sk: 76
+  deva: "खरवसानयोर्विसर्जनीयः"
+  pada: ["खर्-अवसानयोः", "विसर्जनीयः"]
+  anuvrtti: [["रः", "8.3.14"]]
+  adhikara: [["पदस्य", "8.1.16"], ["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "खरि अवसाने च पदान्तस्य रेफस्य विसर्गः। संपुंकानां सो वक्तव्यः (वार्त्तिकम्) । सँस्स्कर्ता, संस्स्कर्ता॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "A word-final r becomes visarga before a voiceless consonant (khar) or a pause. Varadarāja adds here a vārttika (on 8.3.5): after sam, puṃs and kān the result is s instead: saṃskartā."
+- id: "8.3.6"
+  lsk: 94
+  lskVerified: true
+  sk: 139
+  deva: "पुमः खय्यम्परे"
+  pada: ["पुमः", "खयि", "अम्परे"]
+  anuvrtti: [["रु", "8.3.1"]]
+  adhikara: [["पदस्य", "8.1.16"], ["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"], ["अत्रानुनासिकः पूर्वस्य तु वा", "8.3.2"]]
+  vrtti: "अम्परे खयि पुमो रुः। पुँस्कोकिलः, पुंस्कोकिलः॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "The m of pum becomes ru before a voiceless stop (khay) followed by a vowel, semivowel, h or nasal (am): puṃskokilaḥ."
+- id: "8.3.7"
+  lsk: 95
+  lskVerified: true
+  sk: 140
+  deva: "नश्छव्यप्रशान्"
+  pada: ["नः", "छवि", "अप्रशान्"]
+  anuvrtti: [["रु", "8.3.1"], ["अम्परे", "8.3.6"]]
+  adhikara: [["पदस्य", "8.1.16"], ["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"], ["अत्रानुनासिकः पूर्वस्य तु वा", "8.3.2"]]
+  vrtti: "अम्परे छवि नान्तस्य पदस्य रुः ; न तु प्रशान्शब्दस्य॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "A word-final n becomes ru before ch, ṭh, th, c, ṭ or t (chav) followed by am — but not the n of praśān: cakriṃs trāyasva."
+- id: "8.3.34"
+  lsk: 96
+  lskVerified: true
+  sk: 138
+  deva: "विसर्जनीयस्य सः"
+  pada: ["विसर्जनीयस्य", "सः"]
+  anuvrtti: [["खर्", "8.3.15"]]
+  adhikara: [["पदस्य", "8.1.16"], ["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "खरि। चक्रिँस्त्रायस्व, चक्रिंस्त्रायस्व । अप्रशान् किम् ? प्रशान् तनोति । पदस्येति किम् ? हन्ति॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "Visarga becomes s before a voiceless consonant (khar)."
+- id: "8.3.10"
+  lsk: 97
+  lskVerified: true
+  sk: 141
+  deva: "नॄन् पे"
+  pada: ["नॄन्", "पे"]
+  anuvrtti: [["रु", "8.3.1"], ["नः", "8.3.7"]]
+  adhikara: [["पदस्य", "8.1.16"], ["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"], ["अत्रानुनासिकः पूर्वस्य तु वा", "8.3.2"]]
+  vrtti: "नॄनित्यस्य रुर्वा पे॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "The n of nṝn may become ru before p."
+- id: "8.3.37"
+  lsk: 98
+  lskVerified: true
+  sk: 142
+  deva: "कुप्वोः ≍क≍पौ च"
+  pada: ["कुप्वोः", "≍क≍पौ", "च"]
+  anuvrtti: [["विसर्जनीयस्य", "8.3.34"]]
+  adhikara: [["पदस्य", "8.1.16"], ["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "कवर्गे पवर्गे च विसर्गस्य ᳵक ᳶपौ स्तः, चाद्विसर्गः । नॄँ ᳶपाहि, नॄँः पाहि, नॄं≍ पाहि नॄंः पाहि । नॄन्पाहि॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "Before a velar or labial stop, visarga becomes the jihvāmūlīya or the upadhmānīya, or stays visarga."
+- id: "8.1.2"
+  lsk: 99
+  lskVerified: true
+  sk: 83
+  deva: "तस्य परमाम्रेडितम्"
+  pada: ["तस्य", "परम्", "आम्रेडितम्"]
+  anuvrtti: []
+  adhikara: [["सर्वस्य द्वे", "8.1.1"]]
+  vrtti: "द्विरुक्तस्य परमाम्रेडितम् स्यात् ॥"
+  vrttiVerified: true
+  kind: saṃjñā
+  meaning: "When a word is said twice, the second occurrence is called āmreḍita."
+- id: "8.3.12"
+  lsk: 100
+  lskVerified: true
+  sk: 143
+  deva: "कानाम्रेडिते"
+  pada: ["कान्", "आम्रेडिते"]
+  anuvrtti: [["रु", "8.3.1"], ["नः", "8.3.7"]]
+  adhikara: [["पदस्य", "8.1.16"], ["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"], ["अत्रानुनासिकः पूर्वस्य तु वा", "8.3.2"]]
+  vrtti: "कान्नकारस्य रुः स्यादाम्रेडिते। काँस्कान्, कांस्कान्॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "The n of kān becomes ru before its own repetition (āmreḍita): kāṃs kān."
+- id: "6.1.73"
+  lsk: 101
+  lskVerified: true
+  sk: 146
+  deva: "छे च"
+  pada: ["छे", "च"]
+  anuvrtti: [["ह्रस्वस्य", "6.1.71"], ["तुक्", "6.1.71"]]
+  adhikara: [["संहितायाम्", "6.1.72"]]
+  vrtti: "ह्रस्वस्य छे तुक्। शिवच्छाया॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "A short vowel takes the augment t (tuk) before ch: śivacchāyā."
+- id: "6.1.76"
+  lsk: 102
+  lskVerified: true
+  sk: 149
+  deva: "पदान्ताद्वा"
+  pada: ["पदान्तात्", "वा"]
+  anuvrtti: [["तुक्", "6.1.71"], ["छे", "6.1.73"], ["दीर्घात्", "6.1.75"]]
+  adhikara: [["संहितायाम्", "6.1.72"]]
+  vrtti: "दीर्घात्पदान्ताच्छे तुग् वा । लक्ष्मीच्छाया, लक्ष्मीछाया ॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "A long vowel at the end of a word may take t before ch: lakṣmīcchāyā or lakṣmīchāyā."

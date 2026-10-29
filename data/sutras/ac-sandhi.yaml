@@ -5,7 +5,7 @@
 # scripts/check-sutras.py: deva (sūtra text), pada (padaccheda), anuvrtti / adhikara ([word, from a.p.s]),
 # lsk / sk (Laghusiddhāntakaumudī / Siddhāntakaumudī numbers), vrtti (Varadarāja's LSK vṛtti).
 # Source: https://github.com/ashtadhyayi-com/data (sutraani/), used with credit as its README asks.
-# kind: saṃjñā | paribhāṣā | vidhi | niyama | atideśa | adhikāra
+# kind: saṃjñā | paribhāṣā | vidhi | niṣedha | niyama | atideśa | adhikāra
 - id: "6.1.77"
   lsk: 15
   lskVerified: true
@@ -89,7 +89,7 @@
   vrtti: "षष्ठीनिर्दिष्टस्यान्त्यस्याल आदेशः स्यात्। इति यलोपे प्राप्ते - यणः प्रतिषेधो वाच्यः (वार्त्तिकम्)। सुद्ध्युपास्यः। मद्ध्वरिः। धात्रंशः। लाकृतिः॥"
   vrttiVerified: true
   kind: paribhāṣā
-  meaning: "An operation taught for an item applies to its final sound."
+  meaning: "A substitute for an item named in the genitive replaces only its final sound."
 - id: "6.1.78"
   lsk: 22
   lskVerified: true
@@ -497,7 +497,7 @@
   vrtti: "एकोऽज् निपात आङ्वर्जः प्रगृह्यः स्यात्। इ इन्द्रः। उ उमेशः। वाक्यस्मरणयोरङित्; आ एवं नु मन्यसे। आ एवं किल तत्। अन्यत्र ङित् ; आ ईषदुष्णम् ओष्णम्॥"
   vrttiVerified: true
   kind: saṃjñā
-  meaning: "A particle (nipāta) that is a single vowel is pragṛhya, except ā meaning 'up to' (āṅ): i indraḥ, u umeśaḥ."
+  meaning: "A particle (nipāta) that is a single vowel is pragṛhya, except āṅ — the ā used with verbs or meaning 'slightly' or 'up to': i indraḥ, u umeśaḥ."
 - id: "1.1.15"
   lsk: 56
   lskVerified: true

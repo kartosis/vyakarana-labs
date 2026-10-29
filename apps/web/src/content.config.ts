@@ -34,7 +34,7 @@ const sutras = defineCollection({
     adhikara: z.array(z.tuple([z.string(), z.string()])).default([]),
     vrtti: z.string().optional(),
     vrttiVerified: z.boolean(),
-    kind: z.enum(["saṃjñā", "paribhāṣā", "vidhi", "niyama", "atideśa", "adhikāra"]),
+    kind: z.enum(["saṃjñā", "paribhāṣā", "vidhi", "niṣedha", "niyama", "atideśa", "adhikāra"]),
     meaning: z.string(),
     note: z.string().optional(),
     source: z.string(),

@@ -97,11 +97,12 @@ describe("ac-sandhi: optional forms", () => {
     expect(join("cakrī", "atra").alts).not.toContain("cakkryatra");
   });
 
-  it("no Śākalya forms inside a compound (vārttika na samāse, LSK 60)", () => {
+  it("no 6.1.127 form inside a compound (vārttika na samāse, LSK 60), but 6.1.128 holds (SK)", () => {
     const c = join("vāpī", "aśvaḥ", { compound: true });
     expect(c.result).toBe("vāpyaśvaḥ");
     expect(c.altSutras).not.toContain("6.1.127");
     expect(join("vāpī", "aśvaḥ").alts).toContain("vāpi aśvaḥ");
+    expect(join("sapta", "ṛṣīṇām", { compound: true })).toMatchObject({ result: "saptarṣīṇām", alts: ["sapta ṛṣīṇām"] });
   });
 
   it("inside a word, e/o + a uses 6.1.78 (no pūrvarūpa, no 8.3.19)", () => {

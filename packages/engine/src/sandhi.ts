@@ -3,8 +3,8 @@
  * with a sūtra-by-sūtra trace for teaching.
  *
  * Rules are tried in the order that resolves their conflicts the way the tradition does:
- *   prakṛtibhāva (1.1.11–16 + 6.1.125) → pūrvarūpa 6.1.109 → savarṇa-dīrgha 6.1.101 (beats 6.1.77 and 6.1.87)
- *   → pararūpa before om 6.1.95 → vṛddhi 6.1.88 (exception to 6.1.87) → guṇa 6.1.87 → yaṇ 6.1.77
+ *   prakṛtibhāva (1.1.11–16 + 6.1.125) → pūrvarūpa 6.1.109 → pararūpa before om 6.1.95 (beats 6.1.101 too,
+ *   Kāśikā) → savarṇa-dīrgha 6.1.101 (beats 6.1.77 and 6.1.87) → vṛddhi 6.1.88 (exception to 6.1.87) → guṇa 6.1.87 → yaṇ 6.1.77
  *   → ay/av/āy/āv 6.1.78.
  * Optional forms the Laghusiddhāntakaumudī and the Kāśikā accept are returned as alternatives:
  *   8.3.19 (y/v dropped), 6.1.127 and 6.1.128 (left unjoined, shortened), the vārttika on 6.1.101 (ṛ, ḷ),
@@ -55,7 +55,7 @@ export interface SandhiOptions {
   padanta?: boolean;
   /** first word is pragṛhya: a dual in ī, ū or e (1.1.11), amī/amū (1.1.12), a one-vowel particle (1.1.14), a particle in o (1.1.15) */
   pragrhya?: boolean;
-  /** the two words form a compound: Śākalya's unjoined forms (6.1.127, 6.1.128) are then not allowed (vārttika "na samāse") */
+  /** the two words form a compound: 6.1.127's unjoined form is then not allowed (vārttika "na samāse"); 6.1.128 still is */
   compound?: boolean;
 }
 
@@ -96,15 +96,16 @@ export function vowelSandhi(first: string, second: string, opts: SandhiOptions =
 
   /**
    * 6.1.127 iko 'savarṇe śākalyasya hrasvaś ca / 6.1.128 ṛty akaḥ: a word-final ik before a dissimilar vowel,
-   * or a word-final ak before short ṛ, may stay unjoined, shortened if long. Not inside a compound.
+   * or a word-final ak before short ṛ, may stay unjoined, shortened if long. The vārttika "na samāse" bars
+   * 6.1.127 inside a compound; 6.1.128 holds there too (SK: samāse 'py ayaṃ prakṛtibhāvaḥ — saptaṛṣīṇām).
    */
   function sakalyaUnjoined(): Alternative | null {
-    if (!padanta || opts.compound) return null;
+    if (!padanta) return null;
     const unjoined = `${head}${SHORT[x]} ${second}`;
     if (y === "f" && AK.includes(x)) {
       return { form: unjoined, sutra: "6.1.128", note: `Before short ṛ, the word-final ${v(x)} may stay unjoined${SHORT[x] !== x ? `, shortened to ${v(SHORT[x]!)}` : ""} (Śākalya's view).` };
     }
-    if (IK.includes(x) && !isSavarna(x, y)) {
+    if (IK.includes(x) && !isSavarna(x, y) && !opts.compound) {
       return { form: unjoined, sutra: "6.1.127", note: `The word-final ${v(x)} may stay unjoined before a dissimilar vowel${SHORT[x] !== x ? `, shortened to ${v(SHORT[x]!)}` : ""} (Śākalya's view). The shortening would be pointless if sandhi followed, so none does.` };
     }
     return null;
@@ -263,18 +264,18 @@ export function sandhiChecks(first: string, second: string, opts: SandhiOptions 
             : `The ${v(x)} must end a word (padānta).`,
     },
     {
-      sutra: "6.1.101",
-      name: "like vowels lengthen (savarṇa-dīrgha)",
-      ok: AK.includes(x) && isSavarna(x, y),
-      yes: `${v(x)} and ${v(y)} are of one class (savarṇa, 1.1.9).`,
-      no: !AK.includes(x) ? `${v(x)} is not an ak vowel (a i u ṛ ḷ).` : `${v(x)} and ${v(y)} are not of one class.`,
-    },
-    {
       sutra: "6.1.95",
       name: "a + om → om (pararūpa)",
       ok: isA && isOm(second),
       yes: `${v(x)} meets the word om.`,
       no: !isA ? `Needs a or ā first, not ${v(x)}.` : "The second word is not om.",
+    },
+    {
+      sutra: "6.1.101",
+      name: "like vowels lengthen (savarṇa-dīrgha)",
+      ok: AK.includes(x) && isSavarna(x, y),
+      yes: `${v(x)} and ${v(y)} are of one class (savarṇa, 1.1.9).`,
+      no: !AK.includes(x) ? `${v(x)} is not an ak vowel (a i u ṛ ḷ).` : `${v(x)} and ${v(y)} are not of one class.`,
     },
     {
       sutra: "6.1.88",

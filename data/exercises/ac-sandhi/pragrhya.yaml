@@ -18,8 +18,8 @@ cards:
     front: ‹ṛty akaḥ› (6.1.128)
     back: Before short ṛ, a word-final ak may stay unjoined, shortened if long — brahma ṛṣiḥ.
   - id: pragrhya.na-samase
-    front: vārttika ‹na samāse›
-    back: Śākalya's unjoined forms are not used inside a compound — only vāpyaśvaḥ.
+    front: vārttika ‹na samāse› (on 6.1.127)
+    back: The unjoined ik of 6.1.127 is not used inside a compound — only vāpyaśvaḥ. (6.1.128 still is — saptaṛṣīṇām.)
 items:
   - id: pr1
     type: choice
@@ -52,7 +52,7 @@ items:
     type: choice
     prompt: Why is ‹vāpī› + ‹aśvaḥ› only ‹vāpyaśvaḥ›?
     options:
-      - Inside a compound Śākalya's unjoined form is not used (vārttika ‹na samāse›).
+      - Inside a compound, the unjoined form of 6.1.127 is not used (vārttika ‹na samāse›).
       - vāpī is a dual.
       - ī and a are of one class.
       - aśva begins with a consonant.
@@ -102,6 +102,6 @@ items:
   - id: pr12
     type: choice
     prompt: The particle ‹u› after ‹kim›, before ‹uktam›, may also appear as…
-    options: [‹kimv uktam›, ‹kimūktam›, ‹kim vuktam›, ‹kimo uktam›]
+    options: [‹kimv uktam›, ‹kimūktam›, ‹kimuktam›, ‹kimo uktam›]
     answer: 0
     explain: By 8.3.33 u may become v after m. It is pragṛhya (1.1.14), so it never merges into kimūktam.
