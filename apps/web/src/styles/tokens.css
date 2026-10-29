@@ -1,0 +1,153 @@
+/*
+ * Vyākaraṇa Labs — design tokens ("Manuscript").
+ * Three tiers, one direction: --p-* (primitives) → --s-* (semantic) → --c-* (component, in components).
+ * Components never read --p-*. light-dark() appears only in the semantic tier.
+ *
+ * Palette logic follows Sanskrit manuscript practice:
+ *   ink (kajjala, lamp-black) for text · vermilion (sindūra) for rubrication only —
+ *   daṇḍas, sūtra numbers, rule references · haritāla (orpiment, the scribe's yellow
+ *   correction pigment) for highlights and marks · malachite for "correct" ·
+ *   lapis (blue of Jain manuscript painting) for links.
+ */
+@layer tokens, atoms, molecules, organisms, pages;
+
+@layer tokens {
+  :root {
+    /* ---------- primitives: colour (oklch) ---------- */
+    --p-paper-100: oklch(95.4% 0.019 83.1);   /* #F6EFE2 */
+    --p-paper-200: oklch(91.5% 0.039 87.6);   /* #EEE2C6 leaf */
+    --p-paper-300: oklch(83.8% 0.052 85.7);   /* #D9C8A4 leaf edge */
+    --p-ink-900: oklch(22.1% 0.010 67.3);     /* #1E1A16 */
+    --p-ink-700: oklch(43.6% 0.026 69.3);     /* #5B4F42 */
+    --p-ink-600: oklch(49.5% 0.030 71.0);     /* faint text, ≥4.5:1 on leaf */
+    --p-vermilion-600: oklch(51.6% 0.165 32.6); /* #B3361F */
+    --p-saffron-500: oklch(70.7% 0.145 69.9);   /* #D98E1F */
+    --p-haritala-200: oklch(89.0% 0.100 91.5);  /* #F3D98C */
+    --p-malachite-600: oklch(47.5% 0.080 159.3); /* #2E6A4C */
+    --p-lapis-600: oklch(41.7% 0.085 259.3);     /* #2F4C7A */
+
+    --p-night-900: oklch(18.1% 0.010 67.1);   /* #15110D */
+    --p-night-800: oklch(22.4% 0.017 66.8);   /* #211A13 */
+    --p-night-700: oklch(31.4% 0.026 69.1);   /* #3A2F23 */
+    --p-parchment-100: oklch(91.8% 0.029 84.6); /* #EDE3CF */
+    --p-parchment-300: oklch(76.9% 0.034 80.9); /* #BFB29C */
+    --p-parchment-400: oklch(65.6% 0.034 79.8); /* #9C8F7A */
+    --p-vermilion-300: oklch(68.7% 0.151 33.4); /* #E8735A */
+    --p-saffron-300: oklch(78.7% 0.137 78.5);   /* #E9AE45 */
+    --p-haritala-800: oklch(39.8% 0.071 82.1);  /* #5A4313 */
+    --p-malachite-300: oklch(76.0% 0.090 160.5);
+    --p-lapis-300: oklch(76.0% 0.083 260.6);
+
+    /* ---------- primitives: type ---------- */
+    --p-font-latin: "Gentium Book Plus", "Gentium Plus", "Noto Serif", Georgia, serif;
+    --p-font-deva: "Tiro Devanagari Sanskrit", "Noto Serif Devanagari", "Sanskrit Text", serif;
+    /* Elements of Typographic Style scale, base 18px */
+    --p-size-12: 0.75rem;
+    --p-size-14: 0.875rem;
+    --p-size-16: 1rem;
+    --p-size-18: 1.125rem;
+    --p-size-21: 1.3125rem;
+    --p-size-24: 1.5rem;
+    --p-size-36: 2.25rem;
+    --p-size-48: 3rem;
+    --p-size-72: 4.5rem;
+
+    /* ---------- primitives: space & shape ---------- */
+    --p-space-1: 0.25rem;
+    --p-space-2: 0.5rem;
+    --p-space-3: 0.75rem;
+    --p-space-4: 1rem;
+    --p-space-5: 1.5rem;
+    --p-space-6: 2rem;
+    --p-space-7: 3rem;
+    --p-space-8: 4.5rem;
+    --p-radius-1: 0.1875rem;
+    --p-radius-leaf: 2.5rem / 1.25rem; /* palm-leaf: long, softly rounded ends */
+    --p-radius-pill: 999px;
+
+    /* ---------- semantic: colour ---------- */
+    color-scheme: light dark;
+    --s-color-surface: light-dark(var(--p-paper-100), var(--p-night-900));
+    --s-color-leaf: light-dark(var(--p-paper-200), var(--p-night-800));
+    --s-color-leaf-edge: light-dark(var(--p-paper-300), var(--p-night-700));
+    --s-color-text: light-dark(var(--p-ink-900), var(--p-parchment-100));
+    --s-color-text-soft: light-dark(var(--p-ink-700), var(--p-parchment-300));
+    --s-color-text-faint: light-dark(var(--p-ink-600), var(--p-parchment-400));
+    --s-color-rubric: light-dark(var(--p-vermilion-600), var(--p-vermilion-300));
+    --s-color-mark: light-dark(var(--p-haritala-200), var(--p-haritala-800));
+    --s-color-mark-strong: light-dark(var(--p-saffron-500), var(--p-saffron-300));
+    --s-color-correct: light-dark(var(--p-malachite-600), var(--p-malachite-300));
+    --s-color-link: light-dark(var(--p-lapis-600), var(--p-lapis-300));
+    --s-color-border: light-dark(var(--p-ink-700), var(--p-parchment-400)); /* ≥3:1 for UI boundaries */
+    --s-color-hairline: light-dark(var(--p-paper-300), var(--p-night-700)); /* decorative only */
+    --s-color-inverse-bg: light-dark(var(--p-ink-900), var(--p-parchment-100));
+    --s-color-inverse-text: light-dark(var(--p-paper-100), var(--p-night-900));
+    --s-color-focus: light-dark(var(--p-lapis-600), var(--p-lapis-300));
+
+    /* dark mode is more than colour */
+    --s-shadow-color: light-dark(oklch(30% 0.03 70 / 0.2), oklch(0% 0 0 / 0.6));
+    --s-sheen-color: light-dark(oklch(100% 0 0 / 0.55), oklch(100% 0 0 / 0.04));
+    --s-shadow-leaf: 0 1px 0 var(--s-sheen-color) inset, 0 1px 2px var(--s-shadow-color),
+      0 10px 24px -14px var(--s-shadow-color);
+    --s-grain-color: light-dark(oklch(45% 0.05 75 / 0.07), oklch(90% 0.03 80 / 0.035));
+
+    /* ---------- semantic: type ---------- */
+    --s-font-body: var(--p-font-latin), var(--p-font-deva);
+    --s-font-sanskrit: var(--p-font-deva);
+    --s-text-small: var(--p-size-14);
+    --s-text-body: var(--p-size-18);
+    --s-text-lead: var(--p-size-21);
+    --s-text-h3: var(--p-size-24);
+    --s-text-h2: clamp(var(--p-size-24), 1.2rem + 1.6vw, var(--p-size-36));
+    --s-text-h1: clamp(var(--p-size-36), 1.6rem + 3vw, var(--p-size-48));
+    --s-text-display: clamp(var(--p-size-48), 2rem + 5.5vw, var(--p-size-72));
+    --s-leading-body: 1.62;
+    --s-leading-tight: 1.15;
+    --s-deva-scale: 1.12; /* Tiro Devanagari sits optically smaller than Gentium at equal size */
+    --s-measure: 66ch;
+
+    /* ---------- semantic: space ---------- */
+    --s-gutter: clamp(var(--p-space-4), 3vw, var(--p-space-6));
+    --s-stack-xs: var(--p-space-1);
+    --s-stack-s: var(--p-space-2);
+    --s-stack-m: var(--p-space-4);
+    --s-stack-l: var(--p-space-6);
+    --s-stack-xl: var(--p-space-8);
+    --s-radius-control: var(--p-radius-1);
+    --s-radius-leaf: var(--p-radius-leaf);
+    --s-radius-chip: var(--p-radius-pill);
+
+    /* ---------- semantic: layout ---------- */
+    --s-rail: 15.5rem;
+    --s-main: 42rem;
+    --s-margin: 17rem;
+    --s-header-h: 3.75rem;
+
+    accent-color: var(--s-color-rubric);
+  }
+
+  /* Manual override (system default works without JS). */
+  :root[data-theme="light"] { color-scheme: light; }
+  :root[data-theme="dark"] { color-scheme: dark; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :root { --s-motion: 1; }
+  }
+
+  @media (forced-colors: active) {
+    :root {
+      --s-color-surface: Canvas;
+      --s-color-leaf: Canvas;
+      --s-color-text: CanvasText;
+      --s-color-text-soft: CanvasText;
+      --s-color-text-faint: GrayText;
+      --s-color-rubric: CanvasText;
+      --s-color-mark: Highlight;
+      --s-color-correct: CanvasText;
+      --s-color-link: LinkText;
+      --s-color-border: CanvasText;
+      --s-color-focus: Highlight;
+      --s-shadow-leaf: none;
+    }
+  }
+}

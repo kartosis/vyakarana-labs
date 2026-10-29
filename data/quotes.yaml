@@ -113,3 +113,84 @@
   translation: In every word we use, those who know language recognise two ‘words’ — one is the cause that brings words about, the other is put to work for meaning.
   verified: true
   checkedAt: https://qbz506-vakya-vallari.static.hf.space/kanda-1.html
+
+- id: vp-1.2
+  author: Bhartṛhari
+  work: Vākyapadīya
+  ref: 1.2 (Brahmakāṇḍa)
+  deva: एकमेव यदाम्नातं भिन्नशक्तिव्यपाश्रयात्। अपृथक्त्वेऽपि शक्तिभ्यः पृथक्त्वेनेव वर्तते॥
+  translation: It is taught as one, yet because it rests on distinct powers it behaves as though it were many — though it is never separate from those powers.
+  verified: true
+  checkedAt: https://qbz506-vakya-vallari.static.hf.space/kanda-1.html
+- id: vp-1.11
+  author: Bhartṛhari
+  work: Vākyapadīya
+  ref: 1.11 (Brahmakāṇḍa)
+  deva: आसन्नं ब्रह्मणस्तस्य तपसामुत्तमं तपः। प्रथमं छन्दसामङ्गमाहुर्व्याकरणं बुधाः॥
+  translation: The wise call grammar the nearest to that brahman, the highest of austerities, the first of the Veda's auxiliary sciences.
+  verified: true
+  checkedAt: https://qbz506-vakya-vallari.static.hf.space/kanda-1.html
+- id: vp-1.12
+  author: Bhartṛhari
+  work: Vākyapadīya
+  ref: 1.12 (Brahmakāṇḍa)
+  deva: प्राप्तरूपविभागाया यो वाचः परमो रसः। यत्तत् पुण्यतमं ज्योतिस्तस्य मार्गोऽयमाञ्जसः॥
+  translation: Speech that has taken on distinct forms has a highest essence, that holiest light; grammar is the straight road to it.
+  verified: true
+  checkedAt: https://qbz506-vakya-vallari.static.hf.space/kanda-1.html
+- id: vp-1.13
+  author: Bhartṛhari
+  work: Vākyapadīya
+  ref: 1.13 (Brahmakāṇḍa)
+  deva: अर्थप्रवृत्तितत्त्वानां शब्दा एव निबन्धनम्। तत्त्वावबोधः शब्दानां नास्ति व्याकरणादृते॥
+  translation: Words alone hold together the truth of things and of what we do with them — and there is no grasping the truth of words without grammar.
+  verified: true
+  checkedAt: https://qbz506-vakya-vallari.static.hf.space/kanda-1.html
+- id: vp-1.46
+  author: Bhartṛhari
+  work: Vākyapadīya
+  ref: 1.46 (Brahmakāṇḍa)
+  deva: अरणिस्थं यथा ज्योतिः प्रकाशान्तरकारणम्। तद्वच्छब्दोऽपि बुद्धिस्थः श्रुतीनां कारणं पृथक्॥
+  translation: As the fire lying in the kindling-stick is the cause of a second, visible flame, so the word resting in the mind is the distinct cause of the sounds we hear.
+  verified: true
+  checkedAt: https://qbz506-vakya-vallari.static.hf.space/kanda-1.html
+- id: vp-1.47
+  author: Bhartṛhari
+  work: Vākyapadīya
+  ref: 1.47 (Brahmakāṇḍa)
+  deva: वितर्कितः पुरा बुद्धया क्वचिदर्थं निवेशितः। करणेभ्यो विवृत्तेन ध्वनिना सोऽनुगृह्यते॥
+  translation: First the mind considers it and settles it on some meaning; then it is given body by the sound that issues from the organs of speech.
+  verified: true
+  checkedAt: https://qbz506-vakya-vallari.static.hf.space/kanda-1.html
+- id: vp-1.48
+  author: Bhartṛhari
+  work: Vākyapadīya
+  ref: 1.48 (Brahmakāṇḍa)
+  deva: नादस्य क्रमजन्मत्वान्न पूर्वो न परश्च सः। अक्रमः क्रमरूपेण भेदवानिव जायते॥
+  translation: Sound is born in sequence, yet the word itself is neither earlier nor later. Having no sequence, it is born in the form of a sequence, as if it had parts.
+  verified: true
+  checkedAt: https://qbz506-vakya-vallari.static.hf.space/kanda-1.html
+- id: vp-1.50
+  author: Bhartṛhari
+  work: Vākyapadīya
+  ref: 1.50 (Brahmakāṇḍa)
+  deva: आत्मरूपं यथा ज्ञाने ज्ञेयरूपं च दृश्यते। अर्थरूपं तथा शब्दे स्वरूपं च प्रकाशते॥
+  translation: Just as a cognition shows both its own form and the form of what it knows, a word lets both the form of its meaning and its own form shine.
+  verified: true
+  checkedAt: https://qbz506-vakya-vallari.static.hf.space/kanda-1.html
+- id: vp-1.53
+  author: Bhartṛhari
+  work: Vākyapadīya
+  ref: 1.53 (Brahmakāṇḍa)
+  deva: यथा प्रयोक्तुः प्राग् बुद्धिः शब्देष्वेव प्रवर्तते। व्यवसायो ग्रहीतृणामेवं तेष्वेव जायते॥
+  translation: As the speaker's understanding first moves among words, so the listeners' certainty arises in those same words.
+  verified: true
+  checkedAt: https://qbz506-vakya-vallari.static.hf.space/kanda-1.html
+- id: vp-1.69
+  author: Bhartṛhari
+  work: Vākyapadīya
+  ref: 1.69 (Brahmakāṇḍa)
+  deva: संज्ञिनीं व्यक्तिमिच्छन्ति सूत्रे ग्राह्यामथापरे। जातिप्रत्यायिता व्यक्तिः प्रदेशेषूपतिष्ठते॥
+  translation: Some hold that the individual sound named in a sūtra is what the sūtra takes; others, that the individual made known through its class is what appears wherever the rule applies.
+  verified: true
+  checkedAt: https://qbz506-vakya-vallari.static.hf.space/kanda-1.html

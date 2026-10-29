@@ -1,0 +1,198 @@
+/* Element defaults and atoms. All rules live in layers declared in tokens.css. */
+@layer atoms {
+  *,
+  *::before,
+  *::after { box-sizing: border-box; }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    scrollbar-color: var(--s-color-text-faint) transparent;
+    scrollbar-width: thin;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    background-color: var(--s-color-surface);
+    color: var(--s-color-text);
+    font-family: var(--s-font-body);
+    font-size: var(--s-text-body);
+    line-height: var(--s-leading-body);
+    font-kerning: normal;
+    font-variant-ligatures: common-ligatures;
+    text-rendering: optimizeLegibility;
+    overflow-wrap: break-word;
+    font-size-adjust: from-font;
+  }
+
+  /* Paper grain: a quiet, image-free texture behind everything. */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+      radial-gradient(var(--s-grain-color) 0.6px, transparent 0.7px),
+      radial-gradient(var(--s-grain-color) 0.5px, transparent 0.6px);
+    background-size: 7px 7px, 11px 11px;
+    background-position: 0 0, 3px 5px;
+  }
+
+  h1, h2, h3, h4 {
+    line-height: var(--s-leading-tight);
+    font-weight: 700;
+    text-wrap: balance;
+    margin-block: 0;
+  }
+  h1 { font-size: var(--s-text-h1); letter-spacing: -0.01em; }
+  h2 { font-size: var(--s-text-h2); }
+  h3 { font-size: var(--s-text-h3); }
+  h4 { font-size: var(--s-text-lead); }
+
+  p, li, blockquote, dd { text-wrap: pretty; }
+  p { margin-block: 0; }
+
+  a {
+    color: var(--s-color-link);
+    text-decoration-thickness: 0.06em;
+    text-underline-offset: 0.18em;
+    cursor: pointer;
+  }
+  a:hover { text-decoration-thickness: 0.12em; }
+
+  em, i { font-style: italic; }
+  strong, b { font-weight: 700; }
+  small { font-size: var(--s-text-small); }
+
+  ::selection {
+    background-color: var(--s-color-mark);
+    color: var(--s-color-text);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--s-color-focus);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+    color: inherit;
+  }
+  button { cursor: pointer; }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="search"],
+  textarea {
+    background: var(--s-color-surface);
+    border: 1px solid var(--s-color-border);
+    border-radius: var(--s-radius-control);
+    padding: 0.45em 0.6em;
+    min-block-size: 2.75rem;
+  }
+  input:not([type="range"]):user-invalid {
+    border-color: var(--s-color-rubric);
+  }
+
+  img, svg { max-inline-size: 100%; }
+  hr {
+    border: 0;
+    border-block-start: 1px solid var(--s-color-hairline);
+    margin-block: var(--s-stack-l);
+  }
+
+  table { border-collapse: collapse; }
+  th { text-wrap: balance; text-align: start; }
+
+  /* ------------------------------------------------------------------
+     Sanskrit text and the script toggle.
+     <html data-script="deva|both|iast">  — default deva (Round 2 decision).
+     ------------------------------------------------------------------ */
+  [lang="sa"],
+  .deva {
+    font-family: var(--s-font-sanskrit);
+    font-size: calc(1em * var(--s-deva-scale));
+    line-height: 1.5;
+    font-size-adjust: none;
+  }
+  [lang="sa-Latn"],
+  .iast { font-family: var(--p-font-latin, serif); font-style: italic; }
+
+  .sa { white-space: normal; }
+  .sa > .sa-iast { display: none; }
+  :root[data-script="iast"] .sa > .sa-deva { display: none; }
+  :root[data-script="iast"] .sa > .sa-iast { display: inline; }
+  :root[data-script="both"] .sa > .sa-iast { display: inline; }
+  :root[data-script="both"] .sa > .sa-iast::before { content: " ("; font-style: normal; }
+  :root[data-script="both"] .sa > .sa-iast::after { content: ")"; font-style: normal; }
+
+  /* Blocks (folios, quotes) always stack Devanagari over IAST in "both" mode. */
+  .sa-block > .sa-iast { display: none; }
+  :root[data-script="both"] .sa-block > .sa-iast,
+  :root[data-script="iast"] .sa-block > .sa-iast { display: block; }
+  :root[data-script="iast"] .sa-block > .sa-deva { display: none; }
+
+  .visually-hidden {
+    position: absolute !important;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .skip-link {
+    position: absolute;
+    inset-inline-start: var(--s-gutter);
+    inset-block-start: -10rem;
+    z-index: 100;
+    padding: var(--p-space-2) var(--p-space-4);
+    background: var(--s-color-inverse-bg);
+    color: var(--s-color-inverse-text);
+  }
+  .skip-link:focus { inset-block-start: var(--p-space-2); }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    min-block-size: 2.75rem;
+    padding-inline: 1.1em;
+    border: 1px solid var(--s-color-inverse-bg);
+    border-radius: var(--s-radius-control);
+    background: var(--s-color-inverse-bg);
+    color: var(--s-color-inverse-text);
+    font-weight: 700;
+    text-decoration: none;
+    line-height: 1.2;
+  }
+  .btn:hover { filter: brightness(1.15); }
+  .btn--quiet {
+    background: transparent;
+    color: var(--s-color-text);
+    border-color: var(--s-color-border);
+  }
+  .btn--quiet:hover { background: var(--s-color-leaf); filter: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  @media print {
+    body::before { display: none; }
+    .no-print { display: none !important; }
+  }
+}

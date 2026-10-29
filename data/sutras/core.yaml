@@ -1,0 +1,56 @@
+# Interpretive sūtras (paribhāṣā) used throughout, and the first Ac-sandhi rule as a worked example.
+# LSK numbers here are not yet verified (lskVerified: false).
+- id: "1.1.49"
+  lsk: null
+  lskVerified: false
+  deva: षष्ठी स्थानेयोगा
+  pada: [षष्ठी, स्थानेयोगा]
+  anuvrtti: []
+  vrttiVerified: false
+  kind: paribhāṣā
+  meaning: In a rule, a word in the genitive (sixth case) names the thing that is replaced — the place where the operation happens.
+- id: "1.1.50"
+  lsk: null
+  lskVerified: false
+  deva: स्थानेऽन्तरतमः
+  pada: [स्थाने, अन्तरतमः]
+  anuvrtti: []
+  vrttiVerified: false
+  kind: paribhāṣā
+  meaning: When there is a choice of substitutes, the one most similar to the original takes its place.
+- id: "1.1.66"
+  lsk: null
+  lskVerified: false
+  deva: तस्मिन्निति निर्दिष्टे पूर्वस्य
+  pada: [तस्मिन्, इति, निर्दिष्टे, पूर्वस्य]
+  anuvrtti: []
+  vrttiVerified: false
+  kind: paribhāṣā
+  meaning: When a rule names something in the locative (seventh case), the operation applies to what comes immediately before it.
+- id: "1.1.67"
+  lsk: null
+  lskVerified: false
+  deva: तस्मादित्युत्तरस्य
+  pada: [तस्मात्, इति, उत्तरस्य]
+  anuvrtti: []
+  vrttiVerified: false
+  kind: paribhāṣā
+  meaning: When a rule names something in the ablative (fifth case), the operation applies to what comes immediately after it.
+- id: "6.1.77"
+  lsk: null
+  lskVerified: false
+  deva: इको यणचि
+  pada: [इकः, यण्, अचि]
+  anuvrtti: [[संहितायाम्, "6.1.72"]]
+  vrttiVerified: false
+  kind: vidhi
+  meaning: In close junction, a vowel of the ik class (i u ṛ ḷ) is replaced by a semivowel of the yaṇ class (y v r l) when a vowel follows.
+- id: "6.1.72"
+  lsk: null
+  lskVerified: false
+  deva: संहितायाम्
+  pada: [संहितायाम्]
+  anuvrtti: []
+  vrttiVerified: false
+  kind: adhikāra
+  meaning: Heading — the rules that follow apply in saṃhitā, close phonetic junction.
