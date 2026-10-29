@@ -1,0 +1,19 @@
+{
+  "name": "@vl/engine",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Teaching engine for Vyākaraṇa Labs: transliteration, Śivasūtras, pratyāhāras, savarṇa, guṇa/vṛddhi.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json --noEmit",
+    "check": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vitest": "^5.0.5"
+  }
+}

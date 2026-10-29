@@ -26,7 +26,8 @@
 | **Last updated** | 2026-10-29 |
 
 ### ▶ NEXT ACTION
-- **M1** (see `docs/ARCHITECTURE.md §15`): pnpm monorepo scaffold (`apps/web` Astro + Preact, `packages/engine`, `services/api`, `infra/terraform`) → design tokens/layers (Manuscript) → app shell layout (§8.2) → `@vl/engine` lipi + varṇa (Śivasūtra, pratyāhāra) with tests → sūtra data for Saṃjñā → Primer + Saṃjñā lessons → sūtra pages → local build passes.
+- ✅ pnpm monorepo root + `@vl/engine` (lipi: IAST/Deva/SLP1/HK; varṇa: Śivasūtras, 1.1.71 pratyāhāra incl. ṇ ambiguity, savarṇa 1.1.9–10, guṇa/vṛddhi, SK articulation table) — 81 Vitest tests green.
+- **M1 remaining** (see `docs/ARCHITECTURE.md §15`): pnpm monorepo scaffold (`apps/web` Astro + Preact, `packages/engine`, `services/api`, `infra/terraform`) → design tokens/layers (Manuscript) → app shell layout (§8.2) → `@vl/engine` lipi + varṇa (Śivasūtra, pratyāhāra) with tests → sūtra data for Saṃjñā → Primer + Saṃjñā lessons → sūtra pages → local build passes.
 - Checkpoint after each bullet.
 
 ---
@@ -174,3 +175,4 @@ IaC: Terraform (remote state S3 + lock) · CI/CD: GitHub Actions + OIDC role · 
 - **2026-10-29 · S1** — Round 4 answered (§2). Repo access fixed by user; first push OK. Verified Cognito/API GW/Function URL/vidyut facts (§4.3). Next: ARCHITECTURE.md.
 - **2026-10-29 · S1** — Engine decision: hybrid TS + vidyut WASM (§2 5.1). Next: ARCHITECTURE.md.
 - **2026-10-29 · S1** — Wrote `docs/ARCHITECTURE.md` (all 5 Mermaid diagrams render-checked with mmdc). Next: M1 scaffold.
+- **2026-10-29 · S1** — M1: monorepo root + engine (lipi, varṇa) with 81 passing tests. Design plan: Manuscript = rubrication (vermilion for daṇḍa/sūtra no./rule refs only), haritāla saffron for highlights/corrections, malachite for success, pothi folios w/ double vermilion rules, pañcapāṭha lesson layout, hero = live Śivasūtra pratyāhāra builder; fonts Tiro Devanagari Sanskrit + Gentium Book Plus (@fontsource, self-hosted).
