@@ -175,8 +175,11 @@ const current = (href: string) => (path.startsWith(href) ? "page" : undefined);
     }
     .script-switch button,
     .theme-toggle {
-      display: inline-grid;
-      place-items: center;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.1rem;
+      white-space: nowrap;
       min-inline-size: 2.5rem;
       min-block-size: 2.25rem;
       padding-inline: 0.4rem;

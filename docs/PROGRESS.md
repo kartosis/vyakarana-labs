@@ -28,7 +28,8 @@
 ### ▶ NEXT ACTION
 - ✅ pnpm monorepo root + `@vl/engine` (lipi: IAST/Deva/SLP1/HK; varṇa: Śivasūtras, 1.1.71 pratyāhāra incl. ṇ ambiguity, savarṇa 1.1.9–10, guṇa/vṛddhi, SK articulation table) — 81 Vitest tests green.
 - ✅ Astro 7 web app builds (44 pages): tokens/layers (Manuscript), shell, header (script switch deva/both/iast + theme), CourseRail, SutraFolio, Voice (Bhāṣya/Darśana sidenotes), SutraRef, SoundGrid, Practice gate; islands ShivaBoard, SavarnaChart, LipiPad, Steps; pages home/course/lesson/sutra/sutras/tools×3/signin/sources/about/privacy/404; 9 lessons (primer 3 + Saṃjñā LSK 1–14 in 6).
-- **M1 remaining**: visual QA (Playwright screenshots, light/dark/mobile), a11y pass, then M2 (Terraform site module + CI/CD). Original M1 list: pnpm monorepo scaffold (`apps/web` Astro + Preact, `packages/engine`, `services/api`, `infra/terraform`) → design tokens/layers (Manuscript) → app shell layout (§8.2) → `@vl/engine` lipi + varṇa (Śivasūtra, pratyāhāra) with tests → sūtra data for Saṃjñā → Primer + Saṃjñā lessons → sūtra pages → local build passes.
+- ✅ Visual QA (Playwright: desktop/mobile, light/dark, script modes) + fixes (script switch layout, step labels); **axe: 0 violations** on 11 pages × 2 themes (WCAG 2.2 AA tags).
+- **NEXT: M2** — Terraform (`infra/terraform`: bootstrap state+OIDC, site module S3/CloudFront/OAC/CF Function/headers/ACM), GitHub Actions ci.yml + deploy.yml, user-side checklist with PowerShell commands. Original M1 list: pnpm monorepo scaffold (`apps/web` Astro + Preact, `packages/engine`, `services/api`, `infra/terraform`) → design tokens/layers (Manuscript) → app shell layout (§8.2) → `@vl/engine` lipi + varṇa (Śivasūtra, pratyāhāra) with tests → sūtra data for Saṃjñā → Primer + Saṃjñā lessons → sūtra pages → local build passes.
 - Checkpoint after each bullet.
 
 ---
@@ -185,3 +186,4 @@ IaC: Terraform (remote state S3 + lock) · CI/CD: GitHub Actions + OIDC role · 
 - **2026-10-29 · S1** — M1: monorepo root + engine (lipi, varṇa) with 81 passing tests. Design plan: Manuscript = rubrication (vermilion for daṇḍa/sūtra no./rule refs only), haritāla saffron for highlights/corrections, malachite for success, pothi folios w/ double vermilion rules, pañcapāṭha lesson layout, hero = live Śivasūtra pratyāhāra builder; fonts Tiro Devanagari Sanskrit + Gentium Book Plus (@fontsource, self-hosted).
 - **2026-10-29 · S1** — Verified LSK Saṃjñā order + vṛttis; found Pramāṇa gap (1.1.46–75 missing) → `data/pramana.json` + fallback rule.
 - **2026-10-29 · S1** — Web app scaffolded and building (44 pages). Next: visual QA + fixes, then M2 infra.
+- **2026-10-29 · S1** — Visual QA + axe clean. Next: M2 infra + CI/CD.

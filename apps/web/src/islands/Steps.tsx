@@ -6,6 +6,8 @@ type Kind = "it" | "gone" | "new" | "mark";
 export interface Step {
   /** sūtra applied at this step (a.p.s), omitted for the starting form */
   sutra?: string;
+  /** short label for the step track when no sūtra applies */
+  label?: string;
   /** form as SLP1 segments; kind styles a segment */
   parts: Array<[string, Kind?]>;
   note: string;
@@ -47,7 +49,7 @@ export default function Steps({ steps, label }: { steps: Step[]; label: string }
         {steps.map((s, k) => (
           <li>
             <button type="button" aria-current={k === i ? "step" : undefined} onClick={() => setI(k)}>
-              {s.sutra ?? "start"}
+              {s.sutra ?? s.label ?? (k === 0 ? "start" : k === steps.length - 1 ? "result" : `step ${k + 1}`)}
             </button>
           </li>
         ))}
