@@ -21,13 +21,13 @@
 | Field | Value |
 |---|---|
 | **Phase** | P0 — Discovery (setup questions) |
-| **Rounds answered** | 2 / 4 |
-| **Repo** | `kartosis/vyakarana-labs` — **not yet created on GitHub** (add_repo failed 2026-10-29); local copy at `/home/claude/vyakarana-labs` |
+| **Rounds answered** | 3 / 4 |
+| **Repo** | `kartosis/vyakarana-labs` — created by user 2026-10-29, but **Claude GitHub App has no access yet** (likely private repo not in app's repository list); local copy at `/home/claude/vyakarana-labs` |
 | **Last updated** | 2026-10-29 |
 
 ### ▶ NEXT ACTION
 - Retry `add_repo(kartosis, vyakarana-labs, push)`; on success: `git remote add origin`, push (`scripts/checkpoint.sh`).
-- Ask **Round 3** (tracking & community) → record → **Round 4** (brand & launch) → record.
+- Ask **Round 4** (brand & launch) → record → write `docs/ARCHITECTURE.md`.
 - Then write `docs/ARCHITECTURE.md` (flow map, service flow, system setup, layout) and get sign-off.
 
 ---
@@ -50,19 +50,19 @@
 | 2.3 | Curriculum order | **Laghusiddhāntakaumudī (Varadarāja) order**: Saṃjñā → Paribhāṣā → Ac/Hal/Visarga sandhi → Ajanta/Halanta subanta (puṃ/strī/napuṃsaka) → Avyaya → Tiṅanta (bhvādi…curādi, ṇijanta, sannanta…) → Kṛdanta → Kāraka · Samāsa · Taddhita · Strīpratyaya. Every rule cites its sūtra + Pramāṇa link. |
 | 2.4 | v1 interactive tools | **All four**: Prakriyā stepper · Sandhi playground · Form generators (declension/conjugation) · Spaced-repetition drills (FSRS) |
 | — | *Default (not asked)* | Learners = English speakers new to Devanagari **and** Devanagari readers → optional **Varṇamālā primer** before LSK Saṃjñā-prakaraṇa |
-### Round 3 — Tracking & community *(pending)*
+### Round 3 — Tracking & community (2026-10-29)
+| # | Question | Answer |
+|---|---|---|
+| 3.1 | Tracking depth | **Learning data + cookieless privacy-first page analytics** (no consent banner) |
+| 3.2 | Motivation | **Streaks & daily goal · Public leaderboard (opt-out/pseudonym) · Completion certificates** (shareable URL + verification ID). **No XP/badges** → leaderboard ranks by reviews/lessons completed, not XP |
+| 3.3 | Community | **Per-lesson discussion · Private notes & highlights · Report-an-error** on every sūtra/form/lesson |
+| 3.4 | Patañjali/Bhartṛhari depth | **Bhāṣya + Darśana sidebars in every lesson + separate Darśana (philosophy) track** |
+| — | *Default (not asked)* | Role-based **admin dashboard**: users, progress aggregates, discussion moderation, error-report queue |
 ### Round 4 — Brand & launch *(pending)*
 
 ---
 
 ## 3. Pending questions (pre-designed — ask these, don't redesign)
-
-### Round 3 — Tracking & community
-- **Tracking depth**: learning data + cookieless privacy-first analytics *(rec)* · + full product analytics (PostHog, needs consent banner) · learning data only
-- **Motivation** (multi): streaks & daily goal · XP & badges · public leaderboard · completion certificates
-- **Community** (multi): per-lesson discussion · private notes & highlights · "report an error" on any sūtra/lesson
-- **Patañjali/Bhartṛhari depth**: woven into lessons as *Bhāṣya* / *Darśana* sidebars **plus** a dedicated Darśana track *(rec)* · separate track only · minimal
-- *Default taken without asking*: role-based admin dashboard (users, progress, error reports).
 
 ### Round 4 — Brand & launch
 - **Domain**: new domain user buys (Route 53 or Cloudflare) · subdomain of identifyragas.com · CloudFront default URL for now
@@ -117,7 +117,7 @@ IaC: Terraform (remote state S3 + lock) · CI/CD: GitHub Actions + OIDC role · 
 
 ## 6. Phase checklist
 
-- [ ] **P0 Discovery** — Round 1 ✅ · Round 2 ✅ · Round 3 ☐ · Round 4 ☐
+- [ ] **P0 Discovery** — Round 1 ✅ · Round 2 ✅ · Round 3 ✅ · Round 4 ☐
 - [ ] **P1 Architecture doc** — flow map, service flow, data model, API contract, layout/IA, wireframes → user sign-off
 - [ ] **P2 Repo scaffold** — monorepo (`apps/web`, `packages/engine`, `services/api`, `infra/`), lint/test/format, CI
 - [ ] **P3 Design system** — tokens (3-tier), layers, typography (Devanagari + Latin), components
@@ -136,7 +136,8 @@ IaC: Terraform (remote state S3 + lock) · CI/CD: GitHub Actions + OIDC role · 
 
 | # | Item | When | Status |
 |---|---|---|---|
-| U1 | Create **empty** GitHub repo **`kartosis/vyakarana-labs`** (no README/licence) | now | ☐ |
+| U1 | Create **empty** GitHub repo **`kartosis/vyakarana-labs`** (no README/licence) | now | ✅ |
+| U1b | Grant the **Claude GitHub App** access to `vyakarana-labs` (github.com/settings/installations → Claude → Configure → Repository access) | now | ☐ |
 | U2 | AWS account with MFA on root; IAM Identity Center admin user; **AWS Budgets** alert | before P8 | ☐ |
 | U3 | Bootstrap Terraform state bucket (script provided) + GitHub OIDC role (Terraform provided) | P8 | ☐ |
 | U4 | **SES**: verify domain (DKIM), request **production access** (sandbox only emails verified addresses) | P8 / P11 | ☐ |
@@ -156,3 +157,4 @@ IaC: Terraform (remote state S3 + lock) · CI/CD: GitHub Actions + OIDC role · 
 
 - **2026-10-29 · S1** — Read all 7 references (§4). Asked Round 1 (§2). User asked for persistent progress saving → created memory file `/areas/sanskrit-grammar-app.md` + this file + `CLAUDE.md` + `scripts/checkpoint.sh`. Next: Round 2 + repo name.
 - **2026-10-29 · S1** — Round 2 answered (§2). Repo name `vyakarana-labs`; add_repo failed (repo not created yet). Next: Round 3, retry repo.
+- **2026-10-29 · S1** — Round 3 answered (§2). User created repo; add_repo still denied (app lacks access) → asked user to grant Claude GitHub App access. Next: Round 4.
