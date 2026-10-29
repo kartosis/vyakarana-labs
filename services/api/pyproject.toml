@@ -1,0 +1,36 @@
+[project]
+name = "vl-api"
+version = "0.1.0"
+description = "Vyākaraṇa Labs API — AWS Lambda (Function URL behind CloudFront), DynamoDB single table"
+requires-python = ">=3.13"
+dependencies = [
+  "aws-lambda-powertools[tracer]>=3.38,<4",
+  "pydantic>=2.14,<3",
+  "pyjwt[crypto]>=2.15,<3",
+  "fsrs>=6.3,<7",
+]
+
+[dependency-groups]
+dev = ["boto3>=1.43", "moto[dynamodb,cognitoidp]>=5.2", "pytest>=9", "ruff>=0.17", "mypy>=2"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py313"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "S", "SIM", "RUF"]
+ignore = ["S101"]
+
+[tool.mypy]
+python_version = "3.13"
+strict = true
+ignore_missing_imports = true
+mypy_path = "src"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S105", "S106"]  # test JWT claims are not secrets

@@ -38,6 +38,22 @@ jobs:
           path: apps/web/dist
           retention-days: 7
 
+  api:
+    name: API lint and tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/api
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --frozen
+      - run: uv run ruff check src tests
+      - run: uv run ruff format --check src tests
+      - run: uv run pytest -q
+      - name: Package (arm64, python3.13)
+        run: ./build.sh
+
   terraform:
     name: Terraform validate
     runs-on: ubuntu-latest
@@ -46,9 +62,10 @@ jobs:
       - uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: "<2.0.0"
-      - name: Format (advisory)
-        continue-on-error: true
-        run: terraform fmt -check -recursive -diff infra/terraform
+      - name: Format (advisory — lists files as a warning annotation)
+        run: |
+          files=$(terraform fmt -check -recursive -list=true infra/terraform || true)
+          if [ -n "$files" ]; then echo "::warning title=terraform fmt::run 'terraform fmt -recursive infra/terraform' — $(echo $files | tr '\n' ' ')"; fi
       - name: Validate bootstrap
         run: |
           terraform -chdir=infra/terraform/bootstrap init -backend=false -input=false
