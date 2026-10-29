@@ -20,15 +20,14 @@
 
 | Field | Value |
 |---|---|
-| **Phase** | P0 — Discovery (setup questions) |
-| **Rounds answered** | 3 / 4 |
-| **Repo** | `kartosis/vyakarana-labs` — created by user 2026-10-29, but **Claude GitHub App has no access yet** (likely private repo not in app's repository list); local copy at `/home/claude/vyakarana-labs` |
+| **Phase** | P1 — Architecture doc (P0 discovery complete) |
+| **Rounds answered** | 4 / 4 ✅ |
+| **Repo** | `kartosis/vyakarana-labs` — **attached, push verified 2026-10-29**; working copy `/home/claude/vyakarana-labs` |
 | **Last updated** | 2026-10-29 |
 
 ### ▶ NEXT ACTION
-- Retry `add_repo(kartosis, vyakarana-labs, push)`; on success: `git remote add origin`, push (`scripts/checkpoint.sh`).
-- Ask **Round 4** (brand & launch) → record → write `docs/ARCHITECTURE.md`.
-- Then write `docs/ARCHITECTURE.md` (flow map, service flow, system setup, layout) and get sign-off.
+- Write `docs/ARCHITECTURE.md` (flow map, service flows, system setup, data model, API, layout/IA, user-side setup) → push → present to user.
+- Then ask the one open engineering question: **adopt vidyut-prakriya (MIT, Rust→WASM) as the derivation core under a TS API?** (see §4.3)
 
 ---
 
@@ -58,17 +57,19 @@
 | 3.3 | Community | **Per-lesson discussion · Private notes & highlights · Report-an-error** on every sūtra/form/lesson |
 | 3.4 | Patañjali/Bhartṛhari depth | **Bhāṣya + Darśana sidebars in every lesson + separate Darśana (philosophy) track** |
 | — | *Default (not asked)* | Role-based **admin dashboard**: users, progress aggregates, discussion moderation, error-report queue |
-### Round 4 — Brand & launch *(pending)*
+### Round 4 — Brand & launch (2026-10-29)
+| # | Question | Answer |
+|---|---|---|
+| 4.1 | Domain | **Subdomain of identifyragas.com** (DNS on user's Cloudflare). Default host: `sanskrit.identifyragas.com` (Terraform var; changeable) |
+| 4.2 | AWS budget | **$0 — free tier only** → see §4.3 consequences (Function URL instead of API Gateway, DynamoDB provisioned ≤ 25 RCU/WCU, no WAF/KMS CMK/Secrets Manager/Route 53) |
+| 4.3 | Visual direction | **Manuscript**: paper `#F6EFE2`, ink `#1E1A16`, vermilion `#B3361F`, saffron `#D98E1F` (convert to oklch tokens), serif Devanagari, palm-leaf sūtra folios, Bhāṣya/Darśana side panels; light + dark |
+| 4.4 | Public name | **Vyākaraṇa Labs** |
 
 ---
 
 ## 3. Pending questions (pre-designed — ask these, don't redesign)
 
-### Round 4 — Brand & launch
-- **Domain**: new domain user buys (Route 53 or Cloudflare) · subdomain of identifyragas.com · CloudFront default URL for now
-- **Budget ceiling**: $0 free tier · ≤ $10/mo · ≤ $50/mo
-- **Visual direction** (with previews): Manuscript — warm paper, ink, vermilion/saffron, Tiro Devanagari Sanskrit *(rec)* · Modern academic · Night library (dark-first, gold)
-- **Site name**: Śabdānuśāsanam (Mahābhāṣya's opening *atha śabdānuśāsanam*) · Pāṇinīyam · Vyākaraṇa Pāṭhaśālā · other
+*(all rounds answered — nothing pending)*
 
 ---
 
@@ -96,6 +97,13 @@
 - **Chrome visual-design guides**: contrast 4.5:1 text / 3:1 large + UI boundaries; never colour-only state; `forced-colors` fallbacks with system colours; tints via `color-mix(in oklab, …)` (≤ 30 % lightness shifts); `line-height` unitless; `rem` fonts; ≤ 80ch; no justify; `text-wrap: balance` (headings) / `pretty` (paragraphs) — never on `*`; `clamp()` fluid type; **`font-size-adjust: from-font`** for Devanagari/Latin mixing & fallbacks; `text-box: trim-both cap alphabetic` for badges/buttons; `::selection`, `accent-color`, `scrollbar-color` (no transitions on it); `:user-invalid`; `<select>` + `appearance: base-select`; gradients `in oklab`; masks for paper texture; `contrast-color()` with RCS fallback.
 - Local copy of the Chrome guides was cloned to scratch (ephemeral) — re-clone if needed: `git clone --depth 1 https://github.com/GoogleChrome/modern-web-guidance` (public; works via git proxy).
 
+### 4.3 Verified platform facts (2026-10-29 — drive the $0 design)
+- **Cognito** ([pricing](https://aws.amazon.com/cognito/pricing/)): **Lite & Essentials = 10,000 MAU free, does not expire**; **passwordless email OTP + passkeys need Essentials** (Lite has neither) → use **Essentials**. Emails go through **SES, billed separately** (≈ $0.10 / 1,000) → only non-zero line item; minimise with 30-day refresh tokens.
+- **API Gateway** free tier = **12 months, new customers only; none on the post-July-2025 Free plan**; HTTP API then $1.00/M ([AWS Builder: $0 API on Lambda](https://builder.aws.com/content/3KlRhfU9w7K79H2be1uFAjiX62N/run-a-real-api-for-dollar0-a-month-on-lambdas-always-free-tier)) → **replace with Lambda Function URL behind CloudFront (`/api/*`)**.
+- **Lambda** always free: 1M req + 400k GB-s/mo. **DynamoDB** always free: 25 RCU + 25 WCU + 25 GB — **provisioned mode only** (on-demand not covered). **CloudWatch**: 10 alarm metrics free. **SNS**: 1,000 email notifications free.
+- **CloudFront OAC → Lambda Function URL** ([docs](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-lambda.html)): Function URL `AuthType=AWS_IAM`; OAC signing `always`; **POST/PUT must send `x-amz-content-sha256` = hex SHA-256 of body** (browser: `crypto.subtle.digest`); OAC overwrites `Authorization` → send Cognito JWT in a custom header (e.g. `X-VL-Auth`) forwarded by an origin request policy; Lambda verifies JWT (JWKS cached). Same-origin `/api/*` → **no CORS**.
+- **vidyut-prakriya** ([docs.rs](https://docs.rs/vidyut-prakriya), [GitHub](https://github.com/ambuda-org/vidyut), Arun Prasad / Ambuda): **MIT**; ~2,000 Aṣṭādhyāyī rules; excellent subanta, tiṅanta, kṛdanta, taddhitānta; moderate samāsa; weak accent; **every derivation step carries its sūtra code** (e.g. `1.3.1`, `7.3.84`) with intermediate terms in **SLP1**; **compiles to WASM with a `wasm` bindings module**; ~50k words/s. Sibling crates: vidyut-lipi (transliteration, already has WASM build), vidyut-sandhi, vidyut-cheda, vidyut-kosha. → Candidate derivation core for Prakriyā stepper + form generators (user decided "TS engine in browser"; WASM + TS wrapper keeps that contract). Data licence for its Dhātupāṭha not confirmed — check `vidyut-data` before bundling.
+
 ---
 
 ## 5. Architecture (draft — finalize after Round 4 in `docs/ARCHITECTURE.md`)
@@ -117,7 +125,7 @@ IaC: Terraform (remote state S3 + lock) · CI/CD: GitHub Actions + OIDC role · 
 
 ## 6. Phase checklist
 
-- [ ] **P0 Discovery** — Round 1 ✅ · Round 2 ✅ · Round 3 ✅ · Round 4 ☐
+- [x] **P0 Discovery** — Round 1 ✅ · Round 2 ✅ · Round 3 ✅ · Round 4 ✅
 - [ ] **P1 Architecture doc** — flow map, service flow, data model, API contract, layout/IA, wireframes → user sign-off
 - [ ] **P2 Repo scaffold** — monorepo (`apps/web`, `packages/engine`, `services/api`, `infra/`), lint/test/format, CI
 - [ ] **P3 Design system** — tokens (3-tier), layers, typography (Devanagari + Latin), components
@@ -137,11 +145,11 @@ IaC: Terraform (remote state S3 + lock) · CI/CD: GitHub Actions + OIDC role · 
 | # | Item | When | Status |
 |---|---|---|---|
 | U1 | Create **empty** GitHub repo **`kartosis/vyakarana-labs`** (no README/licence) | now | ✅ |
-| U1b | Grant the **Claude GitHub App** access to `vyakarana-labs` (github.com/settings/installations → Claude → Configure → Repository access) | now | ☐ |
+| U1b | Grant the **Claude GitHub App** access to `vyakarana-labs` | now | ✅ |
 | U2 | AWS account with MFA on root; IAM Identity Center admin user; **AWS Budgets** alert | before P8 | ☐ |
 | U3 | Bootstrap Terraform state bucket (script provided) + GitHub OIDC role (Terraform provided) | P8 | ☐ |
 | U4 | **SES**: verify domain (DKIM), request **production access** (sandbox only emails verified addresses) | P8 / P11 | ☐ |
-| U5 | Domain purchase + DNS (Route 53 hosted zone or Cloudflare) + ACM cert in **us-east-1** for CloudFront | P11 | ☐ |
+| U5 | Cloudflare DNS for `identifyragas.com`: add ACM validation CNAME + `sanskrit` CNAME → CloudFront (**DNS-only / grey cloud**) | P8 / P11 | ☐ |
 | U6 | GitHub repo secrets/vars: `AWS_ROLE_ARN`, `AWS_REGION` | P9 | ☐ |
 
 ---
@@ -158,3 +166,4 @@ IaC: Terraform (remote state S3 + lock) · CI/CD: GitHub Actions + OIDC role · 
 - **2026-10-29 · S1** — Read all 7 references (§4). Asked Round 1 (§2). User asked for persistent progress saving → created memory file `/areas/sanskrit-grammar-app.md` + this file + `CLAUDE.md` + `scripts/checkpoint.sh`. Next: Round 2 + repo name.
 - **2026-10-29 · S1** — Round 2 answered (§2). Repo name `vyakarana-labs`; add_repo failed (repo not created yet). Next: Round 3, retry repo.
 - **2026-10-29 · S1** — Round 3 answered (§2). User created repo; add_repo still denied (app lacks access) → asked user to grant Claude GitHub App access. Next: Round 4.
+- **2026-10-29 · S1** — Round 4 answered (§2). Repo access fixed by user; first push OK. Verified Cognito/API GW/Function URL/vidyut facts (§4.3). Next: ARCHITECTURE.md.
