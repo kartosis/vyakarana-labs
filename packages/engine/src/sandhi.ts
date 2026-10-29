@@ -184,7 +184,7 @@ export function vowelSandhi(first: string, second: string, opts: SandhiOptions =
   if (IK.includes(x)) {
     const r = `${head}${YAN[x]}${second}`;
     steps.push({ sutra: "6.1.77", form: r, note: `${v(x)} is an ik vowel and a vowel follows: it becomes a yaṇ sound.` });
-    steps.push({ sutra: "1.1.50", form: r, note: `Of y v r l, the closest to ${v(x)} is ${YAN[x] === "y" ? "y (palatal)" : YAN[x] === "v" ? "v (labial)" : YAN[x] === "r" ? "r (retroflex)" : "l (dental)"}.` });
+    steps.push({ sutra: "1.1.50", form: r, note: `Of y v r l, the closest to ${v(x)} is ${YAN[x] === "y" ? "y (palatal)" : YAN[x] === "v" ? "v (teeth and lips, nearest to the labial u)" : YAN[x] === "r" ? "r (retroflex)" : "l (dental)"}.` });
     const alts: Alternative[] = [];
     // 8.4.47 anaci ca (+ 8.4.53): the consonant before the new y v r l, if it follows a vowel, may be doubled.
     const c = head.at(-1) ?? "";
