@@ -1,0 +1,103 @@
+---
+title: Palatals and retroflexes spread
+deva: स्तोः श्चुना श्चुः
+module: hal-sandhi
+order: 1
+minutes: 25
+summary: LSK 62–66. When s or a dental meets a palatal, it turns palatal; when it meets a retroflex, it turns retroflex. Three short rules say where the spreading stops.
+lskRange: 62–66
+sutras: ["8.4.40", "8.4.44", "8.4.41", "8.4.42", "8.4.43"]
+---
+import Sa from "../../../components/Sa.astro";
+import Voice from "../../../components/Voice.astro";
+import SutraFolio from "../../../components/SutraFolio.astro";
+import SutraRef from "../../../components/SutraRef.astro";
+import Practice from "../../../components/Practice.astro";
+import Steps from "../../../islands/Steps.tsx";
+import SandhiPad from "../../../islands/SandhiPad.tsx";
+
+Vowel sandhi fused sounds or replaced them outright. Consonant sandhi is mostly **assimilation**: a consonant takes on a feature of its neighbour, its place in the mouth, its voice, its nasality. The Hal-sandhi-prakaraṇa, LSK 62 to 102, opens with the two rules of place.
+
+Nearly all of its sūtras come from the last three quarters of the Aṣṭādhyāyī, the <Sa iast="tripādī" />. You met the consequence in the guṇa lesson (<SutraRef id="8.2.1" />): these rules apply after all the others, and among themselves strictly in the order of their numbers. Each folio below also shows the heading they stand under, <Sa iast="saṃhitāyām" />, carried from <SutraRef id="8.2.108" />.
+
+## The palatal row
+
+<SutraFolio id="8.4.40" level={2} />
+
+Unpack the names. <Sa iast="stu" /> is *s* together with *tu*, and *tu*, by <SutraRef id="1.1.69" />, is the whole dental row *t th d dh n*. <Sa iast="ścu" /> is *ś* with the palatal row *c ch j jh ñ*. The instrumental <Sa iast="ścunā" />, "with ścu", means contact, from either side. So: s or a dental in contact with ś or a palatal becomes ś or a palatal.
+
+Which palatal? The Kāśikā answers with a distinction worth remembering.
+
+<Voice quote="kas-8.4.40" voice="bhasya">
+  The condition is not paired: s turns palatal next to ś **or** next to any palatal stop, and so does a dental. The substitutes are paired in order (1.3.10): s always becomes ś, and a dental becomes the palatal of its own position — t to c, d to j, n to ñ.
+</Voice>
+
+Varadarāja's examples:
+
+<div class="example">
+  <span><Sa iast="sat" /> + <Sa iast="cit" /> → <Sa iast="saccit" />, "being and consciousness": t before c becomes c.</span>
+  <span><Sa iast="śārṅgin" /> + <Sa iast="jaya" /> → <Sa iast="śārṅgiñ jaya" />, "victory, bearer of the Śārṅga bow!": n before j becomes ñ.</span>
+  <span><Sa iast="rāmas" /> + <Sa iast="śete" /> → <Sa iast="rāmaś śete" />, "Rāma lies down", and <Sa iast="rāmaś cinoti" />, "Rāma gathers": s becomes ś. (The s here is what a visarga becomes before these sounds, the subject of the next module.)</span>
+</div>
+
+<SutraFolio id="8.4.44" />
+
+After *ś*, a dental keeps its place: <Sa iast="praśnaḥ" />, "question", not *praśñaḥ*. The word <Sa iast="śāt" /> is an ablative: "after ś", by <SutraRef id="1.1.67" />. Contact with a palatal stop still counts in either direction.
+
+## The retroflex row
+
+<SutraFolio id="8.4.41" />
+
+The same pattern, one row further back. <Sa iast="ṣṭu" /> is *ṣ* with the retroflex row *ṭ ṭh ḍ ḍh ṇ*. s or a dental in contact with one of them becomes *ṣ* or the retroflex of its position:
+
+<div class="example">
+  <span><Sa iast="rāmas" /> + <Sa iast="ṣaṣṭhaḥ" /> → <Sa iast="rāmaṣ ṣaṣṭhaḥ" />, "Rāma is sixth"; <Sa iast="rāmaṣ ṭīkate" />, "Rāma goes".</span>
+  <span><Sa iast="peṣ" /> + <Sa iast="tā" /> → <Sa iast="peṣṭā" />, "grinder": inside a word, t after ṣ becomes ṭ.</span>
+  <span><Sa iast="tat" /> + <Sa iast="ṭīkā" /> → <Sa iast="taṭṭīkā" />, "a commentary on it".</span>
+  <span><Sa iast="cakrin" /> + <Sa iast="ḍhaukase" /> → <Sa iast="cakriṇ ḍhaukase" />, "you approach, discus-bearer".</span>
+</div>
+
+<Steps
+  client:visible
+  label="Three junctions, two rules"
+  steps={[
+    { label: "sat + cit", parts: [["sa"], ["t", "mark"], ["cit"]], note: "A dental, t, stands before a palatal, c." },
+    { sutra: "8.4.40", parts: [["sa"], ["c", "new"], ["cit"]], note: "t becomes the palatal of the same position, c: saccit." },
+    { label: "tat + ṭīkā", parts: [["ta"], ["t", "mark"], ["wIkA"]], note: "A dental before a retroflex." },
+    { sutra: "8.4.41", parts: [["ta"], ["w", "new"], ["wIkA"]], note: "t becomes ṭ: taṭṭīkā." },
+    { label: "cakrin + ḍhaukase", parts: [["cakri"], ["n", "mark"], ["QOkase"]], note: "The dental nasal before a retroflex." },
+    { sutra: "8.4.41", parts: [["cakri"], ["R", "new"], ["QOkase"]], note: "n becomes ṇ: cakriṇḍhaukase." },
+  ]}
+/>
+
+## Where retroflexion stops
+
+Two rules keep the retroflex row from spreading too far.
+
+<SutraFolio id="8.4.42" />
+
+After a ṭ-row consonant at the **end of a word**, a following s or dental stays as it is: <Sa iast="ṣaṭ santaḥ" />, "six good people", and <Sa iast="ṣaṭ te" />, "those six". Inside a word the rule does not apply: <Sa iast="īḍ" /> + <Sa iast="te" /> gives <Sa iast="īṭṭe" />, "he praises". Nor after ṣ, which is not of the ṭ-row: <Sa iast="sarpiṣṭamam" />.
+
+<Voice quote="kas-8.4.42" voice="bhasya">
+  The Kāśikā's examples, *śvaliṭ sāye* and *madhuliṭ tarati*, show the s and the t left alone after a word-final ṭ. Then it adds that the exception *anām* is too narrow, and gives the vārttika that widens it: before *nām*, *navati* and *nagarī* the dental does turn retroflex — *ṣaṇṇām* "of six", *ṣaṇṇavatiḥ* "ninety-six", *ṣaṇṇagarī*.
+</Voice>
+
+<SutraFolio id="8.4.43" />
+
+A dental before *ṣ* stays dental: <Sa iast="san ṣaṣṭhaḥ" />, "being sixth", not *saṇ ṣaṣṭhaḥ*.
+
+<Voice quote="vp-1.111" voice="darsana">
+  Bhartṛhari describes speech as breath that strikes the places of articulation. Read with that in mind, ścutva and ṣṭutva are economy of movement: the tongue, already at the palate or the roof of the mouth for the next sound, produces the one before it there too. Pāṇini states the result as a rule; Bhartṛhari's account says where such rules come from.
+</Voice>
+
+## Try it
+
+<SandhiPad client:visible level={3} initialA="sat" initialB="cit" exampleSet="consonant" />
+
+<Practice
+  skills={[
+    "Expanding stu, ścu and ṣṭu",
+    "Turning s or a dental palatal or retroflex",
+    "Knowing when retroflexion does not spread (8.4.42–44)",
+  ]}
+/>

@@ -282,7 +282,8 @@ const RULES: RuleDef[] = [
     sutra: "8.4.48",
     varttika: true,
     run: ({ pre, post }) => {
-      if (!/(Nk|Rw)$/.test(pre) || !"Szs".includes(post[0]!)) return null;
+      // only before ṣ or s: before ś the next rule (8.4.63) may turn the ś into ch, and the Kāśikā gives prāṅk chete
+      if (!/(Nk|Rw)$/.test(pre) || !"zs".includes(post[0]!)) return null;
       return { optional: { pre: pre.slice(0, -1) + (pre.endsWith("k") ? "K" : "W"), post }, note: "A vārttika (Pauṣkarasādi's view): before a sibilant, the k or ṭ may become aspirated.", byDefault: true };
     },
   },

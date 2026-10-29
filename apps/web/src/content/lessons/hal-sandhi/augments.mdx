@@ -1,0 +1,102 @@
+---
+title: Sounds added at the junction
+deva: आद्यन्तौ टकितौ
+module: hal-sandhi
+order: 4
+minutes: 25
+summary: LSK 84–89. Some junctions gain a sound. A word-final ṅ or ṇ before a sibilant may add k or ṭ; an s after ḍ or n may add t; n before ś may add t; and after a short vowel, ṅ, ṇ and n are doubled before a vowel.
+lskRange: 84–89
+sutras: ["1.1.46", "8.3.28", "8.3.29", "8.3.30", "8.3.31", "8.3.32"]
+---
+import Sa from "../../../components/Sa.astro";
+import Voice from "../../../components/Voice.astro";
+import SutraFolio from "../../../components/SutraFolio.astro";
+import SutraRef from "../../../components/SutraRef.astro";
+import Practice from "../../../components/Practice.astro";
+import Steps from "../../../islands/Steps.tsx";
+import SandhiPad from "../../../islands/SandhiPad.tsx";
+
+An <Sa iast="āgama" />, "augment", is a sound that a rule adds without removing anything. Pāṇini names each augment with a marker that says where it goes, and the rule for reading that marker comes first.
+
+## Where an augment goes
+
+<SutraFolio id="1.1.46" level={2} />
+
+An augment marked with *ṭ* goes at the **beginning** of the item it is added to; one marked with *k* goes at the **end**. So <Sa iast="kuk" /> (k, marked with k) attaches to the end of the earlier word, and <Sa iast="dhuṭ" /> (dh, marked with ṭ) to the beginning of the later one. The difference matters, as the next rule shows.
+
+## k and ṭ before a sibilant
+
+<SutraFolio id="8.3.28" />
+
+After a word-final *ṅ* or *ṇ*, before a sibilant, the augment *k* or *ṭ* may be added. Varadarāja adds a vārttika on 8.4.48, <Sa iast="cayo dvitīyāḥ śari pauṣkarasāder iti vācyam" />: in the view of the grammarian Pauṣkarasādi, a first stop of a row (<Sa iast="cay" />: c ṭ t k p) before a sibilant becomes the second, its voiceless aspirate. Applied to the new k and ṭ, that gives three forms each:
+
+<div class="example">
+  <span><Sa iast="prāṅ" /> + <Sa iast="ṣaṣṭhaḥ" /> → <Sa iast="prāṅkh ṣaṣṭhaḥ" />, <Sa iast="prāṅk ṣaṣṭhaḥ" /> or <Sa iast="prāṅ ṣaṣṭhaḥ" /></span>
+  <span><Sa iast="sugaṇ" /> + <Sa iast="ṣaṣṭhaḥ" /> → <Sa iast="sugaṇṭh ṣaṣṭhaḥ" />, <Sa iast="sugaṇṭ ṣaṣṭhaḥ" /> or <Sa iast="sugaṇ ṣaṣṭhaḥ" /></span>
+</div>
+
+<Voice quote="kas-8.3.28" voice="bhasya">
+  Why does *kuk* attach to the end of the first word? The Kāśikā's first reason is the change of ś to ch. It reads 8.4.63 as applying only after a stop that ends a word, so the k must belong to *prāṅ*: *prāṅk chete*, "he lies facing east", beside *prāṅk śete* and *prāṅ śete*.
+</Voice>
+
+## t before s
+
+<SutraFolio id="8.3.29" />
+
+<SutraFolio id="8.3.30" />
+
+After *ḍ*, and after *n*, an *s* may take the augment *dh* (<Sa iast="dhuṭ" />), which then loses its voice before the s by 8.4.55: <Sa iast="ṣaṭ tsantaḥ" /> or <Sa iast="ṣaṭ santaḥ" />; <Sa iast="san tsaḥ" /> or <Sa iast="san saḥ" />.
+
+This time the marker is ṭ, so the augment begins the **second** word. The Kāśikā gives the reason: a dental after a word-final retroflex, like the ṭ of *ṣaṭ*, is protected by <SutraRef id="8.4.42" /> and stays dental. Had the augment ended the first word, the ṭ would no longer be word-final, and the t would turn retroflex.
+
+## t before ś
+
+<SutraFolio id="8.3.31" />
+
+A word-final *n* before *ś* may take the augment *t* (<Sa iast="tuk" />), at its end for the same reason as *kuk*: so that ś may become ch after it. Three later rules then work on the junction, two of them optional, so Varadarāja lists **four** correct results for *san* + *śambhuḥ*, "the good Śambhu":
+
+<Steps
+  client:visible
+  label="san + śambhuḥ: four forms"
+  steps={[
+    { parts: [["san"], [" "], ["SamBuH"]], note: "san ‘good, being’ and śambhuḥ, a name of Śiva." },
+    { sutra: "8.3.31", parts: [["san"], ["t", "new"], ["SamBuH"]], note: "n before ś takes t at its end (optional; without it: sañśambhuḥ, by ścutva alone)." },
+    { sutra: "8.4.40", parts: [["sa"], ["Yc", "new"], ["SamBuH"]], note: "Next to ś, t becomes c, and next to c, n becomes ñ (ścutva): sañcśambhuḥ." },
+    { sutra: "8.4.63", parts: [["saYc"], ["C", "new"], ["amBuH"]], note: "After the stop c, ś before a vowel may become ch: sañcchambhuḥ." },
+    { sutra: "8.4.65", parts: [["saY"], ["c", "gone"], ["CamBuH"]], note: "After the consonant ñ, c before the like sound ch may be dropped: sañchambhuḥ." },
+    { label: "four forms", parts: [["saYCamBuH"]], note: "Varadarāja's list: sañchambhuḥ, sañcchambhuḥ, sañcśambhuḥ, sañśambhuḥ. All four are correct." },
+  ]}
+/>
+
+## The doubled nasal
+
+<SutraFolio id="8.3.32" />
+
+When a word ends in *ṅ*, *ṇ* or *n* after a **short** vowel, a following vowel takes the same nasal as an augment (<Sa iast="ṅamuṭ" />). The effect is a doubled nasal, and it is compulsory (<Sa iast="nityam" />):
+
+<div class="example">
+  <span><Sa iast="pratyaṅ" /> + <Sa iast="ātmā" /> → <Sa iast="pratyaṅṅ ātmā" />, "the inward self"</span>
+  <span><Sa iast="sugaṇ" /> + <Sa iast="īśaḥ" /> → <Sa iast="sugaṇṇ īśaḥ" /></span>
+  <span><Sa iast="san" /> + <Sa iast="acyutaḥ" /> → <Sa iast="sann acyutaḥ" /></span>
+</div>
+
+<Voice quote="kas-8.3.32" voice="bhasya">
+  The Kāśikā's examples include *kurvann āste*, "he sits, working". Then it tests the words of the rule. Why "after a short vowel"? Because after a long one nothing is added: *prāṅ āste*, *bhavān āste*.
+</Voice>
+
+<Voice quote="vp-1.95" voice="darsana">
+  An augment is a part added to a word. Bhartṛhari allows two accounts of parts: where words seem to have them, the difference in form comes from the sequence of sounds; where they have none, dividing them is a means of explaining them. Read with the second account, *sann acyutaḥ* is one continuous utterance, and the augment is the grammar's way of explaining the doubled n that speakers say.
+</Voice>
+
+## Try it
+
+<SandhiPad client:visible level={3} initialA="san" initialB="śambhuḥ" exampleSet="consonant" />
+
+<Practice
+  skills={[
+    "Placing an augment by its marker (1.1.46)",
+    "The forms of prāṅ, ṣaṭ and san before a sibilant",
+    "The four forms of san + śambhuḥ",
+    "Doubling ṅ, ṇ, n before a vowel",
+  ]}
+/>

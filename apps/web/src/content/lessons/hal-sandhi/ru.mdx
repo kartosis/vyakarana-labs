@@ -1,0 +1,139 @@
+---
+title: n and m that turn into s, and t before ch
+deva: नश्छव्यप्रशान्
+module: hal-sandhi
+order: 5
+minutes: 30
+summary: LSK 90–102 close the Hal-sandhi-prakaraṇa. In a few words a final n or m becomes ru, then visarga, then s, with a nasal sound left behind. And a vowel before ch takes a t.
+lskRange: 90–102
+sutras: ["8.3.5", "8.3.2", "8.3.4", "8.3.15", "8.3.6", "8.3.7", "8.3.34", "8.3.10", "8.3.37", "8.1.2", "8.3.12", "6.1.73", "6.1.76"]
+---
+import Sa from "../../../components/Sa.astro";
+import Voice from "../../../components/Voice.astro";
+import SutraFolio from "../../../components/SutraFolio.astro";
+import SutraRef from "../../../components/SutraRef.astro";
+import Practice from "../../../components/Practice.astro";
+import Steps from "../../../islands/Steps.tsx";
+import SandhiPad from "../../../islands/SandhiPad.tsx";
+
+This last stretch introduces <Sa iast="ru" />, an r-sound marked with u, which the grammar puts in place of certain final sounds before they become visarga or s. You will meet it constantly in the next module. Here it replaces an *m* or an *n*, and leaves a trace of nasality behind.
+
+## sam before s
+
+<SutraFolio id="8.3.5" level={2} />
+
+The m of *sam* becomes *ru* before the augment *s* that some verbs take after it, as in *sam* + *s* + *kartā*, "one who refines". Two rules govern the nasality that remains.
+
+<SutraFolio id="8.3.2" compact />
+
+<SutraFolio id="8.3.4" compact />
+
+Throughout this section, the vowel before a *ru* may be nasalised (candrabindu, <Sa deva="ँ" />). Where it is not, an anusvāra is added after it instead. The ru itself becomes visarga before a voiceless sound:
+
+<SutraFolio id="8.3.15" />
+
+Varadarāja cites here a vārttika (on 8.3.5), <Sa iast="saṃpuṃkānāṃ so vaktavyaḥ" />: after *sam*, *puṃs* and *kān* the result is *s*, not visarga. So he writes <Sa deva="सँस्स्कर्ता" /> or <Sa deva="संस्स्कर्ता" />.
+
+<SutraFolio id="8.3.6" />
+
+The m of *pum* "man, male" becomes ru before a voiceless stop followed by a vowel, semivowel, h or nasal: <Sa iast="puṃskokilaḥ" />, "the male cuckoo", or <Sa deva="पुँस्कोकिलः" />.
+
+## n before c, ṭ, t
+
+<SutraFolio id="8.3.7" />
+
+A word-final *n* becomes ru before *ch, ṭh, th, c, ṭ, t* (<Sa iast="chav" />) when a vowel, semivowel, h or nasal follows that consonant. The one exception is the word *praśān*. The ru goes on to visarga by 8.3.15, and visarga before a voiceless sound becomes s:
+
+<SutraFolio id="8.3.34" compact />
+
+<Steps
+  client:visible
+  label="cakrin + trāyasva, LSK 95–96"
+  steps={[
+    { parts: [["cakrin"], [" "], ["trAyasva"]], note: "cakrin ‘discus-bearer’ (vocative) and trāyasva ‘protect!’." },
+    { sutra: "8.3.7", parts: [["cakri"], ["~r", "new"], [" "], ["trAyasva"]], note: "n before t + r becomes ru (written r). By 8.3.2 the vowel before it may be nasalised." },
+    { sutra: "8.3.15", parts: [["cakri~"], ["H", "new"], [" "], ["trAyasva"]], note: "Before the voiceless t, ru becomes visarga." },
+    { sutra: "8.3.34", parts: [["cakri~"], ["s", "new"], ["trAyasva"]], note: "Visarga before a voiceless sound becomes s: cakrim̐s trāyasva. With an anusvāra instead of the nasal vowel (8.3.4): cakriṃs trāyasva." },
+  ]}
+/>
+
+<Voice quote="kas-8.3.7" voice="bhasya">
+  The Kāśikā takes *bhavān*, "Your Honour", through every consonant of the rule: *bhavām̐ś chādayati*, *bhavām̐ś cinoti*, *bhavām̐ṣ ṭīkate*, *bhavām̐s tarati*, each also with anusvāra. The s then follows the next sound's place, by ścutva and ṣṭutva. Before k, which is not in the list, nothing happens: *bhavān karoti*.
+</Voice>
+
+Varadarāja adds the counter-examples: <Sa iast="praśān tanoti" />, because *praśān* is excepted, and <Sa iast="hanti" />, because inside a word the rule does not apply.
+
+<SutraFolio id="8.3.10" compact />
+
+<SutraFolio id="8.3.37" compact />
+
+The word *nṝn*, "men" (accusative plural), may change its n to ru before *p*. Before a velar or labial stop, a visarga may then become one of the two rare breath sounds, the jihvāmūlīya before k and kh, the upadhmānīya before p and ph, or stay visarga. Varadarāja's five forms of *nṝn pāhi*, "protect the men", are in the vṛtti of the folio above.
+
+<SutraFolio id="8.1.2" compact />
+
+<SutraFolio id="8.3.12" />
+
+When a word is said twice, the second is <Sa iast="āmreḍita" />. Before its own repetition, the n of *kān* "whom?" becomes ru: <Sa iast="kāṃs kān" /> or <Sa deva="काँस्कान्" />, "whom, whom?".
+
+<Voice quote="vp-1.94" voice="darsana">
+  *n*, then *ru*, then visarga, then *s*, then a palatal or retroflex s: the chain must run in exactly this order, because each rule sees only what the rules before it have made (8.2.1). Bhartṛhari uses the image of milk turning to curd and a seed growing into a plant to say that understanding, too, unfolds in a fixed order of stages.
+</Voice>
+
+## t before ch
+
+The prakaraṇa ends with two rules from the sixth chapter about a vowel before *ch*.
+
+<SutraFolio id="6.1.73" />
+
+A short vowel before *ch* takes the augment *t* (<Sa iast="tuk" />), which then becomes *c* by ścutva: <Sa iast="śiva" /> + <Sa iast="chāyā" /> → <Sa iast="śivacchāyā" />, "Śiva's shadow".
+
+<Voice quote="kas-6.1.73" voice="bhasya">
+  The Kāśikā's examples are inside words: *icchati*, "wishes", and *yacchati*, "gives". The rule is not about word boundaries at all; it applies wherever a short vowel meets ch in close junction. That is why Sanskrit spells *cch* so often in the middle of words.
+</Voice>
+
+<SutraFolio id="6.1.76" />
+
+After a **long** vowel at the end of a word, the t is optional: <Sa iast="lakṣmīcchāyā" /> or <Sa iast="lakṣmīchāyā" />, "Lakṣmī's shadow".
+
+<Voice quote="kas-6.1.76" voice="bhasya">
+  The Kāśikā's pairs make the same point with other long vowels: *kuṭīcchāyā* or *kuṭīchāyā*, "the shade of the hut", *kuvalīcchāyā* or *kuvalīchāyā*.
+</Voice>
+
+## The prakaraṇa on one page
+
+<div class="table-wrap">
+<table>
+<thead><tr><th scope="col">Junction</th><th scope="col">Rule</th><th scope="col">Example</th></tr></thead>
+<tbody>
+<tr><td>vowel + ch</td><td><SutraRef id="6.1.73" /> t (after a long vowel at word end, optional: <SutraRef id="6.1.76" />)</td><td><Sa iast="śivacchāyā" /></td></tr>
+<tr><td>word-final stop</td><td><SutraRef id="8.2.39" /> voiced</td><td><Sa iast="vāgīśaḥ" /></td></tr>
+<tr><td>n + c ch ṭ ṭh t th (+ am)</td><td><SutraRef id="8.3.7" /> ru → s, nasal kept</td><td><Sa iast="bhavāṃś ca" /></td></tr>
+<tr><td>m + consonant</td><td><SutraRef id="8.3.23" /> anusvāra</td><td><Sa iast="hariṃ vande" /></td></tr>
+<tr><td>ṅ ṇ + sibilant</td><td><SutraRef id="8.3.28" /> k ṭ (optional)</td><td><Sa iast="prāṅk ṣaṣṭhaḥ" /></td></tr>
+<tr><td>ḍ n + s</td><td><SutraRef id="8.3.29" />, <SutraRef id="8.3.30" /> t (optional)</td><td><Sa iast="ṣaṭ tsantaḥ" /></td></tr>
+<tr><td>n + ś</td><td><SutraRef id="8.3.31" /> t (optional)</td><td><Sa iast="sañcchambhuḥ" /></td></tr>
+<tr><td>short vowel + ṅ ṇ n + vowel</td><td><SutraRef id="8.3.32" /> doubled nasal</td><td><Sa iast="sann acyutaḥ" /></td></tr>
+<tr><td>s or dental + palatal</td><td><SutraRef id="8.4.40" /> palatal</td><td><Sa iast="saccit" /></td></tr>
+<tr><td>s or dental + retroflex</td><td><SutraRef id="8.4.41" /> retroflex (not after a word-final ṭ: <SutraRef id="8.4.42" />)</td><td><Sa iast="taṭṭīkā" /></td></tr>
+<tr><td>stop + nasal</td><td><SutraRef id="8.4.45" /> nasal (optional; compulsory before a suffix)</td><td><Sa iast="etan murāriḥ" /></td></tr>
+<tr><td>stop + voiceless</td><td><SutraRef id="8.4.55" /> voiceless</td><td><Sa iast="vākpatiḥ" /></td></tr>
+<tr><td>anusvāra + stop</td><td><SutraRef id="8.4.58" /> that stop's nasal (optional at word end: <SutraRef id="8.4.59" />)</td><td><Sa iast="tvaṅ karoṣi" /></td></tr>
+<tr><td>dental + l</td><td><SutraRef id="8.4.60" /> l</td><td><Sa iast="tallayaḥ" /></td></tr>
+<tr><td>stop + h</td><td><SutraRef id="8.4.62" /> voiced aspirate (optional)</td><td><Sa iast="vāgghariḥ" /></td></tr>
+<tr><td>stop + ś + aṭ</td><td><SutraRef id="8.4.63" /> ch (optional)</td><td><Sa iast="tacchivaḥ" /></td></tr>
+</tbody>
+</table>
+</div>
+
+## Try it
+
+<SandhiPad client:visible level={3} initialA="bhavān" initialB="ca" exampleSet="consonant" />
+
+<Practice
+  skills={[
+    "Following n through ru, visarga and s",
+    "Knowing when 8.3.7 does not apply",
+    "Adding t before ch",
+    "Choosing the right consonant rule for any junction",
+  ]}
+/>

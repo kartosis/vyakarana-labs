@@ -1,0 +1,111 @@
+---
+title: h, ś and the anusvāra
+deva: मोऽनुस्वारः
+module: hal-sandhi
+order: 3
+minutes: 30
+summary: LSK 75–83. After a stop, h may turn into an aspirate and ś into ch. A word-final m before a consonant becomes anusvāra, and an anusvāra before a stop may take on that stop's nasal. A few words keep their m.
+lskRange: 75–83
+sutras: ["8.4.62", "8.4.63", "8.3.23", "8.3.24", "8.4.58", "8.4.59", "8.3.25", "8.3.26", "8.3.27"]
+---
+import Sa from "../../../components/Sa.astro";
+import Voice from "../../../components/Voice.astro";
+import SutraFolio from "../../../components/SutraFolio.astro";
+import SutraRef from "../../../components/SutraRef.astro";
+import Practice from "../../../components/Practice.astro";
+import Steps from "../../../islands/Steps.tsx";
+import SandhiPad from "../../../islands/SandhiPad.tsx";
+
+Two optional rules about what follows a stop, then the rules that govern the most frequent consonant change of all, m before a consonant.
+
+## h after a stop
+
+<SutraFolio id="8.4.62" level={2} />
+
+After a stop (<Sa iast="jhay" />), *h* may take a form like the stop before it (*pūrvasavarṇa*, as in the last lesson). Varadarāja says which: *h* is voiced and breathy, so it becomes the **voiced aspirate** of that row, the fourth sound of the row — <Sa iast="vāg" /> + <Sa iast="hariḥ" /> → <Sa iast="vāgghariḥ" /> or <Sa iast="vāg hariḥ" />.
+
+<Voice quote="kas-8.4.62" voice="bhasya">
+  The Kāśikā runs the rule through all five rows of stops (*vāgghasati*, *śvaliḍḍhasati*, *agniciddhasati*, *triṣṭubbhasati*) and then asks why the rule says "after a jhay". Because after a nasal nothing happens: *prāṅ hasati*, *bhavān hasati*.
+</Voice>
+
+## ś after a stop
+
+<SutraFolio id="8.4.63" />
+
+After a stop, *ś* may become *ch* when a vowel, h, y, v or r follows it (<Sa iast="aṭi" />). Varadarāja's example takes three rules in a row, in the order of their numbers:
+
+<Steps
+  client:visible
+  label="tad + śivaḥ, LSK 76"
+  steps={[
+    { parts: [["tad"], [" "], ["SivaH"]], note: "tad ‘that’ and śivaḥ ‘auspicious’." },
+    { sutra: "8.4.40", parts: [["ta"], ["j", "new"], ["SivaH"]], note: "d next to ś becomes the palatal j (ścutva)." },
+    { sutra: "8.4.55", parts: [["ta"], ["c", "new"], ["SivaH"]], note: "j before the voiceless ś becomes c (khari ca)." },
+    { sutra: "8.4.63", parts: [["tac"], ["C", "new"], ["ivaH"]], note: "After the stop c, ś before the vowel i may become ch: tacchivaḥ. Or it stays: tacśivaḥ." },
+  ]}
+/>
+
+A vārttika (<Sa iast="chatvam amīti vācyam" />) extends the change to the wider class <Sa iast="am" />, which adds l and the nasals: <Sa iast="tacchlokena" />, "by that verse".
+
+<Voice quote="kas-8.4.63" voice="bhasya">
+  The Kāśikā's pairs show the option at every row: *vāk chete* or *vāk śete*, *agnicic chete* or *agnicit śete*. Each pair uses *śete*, "lies down", so that the ś is followed by a vowel, as the rule requires.
+</Voice>
+
+## m becomes anusvāra
+
+<SutraFolio id="8.3.23" />
+
+A word ending in *m* takes anusvāra (ṃ) before any consonant: <Sa iast="harim" /> + <Sa iast="vande" /> → <Sa iast="hariṃ vande" />, "I praise Hari".
+
+<Voice quote="kas-8.3.23" voice="bhasya">
+  The Kāśikā marks both limits of the rule. Before a vowel the m stays: *tvam atra*, *kim atra*. Inside a word it stays too: *gamyate*, *ramyate*, where the m is not word-final.
+</Voice>
+
+<SutraFolio id="8.3.24" />
+
+Inside a word, n and m become anusvāra only before a stop, sibilant or h (<Sa iast="jhal" />): <Sa iast="yaśāṃsi" />, "glories", <Sa iast="ākraṃsyate" />, "he will step up". Before other consonants they stay: <Sa iast="manyate" />, "he thinks".
+
+## The anusvāra takes the next sound's nasal
+
+<SutraFolio id="8.4.58" />
+
+Before a consonant other than a sibilant or h (<Sa iast="yay" />), an anusvāra becomes a sound of the following consonant's class: before a stop, its nasal. Inside a word this is compulsory: in <Sa iast="śāntaḥ" />, "calm", from the root *śam*, the m has become anusvāra before t (8.3.24) and the anusvāra has become n.
+
+<SutraFolio id="8.4.59" />
+
+At the end of a word it is optional: <Sa iast="tvaṅ karoṣi" /> or <Sa iast="tvaṃ karoṣi" />, "you do". Both spellings are correct, and printed texts use both.
+
+<Voice quote="kas-8.4.59" voice="bhasya">
+  The Kāśikā writes one sentence twice to show the whole range: every word-final anusvāra before a stop either takes that stop's nasal or stays anusvāra. *taṅ kathañ citrapakṣaṇ ḍayamānan nabhaḥstham*, or *taṃ kathaṃ citrapakṣaṃ ḍayamānaṃ nabhaḥsthaṃ*: five nasals, one at each place.
+</Voice>
+
+## Words that keep their m
+
+<SutraFolio id="8.3.25" />
+
+In <Sa iast="samrāṭ" />, "emperor", the m of *sam* stays m before *rāj*.
+
+<SutraFolio id="8.3.26" />
+
+Before h followed by m, a word-final m may stay m: <Sa iast="kim hmalayati" /> or <Sa iast="kiṃ hmalayati" />. A vārttika adds: before h followed by y, v or l, the m may become a **nasalised** y, v or l — <Sa deva="किय्ँ ह्यः" /> or <Sa iast="kiṃ hyaḥ" />, "what of yesterday?".
+
+<SutraFolio id="8.3.27" />
+
+Before h followed by n, the m may become n: <Sa iast="kin hnute" /> or <Sa iast="kiṃ hnute" />.
+
+<Voice quote="vp-1.106" voice="darsana">
+  An aspirate is a stop with more breath; *h* turned into *gh* swells the sound without adding a word. Bhartṛhari separates the two: the sound that follows the word may swell or shrink, faint or loud, but the word revealed through it keeps one and the same measure.
+</Voice>
+
+## Try it
+
+<SandhiPad client:visible level={3} initialA="tvam" initialB="karoṣi" exampleSet="consonant" />
+
+<Practice
+  skills={[
+    "Giving both forms of h and ś after a stop",
+    "Turning a word-final m into anusvāra",
+    "Writing the nasal for an anusvāra, and knowing when it is optional",
+    "The m of samrāṭ, kim hmalayati and kin hnute",
+  ]}
+/>

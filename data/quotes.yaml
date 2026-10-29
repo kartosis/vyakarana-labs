@@ -379,3 +379,151 @@
   translation: Just as stem, suffix and the rest are separated out within a word, so in a sentence the words can be drawn out by analysis.
   verified: true
   checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/vakyapadeeyam/data.txt
+# --- Hal-sandhi (checked 2026-10-29 against the ashtadhyayi.com dataset)
+- id: kas-8.4.40
+  author: Jayāditya & Vāmana
+  work: Kāśikāvṛtti
+  ref: on 8.4.40
+  deva: स्तोःश्चुनेति यथासंख्यमत्र नेष्यते। सकारस्य शकारेण चवर्गेण द्वाभ्यामपि संनिपाते शकारो भवति। तवर्गस्यापि च शकारेण चवर्गेण च संनिपाते चवर्गो भवति। आदेशे तु यथासंख्यमिष्यते। सकारस्य शकारः, तवर्गस्य च चवर्ग इति।
+  translation: "In stoḥ ścunā, pairing in order is not intended for the condition: s becomes ś on meeting either ś or a palatal, and the t-row becomes the c-row on meeting either. For the substitutes, though, pairing in order is intended: ś for s, and the c-row for the t-row."
+  verified: true
+  checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/sutraani/kashika.txt
+- id: kas-8.4.42
+  author: Jayāditya & Vāmana
+  work: Kāśikāvṛtti
+  ref: on 8.4.42
+  deva: पदान्ताट् टवर्गादुत्तरस्य स्तोः ष्टुत्वं न भवति नामित्येतद् वर्जयित्वा। श्वलिट् साये। मधुलिट् तरति।
+  translation: After a ṭ-row consonant that ends a word, s or the t-row does not become retroflex — except in nām. śvaliṭ sāye, madhuliṭ tarati.
+  verified: true
+  checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/sutraani/kashika.txt
+- id: kas-8.2.39
+  author: Jayāditya & Vāmana
+  work: Kāśikāvṛtti
+  ref: on 8.2.39
+  deva: झलां जश आदेशा भवन्ति पदस्यान्ते वर्तमानानाम्। वागत्र। श्वलिडत्र। अग्निचिदत्र। त्रिष्टुबत्र।
+  translation: Stops and sibilants at the end of a word are replaced by unaspirated voiced stops — vāg atra, śvaliḍ atra, agnicid atra, triṣṭub atra.
+  verified: true
+  checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/sutraani/kashika.txt
+- id: kas-8.4.45
+  author: Jayāditya & Vāmana
+  work: Kāśikāvṛtti
+  ref: on 8.4.45
+  deva: यरः पदान्तस्यानुनासिके परतो वानुनासिक आदेशो भवति। वाङ् नयति, वाग् नयति। … यरोऽनुनासिके प्रत्यये भाषायां नित्यवचनं कर्तव्यम्॥ वाङ्मयम्। त्वङ्मयम्।
+  translation: A word-final yar before a nasal is optionally replaced by a nasal — vāṅ nayati or vāg nayati. … It should be stated that before a nasal that begins a suffix, in ordinary speech, this is compulsory — vāṅmayam, tvaṅmayam.
+  verified: true
+  checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/sutraani/kashika.txt
+- id: kas-8.4.62
+  author: Jayāditya & Vāmana
+  work: Kāśikāvṛtti
+  ref: on 8.4.62
+  deva: झय उत्तरस्य हकारस्य पूर्वसवर्णादेशो भवत्यन्यतरस्याम्। वाग्घसति, वाग् हसति। … झय इति किम्? प्राङ् हसति। भवान् हसति॥
+  translation: After a jhay (a stop), h is optionally replaced by a sound of the same class as the one before it — vāgghasati or vāg hasati. … Why "after a jhay"? Because of prāṅ hasati and bhavān hasati.
+  verified: true
+  checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/sutraani/kashika.txt
+- id: kas-8.4.63
+  author: Jayāditya & Vāmana
+  work: Kāśikāvṛtti
+  ref: on 8.4.63
+  deva: झय उत्तरस्य शकारस्याटि परतश्छकारादेशो भवत्यन्यतरस्याम्। वाक्छेते, वाक् शेते। अग्निचिच्छेते, अग्निचित् शेते।
+  translation: After a stop, ś is optionally replaced by ch when a vowel, h, y, v or r (aṭ) follows — vāk chete or vāk śete; agnicic chete or agnicit śete.
+  verified: true
+  checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/sutraani/kashika.txt
+- id: kas-8.3.23
+  author: Jayāditya & Vāmana
+  work: Kāśikāvṛtti
+  ref: on 8.3.23
+  deva: मकारान्तस्य पदस्य अनुस्वार आदेशो भवति हलि परतः। कुण्डं हसति। वनं हसति। … हलीत्येव — त्वमत्र। किमत्र। पदान्तस्येत्येव — गम्यते। रम्यते॥
+  translation: A word ending in m takes anusvāra in place of the m before a consonant — kuṇḍaṃ hasati, vanaṃ hasati. … Only before a consonant — tvam atra, kim atra. Only at the end of a word — gamyate, ramyate.
+  verified: true
+  checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/sutraani/kashika.txt
+- id: kas-8.4.59
+  author: Jayāditya & Vāmana
+  work: Kāśikāvṛtti
+  ref: on 8.4.59
+  deva: पदान्तस्यानुस्वारस्य ययि परतो वा परसवर्णादेशो भवति। तङ् कथञ् चित्रपक्षण् डयमानन् नभःस्थम् पुरुषोऽवधीत्, तं कथं चित्रपक्षं डयमानं नभःस्थं पुरुषोऽवधीत्॥
+  translation: >-
+    A word-final anusvāra before a yay is optionally replaced by a sound of the same class as the following one —
+    "taṅ kathañ citrapakṣaṇ ḍayamānan nabhaḥstham puruṣo 'vadhīt", or "taṃ kathaṃ citrapakṣaṃ ḍayamānaṃ nabhaḥsthaṃ
+    puruṣo 'vadhīt" — "how did the man kill that bright-winged bird flying in the sky?"
+  verified: true
+  checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/sutraani/kashika.txt
+- id: kas-8.3.28
+  author: Jayāditya & Vāmana
+  work: Kāśikāvṛtti
+  ref: on 8.3.28
+  deva: पूर्वान्तकरणं प्राङ्क् छेते इत्यत्र छत्वार्थम्। शश्छोऽटि इति हि पदान्ताद् झय इति तद् विज्ञायते।
+  translation: The augment is made the end of the earlier word for the sake of ch in prāṅk chete, for 8.4.63 (śaś cho 'ṭi) is understood to apply after a stop that ends a word.
+  verified: true
+  checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/sutraani/kashika.txt
+- id: kas-8.3.32
+  author: Jayāditya & Vāmana
+  work: Kāśikāvṛtti
+  ref: on 8.3.32
+  deva: ह्रस्वात् परो यो ङम् तदन्तात् पदादुत्तरस्याचो ङमुडागमो भवति नित्यम्। … ह्रस्वादिति किम्? प्राङास्ते। भवानास्ते।
+  translation: After a word that ends in ṅ, ṇ or n preceded by a short vowel, a following vowel always takes the augment ṅamuṭ. … Why "after a short vowel"? Because of prāṅ āste and bhavān āste.
+  verified: true
+  checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/sutraani/kashika.txt
+- id: kas-8.3.7
+  author: Jayāditya & Vāmana
+  work: Kāśikāvṛtti
+  ref: on 8.3.7
+  deva: भवाँश्छादयति, भवांश्छादयति। भवाँश्चिनोति, भवांश्चिनोति। भवाँष्टीकते, भवांष्टीकते। भवाँस्तरति, भवांस्तरति। छवीति किम्? भवान् करोति।
+  translation: bhavām̐ś chādayati or bhavāṃś chādayati; bhavām̐ś cinoti or bhavāṃś cinoti; bhavām̐ṣ ṭīkate or bhavāṃṣ ṭīkate; bhavām̐s tarati or bhavāṃs tarati. Why "before chav"? Because of bhavān karoti.
+  verified: true
+  checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/sutraani/kashika.txt
+- id: kas-6.1.73
+  author: Jayāditya & Vāmana
+  work: Kāśikāvṛtti
+  ref: on 6.1.73
+  deva: छकारे परतः संहितायां विषये ह्रस्वस्य तुगागमो भवति। इच्छति। यच्छति।
+  translation: Before ch, in close junction, a short vowel takes the augment t (tuk) — icchati, yacchati.
+  verified: true
+  checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/sutraani/kashika.txt
+- id: kas-6.1.76
+  author: Jayāditya & Vāmana
+  work: Kāśikāvṛtti
+  ref: on 6.1.76
+  deva: कुटीच्छाया, कुटीछाया। कुवलीच्छाया, कुवलीछाया॥
+  translation: kuṭīcchāyā or kuṭīchāyā; kuvalīcchāyā or kuvalīchāyā.
+  verified: true
+  checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/sutraani/kashika.txt
+- id: vp-1.111
+  author: Bhartṛhari
+  work: Vākyapadīya
+  ref: Brahmakāṇḍa 1.111, second half (verse numbering of the ashtadhyayi.com text)
+  deva: … स्थानेष्वभिहतो वायुः शब्दत्वं प्रतिपद्यते ॥
+  translation: … the breath, striking the places of articulation, becomes speech-sound.
+  verified: true
+  checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/vakyapadeeyam/data.txt
+- id: vp-1.97
+  author: Bhartṛhari
+  work: Vākyapadīya
+  ref: Brahmakāṇḍa 1.97 (verse numbering of the ashtadhyayi.com text)
+  deva: अविकारस्य शब्दस्य निमित्तैर्विकृतो ध्वनिः । उपलब्धौ निमित्तत्वं उपयाति प्रकाशवत् ॥
+  translation: The word itself does not change. The audible sound, changed by its causes, becomes the means by which the word is perceived, as a light reveals a thing.
+  verified: true
+  checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/vakyapadeeyam/data.txt
+- id: vp-1.106
+  author: Bhartṛhari
+  work: Vākyapadīya
+  ref: Brahmakāṇḍa 1.106 (verse numbering of the ashtadhyayi.com text)
+  deva: अल्पे महति वा शब्दे स्फोटकालो न भिद्यते । परस्तु शब्दसंतानः प्रचयापचयात्मकः ॥
+  translation: Whether the sound is faint or loud, the duration of the sphoṭa does not change. It is the stream of sound that follows which swells and shrinks.
+  verified: true
+  checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/vakyapadeeyam/data.txt
+- id: vp-1.95
+  author: Bhartṛhari
+  work: Vākyapadīya
+  ref: Brahmakāṇḍa 1.95 (verse numbering of the ashtadhyayi.com text)
+  deva: भागवत्स्वपि तेष्वेव रूपभेदो ध्वनेः क्रमात् । निर्भागेष्वभ्युपायो वा भागभेदप्रकल्पनम् ॥
+  translation: Even where words seem to have parts, the difference in their form comes from the sequence of the sound. Or else, for words that have no parts, imagining separate parts is a means of explaining them.
+  verified: true
+  checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/vakyapadeeyam/data.txt
+- id: vp-1.94
+  author: Bhartṛhari
+  work: Vākyapadīya
+  ref: Brahmakāṇḍa 1.94 (verse numbering of the ashtadhyayi.com text)
+  deva: यथानुपूर्वीनियमो विकारे क्षीरबीजयोः । तथैव प्रतिपत्तॄणां नियतो बुद्धिषु क्रमः ॥
+  translation: Just as milk or a seed changes through stages in a fixed order, so the order in which understanding arises in the mind of the listener is fixed.
+  verified: true
+  checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/vakyapadeeyam/data.txt

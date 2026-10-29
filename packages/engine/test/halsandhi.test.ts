@@ -100,6 +100,17 @@ describe("hal-sandhi: Varadarāja's examples", () => {
     expect(join("sugaṇ", "ṣaṣṭhaḥ").all).toEqual(["sugaṇṭhṣaṣṭhaḥ", "sugaṇṭṣaṣṭhaḥ", "sugaṇṣaṣṭhaḥ"]);
   });
 
+  it("Kāśikā on 8.3.28: prāṅk chete (k augment, then ś → ch)", () => {
+    expect(join("prāṅ", "śete").all).toEqual(["prāṅkchete", "prāṅkśete", "prāṅśete"]);
+  });
+
+  it("Kāśikā on 8.3.7, 8.3.32, 8.4.62: counter-examples", () => {
+    expect(join("bhavān", "karoti").result).toBe("bhavān karoti".replace(" ", ""));
+    expect(join("bhavān", "tsarukaḥ").result).toBe("bhavāntsarukaḥ");
+    expect(join("prāṅ", "āste").result).toBe("prāṅāste");
+    expect(join("prāṅ", "hasati").untouched).toBe(true);
+  });
+
   it("LSK 86–87, 8.3.29–30: dhuṭ, which becomes t", () => {
     expect(join("ṣaṭ", "santaḥ").all).toEqual(["ṣaṭtsantaḥ", "ṣaṭsantaḥ"]);
     expect(join("san", "saḥ").all).toEqual(["santsaḥ", "sansaḥ"]);

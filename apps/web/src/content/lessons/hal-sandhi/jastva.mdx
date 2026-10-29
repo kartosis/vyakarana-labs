@@ -1,0 +1,94 @@
+---
+title: Voice, nasals, and sounds that copy their neighbours
+deva: झलां जशोऽन्ते
+module: hal-sandhi
+order: 2
+minutes: 30
+summary: LSK 67–74. A word-final stop is voiced; before a nasal it may become nasal; before l it becomes l; before a voiceless sound it loses its voice again. Varadarāja works one word, utthānam, through five sūtras.
+lskRange: 67–74
+sutras: ["8.2.39", "8.4.45", "8.4.60", "8.4.61", "1.1.67", "1.1.54", "8.4.65", "8.4.55"]
+---
+import Sa from "../../../components/Sa.astro";
+import Voice from "../../../components/Voice.astro";
+import SutraFolio from "../../../components/SutraFolio.astro";
+import SutraRef from "../../../components/SutraRef.astro";
+import Practice from "../../../components/Practice.astro";
+import Steps from "../../../islands/Steps.tsx";
+import SandhiPad from "../../../islands/SandhiPad.tsx";
+
+The last lesson moved consonants in place. This one changes their manner: voiced or voiceless, oral or nasal. The first rule sets a default for every word that ends in a stop.
+
+## A word-final stop is voiced
+
+<SutraFolio id="8.2.39" level={2} />
+
+<Sa iast="jhal" /> is every stop that is not a nasal, every sibilant, and h: the pratyāhāra from *jh* to *l* in the Śivasūtras leaves out only vowels, semivowels and nasals. <Sa iast="jaś" /> is *j b g ḍ d*, the unaspirated voiced stops. At the end of a word (<Sa iast="ante" />, under the heading <Sa iast="padasya" />, <SutraRef id="8.1.16" />), a stop becomes the voiced unaspirated stop of its row. So *vāk* + *īśaḥ* gives <Sa iast="vāgīśaḥ" />, "lord of speech".
+
+<Voice quote="kas-8.2.39" voice="bhasya">
+  Every example in the Kāśikā is a word before *atra*, "here": *vāg atra*, *śvaliḍ atra*, *agnicid atra*, *triṣṭub atra*. Four rows, four voiced stops. The fifth row, the palatals, does not appear, because no word ends in a palatal: an earlier rule (8.2.30) has already turned it into a velar.
+</Voice>
+
+This voiced form is what the later rules of the junction start from. Where a voiceless sound follows, 8.4.55 below turns it voiceless again: *vāg* + *patiḥ* → <Sa iast="vākpatiḥ" />. (Said alone, before a pause, a word like *vāk* may end in either k or g, by a rule taught later.)
+
+## Before a nasal
+
+<SutraFolio id="8.4.45" />
+
+A word-final consonant before a nasal **may** become the nasal of its row: <Sa iast="etan murāriḥ" /> or <Sa iast="etad murāriḥ" />, "this is Murāri". Varadarāja adds a vārttika: before a nasal that begins a **suffix**, in ordinary speech, the nasal is compulsory — <Sa iast="tanmātram" /> "that alone", <Sa iast="cinmayam" /> "made of consciousness".
+
+<Voice quote="kas-8.4.45" voice="bhasya">
+  The Kāśikā gives both forms side by side, *vāṅ nayati* and *vāg nayati*, then the same vārttika with *vāṅmayam* "made of speech". It closes with a remark: the rule can be read as an "arranged option" (<Sa iast="vyavasthitavibhāṣā" />), optional in one place and fixed in another, so the vārttika adds nothing new.
+</Voice>
+
+## Before l
+
+<SutraFolio id="8.4.60" />
+
+A dental before *l* becomes *l*: <Sa iast="tad" /> + <Sa iast="layaḥ" /> → <Sa iast="tallayaḥ" />, "absorption in that". For *n*, Varadarāja adds <Sa iast="nasyānunāsiko laḥ" />: n becomes a **nasalised** l, written with the candrabindu — <Sa iast="vidvān" /> + <Sa iast="likhati" /> → <Sa deva="विद्वाँल्लिखति" />, "the learned man writes".
+
+## A sound that copies the one before
+
+<SutraFolio id="8.4.61" />
+
+So far a sound has copied the sound **after** it. Here the copying runs backwards: after the prefix *ud*, the roots *sthā* "stand" and *stambh* "prop" take a sound like the one **before** them (<Sa iast="pūrvasavarṇa" />). Two paribhāṣās place the change.
+
+<SutraFolio id="1.1.67" compact />
+
+<SutraFolio id="1.1.54" compact />
+
+<Sa iast="udaḥ" /> is an ablative, so the change applies to what **follows** ud (1.1.67). And an operation on what follows applies to its **first** sound (1.1.54): only the *s* of *sthā* changes. Varadarāja: <Sa iast="iti sasya thaḥ" />, "so s becomes th" — of the dental row, th is the sound closest to s, voiceless and breathy like it. Two more rules finish the word.
+
+<SutraFolio id="8.4.65" compact />
+
+<SutraFolio id="8.4.55" />
+
+<Steps
+  client:visible
+  label="ud + sthānam, LSK 70–74"
+  steps={[
+    { parts: [["ud"], [" "], ["sTAnam"]], note: "The prefix ud ‘up’ and sthānam ‘standing’." },
+    { sutra: "8.4.61", parts: [["ud"], ["T", "new"], ["TAnam"]], note: "After ud, the first sound of sthā (1.1.67, 1.1.54) becomes a sound like d: th, the closest to s in voice and breath." },
+    { sutra: "8.4.55", parts: [["u"], ["tt", "new"], ["TAnam"]], note: "Before a voiceless sound, a stop becomes the unaspirated voiceless stop of its row: d becomes t, and so does the first th. Varadarāja: udo dasya taḥ." },
+    { sutra: "8.4.65", parts: [["ut"], ["t", "gone"], ["TAnam"]], note: "After a consonant, a stop before a like stop may be dropped: the middle t goes. utthānam, ‘rising’." },
+  ]}
+/>
+
+Varadarāja introduces 8.4.65 before 8.4.55, but in the derivation the rules of the last three quarters apply in the order of their numbers, so 8.4.55 acts first. The same steps give <Sa iast="uttambhanam" />, "propping up", from *ud* + *stambhanam*. Since 8.4.65 is optional, the form that keeps the middle t is correct too: the Kāśikā writes the agent noun that way, <Sa deva="उत्त्थाता" />.
+
+<Voice quote="vp-1.97" voice="darsana">
+  Rule after rule in this lesson changes a sound because of its neighbour. Bhartṛhari's distinction keeps that in proportion: the word itself does not change; the audible sound changes with its causes, and through it the word is perceived, as a lamp's light shows a thing whatever the lamp is made of.
+</Voice>
+
+## Try it
+
+<SandhiPad client:visible level={3} initialA="etad" initialB="murāriḥ" exampleSet="consonant" />
+
+<Practice
+  skills={[
+    "Voicing a word-final stop (8.2.39)",
+    "Giving both forms before a nasal, and knowing when only one is allowed",
+    "Changing a dental before l",
+    "Deriving utthānam",
+    "Unvoicing before a voiceless sound (8.4.55)",
+  ]}
+/>
