@@ -1,129 +1,572 @@
-# Ac-sandhi-prakaraṇa: the vowel-junction rules, plus the saṃjñās and paribhāṣās they lean on.
-# LSK numbers for this prakaraṇa are not yet checked against a source, so lsk is null (PROGRESS §4.4).
-# 6.1.72 and 6.1.77 live in core.yaml. Field meanings: see samjna.yaml.
-- id: "1.1.1"
-  lsk: null
-  lskVerified: false
-  deva: वृद्धिरादैच्
-  pada: [वृद्धिः, आत्-ऐच्]
+# Ac-sandhi-prakaraṇa of the Laghusiddhāntakaumudī: LSK 15–61, in LSK order.
+#
+# Hand-written fields: id (Aṣṭādhyāyī a.p.s), kind, meaning (plain English, original to this project), note.
+# Every other field is filled from the ashtadhyayi.com dataset by scripts/import-sutras.py and checked by
+# scripts/check-sutras.py: deva (sūtra text), pada (padaccheda), anuvrtti / adhikara ([word, from a.p.s]),
+# lsk / sk (Laghusiddhāntakaumudī / Siddhāntakaumudī numbers), vrtti (Varadarāja's LSK vṛtti).
+# Source: https://github.com/ashtadhyayi-com/data (sutraani/), used with credit as its README asks.
+# kind: saṃjñā | paribhāṣā | vidhi | niyama | atideśa | adhikāra
+- id: "6.1.77"
+  lsk: 15
+  lskVerified: true
+  sk: 47
+  deva: "इको यणचि"
+  pada: ["इकः", "यण्", "अचि"]
   anuvrtti: []
-  vrttiVerified: false
-  kind: saṃjñā
-  meaning: The vowels ā, ai and au are called vṛddhi.
-- id: "1.1.2"
-  lsk: null
-  lskVerified: false
-  deva: अदेङ्गुणः
-  pada: [अत्-एङ्, गुणः]
+  adhikara: [["संहितायाम्", "6.1.72"]]
+  vrtti: "इकः स्थाने यण् स्यादचि संहितायां विषये। सुधी उपास्य इति स्थिते॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "In close junction, a vowel of the ik class (i u ṛ ḷ) is replaced by a semivowel of the yaṇ class (y v r l) when a vowel follows."
+- id: "1.1.66"
+  lsk: 16
+  lskVerified: true
+  sk: 40
+  deva: "तस्मिन्निति निर्दिष्टे पूर्वस्य"
+  pada: ["तस्मिन्", "इति", "निर्दिष्टे", "पूर्वस्य"]
   anuvrtti: []
-  vrttiVerified: false
-  kind: saṃjñā
-  meaning: The vowels a, e and o are called guṇa. The t after a limits it to short a (1.1.70).
-- id: "1.1.11"
-  lsk: null
-  lskVerified: false
-  deva: ईदूदेद्द्विवचनं प्रगृह्यम्
-  pada: [ईत्-ऊत्-एत्, द्विवचनम्, प्रगृह्यम्]
-  anuvrtti: []
-  vrttiVerified: false
-  kind: saṃjñā
-  meaning: A dual form ending in ī, ū or e is called pragṛhya — "to be held apart".
-- id: "1.1.51"
-  lsk: null
-  lskVerified: false
-  deva: उरण् रपरः
-  pada: [उः, अण्, रपरः]
-  anuvrtti: [[स्थाने, "1.1.50"]]
-  vrttiVerified: false
+  adhikara: []
+  vrtti: "सप्तमीनिर्देशेन विधीयमानं कार्यं वर्णान्तरेणाव्यवहितस्य पूर्वस्य बोध्यम्॥"
+  vrttiVerified: true
   kind: paribhāṣā
-  meaning: When an aṇ vowel (a, i, u) replaces ṛ or ḷ, it is followed by r (or l for ḷ). So the guṇa of ṛ is ar, its vṛddhi ār.
-- id: "1.1.70"
-  lsk: null
-  lskVerified: false
-  deva: तपरस्तत्कालस्य
-  pada: [तपरः, तत्कालस्य]
+  meaning: "When a rule names something in the locative (seventh case), the operation applies to what comes immediately before it."
+- id: "1.1.50"
+  lsk: 17
+  lskVerified: true
+  sk: 39
+  deva: "स्थानेऽन्तरतमः"
+  pada: ["स्थाने", "अन्तरतमः"]
   anuvrtti: []
-  vrttiVerified: false
+  adhikara: []
+  vrtti: "प्रसङ्गे सति सदृशतम आदेशः स्यात् । सुध्य् उपास्य इति जाते ॥"
+  vrttiVerified: true
   kind: paribhāṣā
-  meaning: A vowel followed (or preceded) by t in a rule stands only for vowels of its own length. So "at" in 6.1.109 means short a only.
+  meaning: "When there is a choice of substitutes, the one most similar to the original takes its place."
+- id: "8.4.47"
+  lsk: 18
+  lskVerified: true
+  sk: 48
+  deva: "अनचि च"
+  pada: ["अनचि", "च"]
+  anuvrtti: [["यरः", "8.4.45"], ["अचः", "8.4.46"], ["द्वे", "8.4.46"]]
+  adhikara: [["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "अचः परस्य यरो द्वे वा स्तो न त्वचि। इति धकारस्य द्वित्वेन सुध्ध्य् उपास्य इति जाते॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "A consonant other than h (the yar class) that comes after a vowel and is not followed by a vowel may optionally be doubled."
+- id: "8.4.53"
+  lsk: 19
+  lskVerified: true
+  sk: 52
+  deva: "झलां जश् झशि"
+  pada: ["झलाम्", "जश्", "झशि"]
+  anuvrtti: []
+  adhikara: [["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "स्पष्टम्। इति पूर्वधकारस्य दकारः॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "Before a voiced stop (jhaś), a stop, sibilant or h (jhal) becomes the unaspirated voiced stop of its row (jaś: j b g ḍ d)."
+- id: "8.2.23"
+  lsk: 20
+  lskVerified: true
+  sk: 54
+  deva: "संयोगान्तस्य लोपः"
+  pada: ["संयोगान्तस्य", "लोपः"]
+  anuvrtti: []
+  adhikara: [["पदस्य", "8.1.16"], ["पूर्वत्रासिद्धम्", "8.2.1"]]
+  vrtti: "संयोगान्तं यत्पदं तदन्तस्य लोपः स्यात्॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "When a pada ends in a cluster of consonants, the final consonant is dropped."
+- id: "1.1.52"
+  lsk: 21
+  lskVerified: true
+  sk: 42
+  deva: "अलोऽन्त्यस्य"
+  pada: ["अलः", "अन्त्यस्य"]
+  anuvrtti: [["षष्ठी", "1.1.49"], ["स्थाने", "1.1.49"]]
+  adhikara: []
+  vrtti: "षष्ठीनिर्दिष्टस्यान्त्यस्याल आदेशः स्यात्। इति यलोपे प्राप्ते - यणः प्रतिषेधो वाच्यः (वार्त्तिकम्)। सुद्ध्युपास्यः। मद्ध्वरिः। धात्रंशः। लाकृतिः॥"
+  vrttiVerified: true
+  kind: paribhāṣā
+  meaning: "An operation taught for an item applies to its final sound."
 - id: "6.1.78"
-  lsk: null
-  lskVerified: false
-  deva: एचोऽयवायावः
-  pada: [एचः, अय्-अव्-आय्-आवः]
-  anuvrtti: [[अचि, "6.1.77"], [संहितायाम्, "6.1.72"]]
-  vrttiVerified: false
+  lsk: 22
+  lskVerified: true
+  sk: 61
+  deva: "एचोऽयवायावः"
+  pada: ["एचः", "अय्-अव्-आय्-आवः"]
+  anuvrtti: [["अचि", "6.1.77"]]
+  adhikara: [["संहितायाम्", "6.1.72"]]
+  vrtti: "एचः क्रमादय् अव् आय् आव् एते स्युरचि॥"
+  vrttiVerified: true
   kind: vidhi
-  meaning: Before a vowel, e, o, ai and au are replaced by ay, av, āy and āv respectively.
-- id: "6.1.84"
-  lsk: null
-  lskVerified: false
-  deva: एकः पूर्वपरयोः
-  pada: [एकः, पूर्वपरयोः]
-  anuvrtti: [[संहितायाम्, "6.1.72"]]
-  vrttiVerified: false
-  kind: adhikāra
-  meaning: Heading — in the rules that follow, a single substitute replaces both the earlier and the later sound (ekādeśa).
-- id: "6.1.87"
-  lsk: null
-  lskVerified: false
-  deva: आद्गुणः
-  pada: [आत्, गुणः]
-  anuvrtti: [[अचि, "6.1.77"], [एकः पूर्वपरयोः, "6.1.84"]]
-  vrttiVerified: false
-  kind: vidhi
-  meaning: When a or ā is followed by a vowel, both are replaced by a single guṇa vowel — the one closest to them (1.1.50).
-- id: "6.1.88"
-  lsk: null
-  lskVerified: false
-  deva: वृद्धिरेचि
-  pada: [वृद्धिः, एचि]
-  anuvrtti: [[आत्, "6.1.87"], [एकः पूर्वपरयोः, "6.1.84"]]
-  vrttiVerified: false
-  kind: vidhi
-  meaning: When a or ā is followed by e, ai, o or au, both are replaced by a single vṛddhi vowel. An exception to 6.1.87.
-- id: "6.1.101"
-  lsk: null
-  lskVerified: false
-  deva: अकः सवर्णे दीर्घः
-  pada: [अकः, सवर्णे, दीर्घः]
-  anuvrtti: [[अचि, "6.1.77"], [एकः पूर्वपरयोः, "6.1.84"]]
-  vrttiVerified: false
-  kind: vidhi
-  meaning: When an ak vowel (a i u ṛ ḷ, short or long) is followed by a vowel of the same class, both are replaced by a single long vowel.
-- id: "6.1.109"
-  lsk: null
-  lskVerified: false
-  deva: एङः पदान्तादति
-  pada: [एङः, पदान्तात्, अति]
-  anuvrtti: [[पूर्वः, "6.1.107"], [एकः पूर्वपरयोः, "6.1.84"]]
-  vrttiVerified: false
-  kind: vidhi
-  meaning: When a word-final e or o is followed by short a, the earlier vowel alone replaces both (pūrvarūpa). In writing, the lost a is shown by an avagraha (ऽ).
-- id: "6.1.125"
-  lsk: null
-  lskVerified: false
-  deva: प्लुतप्रगृह्या अचि नित्यम्
-  pada: [प्लुत-प्रगृह्याः, अचि, नित्यम्]
-  anuvrtti: [[प्रकृत्या, "6.1.115"]]
-  vrttiVerified: false
-  kind: vidhi
-  meaning: Before a vowel, a pluta vowel or a pragṛhya vowel always stays as it is (prakṛtibhāva) — no sandhi.
-- id: "8.2.1"
-  lsk: null
-  lskVerified: false
-  deva: पूर्वत्रासिद्धम्
-  pada: [पूर्वत्र, असिद्धम्]
+  meaning: "Before a vowel, e, o, ai and au are replaced by ay, av, āy and āv respectively."
+- id: "1.3.10"
+  lsk: 23
+  lskVerified: true
+  sk: 128
+  deva: "यथासंख्यमनुदेशः समानाम्"
+  pada: ["यथासंख्यम्", "अनुदेशः", "समानाम्"]
   anuvrtti: []
-  vrttiVerified: false
-  kind: adhikāra
-  meaning: Heading — from here to the end of the Aṣṭādhyāyī, a rule is treated as not having applied when the rules before it are considered.
-- id: "8.3.19"
-  lsk: null
-  lskVerified: false
-  deva: लोपः शाकल्यस्य
-  pada: [लोपः, शाकल्यस्य]
-  anuvrtti: [[व्योः, "8.3.18"], [अपूर्वस्य, "8.3.17"], [अशि, "8.3.17"]]
-  vrttiVerified: false
+  adhikara: []
+  vrtti: "समसंबन्धी विधिर्यथासंख्यं स्यात्। हरये। विष्णवे। नायकः। पावकः॥"
+  vrttiVerified: true
+  kind: paribhāṣā
+  meaning: "When a rule lists items and their substitutes in equal numbers, they pair up in order: first with first, second with second, and so on."
+- id: "6.1.79"
+  lsk: 24
+  lskVerified: true
+  sk: 63
+  deva: "वान्तो यि प्रत्यये"
+  pada: ["वान्तः", "यि", "प्रत्यये"]
+  anuvrtti: [["अचि", "6.1.77"], ["एचः", "6.1.78"]]
+  adhikara: [["संहितायाम्", "6.1.72"]]
+  vrtti: "यकारादौ प्रत्यये परे ओदौतोः अव् आव् एतौ स्तः। गव्यम्। नाव्यम्। अध्वपरिमाणे च (वार्त्तिकम्) गव्यूतिः॥"
+  vrttiVerified: true
   kind: vidhi
-  meaning: In Śākalya's view, a word-final y or v after a or ā is dropped before a vowel or voiced consonant. Since it is an optional view, both forms are correct.
+  meaning: "Before a suffix beginning with y, o and au become av and āv."
+- id: "1.1.2"
+  lsk: 25
+  lskVerified: true
+  sk: 17
+  deva: "अदेङ् गुणः"
+  pada: ["अत्-एङ्", "गुणः"]
+  anuvrtti: []
+  adhikara: []
+  vrtti: "अत् एङ् च गुणसंज्ञः स्यात्॥"
+  vrttiVerified: true
+  kind: saṃjñā
+  meaning: "The vowels a, e and o are called guṇa. The t after a limits it to short a (1.1.70)."
+- id: "1.1.70"
+  lsk: 26
+  lskVerified: true
+  sk: 15
+  deva: "तपरस्तत्कालस्य"
+  pada: ["तपरः", "तत्कालस्य"]
+  anuvrtti: [["स्वम्", "1.1.68"], ["रूपम्", "1.1.68"], ["सवर्णस्य", "1.1.69"]]
+  adhikara: []
+  vrtti: "तः परो यस्मात्स च तात्परश्चोच्चार्यमाणसमकालस्यैव संज्ञा स्यात्॥"
+  vrttiVerified: true
+  kind: paribhāṣā
+  meaning: "A vowel followed (or preceded) by t in a rule stands only for vowels of its own length. So \"at\" in 6.1.109 means short a only."
+- id: "6.1.87"
+  lsk: 27
+  lskVerified: true
+  sk: 69
+  deva: "आद्गुणः"
+  pada: ["आत्", "गुणः"]
+  anuvrtti: [["अचि", "6.1.77"]]
+  adhikara: [["संहितायाम्", "6.1.72"], ["एकः पूर्वपरयोः", "6.1.84"]]
+  vrtti: "अवर्णादचि परे पूर्वपरयोरेको गुण आदेशः स्यात्। उपेन्द्रः। गङ्गोदकम्॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "When a or ā is followed by a vowel, both are replaced by a single guṇa vowel — the one closest to them (1.1.50)."
+- id: "1.3.2"
+  lsk: 28
+  lskVerified: true
+  sk: 3
+  deva: "उपदेशेऽजनुनासिक इत्"
+  pada: ["उपदेशे", "अच्", "अनुनासिकः", "इत्"]
+  anuvrtti: []
+  adhikara: []
+  vrtti: "उपदेशेऽनुनासिकोऽजित्संज्ञः स्यात्। प्रतिज्ञानुनासिक्याः पाणिनीयाः। लण्सूत्रस्थावर्णेन सहोच्चार्यमाणो रेफो रलयोः संज्ञा॥"
+  vrttiVerified: true
+  kind: saṃjñā
+  meaning: "In an upadeśa, a nasalised vowel is an it-marker."
+- id: "1.1.51"
+  lsk: 29
+  lskVerified: true
+  sk: 70
+  deva: "उरण् रपरः"
+  pada: ["उः", "अण्", "रपरः"]
+  anuvrtti: [["षष्ठी", "1.1.49"], ["स्थाने", "1.1.49"]]
+  adhikara: []
+  vrtti: "ऋ इति त्रिंशतः संज्ञेत्युक्तम्। तत्स्थाने योऽण् स रपरः सन्नेव प्रवर्तते। कृष्णर्द्धिः। तवल्कारः॥"
+  vrttiVerified: true
+  kind: paribhāṣā
+  meaning: "When an aṇ vowel (a, i, u) replaces ṛ or ḷ, it is followed by r (or l for ḷ). So the guṇa of ṛ is ar, its vṛddhi ār."
+- id: "8.3.19"
+  lsk: 30
+  lskVerified: true
+  sk: 67
+  deva: "लोपः शाकल्यस्य"
+  pada: ["लोपः", "शाकल्यस्य"]
+  anuvrtti: [["भो-भगो-अघो-अपूर्वस्य", "8.3.17"], ["अशि", "8.3.17"], ["व्योः", "8.3.18"]]
+  adhikara: [["पदस्य", "8.1.16"], ["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "अवर्णपूर्वयोः पदान्तयोर्यवयोर्लोपो वाऽशि परे॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "In Śākalya's view, a word-final y or v after a or ā is dropped before a vowel or voiced consonant. Since it is an optional view, both forms are correct."
+- id: "8.2.1"
+  lsk: 31
+  lskVerified: true
+  sk: 12
+  deva: "पूर्वत्रासिद्धम्"
+  pada: ["पूर्वत्र", "असिद्धम्"]
+  anuvrtti: []
+  adhikara: [["पदस्य", "8.1.16"]]
+  vrtti: "सपादसप्ताध्यायीं प्रति त्रिपाद्यसिद्धा, त्रिपाद्यामपि पूर्वं प्रति परं शास्त्रमसिद्धम्। हर इह, हरयिह। विष्ण इह, विष्णविह॥"
+  vrttiVerified: true
+  kind: adhikāra
+  meaning: "Heading — from here to the end of the Aṣṭādhyāyī, a rule is treated as not having applied when the rules before it are considered."
+- id: "1.1.1"
+  lsk: 32
+  lskVerified: true
+  sk: 16
+  deva: "वृद्धिरादैच्"
+  pada: ["वृद्धिः", "आत्-ऐच्"]
+  anuvrtti: []
+  adhikara: []
+  vrtti: "आदैच्च वृद्धिसंज्ञः स्यात्॥"
+  vrttiVerified: true
+  kind: saṃjñā
+  meaning: "The vowels ā, ai and au are called vṛddhi."
+- id: "6.1.88"
+  lsk: 33
+  lskVerified: true
+  sk: 72
+  deva: "वृद्धिरेचि"
+  pada: ["वृद्धिः", "एचि"]
+  anuvrtti: [["आत्", "6.1.87"]]
+  adhikara: [["संहितायाम्", "6.1.72"], ["एकः पूर्वपरयोः", "6.1.84"]]
+  vrtti: "आदेचि परे वृद्धिरेकादेशः स्यात्। गुणापवादः। कृष्णैकत्वम्। गङ्गौघः। देवैश्वर्यम्। कृष्णौत्कण्ठ्यम्॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "When a or ā is followed by e, ai, o or au, both are replaced by a single vṛddhi vowel. An exception to 6.1.87."
+- id: "6.1.89"
+  lsk: 34
+  lskVerified: true
+  sk: 73
+  deva: "एत्येधत्यूठ्सु"
+  pada: ["एति-एधति-ऊठ्सु"]
+  anuvrtti: [["आत्", "6.1.87"], ["एचि", "6.1.88"], ["वृद्धिः", "6.1.88"]]
+  adhikara: [["संहितायाम्", "6.1.72"], ["एकः पूर्वपरयोः", "6.1.84"]]
+  vrtti: "अवर्णादेजाद्योरेत्येधत्योरूठि च परे वृद्धिरेकादेशः स्यात्। उपैति। उपैधते। प्रष्ठौहः। एजाद्योः किम्? उपेतः। मा भवान्प्रेदिधत्। अक्षादूहिन्यामुपसंख्यानम् (वार्त्तिकम्) । अक्षौहिणी सेना। प्रादूहोढोढ्येषैष्येषु (वार्त्तिकम्)। प्रौहः। प्रौढः। प्रौढिः। प्रैषः। प्रैष्यः। ऋते च तृतीयासमासे (वार्त्तिकम्)। सुखेन ऋतः सुखार्तः। तृतीयेति किम्? परमर्तः। प्रवत्सतरकम्बलवसनार्णदशानामृणे (वार्त्तिकम्) । प्रार्णम्, वत्सतरार्णम्, इत्यादि॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "a or ā followed by a form of i 'go' or edh 'grow' that begins with e or ai, or by ūṭh, becomes one vṛddhi vowel with it. An exception to pararūpa (6.1.94) and to guṇa."
+- id: "1.4.59"
+  lsk: 35
+  lskVerified: true
+  sk: 22
+  deva: "उपसर्गाः क्रियायोगे"
+  pada: ["उपसर्गाः", "क्रियायोगे"]
+  anuvrtti: [["प्रादयः", "1.4.58"]]
+  adhikara: [["आकडारात् एका संज्ञा", "1.4.1"], ["प्राग्रीश्वरान्निपाताः", "1.4.56"]]
+  vrtti: "प्रादयः क्रियायोगे उपसर्गसंज्ञाः स्युः। प्र परा अप सम् अनु अव निस् निर् दुस् दुर् वि आङ् नि अधि अपि अति सु उत् अभि प्रति परि उप - एते प्रादयः॥"
+  vrttiVerified: true
+  kind: saṃjñā
+  meaning: "pra and the rest (the prādi list) are called upasarga when they are joined to a verb."
+- id: "1.3.1"
+  lsk: 36
+  lskVerified: true
+  sk: 18
+  deva: "भूवादयो धातवः"
+  pada: ["भू-वा-आदयः", "धातवः"]
+  anuvrtti: []
+  adhikara: []
+  vrtti: "क्रियावाचिनो भ्वादयो धातुसंज्ञाः स्युः॥"
+  vrttiVerified: true
+  kind: saṃjñā
+  meaning: "bhū and the rest — the items of the root list (dhātupāṭha) — are called dhātu, verbal root."
+- id: "6.1.91"
+  lsk: 37
+  lskVerified: true
+  sk: 74
+  deva: "उपसर्गादृति धातौ"
+  pada: ["उपसर्गात्", "ऋति", "धातौ"]
+  anuvrtti: [["आत्", "6.1.87"], ["वृद्धिः", "6.1.88"]]
+  adhikara: [["संहितायाम्", "6.1.72"], ["एकः पूर्वपरयोः", "6.1.84"]]
+  vrtti: "अवर्णान्तादुपसर्गादृकारादौ धातौ परे वृद्धिरेकादेशः स्यात्। प्रार्च्छति॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "An upasarga ending in a or ā and a root beginning with ṛ become one vṛddhi vowel (ār): pra + ṛcchati → prārcchati. An exception to guṇa (6.1.87)."
+- id: "6.1.94"
+  lsk: 38
+  lskVerified: true
+  sk: 78
+  deva: "एङि पररूपम्"
+  pada: ["एङि", "पररूपम्"]
+  anuvrtti: [["आत्", "6.1.87"], ["उपसर्गात्", "6.1.91"], ["धातौ", "6.1.91"]]
+  adhikara: [["संहितायाम्", "6.1.72"], ["एकः पूर्वपरयोः", "6.1.84"]]
+  vrtti: "आदुपसर्गादेङादौ धातौ पररूपमेकादेशः स्यात् । प्रेजते । उपोषति ॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "An upasarga ending in a or ā and a root beginning with e or o: the later vowel alone replaces both (pararūpa). pra + ejate → prejate. An exception to vṛddhi (6.1.88)."
+- id: "1.1.64"
+  lsk: 39
+  lskVerified: true
+  sk: 79
+  deva: "अचोऽन्त्यादि टि"
+  pada: ["अचः", "अन्त्य-आदि", "टि"]
+  anuvrtti: []
+  adhikara: []
+  vrtti: "अचां मध्ये योऽन्त्यः स आदिर्यस्य तट्टिसंज्ञं स्यात्। शकन्ध्वादिषु पररूपं वाच्यम् (वार्त्तिकम्) । तच्च टेः। शकन्धुः। कर्कन्धुः मनीषा। आकृतिगणोऽयम्। मार्त्तण्डः॥"
+  vrttiVerified: true
+  kind: saṃjñā
+  meaning: "The last vowel of an item, together with whatever follows it, is called ṭi."
+- id: "6.1.95"
+  lsk: 40
+  lskVerified: true
+  sk: 80
+  deva: "ओमाङोश्च"
+  pada: ["ओम्-आङोः", "च"]
+  anuvrtti: [["अचि", "6.1.77"], ["आत्", "6.1.87"], ["पररूपम्", "6.1.94"]]
+  adhikara: [["संहितायाम्", "6.1.72"], ["एकः पूर्वपरयोः", "6.1.84"]]
+  vrtti: "ओमि आङि चात्परे पररूपमेकादेशः स्यात् । शिवायों नमः । शिव एहि ॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "a or ā before om, or before the preposition ā (āṅ): the later vowel alone replaces both (pararūpa). An exception to vṛddhi (6.1.88)."
+- id: "6.1.85"
+  lsk: 41
+  lskVerified: true
+  sk: 75
+  deva: "अन्तादिवच्च"
+  pada: ["अन्त-आदिवत्", "च"]
+  anuvrtti: [["अचि", "6.1.77"]]
+  adhikara: [["संहितायाम्", "6.1.72"], ["एकः पूर्वपरयोः", "6.1.84"]]
+  vrtti: "योऽयमेकादेशः स पूर्वस्यान्तवत्परस्यादिवत्। शिवेहि॥"
+  vrttiVerified: true
+  kind: atideśa
+  meaning: "A single substitute for two sounds counts both as the end of the earlier item and as the beginning of the later one."
+- id: "6.1.101"
+  lsk: 42
+  lskVerified: true
+  sk: 85
+  deva: "अकः सवर्णे दीर्घः"
+  pada: ["अकः", "सवर्णे", "दीर्घः"]
+  anuvrtti: [["अचि", "6.1.77"]]
+  adhikara: [["संहितायाम्", "6.1.72"], ["एकः पूर्वपरयोः", "6.1.84"]]
+  vrtti: "अकः सवर्णेऽचि परे पूर्वपरयोर्दीर्घ एकादेशः स्यात्। दैत्यारिः। श्रीशः। विष्णूदयः। होतॄकारः॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "When an ak vowel (a i u ṛ ḷ, short or long) is followed by a vowel of the same class, both are replaced by a single long vowel."
+- id: "6.1.109"
+  lsk: 43
+  lskVerified: true
+  sk: 86
+  deva: "एङः पदान्तादति"
+  pada: ["एङः", "पदान्तात्", "अति"]
+  anuvrtti: [["पूर्वः", "6.1.107"]]
+  adhikara: [["संहितायाम्", "6.1.72"], ["एकः पूर्वपरयोः", "6.1.84"]]
+  vrtti: "पदान्तादेङोऽति परे पूर्वरूपमेकादेशः स्यात्। हरेऽव। विष्णोऽव॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "When a word-final e or o is followed by short a, the earlier vowel alone replaces both (pūrvarūpa). In writing, the lost a is shown by an avagraha (ऽ)."
+- id: "6.1.122"
+  lsk: 44
+  lskVerified: true
+  sk: 87
+  deva: "सर्वत्र विभाषा गोः"
+  pada: ["सर्वत्र", "विभाषा", "गोः"]
+  anuvrtti: [["अति", "6.1.109"], ["प्रकृत्या", "6.1.115"]]
+  adhikara: [["संहितायाम्", "6.1.72"]]
+  vrtti: "लोके वेदे चैङन्तस्य गोरति वा प्रकृतिभावः पदान्ते। गोअग्रम्, गोऽग्रम्। एङन्तस्य किम्? चित्रग्वग्रम्। पदान्ते किम्? गोः॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "Word-final go (ending in o) optionally stays as it is before short a, in everyday and Vedic language alike: go agram or go'gram."
+- id: "1.1.55"
+  lsk: 45
+  lskVerified: true
+  sk: 45
+  deva: "अनेकाल्शित्सर्वस्य"
+  pada: ["अनेकाल्-शित्", "सर्वस्य"]
+  anuvrtti: [["षष्ठी", "1.1.49"], ["स्थाने", "1.1.49"]]
+  adhikara: []
+  vrtti: "इति प्राप्ते॥"
+  vrttiVerified: true
+  kind: paribhāṣā
+  meaning: "A substitute of more than one sound, or one marked with ś, replaces the whole item, not just its last sound."
+- id: "1.1.53"
+  lsk: 46
+  lskVerified: true
+  sk: 43
+  deva: "ङिच्च"
+  pada: ["ङित्", "च"]
+  anuvrtti: [["षष्ठी", "1.1.49"], ["स्थाने", "1.1.49"], ["अलः", "1.1.52"], ["अन्त्यस्य", "1.1.52"]]
+  adhikara: []
+  vrtti: "ङिदनेकालप्यन्त्यस्यैव स्यात्॥"
+  vrttiVerified: true
+  kind: paribhāṣā
+  meaning: "A substitute marked with ṅ replaces only the last sound, even when it has more than one sound."
+- id: "6.1.123"
+  lsk: 47
+  lskVerified: true
+  sk: 88
+  deva: "अवङ् स्फोटायनस्य"
+  pada: ["अवङ्", "स्फोटायनस्य"]
+  anuvrtti: [["अचि", "6.1.77"], ["प्रकृत्या", "6.1.115"], ["विभाषा", "6.1.122"], ["गोः", "6.1.122"]]
+  adhikara: [["संहितायाम्", "6.1.72"]]
+  vrtti: "पदान्ते एङन्तस्य गोरवङ् वाऽचि । गवाग्रम्, गोऽग्रम् । पदान्ते किम् ? गवि ॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "In Sphoṭāyana's view, word-final go optionally takes the substitute ava (avaṅ) before a vowel: gavāgram."
+- id: "6.1.124"
+  lsk: 48
+  lskVerified: true
+  sk: 89
+  deva: "इन्द्रे च"
+  pada: ["इन्द्रे", "च"]
+  anuvrtti: [["अचि", "6.1.77"], ["प्रकृत्या", "6.1.115"], ["गोः", "6.1.122"], ["अवङ्", "6.1.123"]]
+  adhikara: [["संहितायाम्", "6.1.72"]]
+  vrtti: "गोरवङ् स्यादिन्द्रे। गवेन्द्रः॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "Before indra, go always takes the substitute ava (avaṅ): gavendraḥ."
+- id: "8.2.84"
+  lsk: 49
+  lskVerified: true
+  sk: 95
+  deva: "दूराद्धूते च"
+  pada: ["दूरात्", "हूते", "च"]
+  anuvrtti: []
+  adhikara: [["पदस्य", "8.1.16"], ["पूर्वत्रासिद्धम्", "8.2.1"], ["वाक्यस्य टेः प्लुतः उदात्तः", "8.2.82"]]
+  vrtti: "दूरात्सम्बोधने वाक्यस्य टेः प्लुतो वा॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "When calling to someone far away, the last vowel of the sentence (with what follows it) may be prolated (pluta)."
+- id: "6.1.125"
+  lsk: 50
+  lskVerified: true
+  sk: 90
+  deva: "प्लुतप्रगृह्या अचि नित्यम्"
+  pada: ["प्लुत-प्रगृह्याः", "अचि", "नित्यम्"]
+  anuvrtti: [["प्रकृत्या", "6.1.115"]]
+  adhikara: [["संहितायाम्", "6.1.72"]]
+  vrtti: "एतेऽचि प्रकृत्या स्युः। आगच्छ कृष्ण ३ अत्र गौश्चरति॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "Before a vowel, a pluta vowel or a pragṛhya vowel always stays as it is (prakṛtibhāva) — no sandhi."
+- id: "1.1.11"
+  lsk: 51
+  lskVerified: true
+  sk: 100
+  deva: "ईदूदेद्द्विवचनं प्रगृह्यम्"
+  pada: ["ईत्-ऊत्-एत्", "द्विवचनं", "प्रगृह्यम्"]
+  anuvrtti: []
+  adhikara: []
+  vrtti: "ईदूदेदन्तं द्विवचनं प्रगृह्यं स्यात्। हरी एतौ। विष्णू इमौ। गङ्गे अमू॥"
+  vrttiVerified: true
+  kind: saṃjñā
+  meaning: "A dual form ending in ī, ū or e is called pragṛhya — \"to be held apart\"."
+- id: "1.1.12"
+  lsk: 52
+  lskVerified: true
+  sk: 101
+  deva: "अदसो मात्"
+  pada: ["अदसः", "मात्"]
+  anuvrtti: [["ईदूदेद्", "1.1.11"], ["प्रगृह्यम्", "1.1.11"]]
+  adhikara: []
+  vrtti: "अस्मात्परावीदूतौ प्रगृह्यौ स्तः। अमी ईशाः। रामकृष्णावमू आसाते। मात्किम्? अमुकेऽत्र॥"
+  vrttiVerified: true
+  kind: saṃjñā
+  meaning: "After the m of the pronoun adas 'that', ī and ū are pragṛhya: amī īśāḥ."
+- id: "1.4.57"
+  lsk: 53
+  lskVerified: true
+  sk: 20
+  deva: "चादयोऽसत्त्वे"
+  pada: ["च-आदयः", "असत्त्वे"]
+  anuvrtti: []
+  adhikara: [["आकडारात् एका संज्ञा", "1.4.1"], ["प्राग्रीश्वरान्निपाताः", "1.4.56"]]
+  vrtti: "अद्रव्यार्थाश्चादयो निपाताः स्युः॥"
+  vrttiVerified: true
+  kind: saṃjñā
+  meaning: "ca and the rest are called nipāta (particles) when they do not denote a thing."
+- id: "1.4.58"
+  lsk: 54
+  lskVerified: true
+  sk: 21
+  deva: "प्रादयः"
+  pada: ["प्र-आदयः"]
+  anuvrtti: [["असत्त्वे", "1.4.57"]]
+  adhikara: [["आकडारात् एका संज्ञा", "1.4.1"], ["प्राग्रीश्वरान्निपाताः", "1.4.56"]]
+  vrtti: "एतेऽपि तथा॥"
+  vrttiVerified: true
+  kind: saṃjñā
+  meaning: "pra and the rest are also nipāta, on the same condition."
+- id: "1.1.14"
+  lsk: 55
+  lskVerified: true
+  sk: 103
+  deva: "निपात एकाजनाङ्"
+  pada: ["निपातः", "एकाच्", "अनाङ्"]
+  anuvrtti: [["प्रगृह्यम्", "1.1.11"]]
+  adhikara: []
+  vrtti: "एकोऽज् निपात आङ्वर्जः प्रगृह्यः स्यात्। इ इन्द्रः। उ उमेशः। वाक्यस्मरणयोरङित्; आ एवं नु मन्यसे। आ एवं किल तत्। अन्यत्र ङित् ; आ ईषदुष्णम् ओष्णम्॥"
+  vrttiVerified: true
+  kind: saṃjñā
+  meaning: "A particle (nipāta) that is a single vowel is pragṛhya, except ā meaning 'up to' (āṅ): i indraḥ, u umeśaḥ."
+- id: "1.1.15"
+  lsk: 56
+  lskVerified: true
+  sk: 104
+  deva: "ओत्"
+  pada: ["ओत्"]
+  anuvrtti: [["प्रगृह्यम्", "1.1.11"], ["निपातः", "1.1.14"]]
+  adhikara: []
+  vrtti: "ओदन्तो निपातः प्रगृह्यः स्यात्। अहो ईशाः॥"
+  vrttiVerified: true
+  kind: saṃjñā
+  meaning: "A particle ending in o is pragṛhya: aho īśāḥ."
+- id: "1.1.16"
+  lsk: 57
+  lskVerified: true
+  sk: 105
+  deva: "सम्बुद्धौ शाकल्यस्येतावनार्षे"
+  pada: ["सम्बुद्धौ", "शाकल्यस्य", "इतौ", "अनार्षे"]
+  anuvrtti: [["प्रगृह्यम्", "1.1.11"], ["ओत्", "1.1.15"]]
+  adhikara: []
+  vrtti: "सम्बुद्धिनिमित्तक ओकारो वा प्रगृह्योऽवैदिके इतौ परे। विष्णो इति, विष्ण इति, विष्णविति॥"
+  vrttiVerified: true
+  kind: saṃjñā
+  meaning: "In Śākalya's view, an o produced by the vocative ending is optionally pragṛhya before iti in non-Vedic text: viṣṇo iti."
+- id: "8.3.33"
+  lsk: 58
+  lskVerified: true
+  sk: 108
+  deva: "मय उञो वो वा"
+  pada: ["मयः", "उञः", "वः", "वा"]
+  anuvrtti: [["अचि", "8.3.32"]]
+  adhikara: [["पदस्य", "8.1.16"], ["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "मयः परस्य उञो वो वाऽचि। किम्वुक्तम्, किमु उक्तम्॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "After a consonant of the may class, the particle u (uñ) may be replaced by v before a vowel: kimv uktam or kim u uktam."
+- id: "6.1.127"
+  lsk: 59
+  lskVerified: true
+  sk: 91
+  deva: "इकोऽसवर्णे शाकल्यस्य ह्रस्वश्च"
+  pada: ["इकः", "असवर्णे", "शाकल्यस्य", "ह्रस्वः", "च"]
+  anuvrtti: [["प्रकृत्या", "6.1.115"], ["अचि", "6.1.125"], ["नित्यम्", "6.1.125"]]
+  adhikara: [["संहितायाम्", "6.1.72"]]
+  vrtti: "पदान्ता इको ह्रस्वा वा स्युरसवर्णेऽचि। ह्रस्वविधिसामर्थ्यान्न स्वरसन्धिः। चक्रि अत्र, चक्र्यत्र। पदान्ता इति किम्? गौर्यौ -"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "In Śākalya's view, a word-final i, u, ṛ or ḷ before a vowel of another class may stay unjoined, shortened if long: cakri atra (or cakryatra)."
+- id: "8.4.46"
+  lsk: 60
+  lskVerified: true
+  sk: 59
+  deva: "अचो रहाभ्यां द्वे"
+  pada: ["अचः", "रहाभ्याम्", "द्वे"]
+  anuvrtti: [["यरः", "8.4.45"]]
+  adhikara: [["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "अचः पराभ्यां रेफहकाराभ्यां परस्य यरो द्वे वा स्तः। गौर्य्यौ । न समासे (वार्त्तिकम्) । वाप्यश्वः ॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "After a vowel and then r or h, a following consonant other than h (yar) may be doubled: gauryyau."
+- id: "6.1.128"
+  lsk: 61
+  lskVerified: true
+  sk: 92
+  deva: "ऋत्यकः"
+  pada: ["ऋति", "अकः"]
+  anuvrtti: [["प्रकृत्या", "6.1.115"], ["नित्यम्", "6.1.125"], ["अचि", "6.1.125"], ["शाकल्यस्य", "6.1.127"], ["ह्रस्वः", "6.1.127"], ["च", "6.1.127"]]
+  adhikara: [["संहितायाम्", "6.1.72"]]
+  vrtti: "ऋति परे पदान्ता अकः प्राग्वद्वा । ब्रह्म ऋषिः, ब्रह्मर्षिः पदान्ताः किम् ? आर्च्छत् ॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "Before short ṛ, a word-final vowel of the ak class may likewise stay unjoined, shortened if long: brahma ṛṣiḥ (or brahmarṣiḥ)."

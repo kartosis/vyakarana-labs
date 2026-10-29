@@ -1,18 +1,34 @@
 ---
-title: Clusters and words
-deva: संयोगः पदं च
+title: Junction, clusters and words
+deva: संहिता संयोगः पदं च
 module: samjna
 order: 6
-minutes: 15
-summary: LSK 13–14 close the Saṃjñā-prakaraṇa. A run of consonants is a saṃyoga, and a pada is anything that ends in a nominal or verbal ending. Only a pada is a word you can use.
-lskRange: 13–14
-sutras: ["1.1.7", "1.4.14"]
+minutes: 20
+summary: LSK 12–14 close the Saṃjñā-prakaraṇa. Sounds spoken without a pause are in saṃhitā, the condition for all sandhi. A run of consonants is a saṃyoga, and a pada is anything that ends in a nominal or verbal ending — the only kind of word you can use.
+lskRange: 12–14
+sutras: ["1.4.109", "1.1.7", "1.4.14"]
 ---
 import Sa from "../../../components/Sa.astro";
 import Voice from "../../../components/Voice.astro";
 import SutraFolio from "../../../components/SutraFolio.astro";
 import SutraRef from "../../../components/SutraRef.astro";
 import Practice from "../../../components/Practice.astro";
+
+## Junction
+
+<SutraFolio id="1.4.109" />
+
+Varadarāja glosses <Sa iast="saṃhitā" /> as <Sa iast="varṇānām atiśayitaḥ sannidhiḥ" />, "the utmost nearness of sounds": sounds spoken one after another with no pause between them. This single term is the trigger for all of sandhi. The vowel rules of the next module stand under the heading <SutraRef id="6.1.72" />, <Sa iast="saṃhitāyām" />, "in saṃhitā", and apply only there.
+
+So when must sounds be joined? A traditional verse that Bhaṭṭoji Dīkṣita quotes gives the answer.
+
+<Voice quote="sk-samhita" voice="bhasya">
+  Inside a word, between a prefix and its verb, and inside a compound, sandhi is compulsory. Between the words of a sentence it is the speaker's choice. That is why printed texts sometimes leave words unjoined, and why this course's sandhi tool asks whether your first word is a separate word.
+</Voice>
+
+<Voice quote="vp-2.58" voice="darsana">
+  Bhartṛhari records the old question behind this. Is the joined text (saṃhitā) primary, with separate words cut out of it by analysis? Or are the words primary, with the joined text built from them? Pāṇini's rules work from words to the joined text. Bhartṛhari's own view, which you will meet in the next module (1.73), is that words are never fully separable from the sentence.
+</Voice>
 
 ## Clusters
 
@@ -66,8 +82,8 @@ How *rāma + su* becomes *rāmaḥ*, and *bhū + tip* becomes *bhavati*, is the 
 <tr><td>6–8</td><td><SutraRef id="1.2.29" /> <SutraRef id="1.2.30" /> <SutraRef id="1.2.31" /></td><td>udātta, anudātta, svarita</td></tr>
 <tr><td>9</td><td><SutraRef id="1.1.8" text /></td><td>anunāsika</td></tr>
 <tr><td>10</td><td><SutraRef id="1.1.9" text /></td><td>savarṇa</td></tr>
-<tr><td>11</td><td><SutraRef id="1.1.10" text /></td><td>(no savarṇa across vowel and consonant)</td></tr>
-<tr><td>12</td><td><SutraRef id="1.1.69" text /></td><td>a letter covers its class</td></tr>
+<tr><td>11</td><td><SutraRef id="1.1.69" text /></td><td>a letter covers its class</td></tr>
+<tr><td>12</td><td><SutraRef id="1.4.109" text /></td><td>saṃhitā (junction)</td></tr>
 <tr><td>13</td><td><SutraRef id="1.1.7" text /></td><td>saṃyoga</td></tr>
 <tr><td>14</td><td><SutraRef id="1.4.14" text /></td><td>pada</td></tr>
 </tbody>
@@ -75,12 +91,13 @@ How *rāma + su* becomes *rāmaḥ*, and *bhū + tip* becomes *bhavati*, is the 
 </div>
 
 <Voice quote="vp-1.14" voice="darsana">
-  Bhartṛhari calls grammar "the cure for the flaws of speech." With these fourteen terms you have the vocabulary the cure is written in. The next module, Ac-sandhi, puts them to work: vowels meeting vowels, decided rule by rule.
+  Bhartṛhari calls grammar "the cure for the flaws of speech." With these fourteen terms you have the vocabulary the cure is written in. (1.1.10, which you met in the savarṇa lesson, is not one of the fourteen: Varadarāja leaves it out.) The next module, Ac-sandhi, puts them to work: vowels meeting vowels, decided rule by rule.
 </Voice>
 
 <Practice
-  items={8}
+  items={10}
   skills={[
+    "Saying when sounds must be joined",
     "Finding the saṃyoga in a word",
     "Deciding whether a syllable is light or heavy",
     "Telling a stem from a pada",

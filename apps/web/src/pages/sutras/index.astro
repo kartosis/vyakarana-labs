@@ -6,7 +6,24 @@ import { devaToIast } from "../../lib/sanskrit";
 const sutras = await getCollection("sutras");
 const key = (id: string) => id.split(".").map((n) => n.padStart(3, "0")).join(".");
 const byAst = [...sutras].sort((x, y) => key(x.id).localeCompare(key(y.id)));
-const lsk = sutras.filter((s) => s.data.lsk !== null).sort((x, y) => x.data.lsk! - y.data.lsk!);
+// The LSK table covers the prakaraṇas taught so far (one data file per module); core.yaml rows cited from later
+// prakaraṇas appear only in the Aṣṭādhyāyī list.
+const lsk = sutras
+  .filter((s) => s.data.lsk !== null && s.data.source !== "core.yaml")
+  .sort((x, y) => x.data.lsk! - y.data.lsk!);
+// Group LSK rows by prakaraṇa: each data file data/sutras/{module}.yaml belongs to one course module.
+const modules = await getCollection("modules");
+const groups: Array<{ id: string; title: string; deva: string; rows: typeof lsk }> = [];
+for (const s of lsk) {
+  const id = s.data.source.replace(/\.yaml$/, "");
+  let g = groups.find((x) => x.id === id);
+  if (!g) {
+    const m = modules.find((x) => x.id === id);
+    g = { id, title: m?.data.title ?? id, deva: m?.data.deva ?? "", rows: [] };
+    groups.push(g);
+  }
+  g.rows.push(s);
+}
 ---
 <Base title="Sūtras" description="Every sūtra taught or cited on Vyākaraṇa Labs, by Aṣṭādhyāyī number and in Laghusiddhāntakaumudī order.">
   <div class="page-narrow">
@@ -19,16 +36,24 @@ const lsk = sutras.filter((s) => s.data.lsk !== null).sort((x, y) => x.data.lsk!
     <div class="table-wrap">
       <table class="idx">
         <thead><tr><th scope="col">LSK</th><th scope="col">Sūtra</th><th scope="col">Aṣṭādhyāyī</th><th scope="col">Meaning</th></tr></thead>
-        <tbody>
-          {lsk.map((s) => (
-            <tr>
-              <td class="idx-n">{s.data.lsk}{!s.data.lskVerified && <abbr title="LSK number inferred, awaiting verification">†</abbr>}</td>
-              <td><a href={`/sutra/${s.id}/`} class="sa"><span class="sa-deva" lang="sa">{s.data.deva}</span><span class="sa-iast" lang="sa-Latn">{devaToIast(s.data.deva)}</span></a></td>
-              <td class="idx-n">{s.id}</td>
-              <td class="idx-m">{s.data.meaning}</td>
+        {groups.map((g) => (
+          <tbody>
+            <tr class="idx-group">
+              <th scope="colgroup" colspan="4">
+                <span class="sa"><span class="sa-deva" lang="sa">{g.deva}</span><span class="sa-iast" lang="sa-Latn">{devaToIast(g.deva)}</span></span>
+                <span class="idx-group-title">{g.title}, LSK {g.rows[0]!.data.lsk}–{g.rows.at(-1)!.data.lsk}</span>
+              </th>
             </tr>
-          ))}
-        </tbody>
+            {g.rows.map((s) => (
+              <tr>
+                <td class="idx-n">{s.data.lsk}</td>
+                <td><a href={`/sutra/${s.id}/`} class="sa"><span class="sa-deva" lang="sa">{s.data.deva}</span><span class="sa-iast" lang="sa-Latn">{devaToIast(s.data.deva)}</span></a></td>
+                <td class="idx-n">{s.id}</td>
+                <td class="idx-m">{s.data.meaning}</td>
+              </tr>
+            ))}
+          </tbody>
+        ))}
       </table>
     </div>
 
@@ -40,7 +65,7 @@ const lsk = sutras.filter((s) => s.data.lsk !== null).sort((x, y) => x.data.lsk!
         </li>
       ))}
     </ul>
-    <p class="idx-foot">† LSK number inferred from its neighbours; verified numbers were checked against the Laghusiddhāntakaumudī text. See <a href="/sources/">Sources</a>.</p>
+    <p class="idx-foot">LSK and SK numbers, sūtra texts and Varadarāja's vṛtti follow the open ashtadhyayi.com dataset. See <a href="/sources/">Sources</a>.</p>
   </div>
 </Base>
 
@@ -52,7 +77,14 @@ const lsk = sutras.filter((s) => s.data.lsk !== null).sort((x, y) => x.data.lsk!
     .idx thead th { font-size: var(--s-text-small); color: var(--s-color-text-soft); border-block-end: 2px solid var(--s-color-border); }
     .idx-n { color: var(--s-color-rubric); font-variant-numeric: tabular-nums; white-space: nowrap; }
     .idx-m { color: var(--s-color-text-soft); font-size: var(--s-text-small); }
-    .idx abbr { text-decoration: none; cursor: help; }
+    .idx-group th {
+      padding-block: var(--p-space-5) var(--p-space-2);
+      border-block-end: 1px solid var(--s-color-rubric);
+      font-weight: 400;
+      display: table-cell;
+    }
+    .idx-group .sa-deva { font-size: 1.25rem; color: var(--s-color-rubric); }
+    .idx-group-title { margin-inline-start: 0.6em; font-size: var(--s-text-small); color: var(--s-color-text-soft); }
     .idx-list { columns: 2 16rem; list-style: none; padding: 0; margin: 0; }
     .idx-list li { break-inside: avoid; padding-block: 0.2rem; }
     .idx-list a { text-decoration: none; color: var(--s-color-text); }

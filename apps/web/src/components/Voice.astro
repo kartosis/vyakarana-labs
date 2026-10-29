@@ -23,6 +23,7 @@ const pramana =
   d.work.startsWith("Vākyapadīya") ? pramanaCommentary.darsana :
   d.work.startsWith("Kāśikā") ? pramanaCommentary.kasika :
   d.work.startsWith("Vārttika") ? pramanaCommentary.varttika :
+  d.work.startsWith("Siddhāntakaumudī") ? pramanaCommentary.vyakarana :
   pramanaCommentary.mahabhasya;
 const label = voice === "bhasya" ? "Bhāṣya" : "Darśana";
 const hasNote = Astro.slots.has("default");

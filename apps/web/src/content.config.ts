@@ -24,13 +24,19 @@ const sutras = defineCollection({
     id: z.string().regex(/^\d\.\d\.\d+$/),
     lsk: z.number().int().nullable(),
     lskVerified: z.boolean(),
+    /** Siddhāntakaumudī number */
+    sk: z.number().int().nullable(),
     deva: z.string(),
     pada: z.array(z.string()),
+    /** words carried over from earlier sūtras: [word, a.p.s] */
     anuvrtti: z.array(z.tuple([z.string(), z.string()])),
+    /** headings (adhikāra) in force: [heading, a.p.s] */
+    adhikara: z.array(z.tuple([z.string(), z.string()])).default([]),
     vrtti: z.string().optional(),
     vrttiVerified: z.boolean(),
-    kind: z.string(),
+    kind: z.enum(["saṃjñā", "paribhāṣā", "vidhi", "niyama", "atideśa", "adhikāra"]),
     meaning: z.string(),
+    note: z.string().optional(),
     source: z.string(),
   }),
 });

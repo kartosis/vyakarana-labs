@@ -1,6 +1,6 @@
 ---
 /** Inline citation of a sūtra by its Aṣṭādhyāyī number; links to the sūtra page on this site. */
-import { getEntry } from "astro:content";
+import { getCollection } from "astro:content";
 import { devaToIast } from "../lib/sanskrit";
 import { pramanaLink } from "../lib/pramana";
 
@@ -10,7 +10,8 @@ interface Props {
   text?: boolean;
 }
 const { id, text = false } = Astro.props;
-const entry = await getEntry("sutras", id);
+// getCollection is cached per build; a miss (a sūtra not yet in data/sutras) links to Pramāṇa without a warning.
+const entry = (await getCollection("sutras")).find((s) => s.id === id);
 const title = entry ? `${devaToIast(entry.data.deva)} — ${entry.data.meaning}` : `Aṣṭādhyāyī ${id}`;
 const href = entry ? `/sutra/${id}/` : pramanaLink(id).href;
 ---

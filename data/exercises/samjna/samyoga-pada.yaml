@@ -1,4 +1,7 @@
 cards:
+  - id: samhita.1-4-109
+    front: ‹paraḥ sannikarṣaḥ saṃhitā› (1.4.109)
+    back: The utmost nearness of sounds — spoken with no pause — is called saṃhitā, the condition for sandhi.
   - id: sam.1-1-7
     front: ‹halo 'nantarāḥ saṃyogaḥ› (1.1.7)
     back: Consonants with no vowel between them form a saṃyoga.
@@ -53,3 +56,18 @@ items:
     prompt: Which LSK number defines pada?
     options: ["14", "13", "1", "4"]
     answer: 0
+  - id: sam9
+    type: choice
+    prompt: Which sūtra defines saṃhitā, the condition for sandhi?
+    options: [‹paraḥ sannikarṣaḥ saṃhitā› (1.4.109), ‹halo 'nantarāḥ saṃyogaḥ› (1.1.7), ‹suptiṅantaṃ padam› (1.4.14), ‹tulyāsyaprayatnaṃ savarṇam› (1.1.9)]
+    answer: 0
+  - id: sam10
+    type: choice
+    prompt: Between the separate words of a sentence, is sandhi compulsory?
+    options:
+      - "No: it depends on what the speaker intends."
+      - "Yes, always"
+      - Only in verse
+      - Only between vowels
+    answer: 0
+    explain: The verse quoted in the Siddhāntakaumudī makes saṃhitā compulsory inside a word, between prefix and root, and in compounds, but optional in a sentence.

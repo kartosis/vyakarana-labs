@@ -1,173 +1,197 @@
-# Saṃjñā-prakaraṇa of the Laghusiddhāntakaumudī (LSK 1–14), plus sūtras referenced from it.
-# Fields
-#   id          Aṣṭādhyāyī number a.p.s (standard numbering)
-#   lsk         LSK number, null if not an LSK sūtra here
-#   lskVerified true when the LSK number was checked against a source (docs/PROGRESS.md §4.4)
-#   deva        sūtra text, Devanagari (public-domain original)
-#   pada        padaccheda (word split)
-#   anuvrtti    words carried over from earlier sūtras: [word, from]
-#   vrtti       LSK vṛtti (Varadarāja); vrttiVerified marks text checked against a source
-#   meaning     plain-English rendering (original to this project)
-#   kind        saṃjñā | paribhāṣā | vidhi | niyama | atideśa | adhikāra
+# Saṃjñā-prakaraṇa of the Laghusiddhāntakaumudī: LSK 1–14, plus 1.1.10 and 1.1.68, which lessons cite.
+#
+# Hand-written fields: id (Aṣṭādhyāyī a.p.s), kind, meaning (plain English, original to this project), note.
+# Every other field is filled from the ashtadhyayi.com dataset by scripts/import-sutras.py and checked by
+# scripts/check-sutras.py: deva (sūtra text), pada (padaccheda), anuvrtti / adhikara ([word, from a.p.s]),
+# lsk / sk (Laghusiddhāntakaumudī / Siddhāntakaumudī numbers), vrtti (Varadarāja's LSK vṛtti).
+# Source: https://github.com/ashtadhyayi-com/data (sutraani/), used with credit as its README asks.
+# kind: saṃjñā | paribhāṣā | vidhi | niyama | atideśa | adhikāra
 - id: "1.3.3"
   lsk: 1
   lskVerified: true
-  deva: हलन्त्यम्
-  pada: [हल्, अन्त्यम्]
-  anuvrtti: [[उपदेशे, "1.3.2"], [इत्, "1.3.2"]]
-  vrtti: उपदेशेऽन्त्यं हलित्स्यात्। उपदेश आद्योच्चारणम्। सूत्रेष्वदृष्टं पदं सूत्रान्तरादनुवर्तनीयं सर्वत्र॥
+  sk: 1
+  deva: "हलन्त्यम्"
+  pada: ["हल्", "अन्त्यम्"]
+  anuvrtti: [["उपदेशे", "1.3.2"], ["इत्", "1.3.2"]]
+  adhikara: []
+  vrtti: "उपदेशेऽन्त्यं हलित्स्यात्। उपदेश आद्योच्चारणम्। सूत्रेष्वदृष्टं पदं सूत्रान्तरादनुवर्तनीयं सर्वत्र॥"
   vrttiVerified: true
   kind: saṃjñā
-  meaning: In an item as Pāṇini first teaches it (upadeśa), the final consonant is an it — a marker, not part of the sound-material.
+  meaning: "In an item as Pāṇini first teaches it (upadeśa), the final consonant is an it — a marker, not part of the sound-material."
 - id: "1.1.60"
   lsk: 2
   lskVerified: true
-  deva: अदर्शनं लोपः
-  pada: [अदर्शनम्, लोपः]
-  anuvrtti: []
-  vrtti: प्रसक्तस्यादर्शनं लोपसंज्ञं स्यात्।
+  sk: 53
+  deva: "अदर्शनं लोपः"
+  pada: ["अदर्शनं", "लोपः"]
+  anuvrtti: [["स्थाने", "1.1.50"]]
+  adhikara: []
+  vrtti: "प्रसक्तस्यादर्शनं लोपसंज्ञं स्यात्॥"
   vrttiVerified: true
   kind: saṃjñā
-  meaning: The non-appearance of something that would otherwise be present is called lopa.
+  meaning: "The non-appearance of something that would otherwise be present is called lopa."
 - id: "1.3.9"
   lsk: 3
   lskVerified: true
-  deva: तस्य लोपः
-  pada: [तस्य, लोपः]
-  anuvrtti: [[इतः, "1.3.2"]]
-  vrtti: तस्येतो लोपः स्यात्। णादयोऽणाद्यर्थाः।
+  sk: 62
+  deva: "तस्य लोपः"
+  pada: ["तस्य", "लोपः"]
+  anuvrtti: []
+  adhikara: []
+  vrtti: "तस्येतो लोपः स्यात्। णादयोऽणाद्यर्थाः॥"
   vrttiVerified: true
   kind: vidhi
-  meaning: That it-marker undergoes lopa. (The vṛtti adds — the markers ṇ and the rest exist to form names like aṇ.)
+  meaning: "That it-marker undergoes lopa. (The vṛtti adds — the markers ṇ and the rest exist to form names like aṇ.)"
 - id: "1.1.71"
   lsk: 4
-  lskVerified: false
-  deva: आदिरन्त्येन सहेता
-  pada: [आदिः, अन्त्येन, सह, इता]
-  anuvrtti: []
-  vrttiVerified: false
+  lskVerified: true
+  sk: 2
+  deva: "आदिरन्त्येन सहेता"
+  pada: ["आदिः", "अन्त्येन", "सह", "इता"]
+  anuvrtti: [["स्वम्", "1.1.68"], ["रूपम्", "1.1.68"]]
+  adhikara: []
+  vrtti: "अन्त्येनेता सहित आदिर्मध्यगानां स्वस्य च संज्ञा स्यात् । यथाऽणिति अ इ उ वर्णानां संज्ञा। एवमच् हल् अलित्यादयः॥"
+  vrttiVerified: true
   kind: saṃjñā
-  meaning: An initial sound, taken together with a final it-marker, names itself and every sound in between.
+  meaning: "An initial sound, taken together with a final it-marker, names itself and every sound in between."
 - id: "1.2.27"
   lsk: 5
   lskVerified: true
-  deva: ऊकालोऽज्झ्रस्वदीर्घप्लुतः
-  pada: [ऊकालः, अच्, ह्रस्वदीर्घप्लुतः]
+  sk: 4
+  deva: "ऊकालोऽज्झ्रस्वदीर्घप्लुतः"
+  pada: ["ऊ-कालः", "अच्", "ह्रस्व-दीर्घ-प्लुतः"]
   anuvrtti: []
-  vrtti: उश्च ऊश्च ऊ३श्च वः; वां कालो यस्य सोऽच् क्रमाद् ह्रस्वदीर्घप्लुतसंज्ञः स्यात्। स प्रत्येकमुदात्तादि भेदेन त्रिधा।
+  adhikara: []
+  vrtti: "उश्च ऊश्च उ३श्च वः; वां काल इव कालो यस्य सोऽच् क्रमाद् ह्रस्वदीर्घप्लुतसंज्ञः स्यात्। स प्रत्येकमुदात्तादिभेदेन त्रिधा॥"
   vrttiVerified: true
   kind: saṃjñā
-  meaning: A vowel lasting as long as u, ū or ū3 is called short (hrasva), long (dīrgha) or prolated (pluta), respectively.
+  meaning: "A vowel lasting as long as u, ū or ū3 is called short (hrasva), long (dīrgha) or prolated (pluta), respectively."
 - id: "1.2.29"
   lsk: 6
-  lskVerified: false
-  deva: उच्चैरुदात्तः
-  pada: [उच्चैः, उदात्तः]
-  anuvrtti: [[अच्, "1.2.27"]]
+  lskVerified: true
+  sk: 5
+  deva: "उच्चैरुदात्तः"
+  pada: ["उच्चैः", "उदात्तः"]
+  anuvrtti: [["अच्", "1.2.27"]]
+  adhikara: []
   vrttiVerified: false
   kind: saṃjñā
-  meaning: A vowel pronounced high is udātta.
+  meaning: "A vowel pronounced high is udātta."
 - id: "1.2.30"
   lsk: 7
-  lskVerified: false
-  deva: नीचैरनुदात्तः
-  pada: [नीचैः, अनुदात्तः]
-  anuvrtti: [[अच्, "1.2.27"]]
+  lskVerified: true
+  sk: 6
+  deva: "नीचैरनुदात्तः"
+  pada: ["नीचैः", "अनुदात्तः"]
+  anuvrtti: [["अच्", "1.2.27"]]
+  adhikara: []
   vrttiVerified: false
   kind: saṃjñā
-  meaning: A vowel pronounced low is anudātta.
+  meaning: "A vowel pronounced low is anudātta."
 - id: "1.2.31"
   lsk: 8
-  lskVerified: false
-  deva: समाहारः स्वरितः
-  pada: [समाहारः, स्वरितः]
-  anuvrtti: [[अच्, "1.2.27"]]
-  vrttiVerified: false
+  lskVerified: true
+  sk: 7
+  deva: "समाहारः स्वरितः"
+  pada: ["समाहारः", "स्वरितः"]
+  anuvrtti: [["अच्", "1.2.27"]]
+  adhikara: []
+  vrtti: "स नवविधोऽपि प्रत्येकमनुनासिकत्वाननुनासिकत्वाभ्यां द्विधा ॥"
+  vrttiVerified: true
   kind: saṃjñā
-  meaning: A vowel that combines the two (high and low) is svarita.
+  meaning: "A vowel that combines the two (high and low) is svarita."
 - id: "1.1.8"
   lsk: 9
-  lskVerified: false
-  deva: मुखनासिकावचनोऽनुनासिकः
-  pada: [मुखनासिकावचनः, अनुनासिकः]
+  lskVerified: true
+  sk: 9
+  deva: "मुखनासिकावचनोऽनुनासिकः"
+  pada: ["मुख-नासिका-वचनः", "अनुनासिकः"]
   anuvrtti: []
-  vrttiVerified: false
+  adhikara: []
+  vrtti: "मुखसहितनासिकयोच्चार्यमाणो वर्णोऽनुनासिकसंज्ञः स्यात् । तदित्थम् - अ इ उ ऋ एषां वर्णानां प्रत्येकमष्टादश भेदाः । ऌवर्णस्य द्वादश तस्य दीर्घाभावात् । एचामपि द्वादश तेषां ह्रस्वाभावात् ॥"
+  vrttiVerified: true
   kind: saṃjñā
-  meaning: A sound produced through the mouth and the nose together is anunāsika (nasal).
+  meaning: "A sound produced through the mouth and the nose together is anunāsika (nasal)."
 - id: "1.1.9"
   lsk: 10
   lskVerified: true
-  deva: तुल्यास्यप्रयत्नं सवर्णम्
-  pada: [तुल्यास्यप्रयत्नम्, सवर्णम्]
+  sk: 10
+  deva: "तुल्यास्यप्रयत्नं सवर्णम्"
+  pada: ["तुल्य-आस्य-प्रयत्नम्", "सवर्णम्"]
   anuvrtti: []
-  vrtti: ताल्वादिस्थानमाभ्यन्तरप्रयत्नश्चेत्येतद्द्वयं यस्य येन तुल्यं तन्मिथः सवर्णसंज्ञं स्यात्।
+  adhikara: []
+  vrtti: "ताल्वादिस्थानमाभ्यन्तरप्रयत्नश्चेत्येतद्द्वयं यस्य येन तुल्यं तन्मिथः सवर्णसंज्ञं स्यात्। ऋऌवर्णयोर्मिथः सावर्ण्यं वाच्यम् (वार्त्तिकम्)। अकुहविसर्जनीयानां कण्ठः। इचुयशानां तालु। ऋटुरषाणां मूर्धा। ऌतुलसानां दन्ताः। उपूपध्मानीयानामोष्ठौ। ञमङणनानां नासिका च। एदैतोः कण्ठतालु। ओदौतोः कण्ठोष्ठम्। वकारस्य दन्तोष्ठम्। जिह्वामूलीयस्य जिह्वामूलम्। नासिकाऽनुस्वारस्य। यत्नो द्विधा - आभ्यन्तरो बाह्यश्च। आद्यः पञ्चधा - स्पृष्टेषत्स्पृष्टेषद्विवृतविवृतसंवृतभेदात्। तत्र स्पृष्टं प्रयतनं स्पर्शानाम्। ईषत्स्पृष्टमन्तःस्थानाम्। ईषद्विवृतमूष्मणाम्। विवृतं स्वराणाम्। ह्रस्वस्यावर्णस्य प्रयोगे संवृतम्। प्रक्रियादशायां तु विवृतमेव। बाह्यप्रयत्नस्त्वेकादशधा - विवारः संवारः श्वासो नादो घोषोऽघोषोऽल्पप्राणो महाप्राण उदात्तोऽनुदात्तः स्वरितश्चेति। खरो विवाराः श्वासा अघोषाश्च। हशः संवारा नादा घोषाश्च। वर्गाणां प्रथमतृतीयपञ्चमा यणश्चाल्पप्राणाः। वर्गाणां द्वितीयचतुर्थौ शलश्च महाप्राणाः। कादयो मावसानाः स्पर्शाः। यणोऽन्तःस्थाः। शल ऊष्माणः। अचः स्वराः। ᳵकᳵख इति कखाभ्यां प्रागर्धविसर्गसदृशो जिह्वामूलीयः। ᳶपᳶफ इति पफाभ्यां प्रागर्धविसर्गसदृश उपध्मानीयः। अं अः इत्यचः परावनुस्वारविसर्गौ॥"
   vrttiVerified: true
   kind: saṃjñā
-  meaning: Sounds that share both their place in the mouth and their internal effort are savarṇa — members of one sound-class.
-- id: "1.1.10"
-  lsk: 11
-  lskVerified: false
-  deva: नाज्झलौ
-  pada: [न, अज्झलौ]
-  anuvrtti: [[सवर्णम्, "1.1.9"]]
-  vrttiVerified: false
-  kind: niyama
-  meaning: A vowel and a consonant are never savarṇa, even when their place and effort match.
+  meaning: "Sounds that share both their place in the mouth and their internal effort are savarṇa — members of one sound-class."
 - id: "1.1.69"
-  lsk: 12
-  lskVerified: false
-  deva: अणुदित्सवर्णस्य चाप्रत्ययः
-  pada: [अणुदित्, सवर्णस्य, च, अप्रत्ययः]
-  anuvrtti: [[स्वं रूपम्, "1.1.68"]]
-  vrttiVerified: false
+  lsk: 11
+  lskVerified: true
+  sk: 14
+  deva: "अणुदित् सवर्णस्य चाप्रत्ययः"
+  pada: ["अण्-उदित्", "सवर्णस्य", "च", "अ-प्रत्ययः"]
+  anuvrtti: [["स्वम्", "1.1.68"], ["रूपम्", "1.1.68"]]
+  adhikara: []
+  vrtti: "प्रतीयते विधीयत इति प्रत्ययः। अविधीयमानोऽणुदिच्च सवर्णस्य संज्ञा स्यात्। अत्रैवाण् परेण णकारेण। कु चु टु तु पु एते उदितः। तदेवम् - अ इत्यष्टादशानां संज्ञा। तथेकारोकारौ। ऋकारस्त्रिंशतः। एवम् ऌकारोऽपि। एचो द्वादशानाम्। अनुनासिकाननुनासिकभेदेन यवला द्विधा; तेनाननुनासिकास्ते द्वयोर्द्वयोस्संज्ञा॥"
+  vrttiVerified: true
   kind: paribhāṣā
-  meaning: A sound of the aṇ class, or an item marked with u, names its whole savarṇa class as well as itself — unless it is a suffix.
+  meaning: "A sound of the aṇ class, or an item marked with u, names its whole savarṇa class as well as itself — unless it is a suffix."
+- id: "1.4.109"
+  lsk: 12
+  lskVerified: true
+  sk: 28
+  deva: "परः सन्निकर्षः संहिता"
+  pada: ["परः", "सन्निकर्षः", "संहिता"]
+  anuvrtti: []
+  adhikara: [["आकडारात् एका संज्ञा", "1.4.1"]]
+  vrtti: "वर्णानामतिशयितः सन्निधिः संहितासंज्ञः स्यात् ॥"
+  vrttiVerified: true
+  kind: saṃjñā
+  meaning: "The closest possible joining of sounds — pronounced together, with no pause — is called saṃhitā."
 - id: "1.1.7"
   lsk: 13
   lskVerified: true
-  deva: हलोऽनन्तराः संयोगः
-  pada: [हलः, अनन्तराः, संयोगः]
+  sk: 30
+  deva: "हलोऽनन्तराः संयोगः"
+  pada: ["हलः", "अनन्तराः", "संयोगः"]
   anuvrtti: []
-  vrtti: अज्भिरव्यवहिता हलः संयोगसंज्ञाः स्युः॥
+  adhikara: []
+  vrtti: "अज्भिरव्यवहिता हलः संयोगसंज्ञाः स्युः॥"
   vrttiVerified: true
   kind: saṃjñā
-  meaning: Consonants with no vowel between them are called a saṃyoga (cluster).
+  meaning: "Consonants with no vowel between them are called a saṃyoga (cluster)."
 - id: "1.4.14"
   lsk: 14
   lskVerified: true
-  deva: सुप्तिङन्तं पदम्
-  pada: [सुप्तिङन्तम्, पदम्]
+  sk: 29
+  deva: "सुप्तिङन्तं पदम्"
+  pada: ["सुप्-तिङ्-अन्तम्", "पदम्"]
   anuvrtti: []
-  vrtti: सुबन्तं तिङन्तं च पदसंज्ञं स्यात्॥
+  adhikara: [["आकडारात् एका संज्ञा", "1.4.1"]]
+  vrtti: "सुबन्तं तिङन्तं च पदसंज्ञं स्यात् ॥"
   vrttiVerified: true
   kind: saṃjñā
-  meaning: What ends in a nominal ending (sup) or a verbal ending (tiṅ) is a pada — a finished, usable word.
-
-# Referenced, not numbered in this prakaraṇa
-- id: "1.3.2"
+  meaning: "What ends in a nominal ending (sup) or a verbal ending (tiṅ) is a pada — a finished, usable word."
+- id: "1.1.10"
   lsk: null
   lskVerified: false
-  deva: उपदेशेऽजनुनासिक इत्
-  pada: [उपदेशे, अच्, अनुनासिकः, इत्]
-  anuvrtti: []
+  sk: 13
+  deva: "नाज्झलौ"
+  pada: ["न", "अच्-हलौ"]
+  anuvrtti: [["सवर्णम्", "1.1.9"]]
+  adhikara: []
   vrttiVerified: false
-  kind: saṃjñā
-  meaning: In an upadeśa, a nasalised vowel is an it-marker.
+  kind: niyama
+  meaning: "A vowel and a consonant are never savarṇa, even when their place and effort match."
+  note: "Not in Varadarāja's Laghusiddhāntakaumudī; the Siddhāntakaumudī includes it."
 - id: "1.1.68"
   lsk: null
   lskVerified: false
-  deva: स्वं रूपं शब्दस्याशब्दसंज्ञा
-  pada: [स्वम्, रूपम्, शब्दस्य, अशब्दसंज्ञा]
+  sk: 25
+  deva: "स्वं रूपं शब्दस्याशब्दसंज्ञा"
+  pada: ["स्वम्", "रूपम्", "शब्दस्य", "अ-शब्दसंज्ञा"]
   anuvrtti: []
+  adhikara: []
   vrttiVerified: false
   kind: paribhāṣā
-  meaning: In grammar a word denotes its own form — unless it is a technical name.
-- id: "1.1.52"
-  lsk: null
-  lskVerified: false
-  deva: अलोऽन्त्यस्य
-  pada: [अलः, अन्त्यस्य]
-  anuvrtti: []
-  vrttiVerified: false
-  kind: paribhāṣā
-  meaning: An operation taught for an item applies to its final sound.
+  meaning: "In grammar a word denotes its own form — unless it is a technical name."

@@ -4,8 +4,8 @@ deva: सवर्णसंज्ञा
 module: samjna
 order: 5
 minutes: 25
-summary: LSK 10–12 define when two sounds count as the same class (savarṇa), block one tempting mistake, and let a single short letter in a rule stand for its whole class.
-lskRange: 10–12
+summary: LSK 10–11 define when two sounds count as the same class (savarṇa) and let a single short letter in a rule stand for its whole class. A third sūtra from the Aṣṭādhyāyī, 1.1.10, blocks one tempting mistake.
+lskRange: 10–11
 sutras: ["1.1.9", "1.1.10", "1.1.69"]
 ---
 import Sa from "../../../components/Sa.astro";
@@ -19,12 +19,16 @@ import SavarnaChart from "../../../islands/SavarnaChart.tsx";
 
 Two sounds are <Sa iast="savarṇa" />, of one class, when they share **both** coordinates from the first lesson of this course: the place in the mouth (<Sa iast="āsya" />, glossed by Varadarāja as "palate and the rest") and the internal effort (<Sa iast="ābhyantara prayatna" />).
 
-The Laghusiddhāntakaumudī counts four internal efforts:
+How many internal efforts are there? The Kāśikā names the four that count for savarṇa:
 
 - **full contact** (<Sa iast="spṛṣṭa" />) for stops and nasals
 - **slight contact** (<Sa iast="īṣatspṛṣṭa" />) for semivowels
-- **open** (<Sa iast="vivṛta" />) for sibilants, h and vowels
+- **open** (<Sa iast="vivṛta" />) for vowels, and on this count for the sibilants and h as well
 - **closed** (<Sa iast="saṃvṛta" />) for short *a* as actually spoken. During a derivation, *a* is treated as open like the other vowels.
+
+<Voice quote="kas-1.1.9-prayatna" voice="bhasya">
+  The Kāśikā's list has four efforts. The vṛtti printed in the folio above, as the ashtadhyayi.com edition gives it, has five: it sets the sibilants apart as "slightly open" (<Sa iast="īṣadvivṛta" />), as the Siddhāntakaumudī does. Editions of the Laghusiddhāntakaumudī differ on this point. The chart below follows the Kāśikā's four, the count that the next rule, 1.1.10, presupposes.
+</Voice>
 
 Choose any sound to see its class:
 
@@ -38,7 +42,7 @@ A few results to notice. All five stops of a row form one class, including the n
 
 ## The tempting mistake
 
-Now choose *i* on the chart. The palatal sibilant *ś* lights up with a dashed outline. Its place is the palate, and in the Laghusiddhāntakaumudī's four-fold scheme its effort is open, exactly like a vowel's. By 1.1.9 alone, *i* and *ś* would be savarṇa. The same goes for *a* and *h* (throat, open). The next sūtra forbids it:
+Now choose *i* on the chart. The palatal sibilant *ś* lights up with a dashed outline. Its place is the palate, and on the Kāśikā's four-fold count its effort is open, exactly like a vowel's. By 1.1.9 alone, *i* and *ś* would be savarṇa. The same goes for *a* and *h* (throat, open). The very next sūtra of the Aṣṭādhyāyī forbids it. Varadarāja leaves it out of the Laghusiddhāntakaumudī; Bhaṭṭoji Dīkṣita's fuller Siddhāntakaumudī keeps it as its thirteenth sūtra.
 
 <SutraFolio id="1.1.10" />
 
@@ -48,9 +52,13 @@ Now choose *i* on the chart. The palatal sibilant *ś* lights up with a dashed o
 
 ## One letter for the whole class
 
+This is LSK 11, and Varadarāja's gloss works out exactly how far each letter reaches.
+
 <SutraFolio id="1.1.69" />
 
-This is why the Śivasūtras could list only short *a*. In a rule, *a* stands for all eighteen of its varieties: short, long and prolated, at every pitch, nasal or not. Here *aṇ* takes the **second** ṇ, so the principle reaches the semivowels *y v l* as well, which have nasal forms.
+This is why the Śivasūtras could list only short *a*. In a rule, *a* stands for all eighteen of its varieties: short, long and prolated, at every pitch, nasal or not. Here *aṇ* takes the **second** ṇ (Varadarāja: <Sa iast="atraivāṇ pareṇa ṇakāreṇa" />, "only here is aṇ formed with the later ṇ"), so the principle reaches the semivowels *y v l* as well, which have nasal forms.
+
+His gloss then counts what each letter covers. *a*, *i* and *u* name eighteen sounds each. *ṛ* names **thirty**: its own eighteen plus the twelve of *ḷ*, because the vārttika on 1.1.9 makes the two one class; *ḷ* likewise names thirty. The diphthongs *e ai o au*, which have no short forms, name twelve each.
 
 The other half of the rule covers items marked with *u* (<Sa iast="udit" />). <Sa iast="ku" /> means the whole velar row *k kh g gh ṅ*, <Sa iast="cu" /> the palatal row, and so on through <Sa iast="ṭu" />, <Sa iast="tu" /> and <Sa iast="pu" />.
 

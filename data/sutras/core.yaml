@@ -1,56 +1,191 @@
-# Interpretive sūtras (paribhāṣā) used throughout, and the first Ac-sandhi rule as a worked example.
-# LSK numbers here are not yet verified (lskVerified: false).
+# Interpretive sūtras and headings cited across the course that are not numbered in the LSK prakaraṇas taught so far.
+#
+# Hand-written fields: id (Aṣṭādhyāyī a.p.s), kind, meaning (plain English, original to this project), note.
+# Every other field is filled from the ashtadhyayi.com dataset by scripts/import-sutras.py and checked by
+# scripts/check-sutras.py: deva (sūtra text), pada (padaccheda), anuvrtti / adhikara ([word, from a.p.s]),
+# lsk / sk (Laghusiddhāntakaumudī / Siddhāntakaumudī numbers), vrtti (Varadarāja's LSK vṛtti).
+# Source: https://github.com/ashtadhyayi-com/data (sutraani/), used with credit as its README asks.
+# kind: saṃjñā | paribhāṣā | vidhi | niyama | atideśa | adhikāra
 - id: "1.1.49"
   lsk: null
   lskVerified: false
-  deva: षष्ठी स्थानेयोगा
-  pada: [षष्ठी, स्थानेयोगा]
+  sk: 38
+  deva: "षष्ठी स्थानेयोगा"
+  pada: ["षष्ठी", "स्थाने-योगा"]
   anuvrtti: []
+  adhikara: []
   vrttiVerified: false
   kind: paribhāṣā
-  meaning: In a rule, a word in the genitive (sixth case) names the thing that is replaced — the place where the operation happens.
-- id: "1.1.50"
-  lsk: null
-  lskVerified: false
-  deva: स्थानेऽन्तरतमः
-  pada: [स्थाने, अन्तरतमः]
-  anuvrtti: []
-  vrttiVerified: false
-  kind: paribhāṣā
-  meaning: When there is a choice of substitutes, the one most similar to the original takes its place.
-- id: "1.1.66"
-  lsk: null
-  lskVerified: false
-  deva: तस्मिन्निति निर्दिष्टे पूर्वस्य
-  pada: [तस्मिन्, इति, निर्दिष्टे, पूर्वस्य]
-  anuvrtti: []
-  vrttiVerified: false
-  kind: paribhāṣā
-  meaning: When a rule names something in the locative (seventh case), the operation applies to what comes immediately before it.
+  meaning: "In a rule, a word in the genitive (sixth case) names the thing that is replaced — the place where the operation happens."
 - id: "1.1.67"
-  lsk: null
-  lskVerified: false
-  deva: तस्मादित्युत्तरस्य
-  pada: [तस्मात्, इति, उत्तरस्य]
-  anuvrtti: []
-  vrttiVerified: false
+  lsk: 71
+  lskVerified: true
+  sk: 41
+  deva: "तस्मादित्युत्तरस्य"
+  pada: ["तस्मात्", "इति", "उत्तरस्य"]
+  anuvrtti: [["निर्दिष्टे", "1.1.66"]]
+  adhikara: []
+  vrtti: "पञ्चमीनिर्देशेन क्रियमाणं कार्यं वर्णान्तरेणाव्यवहितस्य परस्य ज्ञेयम्॥"
+  vrttiVerified: true
   kind: paribhāṣā
-  meaning: When a rule names something in the ablative (fifth case), the operation applies to what comes immediately after it.
-- id: "6.1.77"
-  lsk: null
-  lskVerified: false
-  deva: इको यणचि
-  pada: [इकः, यण्, अचि]
-  anuvrtti: [[संहितायाम्, "6.1.72"]]
-  vrttiVerified: false
-  kind: vidhi
-  meaning: In close junction, a vowel of the ik class (i u ṛ ḷ) is replaced by a semivowel of the yaṇ class (y v r l) when a vowel follows.
+  meaning: "When a rule names something in the ablative (fifth case), the operation applies to what comes immediately after it."
 - id: "6.1.72"
   lsk: null
   lskVerified: false
-  deva: संहितायाम्
-  pada: [संहितायाम्]
-  anuvrtti: []
+  sk: 145
+  deva: "संहितायाम्"
+  pada: ["संहितायाम्"]
+  anuvrtti: [["ह्रस्वस्य", "6.1.71"], ["तुक्", "6.1.71"]]
+  adhikara: []
   vrttiVerified: false
   kind: adhikāra
-  meaning: Heading — the rules that follow apply in saṃhitā, close phonetic junction.
+  meaning: "Heading — the rules that follow apply in saṃhitā, close phonetic junction."
+- id: "6.1.84"
+  lsk: null
+  lskVerified: false
+  sk: 68
+  deva: "एकः पूर्वपरयोः"
+  pada: ["एकः", "पूर्वपरयोः"]
+  anuvrtti: [["अचि", "6.1.77"]]
+  adhikara: [["संहितायाम्", "6.1.72"]]
+  vrttiVerified: false
+  kind: adhikāra
+  meaning: "Heading — in the rules that follow, a single substitute replaces both the earlier and the later sound (ekādeśa)."
+- id: "1.4.1"
+  lsk: 165
+  lskVerified: true
+  sk: 232
+  deva: "आ कडारादेका संज्ञा"
+  pada: ["आ", "कडारात्", "एका", "संज्ञा"]
+  anuvrtti: []
+  adhikara: []
+  vrtti: "इत ऊर्ध्वं कडाराः कर्मधारय इत्यतः प्रागेकस्यैकैव संज्ञा ज्ञेया। या परानवकाशा च॥"
+  vrttiVerified: true
+  kind: adhikāra
+  meaning: "Heading — from here up to 2.2.38, an item receives only one technical name. When two could apply, the later one (or the one that would otherwise have no scope) is chosen."
+- id: "1.4.56"
+  lsk: null
+  lskVerified: false
+  sk: 19
+  deva: "प्राग्रीश्वरान्निपाताः"
+  pada: ["प्राक्", "रीश्वरात्", "निपाताः"]
+  anuvrtti: []
+  adhikara: [["आकडारात् एका संज्ञा", "1.4.1"]]
+  vrttiVerified: false
+  kind: adhikāra
+  meaning: "Heading — the items named from here up to 1.4.97 (adhir īśvare) are called nipāta, particles."
+- id: "6.1.107"
+  lsk: 134
+  lskVerified: true
+  sk: 194
+  deva: "अमि पूर्वः"
+  pada: ["अमि", "पूर्वः"]
+  anuvrtti: [["अचि", "6.1.77"], ["अकः", "6.1.101"]]
+  adhikara: [["संहितायाम्", "6.1.72"], ["एकः पूर्वपरयोः", "6.1.84"]]
+  vrtti: "अकोऽम्यचि पूर्वरूपमेकादेशः। रामम्। रामौ॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "Before the ending am, an ak vowel and the a of am are replaced by the earlier vowel alone (pūrvarūpa): rāma + am → rāmam."
+- id: "6.1.115"
+  lsk: null
+  lskVerified: false
+  sk: 3518
+  deva: "प्रकृत्याऽन्तःपादमव्यपरे"
+  pada: ["प्रकृत्या", "अन्तःपादम्", "अव्यपरे"]
+  anuvrtti: [["अति", "6.1.109"]]
+  adhikara: [["संहितायाम्", "6.1.72"]]
+  vrttiVerified: false
+  kind: vidhi
+  meaning: "In Vedic verse, a word-final e or o before short a stays as it is inside a metrical foot, unless that a is followed by v or y."
+- id: "6.1.71"
+  lsk: 773
+  lskVerified: true
+  sk: 2858
+  deva: "ह्रस्वस्य पिति कृति तुक्"
+  pada: ["ह्रस्वस्य", "पिति", "कृति", "तुक्"]
+  anuvrtti: []
+  adhikara: []
+  vrtti: "इत्यः। स्तुत्यः। शासु अनुशिष्टौ॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "A short vowel takes the augment t (tuk) before a kṛt suffix marked with p."
+- id: "8.1.16"
+  lsk: null
+  lskVerified: false
+  sk: 401
+  deva: "पदस्य"
+  pada: ["पदस्य"]
+  anuvrtti: []
+  adhikara: []
+  vrttiVerified: false
+  kind: adhikāra
+  meaning: "Heading — up to 8.3.55, the rules that follow apply to a pada, a finished word."
+- id: "8.2.108"
+  lsk: null
+  lskVerified: false
+  sk: 3627
+  deva: "तयोर्य्वावचि संहितायाम्"
+  pada: ["तयोः", "य्वौ", "अचि", "संहितायाम्"]
+  anuvrtti: []
+  adhikara: [["पदस्य", "8.1.16"], ["पूर्वत्रासिद्धम्", "8.2.1"]]
+  vrttiVerified: false
+  kind: vidhi
+  meaning: "In saṃhitā, before a vowel, the i and u that end the prolated diphthongs of 8.2.107 become y and v. Its last word, saṃhitāyām, carries on as a heading to the end of the grammar."
+- id: "8.2.82"
+  lsk: null
+  lskVerified: false
+  sk: 93
+  deva: "वाक्यस्य टेः प्लुत उदात्तः"
+  pada: ["वाक्यस्य", "टेः", "प्लुतः", "उदात्तः"]
+  anuvrtti: []
+  adhikara: [["पदस्य", "8.1.16"], ["पूर्वत्रासिद्धम्", "8.2.1"]]
+  vrttiVerified: false
+  kind: adhikāra
+  meaning: "Heading — in the rules that follow, the ṭi of a sentence (its last vowel and what follows) becomes prolated (pluta) and high-pitched (udātta)."
+- id: "8.3.17"
+  lsk: 107
+  lskVerified: true
+  sk: 167
+  deva: "भोभगोअघोअपूर्वस्य योऽशि"
+  pada: ["भो-भगो-अघो-अपूर्वस्य", "यः", "अशि"]
+  anuvrtti: [["रोः", "8.3.16"]]
+  adhikara: [["पदस्य", "8.1.16"], ["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "एतत्पूर्वस्य रोर्यादेशोऽशि। देवा इह, देवायिह। भोस् भगोस् अघोस् इति सान्ता निपाताः। तेषां रोर्यत्वे कृते॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "After bhos, bhagos, aghos, or after a or ā, a word-final r that comes from s becomes y before a vowel or voiced consonant."
+- id: "8.3.18"
+  lsk: null
+  lskVerified: false
+  sk: 168
+  deva: "व्योर्लघुप्रयत्नतरः शाकटायनस्य"
+  pada: ["व्योः", "लघुप्रयत्नतरः", "शाकटायनस्य"]
+  anuvrtti: [["भो-भगो-अघो-अपूर्वस्य", "8.3.17"], ["अशि", "8.3.17"]]
+  adhikara: [["पदस्य", "8.1.16"], ["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrttiVerified: false
+  kind: vidhi
+  meaning: "In Śākaṭāyana's view, that word-final v or y is pronounced with lighter effort."
+- id: "8.3.32"
+  lsk: 89
+  lskVerified: true
+  sk: 134
+  deva: "ङमो ह्रस्वादचि ङमुण्नित्यम्"
+  pada: ["ङमः", "ह्रस्वात्", "अचि", "ङमुट्", "नित्यम्"]
+  anuvrtti: []
+  adhikara: [["पदस्य", "8.1.16"], ["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "ह्रस्वात्परो यो ङम् तदन्तं यत्पदं तस्मात्परस्याचो ङमुट्। प्रत्यङ्ङात्मा। सुगण्णीशः। सन्नच्युतः॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "When a word ends in ṅ, ṇ or n after a short vowel, a following vowel always takes the same nasal as an augment, so the nasal is doubled."
+- id: "8.4.45"
+  lsk: 68
+  lskVerified: true
+  sk: 116
+  deva: "यरोऽनुनासिकेऽनुनासिको वा"
+  pada: ["यरः", "अनुनासिके", "अनुनासिकः", "वा"]
+  anuvrtti: [["पदान्तस्य", "8.4.42"]]
+  adhikara: [["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
+  vrtti: "यरः पदान्तस्यानुनासिके परेऽनुनासिको वा स्यात् । एतन्मुरारिः एतद् मुरारिः । प्रत्यये भाषायां नित्यम् (वार्त्तिकम्) । तन्मात्रम् । चिन्मयम् ॥"
+  vrttiVerified: true
+  kind: vidhi
+  meaning: "Before a nasal, a word-final consonant other than h may be replaced by a nasal."

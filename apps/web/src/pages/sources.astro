@@ -14,13 +14,28 @@ const checked = [...new Set(quotes.map((q) => q.data.checkedAt))];
 
     <h2>Primary texts</h2>
     <ul>
-      <li><strong>Pāṇini, Aṣṭādhyāyī</strong> (c. 5th–4th century BCE). Sūtra text and numbering are the standard ones. Citation links go to <a href={pramanaCommentary.astadhyayi} rel="external">Pramāṇa</a>, whose digital text comes from GRETIL (Kāśikā edition of Aryendra Sharma, CC BY-NC-SA 4.0). This site does not copy that digital edition: sūtra texts here are keyed from the public-domain original.</li>
-      <li><strong>Varadarāja, Laghusiddhāntakaumudī</strong>. Course order and the vṛtti lines shown on folios. LSK numbers and vṛttis marked as verified were checked against the Laghusiddhāntakaumudī text given with each sūtra at <a href="https://sanskritdocuments.org/learning_tools/ashtadhyayi/vyakhya/1/1.3.3.htm" rel="external">sanskritdocuments.org</a>.</li>
+      <li><strong>Pāṇini, Aṣṭādhyāyī</strong> (c. 5th–4th century BCE). Sūtra text and numbering are the standard ones. Citation links go to <a href={pramanaCommentary.astadhyayi} rel="external">Pramāṇa</a>, whose digital text comes from GRETIL (Kāśikā edition of Aryendra Sharma, CC BY-NC-SA 4.0). This site does not copy that digital edition.</li>
+      <li><strong>Varadarāja, Laghusiddhāntakaumudī</strong>. Course order, LSK numbers and the vṛtti shown on every folio.</li>
+      <li><strong>Bhaṭṭoji Dīkṣita, Siddhāntakaumudī</strong>. SK numbers for sūtras that the Laghusiddhāntakaumudī leaves out, and one traditional verse.</li>
       <li><strong>Patañjali, Vyākaraṇa-Mahābhāṣya</strong>, chiefly the opening Paspaśāhnika. <a href={pramanaCommentary.mahabhasya} rel="external">Catalogue entry on Pramāṇa</a>.</li>
       <li><strong>Kātyāyana, Vārttikas</strong>, as transmitted in the Mahābhāṣya.</li>
       <li><strong>Jayāditya and Vāmana, Kāśikāvṛtti</strong>. <a href={pramanaCommentary.kasika} rel="external">Catalogue entry on Pramāṇa</a>.</li>
       <li><strong>Bhartṛhari, Vākyapadīya</strong>, Brahmakāṇḍa, cited by kāṇḍa and verse in sequential numbering. <a href={pramanaCommentary.darsana} rel="external">Vyākaraṇadarśana on Pramāṇa</a>.</li>
     </ul>
+
+    <h2>Digital texts used</h2>
+    <p>
+      Sūtra texts, word splits (padaccheda), carried-over words (anuvṛtti), headings (adhikāra), LSK and SK numbers and Varadarāja's
+      vṛtti come from the open dataset behind <a href="https://ashtadhyayi.com/" rel="external">ashtadhyayi.com</a>
+      (<a href="https://github.com/ashtadhyayi-com/data" rel="external">github.com/ashtadhyayi-com/data</a>), which its maintainers
+      offer for reuse with credit. Our gratitude to them. The same dataset's Mahābhāṣya, Kāśikā, Siddhāntakaumudī and
+      Vākyapadīya texts were used to check quoted passages. Two scripts in this project's repository re-check every sūtra and
+      quotation against it before release.
+    </p>
+    <p>
+      Editions differ in places. Where they do and it matters to a lesson, the lesson says so: for example, the
+      Laghusiddhāntakaumudī's list of internal efforts under 1.1.9, and Vākyapadīya verse numbers, which vary between editions.
+    </p>
 
     <h2>Texts quoted were checked against</h2>
     <ul>{checked.map((u) => <li><a href={u} rel="external">{new URL(u).hostname}{new URL(u).pathname}</a></li>)}</ul>
@@ -37,7 +52,7 @@ const checked = [...new Set(quotes.map((q) => q.data.checkedAt))];
     <h2>Known gaps</h2>
     <ul>
       <li>Pramāṇa's Aṣṭādhyāyī page for pāda 1.1 currently stops at 1.1.45. For later sūtras in that pāda, citation links go to the pāda page.</li>
-      <li>Some LSK numbers are inferred from their neighbours and are marked with a dagger (†) until checked.</li>
+      <li>Pramāṇa prints 6.1.125 as <i>plutapragṛhyā aci</i>, without <i>nityam</i>, which the Kāśikā and the Siddhāntakaumudī read.</li>
     </ul>
   </div>
 </Base>
