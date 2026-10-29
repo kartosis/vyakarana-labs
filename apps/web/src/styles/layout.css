@@ -33,9 +33,10 @@
   .prose > h3 { margin-block-start: var(--s-stack-l); }
   .prose > h2 + *,
   .prose > h3 + * { margin-block-start: var(--p-space-3); }
-  .prose ul,
-  .prose ol { padding-inline-start: 1.4em; }
-  .prose li + li { margin-block-start: var(--p-space-2); }
+  /* Only plain content lists: island and component lists carry a class and style themselves. */
+  .prose ul:not([class]),
+  .prose ol:not([class]) { padding-inline-start: 1.4em; }
+  .prose :is(ul, ol):not([class]) > li + li { margin-block-start: var(--p-space-2); }
   .prose li::marker { color: var(--s-color-rubric); }
   .prose dfn { font-style: italic; font-weight: 700; }
   .prose table {

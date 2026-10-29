@@ -7,7 +7,21 @@ const urls = [
   '/course/samjna/shiva-sutras/', '/course/samjna/savarna/', '/course/samjna/pratyahara/', '/sutra/1.1.71/', '/sutras/',
   '/tools/', '/tools/lipi/', '/tools/savarna/', '/tools/pratyahara/', '/signin/', '/me/', '/review/', '/leaderboard/',
   '/sources/', '/about/', '/privacy/', '/does-not-exist/',
+  '/course/samjna/samyoga-pada/', '/course/ac-sandhi/yan/', '/course/ac-sandhi/ayadi/', '/course/ac-sandhi/guna/',
+  '/course/ac-sandhi/vrddhi/', '/course/ac-sandhi/dirgha/', '/course/ac-sandhi/pragrhya/', '/tools/sandhi/',
+  '/tools/sandhi/?a=pra&b=ejate', '/sutra/1.1.9/', '/sutra/6.1.125/',
 ];
+/** Scroll through the page so every client:visible island hydrates before the audit. */
+async function hydrateAll(p) {
+  await p.evaluate(async () => {
+    for (let y = 0; y < document.body.scrollHeight; y += 600) {
+      window.scrollTo(0, y);
+      await new Promise((r) => setTimeout(r, 60));
+    }
+    window.scrollTo(0, 0);
+  });
+  await p.waitForTimeout(300);
+}
 (async () => {
   const b = await chromium.launch();
   let violations = 0;
@@ -16,6 +30,7 @@ const urls = [
     for (const u of urls) {
       const p = await ctx.newPage();
       await p.goto(BASE + u, { waitUntil: 'networkidle' });
+      await hydrateAll(p);
       const r = await new AxeBuilder({ page: p }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
       for (const v of r.violations) {
         violations++;

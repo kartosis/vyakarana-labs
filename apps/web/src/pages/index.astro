@@ -12,6 +12,20 @@ const first = (m: string) =>
 const bhasya = (await getEntry("quotes", "mbh-prayojana"))!.data;
 const darsana = (await getEntry("quotes", "vp-1.13"))!.data;
 const sutra = (await getEntry("sutras", "1.1.71"))!.data;
+const sutras = await getCollection("sutras");
+/** "6 lessons, LSK 15–61" for an open module */
+const moduleMeta = (m: string) => {
+  const n = lessons.filter((l) => l.data.module === m).length;
+  const lsk = sutras.filter((s) => s.data.source === `${m}.yaml` && s.data.lsk !== null).map((s) => s.data.lsk!);
+  const range = lsk.length ? `, LSK ${Math.min(...lsk)}–${Math.max(...lsk)}` : "";
+  return `${n} lesson${n === 1 ? "" : "s"}${range}`;
+};
+const tools = [
+  { href: "/tools/pratyahara/", deva: "प्रत्याहारः", title: "Pratyāhāra builder", text: "Expand or form any of Pāṇini's sound-class names from the Śivasūtras." },
+  { href: "/tools/savarna/", deva: "सवर्णः", title: "Sound classes", text: "Place and effort for every sound, and which sounds count as one class." },
+  { href: "/tools/lipi/", deva: "लिपिः", title: "Transliteration pad", text: "Type Harvard-Kyoto, IAST or SLP1 and read Devanagari as you type." },
+  { href: "/tools/sandhi/", deva: "सन्धिः", title: "Vowel sandhi", text: "Join two words and watch the sūtras decide, rule by rule." },
+];
 ---
 <Base title="Vyākaraṇa Labs" kind="home">
   <section class="hero page">
@@ -87,6 +101,7 @@ const sutra = (await getEntry("sutras", "1.1.71"))!.data;
                 <a href={href} class="path-link">
                   <span class="path-deva" lang="sa">{m.data.deva}</span>
                   <span class="path-title">{m.data.title}</span>
+                  <span class="path-meta">{moduleMeta(m.id)}</span>
                 </a>
               ) : (
                 <span class="path-link">
@@ -104,11 +119,16 @@ const sutra = (await getEntry("sutras", "1.1.71"))!.data;
 
   <section class="page tools-teaser" aria-labelledby="tools-h">
     <h2 id="tools-h">Tools you can use now</h2>
-    <ul class="tools-list">
-      <li><a href="/tools/pratyahara/">Pratyāhāra builder</a>: expand or form any of Pāṇini's sound-class names.</li>
-      <li><a href="/tools/savarna/">Sound classes</a>: place and effort for every sound, and which sounds are savarṇa.</li>
-      <li><a href="/tools/lipi/">Transliteration pad</a>: type Harvard-Kyoto or IAST and get Devanagari.</li>
-      <li><a href="/tools/sandhi/">Vowel sandhi</a>: join two words and watch the sūtras decide the result.</li>
+    <ul class="tools-grid">
+      {tools.map((t) => (
+        <li>
+          <a class="tool-link" href={t.href}>
+            <span class="tool-deva" lang="sa">{t.deva}</span>
+            <span class="tool-title">{t.title}</span>
+          </a>
+          <p class="tool-text">{t.text}</p>
+        </li>
+      ))}
     </ul>
   </section>
 </Base>
@@ -210,12 +230,28 @@ const sutra = (await getEntry("sutras", "1.1.71"))!.data;
       font-variant-numeric: tabular-nums;
     }
     a.path-link:hover .path-title { text-decoration: underline; }
+    a.path-link { border-block-end: 2px solid var(--s-color-text); }
     .path-deva { font-family: var(--s-font-sanskrit); font-size: 1.2rem; }
     .path-title { color: var(--s-color-text-soft); }
+    a.path-link .path-title { color: var(--s-color-text); }
+    .path-meta { font-size: var(--s-text-small); color: var(--s-color-text-soft); }
     .is-soon .path-deva { color: var(--s-color-text-faint); }
     .path-soon { font-size: var(--s-text-small); font-style: italic; color: var(--s-color-text-faint); }
 
     .tools-teaser { padding-block: var(--s-stack-l); border-block-start: 1px solid var(--s-color-hairline); }
-    .tools-list { display: grid; gap: var(--p-space-2); padding-inline-start: 1.2em; margin-block: var(--p-space-4) 0; }
+    .tools-grid {
+      list-style: none;
+      margin: var(--p-space-5) 0 0;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+      gap: var(--p-space-5) var(--p-space-6);
+    }
+    .tools-grid li { display: grid; gap: var(--p-space-2); align-content: start; padding-block-start: var(--p-space-3); border-block-start: 3px double var(--s-color-rubric); }
+    .tool-link { display: grid; gap: 0.1rem; text-decoration: none; color: var(--s-color-text); }
+    .tool-deva { font-family: var(--s-font-sanskrit); font-size: 1.6rem; line-height: 1.3; }
+    .tool-title { font-weight: 700; color: var(--s-color-link); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+    .tool-link:hover .tool-title { text-decoration-thickness: 2px; }
+    .tool-text { margin: 0; color: var(--s-color-text-soft); font-size: var(--s-text-small); max-inline-size: 36ch; }
   }
 </style>

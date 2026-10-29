@@ -41,7 +41,7 @@
   vrtti: "तस्येतो लोपः स्यात्। णादयोऽणाद्यर्थाः॥"
   vrttiVerified: true
   kind: vidhi
-  meaning: "That it-marker undergoes lopa. (The vṛtti adds — the markers ṇ and the rest exist to form names like aṇ.)"
+  meaning: "That it-marker undergoes lopa: it is not heard."
 - id: "1.1.71"
   lsk: 4
   lskVerified: true
@@ -65,7 +65,7 @@
   vrtti: "उश्च ऊश्च उ३श्च वः; वां काल इव कालो यस्य सोऽच् क्रमाद् ह्रस्वदीर्घप्लुतसंज्ञः स्यात्। स प्रत्येकमुदात्तादिभेदेन त्रिधा॥"
   vrttiVerified: true
   kind: saṃjñā
-  meaning: "A vowel lasting as long as u, ū or ū3 is called short (hrasva), long (dīrgha) or prolated (pluta), respectively."
+  meaning: "A vowel that lasts as long as short u, long ū or prolated u3 is called short (hrasva), long (dīrgha) or prolated (pluta), respectively."
 - id: "1.2.29"
   lsk: 6
   lskVerified: true

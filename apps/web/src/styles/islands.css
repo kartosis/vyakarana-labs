@@ -49,7 +49,8 @@
     color: var(--s-color-rubric);
     font-variant-numeric: tabular-nums;
   }
-  .shiva-sounds { display: inline-flex; flex-wrap: wrap; }
+  /* a sūtra never breaks across lines: its marker must stay with its sounds */
+  .shiva-sounds { display: inline-flex; flex-wrap: nowrap; }
   .shiva-slot {
     min-inline-size: 2.1rem;
     min-block-size: 2.6rem;
@@ -74,6 +75,10 @@
   .shiva-slot[aria-disabled="true"] { opacity: 0.45; cursor: not-allowed; }
   .shiva-slot .sa-iast { font-style: normal; }
   :root[data-script="iast"] .shiva-slot { font-size: 1.2rem; }
+  @media (width < 30rem) {
+    .shiva-board { padding-inline: var(--p-space-3); gap: var(--p-space-2) var(--p-space-3); }
+    .shiva-slot { min-inline-size: 1.8rem; font-size: 1.4rem; padding-inline: 0.05rem; }
+  }
 
   .shiva-result { display: grid; gap: var(--p-space-3); min-block-size: 9rem; }
   .shiva-name { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--p-space-4); margin: 0; }
@@ -323,7 +328,7 @@
 
   .sandhi-examples { display: grid; gap: var(--p-space-2); }
   .sandhi-examples > p { margin: 0; font-weight: 700; font-size: var(--s-text-small); }
-  .sandhi-examples ul { display: flex; flex-wrap: wrap; gap: var(--p-space-2); list-style: none; margin: 0; padding: 0; }
+  .sandhi-example-list { display: flex; flex-wrap: wrap; gap: var(--p-space-2); list-style: none; margin: 0; padding: 0; }
   .sandhi-example {
     display: grid;
     justify-items: start;

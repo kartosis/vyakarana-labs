@@ -163,7 +163,7 @@ export default function SandhiPad({
       {showExamples && (
         <div class="sandhi-examples">
           <p id={`${id}-ex`}>Textbook examples</p>
-          <ul aria-labelledby={`${id}-ex`}>
+          <ul class="sandhi-example-list" aria-labelledby={`${id}-ex`}>
             {EXAMPLES.map((e) => (
               <li>
                 <button type="button" class="sandhi-example" onClick={() => pick(e)}
