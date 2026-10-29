@@ -8,7 +8,7 @@
 ## 0. Resume protocol (do this first, every session)
 
 1. Read memory file `/areas/sanskrit-grammar-app.md` → user's answered decisions.
-2. Attach repo: `add_repo(owner="kartosis", repo="<REPO_NAME>", access="push")` → clone → `register_repo_root`.
+2. Attach repo: `add_repo(owner="kartosis", repo="vyakarana-labs", access="push")` → clone → `register_repo_root`.
 3. Read `docs/PROGRESS.md` (this file) and `CLAUDE.md`.
 4. Jump to **▶ NEXT ACTION**. Do **not** re-ask answered questions (§2). Do **not** redo research (§4).
 5. After each finished step: tick §6 checklist → append to §9 log → `scripts/checkpoint.sh "<msg>"` (commit + push).
@@ -21,12 +21,13 @@
 | Field | Value |
 |---|---|
 | **Phase** | P0 — Discovery (setup questions) |
-| **Rounds answered** | 1 / 4 |
-| **Repo** | `kartosis/<pending>` — user to create empty repo |
+| **Rounds answered** | 2 / 4 |
+| **Repo** | `kartosis/vyakarana-labs` — **not yet created on GitHub** (add_repo failed 2026-10-29); local copy at `/home/claude/vyakarana-labs` |
 | **Last updated** | 2026-10-29 |
 
 ### ▶ NEXT ACTION
-- Ask **Round 2** (teaching approach) + repo name → record answers → Round 3 → Round 4.
+- Retry `add_repo(kartosis, vyakarana-labs, push)`; on success: `git remote add origin`, push (`scripts/checkpoint.sh`).
+- Ask **Round 3** (tracking & community) → record → **Round 4** (brand & launch) → record.
 - Then write `docs/ARCHITECTURE.md` (flow map, service flow, system setup, layout) and get sign-off.
 
 ---
@@ -41,23 +42,20 @@
 | 1.3 | Sign-in methods | **Email one-time code only** (passwordless) |
 | 1.4 | Guest access | **Lessons open to all; exercises require an account** |
 
-### Round 2 — Teaching approach *(pending)*
+### Round 2 — Teaching approach (2026-10-29)
+| # | Question | Answer |
+|---|---|---|
+| 2.1 | GitHub repo name | **`kartosis/vyakarana-labs`** (user typed custom name) |
+| 2.2 | Script display | **Devanagari primary + IAST toggle** (also a user setting) |
+| 2.3 | Curriculum order | **Laghusiddhāntakaumudī (Varadarāja) order**: Saṃjñā → Paribhāṣā → Ac/Hal/Visarga sandhi → Ajanta/Halanta subanta (puṃ/strī/napuṃsaka) → Avyaya → Tiṅanta (bhvādi…curādi, ṇijanta, sannanta…) → Kṛdanta → Kāraka · Samāsa · Taddhita · Strīpratyaya. Every rule cites its sūtra + Pramāṇa link. |
+| 2.4 | v1 interactive tools | **All four**: Prakriyā stepper · Sandhi playground · Form generators (declension/conjugation) · Spaced-repetition drills (FSRS) |
+| — | *Default (not asked)* | Learners = English speakers new to Devanagari **and** Devanagari readers → optional **Varṇamālā primer** before LSK Saṃjñā-prakaraṇa |
 ### Round 3 — Tracking & community *(pending)*
 ### Round 4 — Brand & launch *(pending)*
 
 ---
 
 ## 3. Pending questions (pre-designed — ask these, don't redesign)
-
-### Round 2 — Teaching approach
-- **Repo name** (user creates empty repo under `kartosis`, no README): `vyakarana` · `sabdanusasanam` · `panini-path` · other
-- **Script display default**: Devanagari + IAST toggle *(rec)* · Devanagari over IAST always · IAST first
-- **Curriculum order**:
-  - Pāṇini's own system made gradual *(rec)*: Śivasūtras → pratyāhāra → saṃjñā → paribhāṣā → sandhi → subanta → tiṅanta → kṛt/taddhita → samāsa → kāraka; every rule cited to its sūtra
-  - Laghusiddhāntakaumudī (Varadarāja) prakriyā order
-  - Modern textbook order (nouns/verbs first), Pāṇini as the "why" layer
-- **Interactive tools for v1** (multi): Prakriyā stepper (derivation sūtra-by-sūtra) · Sandhi playground · Declension/conjugation generators · Spaced-repetition drills (FSRS)
-- *Default taken without asking*: learner = both English speakers new to Devanagari and Devanagari readers → optional script-primer module.
 
 ### Round 3 — Tracking & community
 - **Tracking depth**: learning data + cookieless privacy-first analytics *(rec)* · + full product analytics (PostHog, needs consent banner) · learning data only
@@ -119,7 +117,7 @@ IaC: Terraform (remote state S3 + lock) · CI/CD: GitHub Actions + OIDC role · 
 
 ## 6. Phase checklist
 
-- [ ] **P0 Discovery** — Round 1 ✅ · Round 2 ☐ · Round 3 ☐ · Round 4 ☐
+- [ ] **P0 Discovery** — Round 1 ✅ · Round 2 ✅ · Round 3 ☐ · Round 4 ☐
 - [ ] **P1 Architecture doc** — flow map, service flow, data model, API contract, layout/IA, wireframes → user sign-off
 - [ ] **P2 Repo scaffold** — monorepo (`apps/web`, `packages/engine`, `services/api`, `infra/`), lint/test/format, CI
 - [ ] **P3 Design system** — tokens (3-tier), layers, typography (Devanagari + Latin), components
@@ -138,7 +136,7 @@ IaC: Terraform (remote state S3 + lock) · CI/CD: GitHub Actions + OIDC role · 
 
 | # | Item | When | Status |
 |---|---|---|---|
-| U1 | Create **empty** GitHub repo under `kartosis` (no README/licence) | now | ☐ |
+| U1 | Create **empty** GitHub repo **`kartosis/vyakarana-labs`** (no README/licence) | now | ☐ |
 | U2 | AWS account with MFA on root; IAM Identity Center admin user; **AWS Budgets** alert | before P8 | ☐ |
 | U3 | Bootstrap Terraform state bucket (script provided) + GitHub OIDC role (Terraform provided) | P8 | ☐ |
 | U4 | **SES**: verify domain (DKIM), request **production access** (sandbox only emails verified addresses) | P8 / P11 | ☐ |
@@ -157,3 +155,4 @@ IaC: Terraform (remote state S3 + lock) · CI/CD: GitHub Actions + OIDC role · 
 ## 9. Session log (append-only)
 
 - **2026-10-29 · S1** — Read all 7 references (§4). Asked Round 1 (§2). User asked for persistent progress saving → created memory file `/areas/sanskrit-grammar-app.md` + this file + `CLAUDE.md` + `scripts/checkpoint.sh`. Next: Round 2 + repo name.
+- **2026-10-29 · S1** — Round 2 answered (§2). Repo name `vyakarana-labs`; add_repo failed (repo not created yet). Next: Round 3, retry repo.
