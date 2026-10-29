@@ -2,15 +2,16 @@
 import Base from "../../layouts/Base.astro";
 import SandhiPad from "../../islands/SandhiPad.tsx";
 ---
-<Base title="Vowel sandhi" kind="tool" description="Join two Sanskrit words and see which Pāṇinian sūtra decides what happens where their vowels meet: 6.1.77, 6.1.78, 6.1.87, 6.1.88, 6.1.101, 6.1.109, 6.1.125, 8.3.19.">
+<Base title="Sandhi" kind="tool" description="Join two Sanskrit words and see which Pāṇinian sūtras decide what happens where they meet: vowel sandhi (6.1.77–6.1.128) and consonant sandhi (6.1.73–8.4.65), with every optional form.">
   <div class="page-narrow">
     <header class="page-head">
       <p class="crumbs"><a href="/tools/">Tools</a></p>
-      <h1>Vowel sandhi</h1>
+      <h1>Sandhi</h1>
       <p class="lead">
-        Join two words. The tool tests every vowel-sandhi rule of the Aṣṭādhyāyī against the two vowels that meet, shows
-        which rule wins and why the others step aside, then derives the joined form sūtra by sūtra.
-        Taught in <a href="/course/ac-sandhi/yan/">Vowel sandhi</a>.
+        Join two words. Where two vowels meet, the tool tests every vowel rule of the Aṣṭādhyāyī, shows which one wins and
+        why the others step aside. Where a consonant is involved, it runs the consonant rules in the order the grammar
+        prescribes. Either way you get the derivation sūtra by sūtra and every other correct form.
+        Taught in <a href="/course/ac-sandhi/yan/">Vowel sandhi</a> and Consonant sandhi.
       </p>
     </header>
     <SandhiPad client:load syncUrl />

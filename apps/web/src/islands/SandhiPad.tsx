@@ -1,6 +1,6 @@
 /** @jsxImportSource preact */
 import { useEffect, useId, useRef, useState } from "preact/hooks";
-import { detectScheme, fromSlp1, sandhiChecks, toSlp1, vowelSandhi, type CheckStatus } from "@vl/engine";
+import { consonantSandhi, detectScheme, fromSlp1, isVowel, sandhiChecks, toSlp1, vowelSandhi, type CheckStatus } from "@vl/engine";
 
 interface Example {
   a: string;
@@ -22,6 +22,18 @@ const EXAMPLES: Example[] = [
   { a: "śivāya", b: "om", shows: "om" },
   { a: "brahma", b: "ṛṣiḥ", shows: "two forms" },
   { a: "harī", b: "etau", pragrhya: true, shows: "no sandhi" },
+];
+
+/** Consonant junctions, from Varadarāja's Hal-sandhi examples. */
+const HAL_EXAMPLES: Example[] = [
+  { a: "sat", b: "cit", shows: "ścutva" },
+  { a: "tat", b: "ṭīkā", shows: "ṣṭutva" },
+  { a: "vāk", b: "īśaḥ", shows: "jaśtva" },
+  { a: "etad", b: "murāriḥ", shows: "nasal" },
+  { a: "tad", b: "śivaḥ", shows: "ś → ch" },
+  { a: "vāk", b: "hariḥ", shows: "h" },
+  { a: "san", b: "śambhuḥ", shows: "four forms" },
+  { a: "śiva", b: "chāyā", shows: "tuk" },
 ];
 
 const STATUS_TEXT: Record<CheckStatus, string> = {
@@ -62,6 +74,9 @@ interface Props {
   initialCompound?: boolean;
   /** hide the example buttons (lessons supply their own context) */
   showExamples?: boolean;
+  /** which example set to offer: vowel junctions, consonant junctions, or both */
+  exampleSet?: "vowel" | "consonant" | "both";
+  initialSuffix?: boolean;
 }
 
 export default function SandhiPad({
@@ -72,6 +87,8 @@ export default function SandhiPad({
   initialPragrhya = false,
   initialCompound = false,
   showExamples = true,
+  exampleSet = "both",
+  initialSuffix = false,
 }: Props) {
   const id = useId();
   const H = `h${level}` as "h2" | "h3";
@@ -80,6 +97,7 @@ export default function SandhiPad({
   const [padanta, setPadanta] = useState(true);
   const [compound, setCompound] = useState(initialCompound);
   const [pragrhya, setPragrhya] = useState(initialPragrhya);
+  const [suffix, setSuffix] = useState(initialSuffix);
 
   // Shareable state on the tool page: ?a=…&b=…&pragrhya=1&padanta=0&compound=1 (written only after the first change).
   const ready = useRef(false);
@@ -91,6 +109,7 @@ export default function SandhiPad({
     if (q.get("pragrhya") === "1") setPragrhya(true);
     if (q.get("padanta") === "0") setPadanta(false);
     if (q.get("compound") === "1") setCompound(true);
+    if (q.get("suffix") === "1") setSuffix(true);
   }, []);
   useEffect(() => {
     if (!syncUrl) return;
@@ -102,17 +121,21 @@ export default function SandhiPad({
     if (pragrhya) q.set("pragrhya", "1");
     if (!padanta) q.set("padanta", "0");
     if (compound) q.set("compound", "1");
+    if (suffix) q.set("suffix", "1");
     history.replaceState(null, "", `${location.pathname}?${q}`);
-  }, [a, b, padanta, compound, pragrhya]);
+  }, [a, b, padanta, compound, pragrhya, suffix]);
 
   const first = slp(a);
   const second = slp(b);
   const last = first.at(-1) ?? "";
   const opts = { padanta, compound, pragrhya };
-  const res = first && second ? vowelSandhi(first, second, opts) : null;
-  const checks = first && second ? sandhiChecks(first, second, opts) : [];
-  const upasargaNote = res && !res.untouched && !pragrhya && A_UPASARGA.has(first);
-  const goNote = res && !res.untouched && !pragrhya && first === "go" && padanta;
+  // two vowels meet: Ac-sandhi; otherwise the consonant rules of the Hal-sandhi-prakaraṇa
+  const vowelMode = isVowel(last) && isVowel(second[0] ?? "");
+  const res = !first || !second ? null : vowelMode ? vowelSandhi(first, second, opts) : consonantSandhi(first, second, { suffix });
+  const checks = first && second && vowelMode ? sandhiChecks(first, second, opts) : [];
+  const halNote = res && !vowelMode && "note" in res ? (res as { note?: string }).note : undefined;
+  const upasargaNote = vowelMode && res && !res.untouched && !pragrhya && A_UPASARGA.has(first);
+  const goNote = vowelMode && res && !res.untouched && !pragrhya && first === "go" && padanta;
 
   const pick = (e: Example) => {
     setA(e.a);
@@ -120,10 +143,12 @@ export default function SandhiPad({
     setPragrhya(!!e.pragrhya);
     setPadanta(true);
     setCompound(false);
+    setSuffix(false);
   };
+  const examples = exampleSet === "vowel" ? EXAMPLES : exampleSet === "consonant" ? HAL_EXAMPLES : [...EXAMPLES, ...HAL_EXAMPLES];
 
   return (
-    <section class="sandhi" aria-label="Vowel sandhi tool">
+    <section class="sandhi" aria-label="Sandhi tool">
       <div class="sandhi-in">
         <div class="sandhi-words">
           <div class="sandhi-word">
@@ -139,7 +164,14 @@ export default function SandhiPad({
           </div>
         </div>
         <fieldset class="sandhi-opts">
-          <legend class="visually-hidden">About the first word</legend>
+          <legend class="visually-hidden">About the two words</legend>
+          {!vowelMode && first && second ? (
+            <p>
+              <input id={`${id}-sfx`} type="checkbox" checked={suffix} onChange={(e) => setSuffix((e.target as HTMLInputElement).checked)} />
+              <label for={`${id}-sfx`}>The second item is a suffix (pratyaya), as maya in vāṅmaya</label>
+            </p>
+          ) : (
+          <>
           <p>
             <input id={`${id}-pad`} type="checkbox" checked={padanta} onChange={(e) => setPadanta((e.target as HTMLInputElement).checked)} />
             <label for={`${id}-pad`}>The first word is a finished word (padānta), not a stem meeting a suffix</label>
@@ -156,6 +188,8 @@ export default function SandhiPad({
               aho (<a href="/sutra/1.1.15/">1.1.15</a>)
             </label>
           </p>
+          </>
+          )}
         </fieldset>
         <p class="sandhi-hint">Type in Devanagari, IAST, Harvard-Kyoto or SLP1.</p>
       </div>
@@ -164,7 +198,7 @@ export default function SandhiPad({
         <div class="sandhi-examples">
           <p id={`${id}-ex`}>Textbook examples</p>
           <ul class="sandhi-example-list" aria-labelledby={`${id}-ex`}>
-            {EXAMPLES.map((e) => (
+            {examples.map((e) => (
               <li>
                 <button type="button" class="sandhi-example" onClick={() => pick(e)}
                   aria-pressed={a === e.a && b === e.b && pragrhya === !!e.pragrhya}>
@@ -181,10 +215,12 @@ export default function SandhiPad({
         {!res ? (
           <p class="sandhi-empty">Type two words to see what happens where they meet.</p>
         ) : res.untouched ? (
-          <p class="sandhi-empty">
-            The sounds at the junction are <Sa s={last} /> and <Sa s={second[0] ?? ""} />. At least one is a consonant (or
-            visarga), so vowel sandhi has nothing to do here. Consonant and visarga sandhi come in the next two modules.
-          </p>
+          <>
+            <p class="sandhi-result"><Sa s={res.result} block /></p>
+            <p class="sandhi-empty">
+              The sounds at the junction are <Sa s={last} /> and <Sa s={second[0] ?? ""} />. {halNote ?? "No sandhi rule applies."}
+            </p>
+          </>
         ) : (
           <>
             {res.junction && (
@@ -237,6 +273,7 @@ export default function SandhiPad({
 
       {res && !res.untouched && (
         <div class="sandhi-explain">
+          {vowelMode && (
           <section aria-labelledby={`${id}-checks`}>
             <H id={`${id}-checks`}>Which rule applies?</H>
             <p class="sandhi-hint">The rules are tested from the most specific down. The first that fits wins; a general rule that also fits is set aside.</p>
@@ -251,8 +288,10 @@ export default function SandhiPad({
               ))}
             </ol>
           </section>
+          )}
           <section aria-labelledby={`${id}-steps`}>
             <H id={`${id}-steps`}>Derivation</H>
+            {!vowelMode && <p class="sandhi-hint">Consonant rules come from the last three quarters of the grammar, so they apply one after another in the order of their numbers (8.2.1).</p>}
             <ol class="sandhi-steps">
               <li>
                 <span class="sandhi-step-label">start</span>
