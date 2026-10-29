@@ -1,0 +1,65 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import SutraFolio from "../../components/SutraFolio.astro";
+import { devaToIast } from "../../lib/sanskrit";
+import { pramanaCommentary, pramanaLink } from "../../lib/pramana";
+
+export async function getStaticPaths() {
+  const sutras = await getCollection("sutras");
+  return sutras.map((s) => ({ params: { id: s.id }, props: { sutra: s } }));
+}
+const { sutra } = Astro.props;
+const id = sutra.id;
+const [a] = id.split(".");
+const lessons = (await getCollection("lessons")).filter((l) => l.data.sutras.includes(id));
+const link = pramanaLink(id);
+const iast = devaToIast(sutra.data.deva);
+---
+<Base title={`${id} ${iast}`} description={`Aṣṭādhyāyī ${id}, ${iast}: ${sutra.data.meaning}`}>
+  <div class="page-narrow">
+    <header class="page-head">
+      <p class="crumbs"><a href="/sutras/">Sūtras</a> / Aṣṭādhyāyī {id}</p>
+    </header>
+    <SutraFolio id={id} level={1} />
+
+    <section class="sutra-more" aria-labelledby="taught-h">
+      <h2 id="taught-h">Where it is taught</h2>
+      {
+        lessons.length ? (
+          <ul>
+            {lessons.map((l) => (
+              <li><a href={`/course/${l.data.module}/${l.id.split("/").pop()}/`}>{l.data.title}</a></li>
+            ))}
+          </ul>
+        ) : (
+          <p>Cited in lessons as a supporting rule.</p>
+        )
+      }
+    </section>
+
+    <section class="sutra-more" aria-labelledby="read-h">
+      <h2 id="read-h">Read further</h2>
+      <ul>
+        <li>
+          <a href={link.href} rel="external">{link.exact ? `Aṣṭādhyāyī ${id} on Pramāṇa` : `Pāda ${id.split(".").slice(0, 2).join(".")} on Pramāṇa`}</a>
+          {!link.exact && <span class="sutra-note"> (Pramāṇa does not yet have a page for this sūtra)</span>}
+        </li>
+        <li><a href={pramanaCommentary.kasika} rel="external">Kāśikāvṛtti</a> and <a href={pramanaCommentary.mahabhasya} rel="external">Mahābhāṣya</a> catalogue entries on Pramāṇa</li>
+        <li>
+          <a href={`https://sanskritdocuments.org/learning_tools/ashtadhyayi/vyakhya/${a}/${id}.htm`} rel="external">Commentaries on {id}</a>
+          <span class="sutra-note"> at sanskritdocuments.org: Kāśikā, Nyāsa, Bālamanoramā and the Laghusiddhāntakaumudī where available</span>
+        </li>
+      </ul>
+    </section>
+  </div>
+</Base>
+
+<style>
+  @layer pages {
+    .sutra-more { margin-block-start: var(--s-stack-l); }
+    .sutra-more h2 { font-size: var(--s-text-h3); margin-block-end: var(--p-space-3); }
+    .sutra-more ul { display: grid; gap: var(--p-space-2); padding-inline-start: 1.2em; margin: 0; }
+    .sutra-note { color: var(--s-color-text-faint); font-size: var(--s-text-small); }
+  }
+</style>

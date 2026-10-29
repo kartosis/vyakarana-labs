@@ -1,0 +1,193 @@
+/* Styles for Preact islands (rendered outside Astro's scoped styles). */
+@layer molecules {
+  /* Shared: inside interactive widgets, "both" mode stacks IAST under each letter instead of parentheses. */
+  .shiva-slot .sa > .sa-iast::before,
+  .shiva-slot .sa > .sa-iast::after,
+  .shiva-members .sa > .sa-iast::before,
+  .shiva-members .sa > .sa-iast::after,
+  .shiva-preset .sa > .sa-iast::before,
+  .shiva-preset .sa > .sa-iast::after,
+  .savarna-sound .sa > .sa-iast::before,
+  .savarna-sound .sa > .sa-iast::after,
+  .savarna thead .sa > .sa-iast::before,
+  .savarna thead .sa > .sa-iast::after,
+  .savarna th .sa > .sa-iast::before,
+  .savarna th .sa > .sa-iast::after { content: none; }
+  :root[data-script="both"] :is(.shiva-slot, .shiva-members, .shiva-preset, .savarna-sound, .savarna th) .sa > .sa-iast {
+    display: block;
+    font-size: 0.62em;
+    line-height: 1.1;
+    color: var(--s-color-text-soft);
+  }
+
+  /* ---------- Śivasūtra board ---------- */
+  .shiva {
+    --c-shiva-mark: var(--s-color-mark);
+    display: grid;
+    gap: var(--p-space-5);
+  }
+  .shiva-board {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--p-space-2) var(--p-space-4);
+    padding: var(--p-space-5) var(--p-space-5);
+    background: var(--s-color-leaf);
+    border: 1px solid var(--s-color-hairline);
+    border-inline: 3px double var(--s-color-rubric);
+    border-radius: var(--s-radius-control);
+  }
+  .shiva-sutra {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.15rem;
+  }
+  .shiva-n {
+    order: 2;
+    margin-inline-start: 0.2rem;
+    font-size: var(--s-text-small);
+    color: var(--s-color-rubric);
+    font-variant-numeric: tabular-nums;
+  }
+  .shiva-sounds { display: inline-flex; flex-wrap: wrap; }
+  .shiva-slot {
+    min-inline-size: 2.1rem;
+    min-block-size: 2.6rem;
+    padding: 0.1rem 0.15rem;
+    border: 0;
+    border-block-end: 2px solid transparent;
+    background: transparent;
+    color: var(--s-color-text);
+    font-size: 1.55rem;
+    line-height: 1.2;
+    transition: background-color 120ms ease;
+  }
+  .shiva-slot:hover { background: color-mix(in oklab, var(--c-shiva-mark) 55%, transparent); }
+  .shiva-slot.is-it { color: var(--s-color-rubric); }
+  .shiva-slot.in-range { background: var(--c-shiva-mark); }
+  .shiva-slot.is-start { border-block-end-color: var(--s-color-text); }
+  .shiva-slot.is-end {
+    outline: 2px solid var(--s-color-rubric);
+    outline-offset: -3px;
+    border-radius: 0.6rem;
+  }
+  .shiva-slot[aria-disabled="true"] { opacity: 0.45; cursor: not-allowed; }
+  .shiva-slot .sa-iast { font-style: normal; }
+  :root[data-script="iast"] .shiva-slot { font-size: 1.2rem; }
+
+  .shiva-result { display: grid; gap: var(--p-space-3); min-block-size: 9rem; }
+  .shiva-name { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--p-space-4); margin: 0; }
+  .shiva-name-sa { font-size: clamp(2.2rem, 1.6rem + 2.5vw, 3.2rem); line-height: 1; }
+  .shiva-name-sa .sa-iast { font-size: 0.7em; }
+  .shiva-count { color: var(--s-color-text-soft); }
+  .shiva-members {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--p-space-1) var(--p-space-3);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 1.3rem;
+  }
+  .shiva-members li { min-inline-size: 1.6rem; text-align: center; }
+  .shiva-note,
+  .shiva-rule,
+  .shiva-hint { margin: 0; font-size: var(--s-text-small); color: var(--s-color-text-soft); max-inline-size: 62ch; }
+  .shiva-note { padding-inline-start: var(--p-space-3); border-inline-start: 2px solid var(--s-color-mark-strong); }
+
+  .shiva-presets-label { margin: 0 0 var(--p-space-2); font-size: var(--s-text-small); color: var(--s-color-text-soft); }
+  .shiva-presets ul { display: flex; flex-wrap: wrap; gap: var(--p-space-2); list-style: none; margin: 0; padding: 0; }
+  .shiva-preset {
+    min-block-size: 2.4rem;
+    min-inline-size: 3rem;
+    padding: 0.15rem 0.6rem;
+    border: 1px solid var(--s-color-border);
+    border-radius: var(--s-radius-chip);
+    background: transparent;
+    font-size: 1.1rem;
+  }
+  .shiva-preset:hover { background: var(--s-color-leaf); }
+  .shiva-preset .sa-iast { font-style: normal; }
+
+  /* ---------- savarṇa chart ---------- */
+  .savarna { display: grid; gap: var(--p-space-4); }
+  .savarna .table-wrap { overflow-x: auto; }
+  .savarna-table { inline-size: 100%; min-inline-size: 36rem; }
+  .savarna-table th,
+  .savarna-table td { padding: 0.4rem 0.5rem; border-block-end: 1px solid var(--s-color-hairline); }
+  .savarna-table thead th { font-weight: 400; vertical-align: bottom; }
+  .savarna-table tbody th { font-weight: 400; white-space: nowrap; }
+  .savarna-col-note { display: block; font-size: 0.78rem; color: var(--s-color-text-faint); font-style: italic; }
+  .savarna-sound {
+    min-inline-size: 2.2rem;
+    min-block-size: 2.4rem;
+    margin: 0.1rem;
+    border: 1px solid transparent;
+    border-radius: var(--s-radius-control);
+    background: transparent;
+    font-size: 1.3rem;
+    line-height: 1.1;
+  }
+  .savarna-sound:hover { border-color: var(--s-color-border); }
+  .savarna-sound.is-self { background: var(--s-color-inverse-bg); color: var(--s-color-inverse-text); }
+  .savarna-sound.is-savarna { background: var(--s-color-mark); border-color: var(--s-color-mark-strong); }
+  .savarna-sound.is-blocked { border: 2px dashed var(--s-color-rubric); }
+  .savarna-readout { display: grid; gap: var(--p-space-2); }
+  .savarna-readout p { margin: 0; }
+  .savarna-key {
+    display: inline-block;
+    inline-size: 1rem;
+    block-size: 1rem;
+    margin-inline-end: 0.4rem;
+    vertical-align: -0.1rem;
+    border-radius: 2px;
+  }
+  .savarna-key.is-savarna { background: var(--s-color-mark); border: 1px solid var(--s-color-mark-strong); }
+  .savarna-key.is-blocked { border: 2px dashed var(--s-color-rubric); }
+
+  /* ---------- lipi pad ---------- */
+  .lipi { display: grid; gap: var(--p-space-4); padding: var(--p-space-5); background: var(--s-color-leaf); border-radius: var(--s-radius-control); }
+  .lipi-inputs { display: grid; gap: var(--p-space-2); }
+  .lipi-inputs label { font-weight: 700; font-size: var(--s-text-small); }
+  .lipi-inputs textarea { resize: vertical; font-size: 1.1rem; }
+  .lipi-inputs select {
+    min-block-size: 2.75rem;
+    padding-inline: 0.5rem;
+    border: 1px solid var(--s-color-border);
+    border-radius: var(--s-radius-control);
+    background: var(--s-color-surface);
+  }
+  .lipi-out { display: grid; gap: var(--p-space-2); margin: 0; }
+  .lipi-out > div { display: grid; grid-template-columns: 8rem 1fr; gap: var(--p-space-3); align-items: baseline; }
+  .lipi-out dt { font-size: var(--s-text-small); color: var(--s-color-text-soft); }
+  .lipi-out dd { margin: 0; overflow-wrap: anywhere; }
+  .lipi-deva { font-size: 1.6rem; }
+  .lipi-help { margin: 0; font-size: var(--s-text-small); color: var(--s-color-text-soft); }
+
+  /* ---------- steps ---------- */
+  .steps { display: grid; gap: var(--p-space-4); padding: var(--p-space-5); background: var(--s-color-leaf); border-radius: var(--s-radius-control); }
+  .steps-track { display: flex; flex-wrap: wrap; gap: var(--p-space-2); list-style: none; margin: 0; padding: 0; }
+  .steps-track button {
+    min-block-size: 2rem;
+    padding: 0.1rem 0.6rem;
+    border: 1px solid var(--s-color-border);
+    border-radius: var(--s-radius-chip);
+    background: transparent;
+    color: var(--s-color-rubric);
+    font-size: var(--s-text-small);
+    font-variant-numeric: tabular-nums;
+  }
+  .steps-track button[aria-current="step"] { background: var(--s-color-inverse-bg); color: var(--s-color-inverse-text); }
+  .steps-stage { display: grid; gap: var(--p-space-3); min-block-size: 8rem; }
+  .steps-form { font-size: 2.2rem; line-height: 1.3; }
+  .steps-form .sa-iast { font-size: 0.6em; color: var(--s-color-text-soft); }
+  .seg--it { color: var(--s-color-rubric); text-decoration: underline wavy var(--s-color-rubric) 1px; text-underline-offset: 0.2em; }
+  .seg--gone { color: var(--s-color-text-faint); text-decoration: line-through; text-decoration-thickness: 2px; }
+  .seg--new { background: var(--s-color-mark); }
+  .seg--mark { background: var(--s-color-mark); }
+  .steps-note { margin: 0; max-inline-size: 62ch; }
+  .steps-sutra { color: var(--s-color-rubric); font-variant-numeric: tabular-nums; }
+  .steps-nav { display: flex; align-items: center; gap: var(--p-space-3); flex-wrap: wrap; }
+  .steps-nav button[disabled] { opacity: 0.45; cursor: not-allowed; }
+  .steps-count { color: var(--s-color-text-faint); font-size: var(--s-text-small); }
+}

@@ -1,0 +1,90 @@
+---
+title: Reading Devanagari
+deva: देवनागरी
+module: varnamala
+order: 2
+minutes: 20
+summary: Devanagari writes syllables, not bare letters. Every consonant carries an a until something says otherwise, and that one idea explains vowel signs, the virāma and conjuncts.
+---
+import Sa from "../../../components/Sa.astro";
+import Voice from "../../../components/Voice.astro";
+import Practice from "../../../components/Practice.astro";
+import LipiPad from "../../../islands/LipiPad.tsx";
+import { transliterate } from "@vl/engine";
+
+## A consonant comes with a vowel
+
+The basic unit of Devanagari is the <Sa iast="akṣara" />: a consonant, or a cluster of consonants, together with the vowel that follows. A bare consonant letter is read with a short *a*: <Sa slp="ka" /> is *ka*, not *k*.
+
+To change the vowel, a **vowel sign** (<Sa iast="mātrā" />) is attached to the consonant. To remove the vowel altogether, a small stroke called the **virāma** goes underneath: <Sa slp="k" />.
+
+<div class="table-wrap">
+<table>
+<caption>The consonant k with every vowel sign</caption>
+<thead><tr><th scope="col">Vowel (IAST)</th><th scope="col">On its own</th><th scope="col">After k</th></tr></thead>
+<tbody>
+{["a","A","i","I","u","U","f","F","x","e","E","o","O"].map((v) => (
+  <tr>
+    <td><i>{transliterate(v, "slp1", "iast")}</i></td>
+    <td class="big"><Sa slp={v} /></td>
+    <td class="big"><Sa slp={`k${v}`} /></td>
+  </tr>
+))}
+</tbody>
+</table>
+</div>
+
+Notice that the sign for short *i* is written **before** the consonant it follows in speech: <Sa slp="ki" />. You read it after the *k*.
+
+## Clusters
+
+When consonants meet with no vowel between them, Devanagari usually fuses them into a conjunct (<Sa iast="saṃyuktākṣara" />). A few conjuncts barely resemble their parts. Learn them as wholes:
+
+<div class="table-wrap">
+<table>
+<thead><tr><th scope="col">Conjunct</th><th scope="col">Parts</th><th scope="col">Example</th></tr></thead>
+<tbody>
+<tr><td class="big"><Sa slp="kza" /></td><td><Sa slp="k" /> + <Sa slp="za" /></td><td><Sa iast="kṣatriya" /></td></tr>
+<tr><td class="big"><Sa slp="jYa" /></td><td><Sa slp="j" /> + <Sa slp="Ya" /></td><td><Sa iast="jñāna" /></td></tr>
+<tr><td class="big"><Sa slp="tra" /></td><td><Sa slp="t" /> + <Sa slp="ra" /></td><td><Sa iast="putra" /></td></tr>
+<tr><td class="big"><Sa slp="Sra" /></td><td><Sa slp="S" /> + <Sa slp="ra" /></td><td><Sa iast="śrī" /></td></tr>
+<tr><td class="big"><Sa slp="dDa" /></td><td><Sa slp="d" /> + <Sa slp="Da" /></td><td><Sa iast="buddha" /></td></tr>
+<tr><td class="big"><Sa slp="dya" /></td><td><Sa slp="d" /> + <Sa slp="ya" /></td><td><Sa iast="vidyā" /></td></tr>
+<tr><td class="big"><Sa slp="rka" /></td><td><Sa slp="r" /> + <Sa slp="ka" /></td><td><Sa iast="arka" />, an r before a consonant rides on top as a hook (repha)</td></tr>
+</tbody>
+</table>
+</div>
+
+Pāṇini has a name for such a cluster, <Sa iast="saṃyoga" />. You will meet its definition at the end of the next module.
+
+<Voice quote="mbh-sabda" voice="bhasya">
+  Patañjali asks what the word "gauḥ" really is: not the cow's dewlap or horns, and not the letters on a page, but that which, once uttered, makes us understand the animal. Script is a record of that uttered word, and the grammar is about the utterance.
+</Voice>
+
+## Signs on a syllable
+
+- **Anusvāra** <Sa slp="aM" />: a dot above, a nasal after the vowel.
+- **Candrabindu** <Sa slp="a~" />: a dot in a crescent, nasalising the vowel itself.
+- **Visarga** <Sa slp="aH" />: two dots after the syllable, a breath.
+- **Avagraha** <Sa slp="'" />: marks an *a* that has merged away in sandhi, as in <Sa iast="so 'yam" />.
+- **Daṇḍa** <span lang="sa">।</span> and **double daṇḍa** <span lang="sa">॥</span>: the full stops of Sanskrit. Sūtras on this site end with a red <span lang="sa">॥</span>, as in a manuscript.
+
+<Voice quote="vp-1.12" voice="darsana">
+  Bhartṛhari speaks of speech "that has taken on distinct forms": divided into the sounds a script can record. Each akṣara on this page is one of those divisions. Grammar, he says, is the straight road from them to the essence of speech.
+</Voice>
+
+## Typing Sanskrit
+
+You will often be asked to type a form. The site accepts Devanagari, IAST, or plain-keyboard **Harvard-Kyoto**, and converts as you type. Try it:
+
+<LipiPad client:visible />
+
+<Practice
+  items={10}
+  skills={[
+    "Reading consonants with each vowel sign",
+    "Splitting common conjuncts into their parts",
+    "Recognising anusvāra, visarga and avagraha",
+    "Typing words in Harvard-Kyoto",
+  ]}
+/>

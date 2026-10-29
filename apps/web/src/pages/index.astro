@@ -1,0 +1,220 @@
+---
+import { getCollection, getEntry } from "astro:content";
+import Base from "../layouts/Base.astro";
+import ShivaBoard from "../islands/ShivaBoard.tsx";
+import Sa from "../components/Sa.astro";
+import { devaToIast } from "../lib/sanskrit";
+
+const modules = (await getCollection("modules")).sort((a, b) => a.data.order - b.data.order);
+const lessons = await getCollection("lessons");
+const first = (m: string) =>
+  lessons.filter((l) => l.data.module === m).sort((a, b) => a.data.order - b.data.order)[0];
+const bhasya = (await getEntry("quotes", "mbh-prayojana"))!.data;
+const darsana = (await getEntry("quotes", "vp-1.13"))!.data;
+const sutra = (await getEntry("sutras", "1.1.71"))!.data;
+---
+<Base title="Vyākaraṇa Labs" kind="home">
+  <section class="hero page">
+    <div class="hero-words">
+      <h1 class="hero-title">
+        <span class="hero-deva" lang="sa">अथ शब्दानुशासनम्</span>
+        <span class="hero-iast" lang="sa-Latn">atha śabdānuśāsanam</span>
+      </h1>
+      <p class="hero-translation">“Now begins the instruction in words.” <cite>Patañjali, Mahābhāṣya</cite></p>
+      <p class="hero-lead">
+        Learn Sanskrit grammar the way Pāṇini built it. The course follows Varadarāja's Laghusiddhāntakaumudī rule by rule,
+        with Patañjali's debates and Bhartṛhari's philosophy of language set beside each sūtra, as commentary sat around the
+        root text on a manuscript page.
+      </p>
+      <p class="hero-actions">
+        <a class="btn" href={`/course/varnamala/${first("varnamala")?.id.split("/").pop()}/`}>Start with the sounds</a>
+        <a class="btn btn--quiet" href="/course/">See the whole course</a>
+      </p>
+    </div>
+
+    <div class="hero-board">
+      <h2 class="hero-board-title">Nine vowels in two syllables</h2>
+      <p class="hero-board-text">
+        These fourteen lines open the grammar. Pick any black letter, then a red marker after it, and Pāṇini's rule 1.1.71
+        names everything in between.
+      </p>
+      <ShivaBoard client:load initial={["a", "c"]} presets={false} label="Try the Śivasūtras: pratyāhāra builder" />
+    </div>
+  </section>
+
+  <section class="page layers" aria-labelledby="layers-h">
+    <div class="layers-text">
+      <h2 id="layers-h">Three voices on every page</h2>
+      <p>
+        A Sanskrit commentary manuscript often set the root text in the middle of the leaf and the commentary above and below it.
+        Every lesson here keeps that arrangement.
+      </p>
+      <ul class="layers-list">
+        <li><strong>Pāṇini</strong> gives the rule: a sūtra, in Devanagari, with its word split, the words carried into it, and Varadarāja's gloss.</li>
+        <li><strong>Patañjali</strong> and the commentators ask why the rule is worded as it is.</li>
+        <li><strong>Bhartṛhari</strong> asks what a word, a sound and a meaning are.</li>
+      </ul>
+    </div>
+    <figure class="tripatha" aria-label="A three-part page: commentary above, rule in the middle, philosophy below">
+      <div class="tripatha-band tripatha-band--top">
+        <span class="tripatha-voice">Patañjali</span>
+        <Sa deva={bhasya.deva} />
+        <span class="tripatha-tr">{bhasya.translation}</span>
+      </div>
+      <div class="tripatha-root">
+        <span class="tripatha-sutra" lang="sa">{sutra.deva} <span class="tripatha-danda">॥ ४ ॥</span></span>
+        <span class="tripatha-sutra-iast" lang="sa-Latn">{devaToIast(sutra.deva)}</span>
+        <span class="tripatha-meta">Pāṇini 1.1.71, Laghusiddhāntakaumudī 4</span>
+      </div>
+      <div class="tripatha-band tripatha-band--bottom">
+        <span class="tripatha-voice">Bhartṛhari</span>
+        <Sa deva={darsana.deva} />
+        <span class="tripatha-tr">{darsana.translation}</span>
+      </div>
+    </figure>
+  </section>
+
+  <section class="page path" aria-labelledby="path-h">
+    <h2 id="path-h">The path, in Laghusiddhāntakaumudī order</h2>
+    <ol class="path-list">
+      {
+        modules.map((m) => {
+          const l = first(m.id);
+          const href = m.data.status === "open" && l ? `/course/${m.id}/${l.id.split("/").pop()}/` : undefined;
+          return (
+            <li class:list={["path-item", { "is-soon": !href }]}>
+              {href ? (
+                <a href={href} class="path-link">
+                  <span class="path-deva" lang="sa">{m.data.deva}</span>
+                  <span class="path-title">{m.data.title}</span>
+                </a>
+              ) : (
+                <span class="path-link">
+                  <span class="path-deva" lang="sa">{m.data.deva}</span>
+                  <span class="path-title">{m.data.title}</span>
+                  <span class="path-soon">in preparation</span>
+                </span>
+              )}
+            </li>
+          );
+        })
+      }
+    </ol>
+  </section>
+
+  <section class="page tools-teaser" aria-labelledby="tools-h">
+    <h2 id="tools-h">Tools you can use now</h2>
+    <ul class="tools-list">
+      <li><a href="/tools/pratyahara/">Pratyāhāra builder</a>: expand or form any of Pāṇini's sound-class names.</li>
+      <li><a href="/tools/savarna/">Sound classes</a>: place and effort for every sound, and which sounds are savarṇa.</li>
+      <li><a href="/tools/lipi/">Transliteration pad</a>: type Harvard-Kyoto or IAST and get Devanagari.</li>
+    </ul>
+  </section>
+</Base>
+
+<style>
+  @layer pages {
+    .hero {
+      display: grid;
+      gap: var(--s-stack-l) var(--p-space-8);
+      padding-block: var(--s-stack-xl) var(--s-stack-l);
+      align-items: start;
+    }
+    @media (width >= 64rem) {
+      .hero { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); }
+    }
+    .hero-words { display: grid; gap: var(--p-space-5); }
+    .hero-title { display: grid; gap: var(--p-space-2); font-weight: 400; }
+    .hero-deva {
+      font-family: var(--s-font-sanskrit);
+      font-size: var(--s-text-display);
+      line-height: 1.12;
+      color: var(--s-color-text);
+    }
+    .hero-iast { font-style: italic; font-size: var(--s-text-h3); color: var(--s-color-rubric); }
+    .hero-translation { font-size: var(--s-text-lead); }
+    .hero-translation cite { font-style: normal; color: var(--s-color-text-soft); font-size: var(--s-text-body); margin-inline-start: 0.4em; }
+    .hero-lead { color: var(--s-color-text-soft); max-inline-size: 52ch; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: var(--p-space-3); }
+
+    .hero-board { display: grid; gap: var(--p-space-3); }
+    .hero-board-title { font-size: var(--s-text-h3); }
+    .hero-board-text { color: var(--s-color-text-soft); max-inline-size: 58ch; }
+
+    .layers {
+      display: grid;
+      gap: var(--s-stack-l) var(--p-space-8);
+      padding-block: var(--s-stack-xl);
+      border-block-start: 1px solid var(--s-color-hairline);
+    }
+    @media (width >= 64rem) {
+      .layers { grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); align-items: center; }
+    }
+    .layers-text { display: grid; gap: var(--p-space-4); }
+    .layers-text p { color: var(--s-color-text-soft); }
+    .layers-list { display: grid; gap: var(--p-space-3); padding-inline-start: 1.2em; margin: 0; }
+    .layers-list li::marker { color: var(--s-color-rubric); }
+
+    .tripatha {
+      margin: 0;
+      display: grid;
+      background: var(--s-color-leaf);
+      border: 1px solid var(--s-color-hairline);
+      border-radius: var(--s-radius-leaf);
+      box-shadow: var(--s-shadow-leaf);
+      padding: var(--p-space-5) var(--p-space-6);
+    }
+    .tripatha-band {
+      display: grid;
+      gap: var(--p-space-1);
+      font-size: var(--s-text-small);
+      color: var(--s-color-text-soft);
+      padding-block: var(--p-space-3);
+    }
+    .tripatha-band--top { border-block-end: 3px double var(--s-color-rubric); }
+    .tripatha-band--bottom { border-block-start: 3px double var(--s-color-rubric); }
+    .tripatha-voice { font-weight: 700; color: var(--s-color-text); }
+    .tripatha-tr { font-style: italic; }
+    .tripatha-root { display: grid; justify-items: center; gap: var(--p-space-1); padding-block: var(--p-space-6); text-align: center; }
+    .tripatha-sutra { font-family: var(--s-font-sanskrit); font-size: clamp(1.8rem, 1.2rem + 2.4vw, 2.8rem); line-height: 1.25; }
+    .tripatha-danda { color: var(--s-color-rubric); font-size: 0.8em; }
+    .tripatha-sutra-iast { font-style: italic; color: var(--s-color-text-soft); }
+    .tripatha-meta { font-size: var(--s-text-small); color: var(--s-color-rubric); }
+
+    .path { padding-block: var(--s-stack-l); border-block-start: 1px solid var(--s-color-hairline); }
+    .path h2 { margin-block-end: var(--p-space-5); }
+    .path-list {
+      counter-reset: path -1;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+      gap: var(--p-space-1) var(--p-space-6);
+    }
+    .path-item { counter-increment: path; }
+    .path-link {
+      display: grid;
+      grid-template-columns: 2rem 1fr;
+      column-gap: var(--p-space-2);
+      padding-block: var(--p-space-2);
+      border-block-end: 1px solid var(--s-color-hairline);
+      color: var(--s-color-text);
+      text-decoration: none;
+    }
+    .path-link::before {
+      content: counter(path);
+      grid-row: span 3;
+      color: var(--s-color-rubric);
+      font-variant-numeric: tabular-nums;
+    }
+    a.path-link:hover .path-title { text-decoration: underline; }
+    .path-deva { font-family: var(--s-font-sanskrit); font-size: 1.2rem; }
+    .path-title { color: var(--s-color-text-soft); }
+    .is-soon .path-deva { color: var(--s-color-text-faint); }
+    .path-soon { font-size: var(--s-text-small); font-style: italic; color: var(--s-color-text-faint); }
+
+    .tools-teaser { padding-block: var(--s-stack-l); border-block-start: 1px solid var(--s-color-hairline); }
+    .tools-list { display: grid; gap: var(--p-space-2); padding-inline-start: 1.2em; margin-block: var(--p-space-4) 0; }
+  }
+</style>

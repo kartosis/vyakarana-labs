@@ -1,0 +1,21 @@
+---
+import Base from "../layouts/Base.astro";
+---
+<Base title="About" description="What Vyākaraṇa Labs is and how it is built.">
+  <div class="page-narrow prose">
+    <header class="page-head">
+      <h1>About Vyākaraṇa Labs</h1>
+      <p class="lead">A free course in Sanskrit grammar that teaches from the sources: Pāṇini's rules in the order of the Laghusiddhāntakaumudī, with Patañjali and Bhartṛhari beside them.</p>
+    </header>
+    <h2>How the course works</h2>
+    <ul>
+      <li><strong>Rules first, cited exactly.</strong> Every rule is shown as a sūtra with its word split, carried-over words and gloss, and links to its source.</li>
+      <li><strong>Three voices.</strong> Patañjali's Mahābhāṣya explains why a rule is phrased as it is. Bhartṛhari's Vākyapadīya asks what a word is.</li>
+      <li><strong>Learning by doing.</strong> Interactive tools run the same grammar engine the lessons are written with. Practice and spaced review come with accounts.</li>
+    </ul>
+    <h2>How it is built</h2>
+    <p>A static site (Astro) served from AWS CloudFront, a Python API on AWS Lambda, DynamoDB for progress, Cognito for passwordless sign-in, all defined in Terraform and deployed from GitHub Actions. The grammar engine is TypeScript with an extensive test suite; full derivations will come from the open-source vidyut-prakriya engine compiled to WebAssembly. The code is on <a href="https://github.com/kartosis/vyakarana-labs" rel="external">GitHub</a>.</p>
+    <h2>Report a mistake</h2>
+    <p>Grammar sites live or die by accuracy. Every sūtra and lesson will get a "report an error" button with accounts. Until then, please open an issue on <a href="https://github.com/kartosis/vyakarana-labs/issues" rel="external">GitHub</a>.</p>
+  </div>
+</Base>

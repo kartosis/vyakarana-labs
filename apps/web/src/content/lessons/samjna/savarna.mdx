@@ -1,0 +1,71 @@
+---
+title: Sounds of one class
+deva: सवर्णसंज्ञा
+module: samjna
+order: 5
+minutes: 25
+summary: LSK 10–12 define when two sounds count as the same class (savarṇa), block one tempting mistake, and let a single short letter in a rule stand for its whole class.
+lskRange: 10–12
+sutras: ["1.1.9", "1.1.10", "1.1.69"]
+---
+import Sa from "../../../components/Sa.astro";
+import Voice from "../../../components/Voice.astro";
+import SutraFolio from "../../../components/SutraFolio.astro";
+import SutraRef from "../../../components/SutraRef.astro";
+import Practice from "../../../components/Practice.astro";
+import SavarnaChart from "../../../islands/SavarnaChart.tsx";
+
+<SutraFolio id="1.1.9" />
+
+Two sounds are <Sa iast="savarṇa" />, of one class, when they share **both** coordinates from the first lesson of this course: the place in the mouth (<Sa iast="āsya" />, glossed by Varadarāja as "palate and the rest") and the internal effort (<Sa iast="ābhyantara prayatna" />).
+
+The Laghusiddhāntakaumudī counts four internal efforts:
+
+- **full contact** (<Sa iast="spṛṣṭa" />) for stops and nasals
+- **slight contact** (<Sa iast="īṣatspṛṣṭa" />) for semivowels
+- **open** (<Sa iast="vivṛta" />) for sibilants, h and vowels
+- **closed** (<Sa iast="saṃvṛta" />) for short *a* as actually spoken. During a derivation, *a* is treated as open like the other vowels.
+
+Choose any sound to see its class:
+
+<SavarnaChart client:visible />
+
+A few results to notice. All five stops of a row form one class, including the nasal, because the nose is an extra passage rather than a place in the mouth. *i* and *ī* are one class, as are *a* and *ā*. A vārttika on this sūtra adds that *ṛ* and *ḷ* count as one class too.
+
+<Voice quote="vp-1.47" voice="darsana">
+  For Bhartṛhari a word is first shaped in the mind, then given body "by the sound that issues from the organs of speech." Places and efforts are those organs at work. Pāṇini's definition of savarṇa classifies sounds by exactly that bodily act.
+</Voice>
+
+## The tempting mistake
+
+Now choose *i* on the chart. The palatal sibilant *ś* lights up with a dashed outline. Its place is the palate, and in the Laghusiddhāntakaumudī's four-fold scheme its effort is open, exactly like a vowel's. By 1.1.9 alone, *i* and *ś* would be savarṇa. The same goes for *a* and *h* (throat, open). The next sūtra forbids it:
+
+<SutraFolio id="1.1.10" />
+
+<Voice quote="kas-1.1.10" voice="bhasya">
+  The Kāśikā shows what goes wrong without the rule. In *dadhi śītam* ("the curd is cold"), i and ś would merge into a long vowel. In *daṇḍa-hastaḥ* ("stick in hand"), a and h would. Neither happens, because a vowel and a consonant are never savarṇa.
+</Voice>
+
+## One letter for the whole class
+
+<SutraFolio id="1.1.69" />
+
+This is why the Śivasūtras could list only short *a*. In a rule, *a* stands for all eighteen of its varieties: short, long and prolated, at every pitch, nasal or not. Here *aṇ* takes the **second** ṇ, so the principle reaches the semivowels *y v l* as well, which have nasal forms.
+
+The other half of the rule covers items marked with *u* (<Sa iast="udit" />). <Sa iast="ku" /> means the whole velar row *k kh g gh ṅ*, <Sa iast="cu" /> the palatal row, and so on through <Sa iast="ṭu" />, <Sa iast="tu" /> and <Sa iast="pu" />.
+
+The last word sets a limit: <Sa iast="apratyayaḥ" />, "not a suffix". A suffix means exactly the sound written and nothing more.
+
+<Voice quote="vp-1.69" voice="darsana">
+  Bhartṛhari reports a debate about exactly this kind of rule. When a sūtra names a sound, does it mean that individual sound, or the individual as known through its class? 1.1.69 is Pāṇini's practical answer for vowels and the five udit rows.
+</Voice>
+
+<Practice
+  items={10}
+  skills={[
+    "Deciding whether two sounds are savarṇa",
+    "Explaining why i and ś are not",
+    "Expanding ku, cu, ṭu, tu, pu",
+    "Saying what a short a in a rule covers",
+  ]}
+/>

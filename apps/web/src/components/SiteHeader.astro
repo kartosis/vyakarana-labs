@@ -1,0 +1,214 @@
+---
+const path = Astro.url.pathname;
+const nav = [
+  { href: "/course/", label: "Course" },
+  { href: "/tools/", label: "Tools" },
+  { href: "/sutras/", label: "Sūtras" },
+  { href: "/sources/", label: "Sources" },
+];
+const current = (href: string) => (path.startsWith(href) ? "page" : undefined);
+---
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="brand" href="/" aria-label="Vyākaraṇa Labs, home">
+      <span class="brand-mark" lang="sa" aria-hidden="true">व्या</span>
+      <span class="brand-name">Vyākaraṇa Labs</span>
+    </a>
+
+    <nav class="site-nav" aria-label="Main">
+      <ul>
+        {nav.map((n) => <li><a href={n.href} aria-current={current(n.href)}>{n.label}</a></li>)}
+      </ul>
+    </nav>
+
+    <div class="site-tools no-print">
+      <div class="script-switch" role="group" aria-label="Script for Sanskrit text">
+        <button type="button" data-set-script="deva" aria-pressed="true" title="Devanagari">
+          <span lang="sa">अ</span><span class="visually-hidden"> Devanagari</span>
+        </button>
+        <button type="button" data-set-script="both" aria-pressed="false" title="Devanagari with IAST">
+          <span lang="sa">अ</span>&#8239;<span class="iast-glyph">a</span><span class="visually-hidden"> Devanagari with romanisation</span>
+        </button>
+        <button type="button" data-set-script="iast" aria-pressed="false" title="IAST romanisation">
+          <span class="iast-glyph">a</span><span class="visually-hidden"> Romanisation (IAST)</span>
+        </button>
+      </div>
+      <button type="button" class="theme-toggle" data-theme-toggle>
+        <svg aria-hidden="true" viewBox="0 0 20 20" width="18" height="18">
+          <circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5" />
+          <path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor" />
+        </svg>
+        <span class="visually-hidden" data-theme-label>Switch theme</span>
+      </button>
+      <a class="signin-link" href="/signin/">Sign in</a>
+    </div>
+  </div>
+</header>
+
+<script>
+  const root = document.documentElement;
+  const store = (k: string, v: string | null) => {
+    try {
+      if (v === null) localStorage.removeItem(k);
+      else localStorage.setItem(k, v);
+    } catch {}
+  };
+
+  // Script switch
+  const buttons = [...document.querySelectorAll<HTMLButtonElement>("[data-set-script]")];
+  const syncScript = () => {
+    const cur = root.dataset.script ?? "deva";
+    for (const b of buttons) b.setAttribute("aria-pressed", String(b.dataset.setScript === cur));
+  };
+  for (const b of buttons) {
+    b.addEventListener("click", () => {
+      root.dataset.script = b.dataset.setScript!;
+      store("vl:script", b.dataset.setScript!);
+      syncScript();
+    });
+  }
+  syncScript();
+  // Keyboard shortcut: "t" cycles scripts (ignored while typing).
+  document.addEventListener("keydown", (e) => {
+    const t = e.target as HTMLElement;
+    if (e.key !== "t" || e.metaKey || e.ctrlKey || e.altKey) return;
+    if (t.closest("input, textarea, select, [contenteditable]")) return;
+    const order = ["deva", "both", "iast"];
+    const next = order[(order.indexOf(root.dataset.script ?? "deva") + 1) % 3]!;
+    root.dataset.script = next;
+    store("vl:script", next);
+    syncScript();
+  });
+
+  // Theme toggle: system default, override to the opposite, click again to return to system.
+  const mq = matchMedia("(prefers-color-scheme: dark)");
+  const toggle = document.querySelector<HTMLButtonElement>("[data-theme-toggle]");
+  const label = document.querySelector<HTMLElement>("[data-theme-label]");
+  const effective = () => (root.dataset.theme as "light" | "dark" | undefined) ?? (mq.matches ? "dark" : "light");
+  const syncTheme = () => {
+    const next = effective() === "dark" ? "light" : "dark";
+    if (label) label.textContent = `Switch to ${next} theme`;
+    toggle?.setAttribute("title", `Switch to ${next} theme`);
+  };
+  toggle?.addEventListener("click", () => {
+    const next = effective() === "dark" ? "light" : "dark";
+    const system = mq.matches ? "dark" : "light";
+    if (next === system) {
+      delete root.dataset.theme;
+      store("vl:theme", null);
+    } else {
+      root.dataset.theme = next;
+      store("vl:theme", next);
+    }
+    syncTheme();
+  });
+  mq.addEventListener("change", syncTheme);
+  syncTheme();
+</script>
+
+<style>
+  @layer organisms {
+    .site-header {
+      position: sticky;
+      inset-block-start: 0;
+      z-index: 20;
+      background: color-mix(in oklab, var(--s-color-surface) 92%, transparent);
+      backdrop-filter: blur(6px);
+      border-block-end: 1px solid var(--s-color-hairline);
+    }
+    .site-header-inner {
+      display: flex;
+      align-items: center;
+      gap: var(--p-space-5);
+      min-block-size: var(--s-header-h);
+      max-inline-size: 90rem;
+      margin-inline: auto;
+      padding-inline: var(--s-gutter);
+    }
+    .brand {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 0.5rem;
+      color: var(--s-color-text);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .brand-mark {
+      font-family: var(--s-font-sanskrit);
+      color: var(--s-color-rubric);
+      font-size: 1.45rem;
+      line-height: 1;
+    }
+    .brand-name { font-weight: 700; font-size: 1.06rem; letter-spacing: 0.01em; }
+
+    .site-nav ul {
+      display: flex;
+      gap: var(--p-space-1);
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .site-nav a {
+      display: inline-block;
+      padding: 0.35rem 0.6rem;
+      color: var(--s-color-text-soft);
+      text-decoration: none;
+      border-radius: var(--s-radius-control);
+    }
+    .site-nav a:hover { color: var(--s-color-text); background: var(--s-color-leaf); }
+    .site-nav a[aria-current="page"] {
+      color: var(--s-color-text);
+      box-shadow: inset 0 -2px 0 var(--s-color-rubric);
+    }
+
+    .site-tools {
+      display: flex;
+      align-items: center;
+      gap: var(--p-space-3);
+      margin-inline-start: auto;
+    }
+    .script-switch {
+      display: inline-flex;
+      border: 1px solid var(--s-color-border);
+      border-radius: var(--s-radius-control);
+      overflow: hidden;
+    }
+    .script-switch button,
+    .theme-toggle {
+      display: inline-grid;
+      place-items: center;
+      min-inline-size: 2.5rem;
+      min-block-size: 2.25rem;
+      padding-inline: 0.4rem;
+      border: 0;
+      background: transparent;
+      color: var(--s-color-text-soft);
+      font-size: 1rem;
+      line-height: 1;
+    }
+    .script-switch button + button { border-inline-start: 1px solid var(--s-color-border); }
+    .script-switch button[aria-pressed="true"] {
+      background: var(--s-color-inverse-bg);
+      color: var(--s-color-inverse-text);
+    }
+    .script-switch [lang="sa"] { font-size: 1.15rem; }
+    .iast-glyph { font-style: italic; }
+    .theme-toggle { border: 1px solid var(--s-color-border); border-radius: var(--s-radius-control); }
+    .signin-link {
+      color: var(--s-color-text);
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .signin-link:hover { text-decoration: underline; }
+
+    @media (width < 52rem) {
+      .site-header-inner { flex-wrap: wrap; gap: 0 var(--p-space-3); padding-block: var(--p-space-2); }
+      .site-nav { order: 3; inline-size: 100%; overflow-x: auto; }
+      .site-nav ul { padding-block: var(--p-space-1); }
+    }
+    @media (width < 26rem) {
+      .brand-name { display: none; }
+    }
+  }
+</style>

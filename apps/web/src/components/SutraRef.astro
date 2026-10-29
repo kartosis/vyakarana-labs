@@ -1,0 +1,50 @@
+---
+/** Inline citation of a sūtra by its Aṣṭādhyāyī number; links to the sūtra page on this site. */
+import { getEntry } from "astro:content";
+import { devaToIast } from "../lib/sanskrit";
+
+interface Props {
+  id: string;
+  /** show the sūtra text after the number */
+  text?: boolean;
+}
+const { id, text = false } = Astro.props;
+const entry = await getEntry("sutras", id);
+const title = entry ? `${devaToIast(entry.data.deva)} — ${entry.data.meaning}` : `Aṣṭādhyāyī ${id}`;
+const href = entry ? `/sutra/${id}/` : `https://indike.org/pramana/in.vedanga.vyakarana.astadhyayi.${id}`;
+---
+<a class="sref" href={href} title={title}
+  ><span class="sref-n">{id}</span>{
+    text && entry && (
+      <span class="sref-text">
+        <span class="sa">
+          <span class="sa-deva" lang="sa">{entry.data.deva}</span>
+          <span class="sa-iast" lang="sa-Latn">{devaToIast(entry.data.deva)}</span>
+        </span>
+      </span>
+    )
+  }</a
+>
+
+<style>
+  @layer molecules {
+    .sref {
+      --c-sref-color: var(--s-color-rubric);
+      display: inline-flex;
+      align-items: baseline;
+      gap: 0.35em;
+      color: var(--c-sref-color);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .sref-n {
+      font-variant-numeric: lining-nums tabular-nums;
+      font-size: 0.86em;
+      letter-spacing: 0.01em;
+      padding-inline: 0.3em;
+      border-block-end: 1px solid currentColor;
+    }
+    .sref:hover .sref-n { background: var(--s-color-mark); }
+    .sref-text { color: var(--s-color-text); white-space: normal; }
+  }
+</style>

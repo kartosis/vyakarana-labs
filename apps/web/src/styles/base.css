@@ -133,6 +133,8 @@
   :root[data-script="both"] .sa > .sa-iast::after { content: ")"; font-style: normal; }
 
   /* Blocks (folios, quotes) always stack Devanagari over IAST in "both" mode. */
+  .sa-block { display: block; }
+  .sa-block > .sa-deva { display: block; }
   .sa-block > .sa-iast { display: none; }
   :root[data-script="both"] .sa-block > .sa-iast,
   :root[data-script="iast"] .sa-block > .sa-iast { display: block; }

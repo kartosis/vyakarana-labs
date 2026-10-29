@@ -1,0 +1,78 @@
+---
+title: Naming a range of sounds
+deva: प्रत्याहारः
+module: samjna
+order: 3
+minutes: 20
+summary: LSK 4 turns the markers into a naming system. A first sound plus a later marker names every sound between them, so two syllables can stand for nine vowels or thirty-three consonants.
+lskRange: "4"
+sutras: ["1.1.71"]
+---
+import Sa from "../../../components/Sa.astro";
+import Voice from "../../../components/Voice.astro";
+import SutraFolio from "../../../components/SutraFolio.astro";
+import SutraRef from "../../../components/SutraRef.astro";
+import Practice from "../../../components/Practice.astro";
+import ShivaBoard from "../../../islands/ShivaBoard.tsx";
+import { pratyahara, transliterate } from "@vl/engine";
+
+export const show = (slp) => pratyahara(slp).sounds.map((s) => transliterate("aAiIuUfFxXeEoO".includes(s) ? s : s + "a", "slp1", "iast")).join(" ");
+
+<SutraFolio id="1.1.71" />
+
+The rule is short, and it is the key to reading Pāṇini. Take a sound from the Śivasūtras (the *ādi*, "beginning"). Put after it any marker that comes later (the *antya it*, "final marker"). The pair is a name, a <Sa iast="pratyāhāra" />, for that first sound and every sound up to the marker. Markers along the way are skipped, because they are not sounds.
+
+## Build one by hand
+
+**ac.** Start at *a* in line 1 and walk to the *c* that ends line 4: a, i, u, (skip ṇ), ṛ, ḷ, (skip k), e, o, (skip ṅ), ai, au. So <Sa iast="ac" /> = every vowel.
+
+**hal.** Start at *ha* in line 5 and walk to the *l* that ends line 14. That is every consonant, with *ha* counted once although it appears twice.
+
+**al.** From *a* to the last marker: every sound in the language.
+
+Now try any pair on the board. Choose a first sound, then a red marker:
+
+<ShivaBoard client:visible initial={["J", "S"]} label="Pratyāhāra builder" />
+
+<Voice quote="mbh-laghu" voice="bhasya">
+  "For the sake of economy" is one of Patañjali's five reasons for studying grammar. The pratyāhāra is economy made into a tool. <Sa iast="jaś" /> names five sounds in one syllable, and <Sa iast="hal" /> names thirty-three.
+</Voice>
+
+## The names you will meet most
+
+<div class="table-wrap">
+<table>
+<thead><tr><th scope="col">Name</th><th scope="col">Sounds</th><th scope="col">Used in, for example</th></tr></thead>
+<tbody>
+<tr><td><Sa iast="ac" /></td><td>{show("ac")}</td><td>vowel length <SutraRef id="1.2.27" />; vowel sandhi <SutraRef id="6.1.77" /></td></tr>
+<tr><td><Sa iast="hal" /></td><td>all consonants</td><td>the first rule, <SutraRef id="1.3.3" />; clusters, <SutraRef id="1.1.7" /></td></tr>
+<tr><td><Sa iast="ak" /></td><td>{show("ak")}</td><td>merging like vowels into a long one, 6.1.101 <Sa iast="akaḥ savarṇe dīrghaḥ" /></td></tr>
+<tr><td><Sa iast="ik" /></td><td>{show("ik")}</td><td>the vowels that become semivowels, <SutraRef id="6.1.77" /></td></tr>
+<tr><td><Sa iast="yaṇ" /></td><td>{show("yaR")}</td><td>the semivowels they become, <SutraRef id="6.1.77" /></td></tr>
+<tr><td><Sa iast="eṅ" /></td><td>{show("eN")}</td><td>the guṇa vowels, 1.1.2 <Sa iast="adeṅ guṇaḥ" /></td></tr>
+<tr><td><Sa iast="aic" /></td><td>{show("Ec")}</td><td>the vṛddhi vowels, 1.1.1 <Sa iast="vṛddhir ādaic" /></td></tr>
+<tr><td><Sa iast="jhaś" /></td><td>{show("JaS")}</td><td>all voiced stops</td></tr>
+<tr><td><Sa iast="jaś" /></td><td>{show("jaS")}</td><td>voiced unaspirated stops, 8.4.53 <Sa iast="jhalāṃ jaś jhaśi" /></td></tr>
+<tr><td><Sa iast="khar" /></td><td>{show("Kar")}</td><td>every voiceless sound, 8.4.55 <Sa iast="khari ca" /></td></tr>
+<tr><td><Sa iast="śal" /></td><td>{show("Sal")}</td><td>sibilants and h</td></tr>
+</tbody>
+</table>
+</div>
+
+## When ṇ is ambiguous
+
+ṇ closes two lines, 1 and 6, so <Sa iast="aṇ" /> could mean *a i u* or run on to *l*. The tradition settles each case. **aṇ** normally takes the first ṇ (a, i, u). In <SutraRef id="1.1.69" />, which you will meet soon, it takes the second. **iṇ** and **yaṇ** always use the second, since nothing else makes sense for them. Choose *a* on the board and then each red ṇ in turn to see the two readings.
+
+<Voice quote="vp-1.50" voice="darsana">
+  Every word, Bhartṛhari says, shows two things: its meaning and its own form. A pratyāhāra makes that distinction unavoidable. As a form, <Sa iast="ac" /> is a two-letter syllable. As a name, it means the nine vowels. Pāṇini later states the general principle: a word in grammar denotes its own form unless it is a technical name, <SutraRef id="1.1.68" />.
+</Voice>
+
+<Practice
+  items={10}
+  skills={[
+    "Expanding a pratyāhāra into its sounds",
+    "Naming the smallest pratyāhāra for a set",
+    "Resolving aṇ and iṇ",
+    "Checking whether a sound belongs to a class",
+  ]}
+/>

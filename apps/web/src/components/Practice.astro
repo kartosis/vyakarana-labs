@@ -1,0 +1,44 @@
+---
+/**
+ * Practice block for a lesson. Exercises need an account (Round 1 decision), so signed-out
+ * learners see what the practice covers and a sign-in link. The scored exercise island mounts
+ * here once accounts launch (milestone M3).
+ */
+interface Props {
+  items: number;
+  skills: string[];
+}
+const { items, skills } = Astro.props;
+---
+<section class="practice" aria-labelledby="practice-h">
+  <h2 id="practice-h">Practice</h2>
+  <p>{items} questions on:</p>
+  <ul>
+    {skills.map((s) => <li>{s}</li>)}
+  </ul>
+  <p class="practice-gate">
+    Practice is saved to your account so that reviews can be scheduled for you.
+    <a class="btn" href="/signin/">Sign in to practise</a>
+  </p>
+</section>
+
+<style>
+  @layer molecules {
+    .practice {
+      clear: both;
+      margin-block-start: var(--s-stack-xl);
+      padding: var(--p-space-5) var(--p-space-5) var(--p-space-6);
+      border: 1px solid var(--s-color-border);
+      border-radius: var(--s-radius-control);
+    }
+    .practice h2 { margin: 0 0 var(--p-space-3); }
+    .practice ul { margin-block: var(--p-space-2) var(--p-space-4); }
+    .practice-gate {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--p-space-3) var(--p-space-5);
+      color: var(--s-color-text-soft);
+    }
+  }
+</style>

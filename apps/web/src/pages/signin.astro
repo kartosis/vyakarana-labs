@@ -1,0 +1,28 @@
+---
+import Base from "../layouts/Base.astro";
+---
+<Base title="Sign in" description="Sign in to Vyākaraṇa Labs with a one-time code sent to your email.">
+  <div class="page-narrow">
+    <header class="page-head">
+      <h1>Sign in</h1>
+      <p class="lead">An account saves your practice and schedules your reviews. There is no password: enter your email and we send you a 6-digit code.</p>
+    </header>
+    <form class="signin" data-signin aria-describedby="signin-status">
+      <label for="signin-email">Email address</label>
+      <input id="signin-email" name="email" type="email" autocomplete="email" required inputmode="email" />
+      <button class="btn" type="submit" disabled>Send code</button>
+      <p id="signin-status" class="signin-status" role="status">
+        Accounts open with the next release. Every lesson and tool works without one in the meantime, and anything you mark as read is kept in this browser and moved into your account when you first sign in.
+      </p>
+    </form>
+  </div>
+</Base>
+<style>
+  @layer pages {
+    .signin { display: grid; gap: var(--p-space-3); max-inline-size: 28rem; }
+    .signin label { font-weight: 700; }
+    .signin .btn { justify-self: start; }
+    .signin .btn[disabled] { opacity: 0.5; cursor: not-allowed; }
+    .signin-status { color: var(--s-color-text-soft); padding: var(--p-space-4); background: var(--s-color-leaf); border-radius: var(--s-radius-control); }
+  }
+</style>

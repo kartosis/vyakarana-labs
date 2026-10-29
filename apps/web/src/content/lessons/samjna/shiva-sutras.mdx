@@ -1,0 +1,68 @@
+---
+title: The fourteen sound-lists
+deva: माहेश्वराणि सूत्राणि
+module: samjna
+order: 1
+minutes: 20
+summary: Pāṇini's grammar begins with an inventory of sounds in fourteen short lists. The order is not the alphabet's. It is arranged so that every group his rules need can be named in two syllables.
+lskRange: before 1
+---
+import Sa from "../../../components/Sa.astro";
+import Voice from "../../../components/Voice.astro";
+import SutraRef from "../../../components/SutraRef.astro";
+import Practice from "../../../components/Practice.astro";
+import ShivaBoard from "../../../islands/ShivaBoard.tsx";
+
+The Laghusiddhāntakaumudī opens, before its first numbered rule, with fourteen lines. Tradition calls them the **Māheśvara** or **Śiva sūtras**. Each line lists a few sounds and ends with one consonant that is not part of the list. The red letters below are those final consonants.
+
+<ShivaBoard client:load presets={false} initial={["a", "c"]} label="The fourteen Śivasūtras, with ac selected" />
+
+The board already does something you have not yet learned: it has picked out <Sa iast="ac" />, every vowel, by joining the first sound *a* to the red *c* that ends line 4. Click any black letter, then any red letter after it, and watch the group change. The rule that makes this work is the subject of a later lesson. First, look at what the lists contain.
+
+<Voice quote="mbh-atha" voice="bhasya">
+  The Mahābhāṣya begins: "Now, the instruction in words." The Śivasūtras are where that instruction starts. Before any word can be explained, its sound-material has to be listed and named.
+</Voice>
+
+## What is in the lists
+
+Read the fourteen lines in groups and a design appears:
+
+1. **Lines 1–4 are vowels**: simple *a i u*, then *ṛ ḷ*, then the diphthongs *e o*, then *ai au*.
+2. **Lines 5–6 are semivowels**, *ya va ra la*, and the aspirate *ha* is placed among them.
+3. **Line 7 is the five nasals**: *ña ma ṅa ṇa na*.
+4. **Lines 8–10 are voiced stops**: the breathy ones (*jha bha gha ḍha dha*) before the plain ones (*ja ba ga ḍa da*).
+5. **Lines 11–12 are voiceless stops**: breathy first, then plain.
+6. **Line 13 is the sibilants** *śa ṣa sa*, and **line 14** repeats *ha*.
+
+Consonants are written with an *a* only so they can be pronounced. That *a* is not a member of the list. And long vowels do not appear at all. You will see why when you reach <SutraRef id="1.1.69" />, which lets a short vowel stand for its long forms.
+
+## Why not the alphabet order?
+
+The alphabet groups sounds by place: the five velars, then the five palatals, and so on. Pāṇini's rules more often need groups by **manner**: all voiced stops, all voiceless sounds, all nasals. The Śivasūtras are ordered so that each of those groups is one unbroken stretch.
+
+- Every voiced unaspirated stop (*j b g ḍ d*) sits in line 10, so one short name covers all five.
+- Every voiceless sound, from *kh* through *s*, is one stretch from line 11 to line 13.
+- Every consonant is one stretch, from the *ha* of line 5 to the *l* that closes line 14.
+
+## Two oddities, both deliberate
+
+- ***ha* appears twice**, in line 5 and again in line 14. That lets it belong to two different groups: the voiced sounds that begin at line 5, and the sibilant-and-*h* group at the end.
+- **The red ṇ closes two lines**, 1 and 6. A name ending in ṇ is therefore ambiguous, and Pāṇini resolves each case. Try it on the board: choose *a*, then the second red ṇ.
+
+<Voice quote="vp-1.1" voice="darsana">
+  Bhartṛhari's first verse calls the Word *akṣara*: the imperishable. The same word names a letter or syllable. The Śivasūtras are the Word laid out as its smallest audible parts, and the rest of the grammar builds those parts back up into language.
+</Voice>
+
+## The markers are tools
+
+The red letters are never pronounced as part of any word. They are markers, and Pāṇini's term is <Sa iast="it" />. The next lesson covers the three rules that define them and make them disappear: LSK 1–3.
+
+<Practice
+  items={8}
+  skills={[
+    "Saying which line contains a given sound",
+    "Telling sounds from markers",
+    "Explaining why ha and ṇ appear twice",
+    "Reciting the fourteen lines in order",
+  ]}
+/>

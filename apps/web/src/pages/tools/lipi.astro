@@ -1,0 +1,14 @@
+---
+import Base from "../../layouts/Base.astro";
+import LipiPad from "../../islands/LipiPad.tsx";
+---
+<Base title="Transliteration pad" kind="tool" description="Convert Sanskrit between Harvard-Kyoto, IAST, SLP1 and Devanagari as you type.">
+  <div class="page-narrow">
+    <header class="page-head">
+      <p class="crumbs"><a href="/tools/">Tools</a></p>
+      <h1>Transliteration pad</h1>
+      <p class="lead">Type Sanskrit in any of four schemes and read it in all of them. Everything happens in your browser.</p>
+    </header>
+    <LipiPad client:load initial="atha zabdAnuzAsanam" />
+  </div>
+</Base>

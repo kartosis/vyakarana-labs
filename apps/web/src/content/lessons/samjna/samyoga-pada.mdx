@@ -1,0 +1,89 @@
+---
+title: Clusters and words
+deva: संयोगः पदं च
+module: samjna
+order: 6
+minutes: 15
+summary: LSK 13–14 close the Saṃjñā-prakaraṇa. A run of consonants is a saṃyoga, and a pada is anything that ends in a nominal or verbal ending. Only a pada is a word you can use.
+lskRange: 13–14
+sutras: ["1.1.7", "1.4.14"]
+---
+import Sa from "../../../components/Sa.astro";
+import Voice from "../../../components/Voice.astro";
+import SutraFolio from "../../../components/SutraFolio.astro";
+import SutraRef from "../../../components/SutraRef.astro";
+import Practice from "../../../components/Practice.astro";
+
+## Clusters
+
+<SutraFolio id="1.1.7" />
+
+Consonants with no vowel between them form a <Sa iast="saṃyoga" />. Varadarāja's gloss spells out the condition: <Sa iast="ajbhir avyavahitāḥ" />, "not separated by vowels". Examples:
+
+- <Sa iast="agni" />: g and n
+- <Sa iast="kṛṣṇa" />: ṣ and ṇ
+- <Sa iast="indra" />: n, d and r, a three-consonant saṃyoga
+- <Sa iast="ātman" />: t and m
+
+The term matters right away for syllable weight. A short vowel is *light* (1.4.10 <Sa iast="hrasvaṃ laghu" />), but a short vowel before a saṃyoga counts as *heavy* (1.4.11 <Sa iast="saṃyoge guru" />). Meter and many rules of derivation depend on that distinction.
+
+## Words
+
+<SutraFolio id="1.4.14" />
+
+This is the grammar's definition of a usable word, a <Sa iast="pada" />. Anything that ends in a nominal ending (<Sa iast="sup" />) or a verbal ending (<Sa iast="tiṅ" />) is one.
+
+Notice what <Sa iast="sup" /> and <Sa iast="tiṅ" /> are: two more pratyāhāras. They are built by the same rule as <Sa iast="ac" /> and <Sa iast="hal" />, <SutraRef id="1.1.71" />, but from different upadeśa lists:
+
+- **sup** runs from *su*, the first of the 21 nominal endings listed in 4.1.2, to the marker *p* of the last one.
+- **tiṅ** runs from *tip*, the first of the 18 verbal endings listed in 3.4.78, to the marker *ṅ* of the last one.
+
+So the method you learned on the Śivasūtras works on every list in the grammar.
+
+<div class="example">
+  <span><Sa iast="rāma" /> is a stem. It is not yet a word and cannot appear in a sentence.</span>
+  <span><Sa iast="rāma" /> + <Sa iast="su" /> → <Sa iast="rāmaḥ" />: it now ends in a sup, so it is a pada.</span>
+  <span><Sa iast="bhū" /> + <Sa iast="tip" /> → <Sa iast="bhavati" />: it ends in a tiṅ, so it is a pada.</span>
+</div>
+
+How *rāma + su* becomes *rāmaḥ*, and *bhū + tip* becomes *bhavati*, is the work of the rest of the course.
+
+<Voice quote="mbh-sabda" voice="bhasya">
+  Patañjali defines a word by what it does: "that which, once uttered, makes us understand" its meaning. Pāṇini's pada is the formal counterpart. Only a finished, inflected word can be uttered and understood. A bare stem or a bare ending cannot.
+</Voice>
+
+## The Saṃjñā-prakaraṇa in one table
+
+<div class="table-wrap">
+<table>
+<thead><tr><th scope="col">LSK</th><th scope="col">Sūtra</th><th scope="col">Term defined</th></tr></thead>
+<tbody>
+<tr><td>1</td><td><SutraRef id="1.3.3" text /></td><td>it (marker)</td></tr>
+<tr><td>2</td><td><SutraRef id="1.1.60" text /></td><td>lopa (non-appearance)</td></tr>
+<tr><td>3</td><td><SutraRef id="1.3.9" text /></td><td>the marker disappears</td></tr>
+<tr><td>4</td><td><SutraRef id="1.1.71" text /></td><td>pratyāhāra</td></tr>
+<tr><td>5</td><td><SutraRef id="1.2.27" text /></td><td>hrasva, dīrgha, pluta</td></tr>
+<tr><td>6–8</td><td><SutraRef id="1.2.29" /> <SutraRef id="1.2.30" /> <SutraRef id="1.2.31" /></td><td>udātta, anudātta, svarita</td></tr>
+<tr><td>9</td><td><SutraRef id="1.1.8" text /></td><td>anunāsika</td></tr>
+<tr><td>10</td><td><SutraRef id="1.1.9" text /></td><td>savarṇa</td></tr>
+<tr><td>11</td><td><SutraRef id="1.1.10" text /></td><td>(no savarṇa across vowel and consonant)</td></tr>
+<tr><td>12</td><td><SutraRef id="1.1.69" text /></td><td>a letter covers its class</td></tr>
+<tr><td>13</td><td><SutraRef id="1.1.7" text /></td><td>saṃyoga</td></tr>
+<tr><td>14</td><td><SutraRef id="1.4.14" text /></td><td>pada</td></tr>
+</tbody>
+</table>
+</div>
+
+<Voice quote="vp-1.14" voice="darsana">
+  Bhartṛhari calls grammar "the cure for the flaws of speech." With these fourteen terms you have the vocabulary the cure is written in. The next module, Ac-sandhi, puts them to work: vowels meeting vowels, decided rule by rule.
+</Voice>
+
+<Practice
+  items={8}
+  skills={[
+    "Finding the saṃyoga in a word",
+    "Deciding whether a syllable is light or heavy",
+    "Telling a stem from a pada",
+    "Matching each LSK number to its term",
+  ]}
+/>

@@ -1,0 +1,45 @@
+---
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <p class="footer-colophon">
+      <span lang="sa" class="footer-iti">॥ इति ॥</span>
+      Vyākaraṇa Labs teaches Sanskrit grammar from its sources: Pāṇini's Aṣṭādhyāyī in the order of Varadarāja's
+      Laghusiddhāntakaumudī, with Patañjali's Mahābhāṣya and Bhartṛhari's Vākyapadīya beside the rules.
+      Sūtra citations link to <a href="https://indike.org/pramana/in.vedanga.vyakarana" rel="external">Pramāṇa</a>.
+    </p>
+    <nav aria-label="Footer">
+      <ul>
+        <li><a href="/about/">About</a></li>
+        <li><a href="/sources/">Sources and licences</a></li>
+        <li><a href="/privacy/">Privacy</a></li>
+        <li><a href="https://github.com/kartosis/vyakarana-labs" rel="external">Code on GitHub</a></li>
+      </ul>
+    </nav>
+    <p class="footer-small">© {year} Vyākaraṇa Labs. Lesson text and translations are original to this project; source texts are public domain.</p>
+  </div>
+</footer>
+
+<style>
+  @layer organisms {
+    .site-footer {
+      margin-block-start: var(--s-stack-xl);
+      border-block-start: 1px solid var(--s-color-hairline);
+      background: var(--s-color-leaf);
+      font-size: var(--s-text-small);
+      color: var(--s-color-text-soft);
+    }
+    .site-footer-inner {
+      display: grid;
+      gap: var(--p-space-4);
+      max-inline-size: 90rem;
+      margin-inline: auto;
+      padding: var(--p-space-6) var(--s-gutter);
+    }
+    .footer-colophon { max-inline-size: 70ch; }
+    .footer-iti { color: var(--s-color-rubric); margin-inline-end: 0.5em; }
+    .site-footer ul { display: flex; flex-wrap: wrap; gap: var(--p-space-2) var(--p-space-5); list-style: none; margin: 0; padding: 0; }
+    .footer-small { color: var(--s-color-text-faint); }
+  }
+</style>

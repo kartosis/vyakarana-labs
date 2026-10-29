@@ -1,0 +1,38 @@
+---
+import Base from "../../layouts/Base.astro";
+const tools = [
+  { href: "/tools/pratyahara/", title: "Pratyāhāra builder", text: "Pick a first sound and a marker in the Śivasūtras to form a class name, or choose a name to see its members. Rule 1.1.71." },
+  { href: "/tools/savarna/", title: "Sound classes", text: "Every sound by place and internal effort, with its savarṇa class and the pairs that 1.1.10 keeps apart." },
+  { href: "/tools/lipi/", title: "Transliteration pad", text: "Type Harvard-Kyoto, IAST, SLP1 or Devanagari and see all four at once." },
+];
+const soon = [
+  { title: "Sandhi playground", text: "Join two words and see each sūtra that applies." },
+  { title: "Derivation stepper", text: "Watch rāma + su become rāmaḥ, rule by rule." },
+  { title: "Declension and conjugation tables", text: "Full tables for any stem or root the course has taught." },
+];
+---
+<Base title="Tools" kind="tool" description="Interactive tools for Pāṇinian grammar: pratyāhāra builder, sound classes, transliteration.">
+  <div class="page-narrow">
+    <header class="page-head">
+      <h1>Tools</h1>
+      <p class="lead">Each tool runs in your browser with the same grammar engine the lessons use. No account needed.</p>
+    </header>
+    <ul class="tool-list">
+      {tools.map((t) => <li><h2><a href={t.href}>{t.title}</a></h2><p>{t.text}</p></li>)}
+    </ul>
+    <h2 class="tool-soon-h">In preparation</h2>
+    <ul class="tool-list tool-list--soon">
+      {soon.map((t) => <li><h3>{t.title}</h3><p>{t.text}</p></li>)}
+    </ul>
+  </div>
+</Base>
+<style>
+  @layer pages {
+    .tool-list { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--p-space-2); }
+    .tool-list li { padding-block: var(--p-space-4); border-block-start: 1px solid var(--s-color-hairline); }
+    .tool-list h2, .tool-list h3 { font-size: var(--s-text-h3); }
+    .tool-list p { color: var(--s-color-text-soft); margin-block-start: var(--p-space-1); }
+    .tool-soon-h { font-size: var(--s-text-lead); margin-block: var(--s-stack-l) var(--p-space-2); color: var(--s-color-text-soft); }
+    .tool-list--soon h3 { color: var(--s-color-text-soft); }
+  }
+</style>

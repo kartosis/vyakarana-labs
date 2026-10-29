@@ -1,0 +1,113 @@
+/* Page-level layout and long-form prose. */
+@layer organisms {
+  .page {
+    max-inline-size: 90rem;
+    margin-inline: auto;
+    padding-inline: var(--s-gutter);
+  }
+  .page-narrow {
+    max-inline-size: calc(var(--s-main) + 2 * var(--s-gutter));
+    margin-inline: auto;
+    padding-inline: var(--s-gutter);
+  }
+  .page-head {
+    padding-block: var(--s-stack-l) var(--s-stack-m);
+    display: grid;
+    gap: var(--p-space-3);
+  }
+  .page-head .lead { font-size: var(--s-text-lead); color: var(--s-color-text-soft); max-inline-size: 60ch; }
+  .crumbs {
+    font-size: var(--s-text-small);
+    color: var(--s-color-text-faint);
+  }
+  .crumbs a { color: inherit; }
+
+  /* ---------- prose ---------- */
+  .prose { max-inline-size: var(--s-main); }
+  .prose > * + * { margin-block-start: var(--p-space-4); }
+  .prose > h2 {
+    margin-block-start: var(--s-stack-xl);
+    padding-block-start: var(--p-space-4);
+    border-block-start: 1px solid var(--s-color-hairline);
+  }
+  .prose > h3 { margin-block-start: var(--s-stack-l); }
+  .prose > h2 + *,
+  .prose > h3 + * { margin-block-start: var(--p-space-3); }
+  .prose ul,
+  .prose ol { padding-inline-start: 1.4em; }
+  .prose li + li { margin-block-start: var(--p-space-2); }
+  .prose li::marker { color: var(--s-color-rubric); }
+  .prose dfn { font-style: italic; font-weight: 700; }
+  .prose table {
+    inline-size: 100%;
+    font-size: 0.97rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .prose th,
+  .prose td {
+    padding: 0.45em 0.6em;
+    border-block-end: 1px solid var(--s-color-hairline);
+    vertical-align: top;
+  }
+  .prose thead th {
+    border-block-end: 2px solid var(--s-color-border);
+    font-size: var(--s-text-small);
+    color: var(--s-color-text-soft);
+  }
+  .prose .table-wrap { overflow-x: auto; }
+  .prose kbd {
+    font-family: inherit;
+    font-size: 0.85em;
+    padding: 0.05em 0.4em;
+    border: 1px solid var(--s-color-border);
+    border-radius: var(--s-radius-control);
+  }
+  .prose mark {
+    background: var(--s-color-mark);
+    color: inherit;
+    padding-inline: 0.15em;
+  }
+  .prose .callout {
+    padding: var(--p-space-4) var(--p-space-5);
+    background: var(--s-color-leaf);
+    border-radius: var(--s-radius-control);
+  }
+  .prose .example {
+    display: grid;
+    gap: var(--p-space-2);
+    padding: var(--p-space-4) var(--p-space-5);
+    border: 1px dashed var(--s-color-hairline);
+    border-radius: var(--s-radius-control);
+  }
+
+  /* ---------- lesson shell ---------- */
+  .lesson-shell {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--p-space-6);
+    max-inline-size: 90rem;
+    margin-inline: auto;
+    padding-inline: var(--s-gutter);
+  }
+  .lesson-article { container: lesson / inline-size; min-inline-size: 0; }
+
+  @media (width >= 64rem) {
+    .lesson-shell { grid-template-columns: var(--s-rail) minmax(0, 1fr); }
+  }
+
+  /* Commentary voices float into the right margin when there is room — a pañcapāṭha page. */
+  @container lesson (inline-size >= 63rem) {
+    .prose > .gloss {
+      float: right;
+      clear: right;
+      inline-size: var(--s-margin);
+      margin-inline-end: calc(-1 * (var(--s-margin) + 3rem));
+      margin-block: 0.4rem var(--p-space-5);
+    }
+  }
+}
+
+@layer organisms {
+  .prose td.big { font-size: 1.45rem; line-height: 1.3; }
+  .prose td.big .sa-iast { font-style: normal; }
+}

@@ -1,0 +1,69 @@
+---
+title: Markers that vanish
+deva: इत्संज्ञा लोपश्च
+module: samjna
+order: 2
+minutes: 18
+summary: LSK 1–3 define Pāṇini's markers and make them disappear from speech. In three sūtras you also meet upadeśa, anuvṛtti and lopa, ideas used on every page that follows.
+lskRange: 1–3
+sutras: ["1.3.3", "1.1.60", "1.3.9"]
+---
+import Sa from "../../../components/Sa.astro";
+import Voice from "../../../components/Voice.astro";
+import SutraFolio from "../../../components/SutraFolio.astro";
+import SutraRef from "../../../components/SutraRef.astro";
+import Practice from "../../../components/Practice.astro";
+import Steps from "../../../islands/Steps.tsx";
+
+Every list in the Śivasūtras ends with a consonant that is not a sound of the list. Pāṇini has to say so, or a reader would take *aiuṇ* to contain an ṇ. The first numbered rule of the Laghusiddhāntakaumudī does exactly that.
+
+<SutraFolio id="1.3.3" />
+
+**Upadeśa.** Varadarāja glosses it as <Sa iast="ādyoccāraṇam" />, "the first utterance": an item as Pāṇini states it when he teaches it. The Śivasūtras are <Sa iast="upadeśa" />, and so are the lists of roots, suffixes and substitutes you will meet later. In all of them, the final consonant is a marker.
+
+**Carried-over words.** Two words of the rule's meaning, "in an upadeśa" and "is an it", are not in the rule at all. They come from the previous sūtra, <SutraRef id="1.3.2" />. That is why Varadarāja adds, on this very first rule, that a word missing from a sūtra is to be carried over from another, *everywhere*. You read that sentence in the folio above.
+
+Commentators from Patañjali onward note a puzzle: the rule uses the name <Sa iast="hal" /> ("consonant") before the method of forming such names has been taught. The next lesson's rule supplies the method, and the tradition explains how the two rules support each other. For now, read *hal* simply as "consonant".
+
+## Making a marker disappear
+
+A marker is a tool for the grammarian, never a sound for the speaker. Two sūtras remove it. The first defines what "removal" means:
+
+<SutraFolio id="1.1.60" />
+
+The definition is careful. *Lopa* is not destruction but **non-appearance** (<Sa iast="adarśana" />) of something that was due to appear (<Sa iast="prasakta" />). The thing is still there for the grammar to refer to; it is simply not heard. The second sūtra applies it:
+
+<SutraFolio id="1.3.9" />
+
+<Voice quote="kas-1.3.9" voice="bhasya">
+  Why does the rule need the word *tasya*, "of that"? Without it, a general principle (<SutraRef id="1.1.52" />) would delete only the last sound of whatever is to be removed. *Tasya* makes the whole marker disappear. Pāṇini's commentators read each syllable of a sūtra on the assumption that none is wasted.
+</Voice>
+
+Varadarāja's gloss adds a sentence that points forward: <Sa iast="ṇādayo 'ṇādyarthāḥ" />, "the markers ṇ and the rest are for the sake of aṇ and the rest." The markers vanish from speech, but they remain useful as name-tags.
+
+## Step through it
+
+<Steps
+  client:visible
+  label="Line 5 of the Śivasūtras through LSK 1–3"
+  steps={[
+    { parts: [["hayavara"], ["w"]], note: "Line 5 as Pāṇini teaches it: hayavaraṭ. It is an upadeśa." },
+    { sutra: "1.3.3", parts: [["hayavara"], ["w", "it"]], note: "Its final consonant, ṭ, is an it: a marker, not a member of the list." },
+    { sutra: "1.3.9", parts: [["hayavara"], ["w", "gone"]], note: "The it undergoes lopa." },
+    { sutra: "1.1.60", parts: [["hayavara"], ["w", "gone"]], note: "Lopa means non-appearance: ṭ is not heard, but the grammar can still point to it. In the next lesson it serves as the end-point of the name aṭ." },
+  ]}
+/>
+
+<Voice quote="vp-1.44" voice="darsana">
+  Bhartṛhari distinguishes two aspects in every word we use: the form that brings words about, and the word that is applied to a meaning. An it-marker is the purest case of the first. It is uttered in the teaching and shapes everything built from it, yet it never reaches the listener as meaning.
+</Voice>
+
+<Practice
+  items={6}
+  skills={[
+    "Finding the marker in an upadeśa",
+    "Explaining upadeśa and anuvṛtti",
+    "Telling lopa from destruction",
+    "Saying what the word tasya contributes",
+  ]}
+/>

@@ -1,0 +1,14 @@
+---
+import Base from "../../layouts/Base.astro";
+import SavarnaChart from "../../islands/SavarnaChart.tsx";
+---
+<Base title="Sound classes" kind="tool" description="Place and internal effort for every Sanskrit sound, and its savarṇa class (Aṣṭādhyāyī 1.1.9–1.1.10).">
+  <div class="page-narrow">
+    <header class="page-head">
+      <p class="crumbs"><a href="/tools/">Tools</a></p>
+      <h1>Sound classes</h1>
+      <p class="lead">Choose a sound. Its savarṇa class (<a href="/sutra/1.1.9/">1.1.9</a>) is highlighted; sounds that match in place and effort but are kept apart by <a href="/sutra/1.1.10/">1.1.10</a> get a dashed outline. Taught in <a href="/course/samjna/savarna/">Sounds of one class</a>.</p>
+    </header>
+    <SavarnaChart client:load />
+  </div>
+</Base>

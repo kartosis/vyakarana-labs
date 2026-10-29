@@ -1,0 +1,178 @@
+---
+import { getCollection, getEntry, render } from "astro:content";
+import Base from "../../../layouts/Base.astro";
+import CourseRail from "../../../components/CourseRail.astro";
+import SutraRef from "../../../components/SutraRef.astro";
+
+export async function getStaticPaths() {
+  const lessons = await getCollection("lessons");
+  return lessons.map((entry) => ({
+    params: { module: entry.data.module, lesson: entry.id.split("/").pop()! },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const mod = await getEntry("modules", entry.data.module);
+if (!mod) throw new Error(`Unknown module ${entry.data.module}`);
+
+// Previous / next across the whole course, in LSK order.
+const modules = (await getCollection("modules")).sort((a, b) => a.data.order - b.data.order);
+const all = (await getCollection("lessons")).sort((a, b) => {
+  const ma = modules.findIndex((m) => m.id === a.data.module);
+  const mb = modules.findIndex((m) => m.id === b.data.module);
+  return ma - mb || a.data.order - b.data.order;
+});
+const idx = all.findIndex((l) => l.id === entry.id);
+const prev = all[idx - 1];
+const next = all[idx + 1];
+const href = (l: (typeof all)[number]) => `/course/${l.data.module}/${l.id.split("/").pop()}/`;
+const slug = entry.id.split("/").pop()!;
+const lessonKey = `${entry.data.module}/${slug}`;
+---
+<Base title={entry.data.title} description={entry.data.summary} kind="lesson">
+  <div class="lesson-shell">
+    <CourseRail currentModule={entry.data.module} currentLesson={slug} />
+    <article class="lesson-article" data-lesson={lessonKey}>
+      <header class="lesson-head">
+        <p class="crumbs">
+          <a href="/course/">Course</a> /
+          <span class="sa"><span class="sa-deva" lang="sa">{mod.data.deva}</span><span class="sa-iast" lang="sa-Latn">{mod.data.title}</span></span>
+          {mod.data.lsk ? "" : <span> (before the Laghusiddhāntakaumudī)</span>}
+        </p>
+        <h1>
+          <span class="lesson-title">{entry.data.title}</span>
+          <span class="lesson-deva" lang="sa">{entry.data.deva}</span>
+        </h1>
+        <p class="lesson-summary">{entry.data.summary}</p>
+        <p class="lesson-meta">
+          <span>About {entry.data.minutes} minutes</span>
+          {entry.data.lskRange && <span>LSK {entry.data.lskRange}</span>}
+          {
+            entry.data.sutras.length > 0 && (
+              <span class="lesson-sutras">
+                Sūtras: {entry.data.sutras.map((id, i) => <>{i > 0 && " "}<SutraRef id={id} /></>)}
+              </span>
+            )
+          }
+        </p>
+      </header>
+
+      <div class="prose">
+        <Content />
+      </div>
+
+      <footer class="lesson-foot no-print">
+        <nav class="lesson-pager" aria-label="Lesson">
+          {prev ? (
+            <a class="pager-link pager-prev" href={href(prev)}>
+              <span class="pager-dir">Previous lesson</span>
+              <span class="pager-title">{prev.data.title}</span>
+            </a>
+          ) : <span />}
+          <button type="button" class="btn btn--quiet mark-read" data-mark-read={lessonKey} aria-pressed="false">
+            Mark as read
+          </button>
+          {next ? (
+            <a class="pager-link pager-next" href={href(next)}>
+              <span class="pager-dir">Next lesson</span>
+              <span class="pager-title">{next.data.title}</span>
+            </a>
+          ) : <span />}
+        </nav>
+      </footer>
+    </article>
+  </div>
+</Base>
+
+<script>
+  // Guest progress lives in this browser until accounts launch; it is merged on first sign-in.
+  const KEY = "vl:read";
+  const read = (): string[] => {
+    try {
+      return JSON.parse(localStorage.getItem(KEY) ?? "[]");
+    } catch {
+      return [];
+    }
+  };
+  const write = (v: string[]) => {
+    try {
+      localStorage.setItem(KEY, JSON.stringify(v));
+    } catch {}
+  };
+  const paint = () => {
+    const done = new Set(read());
+    document.querySelectorAll<HTMLAnchorElement>(".rail-lessons a").forEach((a) => {
+      const key = new URL(a.href).pathname.replace(/^\/course\//, "").replace(/\/$/, "");
+      a.classList.toggle("is-read", done.has(key));
+    });
+    document.querySelectorAll<HTMLButtonElement>("[data-mark-read]").forEach((b) => {
+      const on = done.has(b.dataset.markRead!);
+      b.setAttribute("aria-pressed", String(on));
+      b.textContent = on ? "Marked as read" : "Mark as read";
+    });
+  };
+  document.querySelectorAll<HTMLButtonElement>("[data-mark-read]").forEach((b) =>
+    b.addEventListener("click", () => {
+      const done = new Set(read());
+      const k = b.dataset.markRead!;
+      if (done.has(k)) done.delete(k);
+      else done.add(k);
+      write([...done]);
+      paint();
+    }),
+  );
+  paint();
+</script>
+
+<style>
+  @layer pages {
+    .lesson-head {
+      display: grid;
+      gap: var(--p-space-3);
+      max-inline-size: var(--s-main);
+      padding-block: var(--s-stack-l) var(--s-stack-m);
+    }
+    .lesson-head h1 { display: grid; gap: var(--p-space-1); }
+    .lesson-deva {
+      font-family: var(--s-font-sanskrit);
+      font-weight: 400;
+      font-size: 0.62em;
+      color: var(--s-color-rubric);
+    }
+    .lesson-summary { font-size: var(--s-text-lead); color: var(--s-color-text-soft); line-height: 1.45; }
+    .lesson-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--p-space-2) var(--p-space-5);
+      font-size: var(--s-text-small);
+      color: var(--s-color-text-faint);
+    }
+    .lesson-foot {
+      clear: both;
+      max-inline-size: var(--s-main);
+      margin-block-start: var(--s-stack-xl);
+      padding-block-start: var(--p-space-5);
+      border-block-start: 3px double var(--s-color-rubric);
+    }
+    .lesson-pager {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: var(--p-space-4);
+      align-items: center;
+    }
+    .pager-link { display: grid; gap: 0.1rem; text-decoration: none; color: var(--s-color-text); }
+    .pager-next { text-align: end; }
+    .pager-dir { font-size: var(--s-text-small); color: var(--s-color-text-faint); }
+    .pager-title { font-weight: 700; }
+    .pager-link:hover .pager-title { text-decoration: underline; }
+    .mark-read[aria-pressed="true"] { border-color: var(--s-color-correct); color: var(--s-color-correct); }
+    :global(.rail-lessons a.is-read)::after { content: " ✓"; color: var(--s-color-correct); }
+
+    @media (width < 40rem) {
+      .lesson-pager { grid-template-columns: 1fr; }
+      .pager-next { text-align: start; }
+    }
+  }
+</style>

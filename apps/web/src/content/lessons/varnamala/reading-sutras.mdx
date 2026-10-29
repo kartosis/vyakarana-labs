@@ -1,0 +1,94 @@
+---
+title: How to read a sūtra
+deva: सूत्रम्
+module: varnamala
+order: 3
+minutes: 20
+summary: A sūtra is a rule compressed to its last syllable. Four habits unpack any of them — split the words, read the cases, expand the names, and supply what is carried over.
+sutras: ["6.1.77", "1.1.49", "1.1.66", "1.1.67", "1.1.50"]
+---
+import Sa from "../../../components/Sa.astro";
+import Voice from "../../../components/Voice.astro";
+import SutraFolio from "../../../components/SutraFolio.astro";
+import SutraRef from "../../../components/SutraRef.astro";
+import Practice from "../../../components/Practice.astro";
+import Steps from "../../../islands/Steps.tsx";
+
+Pāṇini's grammar runs to about four thousand sūtras. Each is as short as it can be made, because the whole was meant to be memorised and recited. The price of that brevity is that a sūtra cannot be read like a sentence. It has to be unpacked, and the unpacking always follows the same four habits.
+
+We will use one rule throughout, the first rule of vowel sandhi in the Laghusiddhāntakaumudī:
+
+<SutraFolio id="6.1.77" level={2} />
+
+<Voice quote="mbh-brhaspati" voice="bhasya">
+  Patañjali's parable of why grammar needs rules: a word-by-word recitation never ends, even for the teacher of the gods. Rules that cover infinitely many words are the only finite way to know them. This is why every sūtra is general, and why it is so compressed.
+</Voice>
+
+## 1. Split the words
+
+Sūtras are written in sandhi, so first undo it. This step is called <Sa iast="padaccheda" />, "cutting into words". <Sa iast="iko yaṇ aci" /> is three words: <Sa iast="ikaḥ" />, <Sa iast="yaṇ" />, <Sa iast="aci" />. Every folio on this site gives the word split first.
+
+## 2. Read the cases
+
+Pāṇini assigns a job to each grammatical case, and he states those jobs as rules of their own:
+
+<div class="table-wrap">
+<table>
+<thead><tr><th scope="col">Case in the sūtra</th><th scope="col">Its job</th><th scope="col">Rule</th><th scope="col">In 6.1.77</th></tr></thead>
+<tbody>
+<tr><td>genitive (6th)</td><td>what is replaced</td><td><SutraRef id="1.1.49" /></td><td><Sa iast="ikaḥ" />, "in place of ik"</td></tr>
+<tr><td>nominative (1st)</td><td>what replaces it</td><td>(the default)</td><td><Sa iast="yaṇ" />, "yaṇ comes in"</td></tr>
+<tr><td>locative (7th)</td><td>what must follow</td><td><SutraRef id="1.1.66" /></td><td><Sa iast="aci" />, "when ac follows"</td></tr>
+<tr><td>ablative (5th)</td><td>what must precede</td><td><SutraRef id="1.1.67" /></td><td>none here</td></tr>
+</tbody>
+</table>
+</div>
+
+So <Sa iast="iko yaṇ aci" /> already reads: *in place of ik, yaṇ, when ac follows.*
+
+## 3. Expand the names
+
+<Sa iast="ik" />, <Sa iast="yaṇ" /> and <Sa iast="ac" /> are not words of the language. They are compressed names for sets of sounds, built from the Śivasūtras by a method you will learn in the next module:
+
+- <Sa iast="ik" /> = i, u, ṛ, ḷ (with their long forms)
+- <Sa iast="yaṇ" /> = y, v, r, l
+- <Sa iast="ac" /> = every vowel
+
+Now: *in place of i, u, ṛ or ḷ, a semivowel comes in when a vowel follows.*
+
+## 4. Supply what is carried over
+
+Some words a sūtra needs are not written in it at all. They continue in force from an earlier sūtra, which is called <Sa iast="anuvṛtti" />. Varadarāja states the habit outright in his gloss on the very first rule of the Laghusiddhāntakaumudī: <Sa iast="sūtreṣv adṛṣṭaṃ padaṃ sūtrāntarād anuvartanīyaṃ sarvatra" />, "a word not seen in a sūtra is to be carried over from another sūtra, everywhere."
+
+Here the carried word is <Sa iast="saṃhitāyām" />, "in close junction", from <SutraRef id="6.1.72" />. That sūtra is a heading (<Sa iast="adhikāra" />) that governs a long stretch of rules after it. With it supplied, the rule is complete:
+
+<p class="example"><span><strong>6.1.77, unpacked:</strong> when sounds run together, i, u, ṛ or ḷ is replaced by a semivowel if a vowel follows.</span></p>
+
+## Which semivowel?
+
+The rule offers four substitutes. The general principle <SutraRef id="1.1.50" />, <Sa iast="sthāne 'ntaratamaḥ" />, picks the one closest to the original. i is palatal, so it becomes the palatal y. u becomes v, ṛ becomes r, ḷ becomes l. Step through it:
+
+<Steps
+  client:visible
+  label="dadhi + atra by 6.1.77"
+  steps={[
+    { parts: [["daDi"], [" "], ["atra"]], note: "Two words: dadhi ‘curd’ and atra ‘here’. Spoken together, their sounds run into each other." },
+    { parts: [["daD"], ["i", "mark"], ["atra"]], note: "In close junction (6.1.72) the final i (an ik sound) stands directly before a (an ac sound). The conditions of 6.1.77 are met." },
+    { sutra: "6.1.77", parts: [["daD"], ["y", "new"], ["atra"]], note: "i is replaced by a yaṇ sound. Of y v r l, the palatal y is closest to the palatal i (1.1.50)." },
+    { parts: [["daDyatra"]], note: "Result: dadhyatra, ‘the curd (is) here’. The same rule gives madhv atra from madhu + atra, and pitrartham from pitṛ + artham." },
+  ]}
+/>
+
+<Voice quote="vp-1.13" voice="darsana">
+  Bhartṛhari's claim for grammar is large: words hold together our knowledge of things and of action, and the truth of words is not reached without grammar. The four habits on this page are the working end of that claim. Each one turns a compressed string back into a precise statement about language.
+</Voice>
+
+<Practice
+  items={8}
+  skills={[
+    "Splitting a sūtra into words",
+    "Naming the job of each case",
+    "Saying which earlier word is carried over",
+    "Choosing the closest substitute by 1.1.50",
+  ]}
+/>

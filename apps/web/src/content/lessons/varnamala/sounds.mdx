@@ -1,0 +1,64 @@
+---
+title: The sounds of Sanskrit
+deva: वर्णाः
+module: varnamala
+order: 1
+minutes: 15
+summary: Sanskrit grammarians map every sound by where the mouth makes it and how. Learn that map first and the rules that follow become readable.
+---
+import Sa from "../../../components/Sa.astro";
+import Voice from "../../../components/Voice.astro";
+import SoundGrid from "../../../components/SoundGrid.astro";
+import SutraRef from "../../../components/SutraRef.astro";
+import Practice from "../../../components/Practice.astro";
+
+Most alphabets are historical accidents. The Sanskrit one is a phonetics lesson. Its order runs from the back of the mouth to the lips, and within each place it moves through a fixed sequence of manners. Indian grammarians describe every sound with two coordinates:
+
+- **Place**, <Sa iast="sthāna" />: where the sound is made (throat, palate, roof of the mouth, teeth, lips).
+- **Effort**, <Sa iast="prayatna" />: how the passage is shaped (full contact, slight contact, open).
+
+Hold on to those two words. Pāṇini's definition of a sound-class, <SutraRef id="1.1.9" />, is built from exactly them, and much of sandhi is the mouth taking the shortest path from one place to the next.
+
+<Voice quote="mbh-raksa" voice="bhasya">
+  Patañjali's first reason for studying grammar is preservation. The three operations he names, deletion (lopa), augment (āgama) and sound-change (varṇavikāra), are the operations this course teaches. Each one is defined over the sounds on this page.
+</Voice>
+
+## Vowels
+
+Vowels come in short and long pairs. Length is real: a long vowel takes twice the time of a short one, and Pāṇini defines length by timing, as you will see in <SutraRef id="1.2.27" />. Four vowels, e, ai, o and au, have no short partner in Sanskrit.
+
+<SoundGrid />
+
+## Reading the stop grid
+
+Read the 25 stops as a grid, not a list.
+
+- **Rows are places.** Each row is a <Sa iast="varga" />, named by its first letter: <Sa iast="ka" />-varga, <Sa iast="ca" />-varga, <Sa iast="ṭa" />-varga, <Sa iast="ta" />-varga, <Sa iast="pa" />-varga.
+- **Columns are manners.** Voiceless, voiceless with a puff of breath, voiced, voiced with breath, nasal.
+
+Two contrasts trip up English speakers.
+
+1. **Aspiration is a separate sound.** *kh* is *k* with breath released, as in *ink-horn*. *th* is *t* with breath, as in *hot-house*, never the *th* of *thin*. *bh* is *b* with breath, as in *club-house*. Writing *Buddha* with *dh* records a real difference.
+2. **Retroflex and dental are different places.** For *ṭ ḍ ṇ* the tongue tip curls back to touch the roof of the mouth. For *t d n* it touches the back of the upper teeth. The dot under the letter marks the retroflex row.
+
+<Voice quote="vp-1.46" voice="darsana">
+  Bhartṛhari separates the word as it exists in the mind from the audible sounds that reveal it, as flame lies hidden in a kindling-stick until it is struck. This lesson is about the struck flame: the sounds the mouth produces. Later lessons return to the word itself.
+</Voice>
+
+## Why this order matters to Pāṇini
+
+Pāṇini's rules constantly speak of whole columns and rows at once: all voiced unaspirated stops, all nasals, all sounds made at the palate. Because the alphabet is already a grid, such groups are easy to name. In the next module you will see that his own sound-list, the fourteen Śivasūtras, reorders the sounds once more so that the groups his rules need sit side by side.
+
+<div class="callout">
+  <strong>Try the script switch.</strong> The <span lang="sa">अ</span> / <span lang="sa">अ</span> a / a buttons in the header show Sanskrit in Devanagari, in both scripts, or in romanisation (IAST). Press <kbd>t</kbd> anywhere to cycle through them.
+</div>
+
+<Practice
+  items={8}
+  skills={[
+    "Placing a sound in its row (varga) and column",
+    "Telling aspirated from unaspirated stops",
+    "Telling retroflex from dental",
+    "Reading IAST diacritics aloud",
+  ]}
+/>

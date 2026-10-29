@@ -1,0 +1,75 @@
+---
+title: Length, pitch and nasality
+deva: ह्रस्वदीर्घप्लुताः
+module: samjna
+order: 4
+minutes: 15
+summary: LSK 5–9 give every vowel three properties. Length is measured against a reference vowel, pitch is high, low or both, and a vowel is either nasal or not. Together they make eighteen kinds of a.
+lskRange: 5–9
+sutras: ["1.2.27", "1.2.29", "1.2.30", "1.2.31", "1.1.8"]
+---
+import Sa from "../../../components/Sa.astro";
+import Voice from "../../../components/Voice.astro";
+import SutraFolio from "../../../components/SutraFolio.astro";
+import SutraRef from "../../../components/SutraRef.astro";
+import Practice from "../../../components/Practice.astro";
+
+## Length by measure
+
+<SutraFolio id="1.2.27" />
+
+Pāṇini does not say "a short vowel is brief". He gives a measuring stick. Inside the sūtra, *ū* stands for three reference vowels at once: short *u*, long *ū*, and prolated *ū3*. Varadarāja's gloss unpacks it as <Sa iast="uś ca ūś ca ū3ś ca vaḥ" />. A vowel that lasts as long as the first is **short** (<Sa iast="hrasva" />, one *mātrā*), as long as the second is **long** (<Sa iast="dīrgha" />, two), and as long as the third is **prolated** (<Sa iast="pluta" />, three).
+
+Prolated vowels are rare in ordinary prose. They appear, for instance, when someone is called from a distance, and they are written with a 3: *devadatta3*.
+
+## Pitch
+
+The same gloss ends: <Sa iast="sa pratyekam udāttādibhedena tridhā" />, "each of these is threefold by the distinction of udātta and the rest." Three short sūtras name the three pitches:
+
+<SutraFolio id="1.2.29" compact />
+<SutraFolio id="1.2.30" compact />
+<SutraFolio id="1.2.31" compact />
+
+Pitch accent is marked and recited in the Veda. Classical Sanskrit texts do not mark it, but the grammar still describes it, and several rules depend on it.
+
+<Voice quote="kas-1.1.9-18" voice="bhasya">
+  The Kāśikā on 1.1.9 counts the result: through the distinctions of short, long and prolated, with pitch and nasality, the vowels divide eighteen ways. The table below works through the arithmetic.
+</Voice>
+
+## Nasality
+
+<SutraFolio id="1.1.8" />
+
+A nasal vowel sounds through mouth and nose together. Any vowel can be nasal or oral, which doubles the count again.
+
+## Eighteen kinds of a
+
+<div class="table-wrap">
+<table>
+<thead><tr><th scope="col">Property</th><th scope="col">Values</th><th scope="col">Count</th></tr></thead>
+<tbody>
+<tr><td>length</td><td>short, long, prolated</td><td>3</td></tr>
+<tr><td>pitch</td><td>udātta, anudātta, svarita</td><td>× 3</td></tr>
+<tr><td>nasality</td><td>oral, nasal</td><td>× 2</td></tr>
+<tr><th scope="row">varieties of a, i, u, ṛ</th><td></td><td><strong>18</strong></td></tr>
+<tr><th scope="row">varieties of ḷ</th><td>no long form, so 2 × 3 × 2</td><td><strong>12</strong></td></tr>
+<tr><th scope="row">varieties of e, ai, o, au</th><td>no short form, so 2 × 3 × 2</td><td><strong>12</strong></td></tr>
+</tbody>
+</table>
+</div>
+
+Why count at all? Because the Śivasūtras list only *a*, not eighteen *a*'s. Something has to let one short letter stand for every variety, and that is the job of <SutraRef id="1.1.69" /> in the next lesson.
+
+<Voice quote="vp-1.48" voice="darsana">
+  Length is a matter of time: one, two or three measures. Bhartṛhari observes that sound is born in sequence while the word itself has no before and after; it only appears in the form of a sequence. The mātrās measured here belong to the sound that reveals the word, not to the word itself.
+</Voice>
+
+<Practice
+  items={8}
+  skills={[
+    "Classifying vowels as short, long or prolated",
+    "Naming the three pitches",
+    "Counting varieties of a vowel",
+    "Recognising nasal vowels",
+  ]}
+/>

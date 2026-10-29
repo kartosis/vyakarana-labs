@@ -1,0 +1,225 @@
+---
+/**
+ * A sūtra set as a manuscript folio (pothi leaf): sūtra text framed by double vermilion rules,
+ * LSK number in the left margin, Aṣṭādhyāyī number and Pramāṇa link in the right margin,
+ * then the apparatus — word split, carried-over words, Varadarāja's vṛtti, plain meaning.
+ */
+import { getEntry } from "astro:content";
+import Sa from "./Sa.astro";
+import SutraRef from "./SutraRef.astro";
+import { devaNumber, devaToIast } from "../lib/sanskrit";
+import { pramanaLink } from "../lib/pramana";
+
+interface Props {
+  id: string;
+  /** heading level for the sūtra line */
+  level?: 2 | 3 | 4;
+  compact?: boolean;
+}
+const { id, level = 3, compact = false } = Astro.props;
+const entry = await getEntry("sutras", id);
+if (!entry) throw new Error(`SutraFolio: no sūtra ${id} in data/sutras`);
+const s = entry.data;
+const link = pramanaLink(id);
+const H = `h${level}` as "h2" | "h3" | "h4";
+const kindLabel: Record<string, string> = {
+  "saṃjñā": "defines a term",
+  "paribhāṣā": "tells how to read rules",
+  "vidhi": "operation",
+  "niyama": "restriction",
+  "atideśa": "extension",
+  "adhikāra": "heading",
+};
+---
+<article class:list={["folio", { "folio--compact": compact }]} id={`sutra-${id}`} aria-labelledby={`sutra-${id}-h`}>
+  <div class="folio-margin folio-margin--start">
+    {
+      s.lsk !== null ? (
+        <p class="folio-lsk">
+          <span class="folio-lsk-n" lang="sa">॥ {devaNumber(s.lsk)} ॥</span>
+          <span class="folio-lsk-label">
+            <abbr title="Number in Varadarāja's Laghusiddhāntakaumudī">LSK</abbr> {s.lsk}
+            {!s.lskVerified && (
+              <abbr class="folio-unverified" title="This LSK number is inferred from its neighbours and awaits checking against an edition.">†</abbr>
+            )}
+          </span>
+        </p>
+      ) : (
+        <p class="folio-lsk folio-lsk--none"><span class="folio-lsk-label">{kindLabel[s.kind] ?? s.kind}</span></p>
+      )
+    }
+  </div>
+
+  <div class="folio-text">
+    <H class="folio-sutra sa-block" id={`sutra-${id}-h`}>
+      <span class="sa-deva" lang="sa">{s.deva}</span><span class="folio-danda" aria-hidden="true">॥</span>
+      <span class="sa-iast" lang="sa-Latn">{devaToIast(s.deva)}</span>
+    </H>
+
+    {
+      !compact && (
+        <dl class="folio-apparatus">
+          <div>
+            <dt><Sa iast="padaccheda" /> <span class="folio-gloss">word split</span></dt>
+            <dd><Sa deva={s.pada.join(" । ")} /></dd>
+          </div>
+          {s.anuvrtti.length > 0 && (
+            <div>
+              <dt><Sa iast="anuvṛtti" /> <span class="folio-gloss">carried over</span></dt>
+              <dd>
+                {s.anuvrtti.map(([word, from], i) => (
+                  <span class="folio-anu">
+                    <Sa deva={word} /> <span class="folio-from">from</span> <SutraRef id={from} />
+                    {i < s.anuvrtti.length - 1 && <span aria-hidden="true">; </span>}
+                  </span>
+                ))}
+              </dd>
+            </div>
+          )}
+          {s.vrtti && s.vrttiVerified && (
+            <div>
+              <dt><Sa iast="vṛtti" /> <span class="folio-gloss">Varadarāja's gloss</span></dt>
+              <dd class="folio-vrtti"><Sa block deva={s.vrtti} /></dd>
+            </div>
+          )}
+          <div>
+            <dt>Meaning</dt>
+            <dd class="folio-meaning">{s.meaning}</dd>
+          </div>
+        </dl>
+      )
+    }
+    {compact && <p class="folio-meaning">{s.meaning}</p>}
+  </div>
+
+  <div class="folio-margin folio-margin--end">
+    <p class="folio-num">
+      <a href={`/sutra/${id}/`} class="folio-num-link"><span class="visually-hidden">Aṣṭādhyāyī </span>{id}</a>
+    </p>
+    <p class="folio-ext">
+      <a href={link.href} rel="external" title={link.label}>
+        Pramāṇa<svg aria-hidden="true" viewBox="0 0 12 12" width="11" height="11"><path d="M4 2h6v6M10 2 3 9" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+      </a>
+      {!link.exact && <span class="folio-ext-note">pāda page</span>}
+    </p>
+  </div>
+</article>
+
+<style>
+  @layer molecules {
+    .folio {
+      --c-folio-bg: var(--s-color-leaf);
+      --c-folio-rule: var(--s-color-rubric);
+      container-type: inline-size;
+      display: grid;
+      grid-template-columns: 4.25rem minmax(0, 1fr) 5.5rem;
+      gap: 0;
+      margin-block: var(--s-stack-l);
+      padding-block: var(--p-space-5);
+      background: var(--c-folio-bg);
+      border: 1px solid var(--s-color-hairline);
+      border-radius: var(--s-radius-leaf);
+      box-shadow: var(--s-shadow-leaf);
+    }
+    .folio-text {
+      padding-inline: var(--p-space-5);
+      border-inline: 3px double var(--c-folio-rule);
+      min-inline-size: 0;
+    }
+    .folio-margin {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--p-space-2);
+      padding-inline: var(--p-space-2);
+      font-size: var(--s-text-small);
+      color: var(--s-color-text-soft);
+      text-align: center;
+    }
+    .folio-margin p { margin: 0; }
+    .folio-lsk { display: grid; gap: var(--p-space-1); }
+    .folio-lsk-n {
+      font-family: var(--s-font-sanskrit);
+      color: var(--s-color-rubric);
+      font-size: 1.15rem;
+      white-space: nowrap;
+    }
+    .folio-lsk-label abbr { text-decoration: none; }
+    .folio-unverified { color: var(--s-color-rubric); cursor: help; }
+    .folio-lsk--none .folio-lsk-label { font-style: italic; line-height: 1.3; }
+
+    .folio-sutra {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0 0.5em;
+      font-weight: 400;
+      font-size: clamp(1.5rem, 1.1rem + 2.2cqi, 2.1rem);
+      line-height: 1.35;
+      margin-block-end: var(--p-space-3);
+    }
+    .folio-sutra .sa-iast {
+      font-size: 0.62em;
+      color: var(--s-color-text-soft);
+      flex-basis: 100%;
+    }
+    .folio-danda { font-family: var(--s-font-sanskrit); color: var(--s-color-rubric); font-size: 0.9em; }
+    :root[data-script="iast"] .folio-danda { display: none; }
+
+    .folio-apparatus { margin: 0; display: grid; gap: var(--p-space-3); }
+    .folio-apparatus > div {
+      display: grid;
+      grid-template-columns: 9.5rem minmax(0, 1fr);
+      gap: var(--p-space-4);
+      padding-block-start: var(--p-space-3);
+      border-block-start: 1px solid var(--s-color-hairline);
+    }
+    .folio-apparatus dt {
+      font-size: var(--s-text-small);
+      color: var(--s-color-text-soft);
+      line-height: 1.35;
+    }
+    .folio-gloss { display: block; color: var(--s-color-text-faint); font-style: italic; }
+    .folio-apparatus dd { margin: 0; }
+    .folio-from { color: var(--s-color-text-faint); font-size: var(--s-text-small); }
+    .folio-meaning { font-size: var(--s-text-lead); line-height: 1.45; }
+    .folio--compact .folio-meaning { font-size: var(--s-text-body); }
+
+    .folio-num-link {
+      color: var(--s-color-rubric);
+      font-size: var(--s-text-body);
+      font-variant-numeric: lining-nums;
+      text-decoration: none;
+      border-block-end: 1px solid currentColor;
+    }
+    .folio-ext a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25em;
+      min-block-size: 1.5rem;
+    }
+    .folio-ext-note { display: block; font-style: italic; color: var(--s-color-text-faint); }
+
+    @container (inline-size < 34rem) {
+      .folio-apparatus > div { grid-template-columns: 1fr; gap: var(--p-space-1); }
+      .folio-gloss { display: inline; }
+      .folio-gloss::before { content: "— "; }
+    }
+  }
+
+  @media (width < 40rem) {
+    @layer molecules {
+      .folio {
+        grid-template-columns: minmax(0, 1fr);
+        border-radius: 1.25rem / 0.75rem;
+        padding-block: var(--p-space-4);
+      }
+      .folio-text { border-inline: 0; border-block: 3px double var(--s-color-rubric); padding-block: var(--p-space-4); }
+      .folio-margin { flex-direction: row; justify-content: space-between; padding-inline: var(--p-space-4); }
+      .folio-margin--start { order: -1; padding-block-end: var(--p-space-3); }
+      .folio-margin--end { padding-block-start: var(--p-space-3); }
+      .folio-lsk { display: flex; gap: var(--p-space-3); align-items: baseline; }
+      .folio-ext-note { display: inline; margin-inline-start: 0.4em; }
+    }
+  }
+</style>

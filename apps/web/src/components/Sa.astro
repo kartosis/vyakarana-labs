@@ -1,0 +1,31 @@
+---
+/**
+ * Sanskrit text in both scripts. Pass one of slp / deva / iast / hk; the other script is derived at build time.
+ * The visible script follows <html data-script="deva|both|iast">.
+ */
+import { transliterate } from "@vl/engine";
+
+interface Props {
+  slp?: string;
+  deva?: string;
+  iast?: string;
+  hk?: string;
+  block?: boolean;
+  class?: string;
+}
+const { slp, deva, iast, hk, block = false, class: cls } = Astro.props;
+let d = deva ?? "";
+let i = iast ?? "";
+if (slp) {
+  d = transliterate(slp, "slp1", "deva");
+  i = transliterate(slp, "slp1", "iast");
+} else if (hk) {
+  d = transliterate(hk, "hk", "deva");
+  i = transliterate(hk, "hk", "iast");
+} else if (deva && !iast) {
+  i = transliterate(deva, "deva", "iast");
+} else if (iast && !deva) {
+  d = transliterate(iast, "iast", "deva");
+}
+---
+<span class:list={[block ? "sa-block" : "sa", cls]}><span class="sa-deva" lang="sa">{d}</span><span class="sa-iast" lang="sa-Latn">{i}</span></span>

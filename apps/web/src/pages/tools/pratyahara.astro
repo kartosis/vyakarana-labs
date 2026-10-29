@@ -1,0 +1,14 @@
+---
+import Base from "../../layouts/Base.astro";
+import ShivaBoard from "../../islands/ShivaBoard.tsx";
+---
+<Base title="Pratyāhāra builder" kind="tool" description="Form and expand Pāṇini's pratyāhāras from the fourteen Śivasūtras (Aṣṭādhyāyī 1.1.71).">
+  <div class="page">
+    <header class="page-head">
+      <p class="crumbs"><a href="/tools/">Tools</a></p>
+      <h1>Pratyāhāra builder</h1>
+      <p class="lead">Choose a first sound, then any red marker after it. Or choose a name from the list. The rule is <a href="/sutra/1.1.71/">1.1.71 ādir antyena sahetā</a>, taught in <a href="/course/samjna/pratyahara/">Naming a range of sounds</a>.</p>
+    </header>
+    <ShivaBoard client:load initial={["h", "l"]} label="Pratyāhāra builder" />
+  </div>
+</Base>

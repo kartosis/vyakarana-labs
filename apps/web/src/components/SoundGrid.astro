@@ -1,0 +1,122 @@
+---
+/** Static sound inventory: vowels and the 5 × 5 stop grid, generated from the engine. */
+import { transliterate } from "@vl/engine";
+import Sa from "./Sa.astro";
+
+const say = (s: string) => ("aAiIuUfFxXeEoO".includes(s) ? s : `${s}a`);
+
+const vowels: Array<{ short?: string; long?: string; hint: string }> = [
+  { short: "a", long: "A", hint: "a as in about; ā as in father" },
+  { short: "i", long: "I", hint: "i as in sit; ī as in machine" },
+  { short: "u", long: "U", hint: "u as in put; ū as in rule" },
+  { short: "f", long: "F", hint: "a vowel r, rolled briefly (kṛṣṇa)" },
+  { short: "x", hint: "a vowel l; only short in use (kḷpta)" },
+  { long: "e", hint: "e as in they, held long" },
+  { long: "E", hint: "ai as in aisle" },
+  { long: "o", hint: "o as in go, held long" },
+  { long: "O", hint: "au as in how" },
+];
+
+const rows: Array<{ place: string; sa: string; cons: string; note: string }> = [
+  { place: "throat (velar)", sa: "kaRWya", cons: "kKgGN", note: "back of the tongue on the soft palate" },
+  { place: "palate", sa: "tAlavya", cons: "cCjJY", note: "flat of the tongue on the hard palate" },
+  { place: "roof (retroflex)", sa: "mUrDanya", cons: "wWqQR", note: "tongue tip curled back to the roof" },
+  { place: "teeth (dental)", sa: "dantya", cons: "tTdDn", note: "tongue tip on the back of the upper teeth" },
+  { place: "lips (labial)", sa: "ozWya", cons: "pPbBm", note: "both lips" },
+];
+const cols = ["voiceless", "voiceless, breathy", "voiced", "voiced, breathy", "nasal"];
+---
+<div class="table-wrap">
+  <table class="sound-table">
+    <caption>Vowels (<Sa iast="svara" />). Short and long are paired; e, ai, o, au are long by nature.</caption>
+    <thead>
+      <tr><th scope="col">Short</th><th scope="col">Long</th><th scope="col">Sounds like</th></tr>
+    </thead>
+    <tbody>
+      {vowels.map((v) => (
+        <tr>
+          <td class="sound-cell">{v.short ? <Sa slp={v.short} /> : <span class="sound-none">—</span>}</td>
+          <td class="sound-cell">{v.long ? <Sa slp={v.long} /> : <span class="sound-none">—</span>}</td>
+          <td class="sound-hint">{v.hint}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+<div class="table-wrap">
+  <table class="sound-table">
+    <caption>The 25 stops (<Sa iast="sparśa" />), five places by five manners. Each row is a <Sa iast="varga" />.</caption>
+    <thead>
+      <tr>
+        <th scope="col">Place</th>
+        {cols.map((c) => <th scope="col">{c}</th>)}
+      </tr>
+    </thead>
+    <tbody>
+      {rows.map((r) => (
+        <tr>
+          <th scope="row">
+            <span class="sound-place">{r.place}</span>
+            <Sa slp={r.sa} />
+          </th>
+          {r.cons.split("").map((c) => <td class="sound-cell"><Sa slp={say(c)} /></td>)}
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+<div class="table-wrap">
+  <table class="sound-table">
+    <caption>The rest: semivowels, sibilants, h, and two signs that modify a syllable.</caption>
+    <thead>
+      <tr><th scope="col">Group</th><th scope="col">Sounds</th><th scope="col">Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">semivowels <Sa iast="antaḥstha" /></th>
+        <td class="sound-cell">{"yrlv".split("").map((c) => <><Sa slp={`${c}a`} />{" "}</>)}</td>
+        <td class="sound-hint">y palatal, r retroflex, l dental, v between teeth and lips</td>
+      </tr>
+      <tr>
+        <th scope="row">sibilants <Sa iast="ūṣman" /></th>
+        <td class="sound-cell">{"Szs".split("").map((c) => <><Sa slp={`${c}a`} />{" "}</>)}</td>
+        <td class="sound-hint">ś as in shut (palatal); ṣ with the tongue curled back; s as in sun</td>
+      </tr>
+      <tr>
+        <th scope="row">aspirate</th>
+        <td class="sound-cell"><Sa slp="ha" /></td>
+        <td class="sound-hint">a voiced h, made in the throat</td>
+      </tr>
+      <tr>
+        <th scope="row">anusvāra</th>
+        <td class="sound-cell"><Sa slp="aM" /></td>
+        <td class="sound-hint">a nasal after a vowel (saṃskṛta)</td>
+      </tr>
+      <tr>
+        <th scope="row">visarga</th>
+        <td class="sound-cell"><Sa slp="aH" /></td>
+        <td class="sound-hint">a breath after a vowel, echoing it (rāmaḥ ≈ rāmaha)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<style>
+  @layer molecules {
+    .sound-table { inline-size: 100%; margin-block: var(--p-space-4); }
+    .sound-table caption {
+      caption-side: top;
+      text-align: start;
+      padding-block-end: var(--p-space-2);
+      color: var(--s-color-text-soft);
+      font-size: var(--s-text-small);
+    }
+    .sound-cell { font-size: 1.35rem; white-space: nowrap; }
+    .sound-cell :global(.sa-iast) { font-style: normal; }
+    .sound-hint { color: var(--s-color-text-soft); font-size: var(--s-text-small); }
+    .sound-place { display: block; font-size: var(--s-text-small); font-weight: 400; color: var(--s-color-text-soft); }
+    .sound-none { color: var(--s-color-text-faint); }
+  }
+</style>

@@ -1,0 +1,69 @@
+---
+import "@fontsource/gentium-book-plus/400.css";
+import "@fontsource/gentium-book-plus/400-italic.css";
+import "@fontsource/gentium-book-plus/700.css";
+import "@fontsource/tiro-devanagari-sanskrit/400.css";
+import "../styles/tokens.css";
+import "../styles/base.css";
+import "../styles/layout.css";
+import "../styles/islands.css";
+import SiteHeader from "../components/SiteHeader.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+  /** page kind, for layout hooks */
+  kind?: "home" | "lesson" | "page" | "tool";
+}
+const {
+  title,
+  description = "Learn Sanskrit grammar the way Pāṇini built it — in Laghusiddhāntakaumudī order, with Patañjali and Bhartṛhari beside every rule.",
+  kind = "page",
+} = Astro.props;
+const fullTitle = title === "Vyākaraṇa Labs" ? title : `${title} — Vyākaraṇa Labs`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+<!doctype html>
+<html lang="en" data-script="deva" data-kind={kind}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#F6EFE2" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#15110D" media="(prefers-color-scheme: dark)" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <!-- Apply saved script and theme before first paint (wrapped: storage can throw). -->
+    <script is:inline>
+      (() => {
+        const root = document.documentElement;
+        try {
+          const s = localStorage.getItem("vl:script");
+          if (s === "deva" || s === "both" || s === "iast") root.dataset.script = s;
+          const t = localStorage.getItem("vl:theme");
+          if (t === "light" || t === "dark") root.dataset.theme = t;
+        } catch {}
+      })();
+    </script>
+    <script type="speculationrules" is:inline>
+      { "prefetch": [{ "where": { "and": [{ "href_matches": "/*" }, { "not": { "href_matches": "/api/*" } }] }, "eagerness": "moderate" }] }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <SiteHeader />
+    <slot name="before-main" />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <SiteFooter />
+  </body>
+</html>

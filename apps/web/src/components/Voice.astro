@@ -1,0 +1,83 @@
+---
+/**
+ * A commentary voice beside the root text, as in a pañcapāṭha manuscript page.
+ *   voice="bhasya"  — Patañjali, Kātyāyana and the vṛttis (Kāśikā …)
+ *   voice="darsana" — Bhartṛhari's philosophy of language
+ * Quotes come from data/quotes.yaml; only verified passages render.
+ * The default slot carries this project's short commentary on why the passage matters here.
+ */
+import { getEntry } from "astro:content";
+import { pramanaCommentary } from "../lib/pramana";
+import { devaToIast } from "../lib/sanskrit";
+
+interface Props {
+  quote: string;
+  voice: "bhasya" | "darsana";
+}
+const { quote, voice } = Astro.props;
+const q = await getEntry("quotes", quote);
+if (!q) throw new Error(`Voice: no quote ${quote}`);
+if (!q.data.verified) throw new Error(`Voice: quote ${quote} is not verified`);
+const d = q.data;
+const pramana =
+  d.work.startsWith("Vākyapadīya") ? pramanaCommentary.darsana :
+  d.work.startsWith("Kāśikā") ? pramanaCommentary.kasika :
+  d.work.startsWith("Vārttika") ? pramanaCommentary.varttika :
+  pramanaCommentary.mahabhasya;
+const label = voice === "bhasya" ? "Bhāṣya" : "Darśana";
+const hasNote = Astro.slots.has("default");
+---
+<aside class:list={["gloss", `gloss--${voice}`]} aria-label={`${label}: ${d.author}, ${d.work}`}>
+  <p class="gloss-voice">
+    <span class="gloss-voice-name">{label}</span>
+    <span class="gloss-author">{d.author}</span>
+  </p>
+  <blockquote class="gloss-quote sa-block" cite={d.checkedAt}>
+    <span class="sa-deva" lang="sa">{d.deva}</span>
+    <span class="sa-iast" lang="sa-Latn">{devaToIast(d.deva)}</span>
+  </blockquote>
+  <p class="gloss-translation">{d.translation}</p>
+  <p class="gloss-cite">
+    <cite>{d.work}</cite>, {d.ref}. <a href={pramana} rel="external">Catalogue entry on Pramāṇa</a>
+  </p>
+  {hasNote && <div class="gloss-note"><slot /></div>}
+</aside>
+
+<style>
+  @layer molecules {
+    .gloss {
+      --c-gloss-accent: var(--s-color-rubric);
+      font-size: var(--s-text-small);
+      line-height: 1.5;
+      color: var(--s-color-text-soft);
+      padding-inline-start: var(--p-space-4);
+      border-inline-start: 2px solid var(--c-gloss-accent);
+      margin-block: var(--s-stack-l);
+    }
+    .gloss--darsana { --c-gloss-accent: var(--s-color-link); }
+    .gloss p { margin: 0; }
+    .gloss > * + * { margin-block-start: var(--p-space-2); }
+    .gloss-voice { display: flex; gap: 0.6em; align-items: baseline; }
+    .gloss-voice-name {
+      font-weight: 700;
+      color: var(--c-gloss-accent);
+      font-size: var(--s-text-body);
+    }
+    .gloss-author { font-style: italic; }
+    .gloss-quote {
+      margin: 0;
+      color: var(--s-color-text);
+      font-size: 1.05rem;
+      line-height: 1.55;
+    }
+    .gloss-quote .sa-iast { font-size: 0.92em; color: var(--s-color-text-soft); margin-block-start: 0.2em; }
+    .gloss-translation { color: var(--s-color-text); font-style: italic; }
+    .gloss-cite { font-size: 0.8rem; }
+    .gloss-note {
+      padding-block-start: var(--p-space-2);
+      border-block-start: 1px solid var(--s-color-hairline);
+      color: var(--s-color-text-soft);
+    }
+    .gloss-note :global(p + p) { margin-block-start: var(--p-space-2); }
+  }
+</style>

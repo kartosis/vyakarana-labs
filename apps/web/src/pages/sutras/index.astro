@@ -1,0 +1,62 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import { devaToIast } from "../../lib/sanskrit";
+
+const sutras = await getCollection("sutras");
+const key = (id: string) => id.split(".").map((n) => n.padStart(3, "0")).join(".");
+const byAst = [...sutras].sort((x, y) => key(x.id).localeCompare(key(y.id)));
+const lsk = sutras.filter((s) => s.data.lsk !== null).sort((x, y) => x.data.lsk! - y.data.lsk!);
+---
+<Base title="Sūtras" description="Every sūtra taught or cited on Vyākaraṇa Labs, by Aṣṭādhyāyī number and in Laghusiddhāntakaumudī order.">
+  <div class="page-narrow">
+    <header class="page-head">
+      <h1>Sūtras</h1>
+      <p class="lead">Every sūtra taught or cited in the course so far, {sutras.length} in all. Each has its own page with word split, carried-over words, gloss and links to the commentaries.</p>
+    </header>
+
+    <h2 class="idx-h">In Laghusiddhāntakaumudī order</h2>
+    <div class="table-wrap">
+      <table class="idx">
+        <thead><tr><th scope="col">LSK</th><th scope="col">Sūtra</th><th scope="col">Aṣṭādhyāyī</th><th scope="col">Meaning</th></tr></thead>
+        <tbody>
+          {lsk.map((s) => (
+            <tr>
+              <td class="idx-n">{s.data.lsk}{!s.data.lskVerified && <abbr title="LSK number inferred, awaiting verification">†</abbr>}</td>
+              <td><a href={`/sutra/${s.id}/`} class="sa"><span class="sa-deva" lang="sa">{s.data.deva}</span><span class="sa-iast" lang="sa-Latn">{devaToIast(s.data.deva)}</span></a></td>
+              <td class="idx-n">{s.id}</td>
+              <td class="idx-m">{s.data.meaning}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="idx-h">By Aṣṭādhyāyī number</h2>
+    <ul class="idx-list">
+      {byAst.map((s) => (
+        <li>
+          <a href={`/sutra/${s.id}/`}><span class="idx-n">{s.id}</span> <span class="sa"><span class="sa-deva" lang="sa">{s.data.deva}</span><span class="sa-iast" lang="sa-Latn">{devaToIast(s.data.deva)}</span></span></a>
+        </li>
+      ))}
+    </ul>
+    <p class="idx-foot">† LSK number inferred from its neighbours; verified numbers were checked against the Laghusiddhāntakaumudī text. See <a href="/sources/">Sources</a>.</p>
+  </div>
+</Base>
+
+<style>
+  @layer pages {
+    .idx-h { font-size: var(--s-text-h3); margin-block: var(--s-stack-l) var(--p-space-3); }
+    .idx { inline-size: 100%; }
+    .idx th, .idx td { padding: 0.45em 0.6em; border-block-end: 1px solid var(--s-color-hairline); text-align: start; vertical-align: top; }
+    .idx thead th { font-size: var(--s-text-small); color: var(--s-color-text-soft); border-block-end: 2px solid var(--s-color-border); }
+    .idx-n { color: var(--s-color-rubric); font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .idx-m { color: var(--s-color-text-soft); font-size: var(--s-text-small); }
+    .idx abbr { text-decoration: none; cursor: help; }
+    .idx-list { columns: 2 16rem; list-style: none; padding: 0; margin: 0; }
+    .idx-list li { break-inside: avoid; padding-block: 0.2rem; }
+    .idx-list a { text-decoration: none; color: var(--s-color-text); }
+    .idx-list a:hover { text-decoration: underline; }
+    .idx-foot { margin-block-start: var(--s-stack-l); font-size: var(--s-text-small); color: var(--s-color-text-faint); }
+  }
+</style>

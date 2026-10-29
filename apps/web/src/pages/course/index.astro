@@ -1,0 +1,82 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../layouts/Base.astro";
+
+const modules = (await getCollection("modules")).sort((a, b) => a.data.order - b.data.order);
+const lessons = await getCollection("lessons");
+const byModule = (m: string) =>
+  lessons.filter((l) => l.data.module === m).sort((a, b) => a.data.order - b.data.order);
+---
+<Base title="Course" description="The complete Vyākaraṇa Labs course in Laghusiddhāntakaumudī order.">
+  <div class="page-narrow">
+    <header class="page-head">
+      <h1>The course</h1>
+      <p class="lead">
+        A primer on sounds and script, then the Laghusiddhāntakaumudī in Varadarāja's order: technical terms, the three sandhis,
+        nouns by stem and gender, indeclinables, verbs, derivatives, case meanings, compounds and feminine suffixes.
+      </p>
+    </header>
+
+    <ol class="course-modules">
+      {
+        modules.map((m) => {
+          const ls = byModule(m.id);
+          return (
+            <li class:list={["course-module", { "is-soon": m.data.status === "soon" }]} id={m.id}>
+              <h2 class="course-module-h">
+                <span class="course-deva" lang="sa">{m.data.deva}</span>
+                <span class="course-title">{m.data.title}</span>
+              </h2>
+              <p class="course-summary">{m.data.summary}</p>
+              {ls.length > 0 ? (
+                <ol class="course-lessons">
+                  {ls.map((l) => (
+                    <li>
+                      <a href={`/course/${m.id}/${l.id.split("/").pop()}/`}>{l.data.title}</a>
+                      <span class="course-lesson-meta">
+                        {l.data.lskRange ? `LSK ${l.data.lskRange}, ` : ""}about {l.data.minutes} minutes
+                      </span>
+                    </li>
+                  ))}
+                </ol>
+              ) : (
+                <p class="course-soon">In preparation.</p>
+              )}
+            </li>
+          );
+        })
+      }
+    </ol>
+  </div>
+</Base>
+
+<style>
+  @layer pages {
+    .course-modules { list-style: none; margin: 0; padding: 0; counter-reset: cm -1; }
+    .course-module {
+      counter-increment: cm;
+      display: grid;
+      grid-template-columns: 2.5rem minmax(0, 1fr);
+      column-gap: var(--p-space-3);
+      padding-block: var(--p-space-5);
+      border-block-start: 1px solid var(--s-color-hairline);
+    }
+    .course-module::before {
+      content: counter(cm);
+      grid-row: span 3;
+      color: var(--s-color-rubric);
+      font-size: var(--s-text-h3);
+      font-variant-numeric: tabular-nums;
+      line-height: 1.3;
+    }
+    .course-module-h { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 var(--p-space-3); font-size: var(--s-text-h3); }
+    .course-deva { font-family: var(--s-font-sanskrit); font-weight: 400; }
+    .course-title { font-size: var(--s-text-body); color: var(--s-color-text-soft); font-weight: 400; }
+    .is-soon .course-deva { color: var(--s-color-text-faint); }
+    .course-summary { color: var(--s-color-text-soft); margin-block: var(--p-space-2); max-inline-size: 62ch; }
+    .course-lessons { margin: var(--p-space-2) 0 0; padding-inline-start: 1.3em; display: grid; gap: var(--p-space-2); }
+    .course-lessons li::marker { color: var(--s-color-rubric); }
+    .course-lesson-meta { display: block; font-size: var(--s-text-small); color: var(--s-color-text-faint); }
+    .course-soon { font-style: italic; color: var(--s-color-text-faint); margin: 0; }
+  }
+</style>
