@@ -20,13 +20,14 @@
 
 | Field | Value |
 |---|---|
-| **Phase** | P1 — Architecture doc (P0 discovery complete) |
+| **Phase** | M1 — Scaffold + design system + first lessons (architecture done) |
 | **Rounds answered** | 4 / 4 ✅ |
 | **Repo** | `kartosis/vyakarana-labs` — **attached, push verified 2026-10-29**; working copy `/home/claude/vyakarana-labs` |
 | **Last updated** | 2026-10-29 |
 
 ### ▶ NEXT ACTION
-- Write `docs/ARCHITECTURE.md` (flow map, service flows, system setup, data model, API, layout/IA, user-side setup) → push → present to user.
+- **M1** (see `docs/ARCHITECTURE.md §15`): pnpm monorepo scaffold (`apps/web` Astro + Preact, `packages/engine`, `services/api`, `infra/terraform`) → design tokens/layers (Manuscript) → app shell layout (§8.2) → `@vl/engine` lipi + varṇa (Śivasūtra, pratyāhāra) with tests → sūtra data for Saṃjñā → Primer + Saṃjñā lessons → sūtra pages → local build passes.
+- Checkpoint after each bullet.
 
 ---
 
@@ -110,7 +111,7 @@
 
 ---
 
-## 5. Architecture (draft — finalize after Round 4 in `docs/ARCHITECTURE.md`)
+## 5. Architecture — **superseded by `docs/ARCHITECTURE.md` (2026-10-29)**; sketch below kept for history (API Gateway replaced by CloudFront → Lambda Function URL)
 
 ```
 Browser (Astro SSG + TS islands; grammar engine in TS, client-side)
@@ -130,7 +131,7 @@ IaC: Terraform (remote state S3 + lock) · CI/CD: GitHub Actions + OIDC role · 
 ## 6. Phase checklist
 
 - [x] **P0 Discovery** — Round 1 ✅ · Round 2 ✅ · Round 3 ✅ · Round 4 ✅
-- [ ] **P1 Architecture doc** — flow map, service flow, data model, API contract, layout/IA, wireframes → user sign-off
+- [x] **P1 Architecture doc** — `docs/ARCHITECTURE.md`: context, containers, flow map, 7 service flows, data model, API, engine, IA/layout, content plan, IaC, CI/CD, $0 guardrails, user checklist, milestones M1–M7
 - [ ] **P2 Repo scaffold** — monorepo (`apps/web`, `packages/engine`, `services/api`, `infra/`), lint/test/format, CI
 - [ ] **P3 Design system** — tokens (3-tier), layers, typography (Devanagari + Latin), components
 - [ ] **P4 Grammar engine (TS)** — transliteration (IAST↔Devanagari), Śivasūtra/pratyāhāra, sandhi, subanta, tiṅanta, prakriyā tracer + tests
@@ -172,3 +173,4 @@ IaC: Terraform (remote state S3 + lock) · CI/CD: GitHub Actions + OIDC role · 
 - **2026-10-29 · S1** — Round 3 answered (§2). User created repo; add_repo still denied (app lacks access) → asked user to grant Claude GitHub App access. Next: Round 4.
 - **2026-10-29 · S1** — Round 4 answered (§2). Repo access fixed by user; first push OK. Verified Cognito/API GW/Function URL/vidyut facts (§4.3). Next: ARCHITECTURE.md.
 - **2026-10-29 · S1** — Engine decision: hybrid TS + vidyut WASM (§2 5.1). Next: ARCHITECTURE.md.
+- **2026-10-29 · S1** — Wrote `docs/ARCHITECTURE.md` (all 5 Mermaid diagrams render-checked with mmdc). Next: M1 scaffold.
