@@ -24,6 +24,7 @@ provider "aws" {
 
 locals {
   analytics = var.cf_beacon_token != ""
+  accounts  = var.accounts_enabled
 }
 
 module "site" {
@@ -36,6 +37,43 @@ module "site" {
 
   csp_extra_script_src  = local.analytics ? ["https://static.cloudflareinsights.com"] : []
   csp_extra_connect_src = concat(["https://cognito-idp.us-east-1.amazonaws.com"], local.analytics ? ["https://cloudflareinsights.com"] : [])
+
+  api_origin = local.accounts ? module.api[0].origin : null
+}
+
+# ---------------------------------------------------------------- accounts (milestone M3)
+module "email" {
+  source = "../../modules/email"
+  count  = var.ses_domain == "" ? 0 : 1
+  domain = var.ses_domain
+}
+
+module "data" {
+  source = "../../modules/data"
+  count  = local.accounts ? 1 : 0
+  name   = "vl"
+}
+
+module "auth" {
+  source           = "../../modules/auth"
+  count            = local.accounts ? 1 : 0
+  name             = "vl"
+  ses_identity_arn = module.email[0].identity_arn
+  from_address     = "Vyakarana Labs <no-reply@${var.ses_domain}>"
+}
+
+module "api" {
+  source           = "../../modules/api"
+  count            = local.accounts ? 1 : 0
+  name             = "vl"
+  package_path     = "${path.root}/../../../../services/api/dist/vl-api.zip"
+  table_arn        = module.data[0].table_arn
+  table_name       = module.data[0].table_name
+  user_pool_id     = module.auth[0].user_pool_id
+  user_pool_arn    = module.auth[0].user_pool_arn
+  client_id        = module.auth[0].client_id
+  distribution_arn = module.site.distribution_arn
+  alarm_topic_arn  = module.guardrails.alarm_topic_arn
 }
 
 module "guardrails" {

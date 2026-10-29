@@ -6,3 +6,9 @@
 # Phase 3: set acm_validated = true → apply → add the site CNAME in Cloudflare
 domain_name   = ""
 acm_validated = false
+
+# Accounts (milestone M3)
+# Step 1: ses_domain = "sanskrit.identifyragas.com" → apply → add the 3 DKIM CNAMEs in Cloudflare
+# Step 2: once SES shows verified, accounts_enabled = true → apply
+ses_domain       = ""
+accounts_enabled = false
