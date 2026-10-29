@@ -179,7 +179,12 @@ export const VRDDHI_SOUNDS = ["A", "E", "O"] as const; // 1.1.1
 // ---------------------------------------------------------------------------
 
 export type Sthana = "kantha" | "talu" | "murdhan" | "danta" | "ostha" | "nasika";
-export type Abhyantara = "sprsta" | "isatsprsta" | "isadvivrta" | "vivrta";
+/**
+ * Internal effort (ābhyantara prayatna), four-fold as in the Laghusiddhāntakaumudī under 1.1.9:
+ * spṛṣṭa (stops), īṣatspṛṣṭa (semivowels), vivṛta (sibilants/h and vowels), saṃvṛta (short a in use).
+ * The Siddhāntakaumudī instead gives īṣadvivṛta for the sibilants; we follow the LSK course.
+ */
+export type Abhyantara = "sprsta" | "isatsprsta" | "vivrta" | "samvrta";
 
 export interface Articulation {
   readonly sthana: readonly Sthana[];
@@ -218,8 +223,8 @@ export function articulation(s: string): Articulation {
   const table: Record<string, [Sthana[], Abhyantara]> = {
     y: [["talu"], "isatsprsta"], r: [["murdhan"], "isatsprsta"],
     l: [["danta"], "isatsprsta"], v: [["danta", "ostha"], "isatsprsta"],
-    S: [["talu"], "isadvivrta"], z: [["murdhan"], "isadvivrta"],
-    s: [["danta"], "isadvivrta"], h: [["kantha"], "isadvivrta"],
+    S: [["talu"], "vivrta"], z: [["murdhan"], "vivrta"],
+    s: [["danta"], "vivrta"], h: [["kantha"], "vivrta"],
   };
   const [sthana, abhyantara] = table[s]!;
   return { sthana, abhyantara, ghosa, mahaprana };
@@ -232,7 +237,15 @@ export function articulation(s: string): Articulation {
  */
 export function isSavarna(x: string, y: string): boolean {
   if (isVowel(x) !== isVowel(y)) return false; // 1.1.10
-  if (isVowel(x)) {
+  return sharesPlaceAndEffort(x, y);
+}
+
+/**
+ * 1.1.9 alone, without the 1.1.10 block: same oral place and same internal effort.
+ * Used to show why nājjhalau is needed — e.g. i ~ ś (both tālu, vivṛta) and a ~ h (both kaṇṭha, vivṛta).
+ */
+export function sharesPlaceAndEffort(x: string, y: string): boolean {
+  if (isVowel(x) && isVowel(y)) {
     const cls = (v: string) =>
       "aA".includes(v) ? "a" : "iI".includes(v) ? "i" : "uU".includes(v) ? "u" : "fFxX".includes(v) ? "f" : v;
     return cls(x) === cls(y);

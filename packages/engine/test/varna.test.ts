@@ -5,6 +5,7 @@ import {
   expandPratyahara,
   grade,
   isSavarna,
+  sharesPlaceAndEffort,
   pratyahara,
   shivaSutraText,
   standardPratyaharas,
@@ -91,11 +92,18 @@ describe("savarṇa (1.1.9–1.1.10)", () => {
     expect(isSavarna(x, y)).toBe(out);
   });
 
+  it("shows why 1.1.10 nājjhalau is needed (Kāśikā: dadhi śītam, daṇḍa-hastaḥ)", () => {
+    expect(sharesPlaceAndEffort("i", "S")).toBe(true);
+    expect(sharesPlaceAndEffort("a", "h")).toBe(true);
+    expect(isSavarna("i", "S")).toBe(false);
+    expect(isSavarna("a", "h")).toBe(false);
+  });
+
   it("follows the Siddhāntakaumudī articulation table", () => {
     expect(articulation("v").sthana).toEqual(["danta", "ostha"]);
     expect(articulation("e").sthana).toEqual(["kantha", "talu"]);
     expect(articulation("N").sthana).toEqual(["kantha", "nasika"]);
-    expect(articulation("h")).toMatchObject({ abhyantara: "isadvivrta", ghosa: true, mahaprana: true });
+    expect(articulation("h")).toMatchObject({ abhyantara: "vivrta", ghosa: true, mahaprana: true });
     expect(articulation("k")).toMatchObject({ abhyantara: "sprsta", ghosa: false, mahaprana: false });
   });
 });
