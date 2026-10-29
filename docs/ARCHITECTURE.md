@@ -429,7 +429,8 @@ sequenceDiagram
 - `data/sutras/*.yaml`: `{id: "1.1.71", lsk: n, deva, iast, padaccheda[], anuvrtti[], vrtti, meaning, notes, pramana: url}`; text keyed from public-domain originals; **no bulk import** of GRETIL (CC BY-NC-SA).
 - `apps/web/src/content/lessons/*.mdx`: frontmatter `{prakarana, order, sutras[], cards[], estMinutes}`; schema validated with zod.
 - `apps/web/src/content/darshana/*.mdx`: `{source, ref, edition}`.
-- Build-time check: every `a.p.s` in content resolves to a `data/sutras` entry, and every Pramāṇa URL matches the pattern.
+- Build-time check: every `a.p.s` in content resolves to a `data/sutras` entry.
+- **Citation chips**: Pramāṇa sūtra URL when the sūtra exists there, otherwise the **pāda URL** (Pramāṇa's 1.1 stops at 1.1.45); availability comes from `data/pramana.json` (to be refreshed by a CI job using Pramāṇa's API).
 
 ---
 

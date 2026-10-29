@@ -18,4 +18,6 @@
 
 ## Citations
 - Every grammatical rule shown to learners cites its sūtra and links to
-  `https://indike.org/pramana/in.vedanga.vyakarana.astadhyayi.{a}.{p}.{s}`.
+  `https://indike.org/pramana/in.vedanga.vyakarana.astadhyayi.{a}.{p}.{s}` — or to the pāda page
+  `…astadhyayi.{a}.{p}` when Pramāṇa lacks that sūtra (see `data/pramana.json`; 1.1.46–1.1.75 are missing).
+- Sanskrit source text shown to learners must be verified (see PROGRESS §4.4); mark unverified items `verified: false`.
