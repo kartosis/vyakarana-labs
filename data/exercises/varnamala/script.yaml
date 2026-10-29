@@ -1,0 +1,50 @@
+cards:
+  - id: lipi.ksa
+    front: ‹kṣa›
+    back: ‹k› + ‹ṣa›
+  - id: lipi.jna
+    front: ‹jña›
+    back: ‹j› + ‹ña›
+  - id: lipi.virama
+    front: What does the virāma do?
+    back: It removes the consonant's inherent a, as in ‹k›.
+items:
+  - id: lipi1
+    type: choice
+    prompt: How is the bare letter ‹ka› read?
+    options: [ka, k, kā, ki]
+    answer: 0
+    explain: Every consonant letter carries a short a unless something removes it.
+  - id: lipi2
+    type: choice
+    prompt: Which vowel sign is written before the consonant it follows in speech?
+    options: [short ‹i›, long ‹ī›, ‹u›, ‹e›]
+    answer: 0
+  - id: lipi3
+    type: text
+    prompt: Type ‹jñāna› in Harvard-Kyoto or IAST.
+    answers: [jñāna]
+  - id: lipi4
+    type: choice
+    prompt: ‹kṣa› is made of…
+    options: [‹k› + ‹ṣa›, ‹k› + ‹sa›, ‹kh› + ‹a›, ‹c› + ‹ṣa›]
+    answer: 0
+  - id: lipi5
+    type: choice
+    prompt: What does the visarga in ‹rāmaḥ› mark?
+    options: [a breath after the vowel, a nasal, a lost a, a long vowel]
+    answer: 0
+  - id: lipi6
+    type: choice
+    prompt: What does the avagraha in ‹so 'yam› mark?
+    options: [an a that merged away in sandhi, a pause for breath, a nasal vowel, the end of a verse]
+    answer: 0
+  - id: lipi7
+    type: text
+    prompt: Type ‹kṛṣṇa›.
+    answers: [kṛṣṇa]
+  - id: lipi8
+    type: choice
+    prompt: Which mark ends a verse or a sūtra?
+    options: [the double daṇḍa, the virāma, the anusvāra, the avagraha]
+    answer: 0

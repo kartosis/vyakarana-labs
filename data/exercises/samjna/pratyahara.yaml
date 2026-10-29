@@ -1,0 +1,82 @@
+cards:
+  - id: prat.ac
+    front: ‹ac›
+    back: every vowel — ‹a i u ṛ ḷ e o ai au›
+  - id: prat.hal
+    front: ‹hal›
+    back: every consonant
+  - id: prat.al
+    front: ‹al›
+    back: every sound
+  - id: prat.ik
+    front: ‹ik›
+    back: ‹i u ṛ ḷ›
+  - id: prat.yan
+    front: ‹yaṇ›
+    back: ‹y v r l›
+  - id: prat.ec
+    front: ‹ec›
+    back: ‹e o ai au›
+  - id: prat.jhas
+    front: ‹jhaś›
+    back: every voiced stop — ‹jh bh gh ḍh dh j b g ḍ d›
+  - id: prat.jas
+    front: ‹jaś›
+    back: voiced unaspirated stops — ‹j b g ḍ d›
+  - id: prat.khar
+    front: ‹khar›
+    back: every voiceless consonant — ‹kh ph ch ṭh th c ṭ t k p ś ṣ s›
+items:
+  - id: prat1
+    type: choice
+    prompt: ‹ik› names…
+    options: [‹i u ṛ ḷ›, ‹a i u›, ‹y v r l›, ‹e o›]
+    answer: 0
+  - id: prat2
+    type: text
+    prompt: Name the pratyāhāra for ‹y v r l›.
+    answers: [yaṇ]
+  - id: prat3
+    type: choice
+    prompt: ‹hal› names…
+    options: [every consonant, every vowel, every sound, the nasals]
+    answer: 0
+  - id: prat4
+    type: choice
+    prompt: How many sounds does ‹jaś› name?
+    options: ["5", "4", "10", "2"]
+    answer: 0
+  - id: prat5
+    type: text
+    prompt: Name the pratyāhāra for every vowel.
+    answers: [ac]
+  - id: prat6
+    type: choice
+    prompt: In most rules, ‹aṇ› means…
+    options: [‹a i u›, ‹a› through ‹l›, every vowel, every sound]
+    answer: 0
+    explain: aṇ normally takes the first ṇ; only 1.1.69 extends it to the second.
+  - id: prat7
+    type: choice
+    prompt: Is the marker ‹ṭ› a member of ‹aṭ›?
+    options:
+      - "No: markers are never members."
+      - "Yes"
+      - Only in the Veda
+      - Only when long
+    answer: 0
+  - id: prat8
+    type: choice
+    prompt: Which pratyāhāra names every sound?
+    options: [‹al›, ‹ac›, ‹hal›, ‹aś›]
+    answer: 0
+  - id: prat9
+    type: choice
+    prompt: ‹khar› names…
+    options: [every voiceless consonant, every voiced consonant, the nasals, the vowels]
+    answer: 0
+  - id: prat10
+    type: choice
+    prompt: Which of these is a member of ‹jhaś›?
+    options: [‹ga›, ‹ka›, ‹ṅa›, ‹ha›]
+    answer: 0

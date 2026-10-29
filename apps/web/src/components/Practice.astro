@@ -1,25 +1,34 @@
 ---
 /**
- * Practice block for a lesson. Exercises need an account (Round 1 decision), so signed-out
- * learners see what the practice covers and a sign-in link. The scored exercise island mounts
- * here once accounts launch (milestone M3).
+ * Practice block for a lesson. Items and cards come from data/exercises/{module}/{lesson}.yaml.
+ * Exercises need an account (Round 1 decision): the island shows a sign-in link to guests.
  */
+import { getEntry } from "astro:content";
+import PracticeSession from "../islands/PracticeSession.tsx";
+
 interface Props {
-  items: number;
+  /** what the practice covers, listed for everyone */
   skills: string[];
+  /** legacy prop, ignored: the count comes from the data file */
+  items?: number;
 }
-const { items, skills } = Astro.props;
+const { skills } = Astro.props;
+const lessonId = Astro.url.pathname.replace(/^\/course\//, "").replace(/\/$/, "");
+const ex = await getEntry("exercises", lessonId);
 ---
 <section class="practice" aria-labelledby="practice-h">
   <h2 id="practice-h">Practice</h2>
-  <p>{items} questions on:</p>
+  {ex && <p>{ex.data.items.length} questions on:</p>}
   <ul>
     {skills.map((s) => <li>{s}</li>)}
   </ul>
-  <p class="practice-gate">
-    Practice is saved to your account so that reviews can be scheduled for you.
-    <a class="btn" href="/signin/">Sign in to practise</a>
-  </p>
+  {
+    ex ? (
+      <PracticeSession client:visible lessonId={lessonId} items={ex.data.items} cards={ex.data.cards.map((c) => c.id)} />
+    ) : (
+      <p class="practice-note">Practice for this lesson is in preparation.</p>
+    )
+  }
 </section>
 
 <style>
@@ -32,13 +41,6 @@ const { items, skills } = Astro.props;
       border-radius: var(--s-radius-control);
     }
     .practice h2 { margin: 0 0 var(--p-space-3); }
-    .practice ul { margin-block: var(--p-space-2) var(--p-space-4); }
-    .practice-gate {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: var(--p-space-3) var(--p-space-5);
-      color: var(--s-color-text-soft);
-    }
+    .practice > ul { margin-block: var(--p-space-2) var(--p-space-4); }
   }
 </style>

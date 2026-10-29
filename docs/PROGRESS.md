@@ -20,7 +20,7 @@
 
 | Field | Value |
 |---|---|
-| **Phase** | M2 code complete — awaiting user bootstrap (docs/DEPLOY.md); next M3 |
+| **Phase** | M3 code complete (API + auth + practice/review UI) — awaiting user AWS bootstrap; next CI e2e, then M4 content |
 | **Rounds answered** | 4 / 4 ✅ |
 | **Repo** | `kartosis/vyakarana-labs` — **attached, push verified 2026-10-29**; working copy `/home/claude/vyakarana-labs` |
 | **Last updated** | 2026-10-29 |
@@ -34,7 +34,10 @@
 - ✅ CI on GitHub green (engine, build, CSP, terraform validate ×2).
 - ✅ **M3 API** `services/api` (Python 3.13, Powertools LambdaFunctionUrlResolver): Cognito access-token verify (X-VL-Auth, token_use/client_id/iss), token-handler cookie (`/auth/session|refresh|logout`, HttpOnly SameSite=Strict Path=/api/v1/auth), `/me` GET/PATCH/DELETE (+Cognito AdminDeleteUser), `/me/export`, `/progress`, `/progress/merge`, `/sessions` (plausibility 422), `/reviews/due` (LSI1), `/reviews` (py-fsrs 6), `/leaderboard/{week|current}` (GSI1, opt-out sparse). Lazy profile creation (no PostConfirmation Lambda). Never 403 (CloudFront maps 403→404 page). 22 pytest (moto) green; ruff clean; `build.sh` → 8.7 MB arm64 zip.
 - ✅ M3 infra modules `data`, `email` (SES v2 identity + Cognito send policy + DKIM outputs), `auth` (Cognito ESSENTIALS, sign_in_policy EMAIL_OTP+PASSWORD, public client USER_AUTH+REFRESH, 60m/30d tokens, admin group), `api` (Lambda arm64 py3.13, Function URL AWS_IAM, OAC lambda, 2 CloudFront permissions, IAM least-privilege, 7d logs, 3 alarms → SNS); prod toggles `ses_domain` → `accounts_enabled` (validated); deploy builds API zip, writes `/config.json` from `web_config` output. terraform fmt matched (no CI warning).
-- **NEXT**: web auth: `lib/config.ts` (/config.json), `lib/auth.ts` (Cognito SignUp/ConfirmSignUp/InitiateAuth USER_AUTH EMAIL_OTP/RespondToAuthChallenge via fetch + X-Amz-Target), `lib/api.ts` (X-VL-Auth + x-amz-content-sha256), SignIn island, header user state, /me dashboard, Practice island + exercises data; DEPLOY.md §7 accounts steps. Original M1 list: pnpm monorepo scaffold (`apps/web` Astro + Preact, `packages/engine`, `services/api`, `infra/terraform`) → design tokens/layers (Manuscript) → app shell layout (§8.2) → `@vl/engine` lipi + varṇa (Śivasūtra, pratyāhāra) with tests → sūtra data for Saṃjñā → Primer + Saṃjñā lessons → sūtra pages → local build passes.
+- ✅ M3 terraform validated in CI (Cognito ESSENTIALS, sesv2, Function URL OAC all accepted by provider ~>6).
+- ✅ M3 web: `lib/config|auth|api.ts` (Cognito fetch, sessionStorage access token + localStorage flag, OAC body hash), islands SignIn, PracticeSession (shuffle, timing, SLP1 grading, pass 60%), ReviewSession (FSRS ratings), Dashboard (stats, lessons, settings PATCH, export, sign out, delete via <dialog>), Leaderboard; pages /signin /me /review /leaderboard; header "Your progress"; **72 exercises + 39 cards** in `data/exercises/**` (zod-validated collection). 47 pages build.
+- ✅ Browser e2e with stubbed Cognito/API under strict CSP: 11/11 pass (scratch script; to be moved into repo CI).
+- **NEXT**: e2e + axe into CI (`apps/web/e2e`), DEPLOY.md accounts section (SES DKIM, prod access, enable accounts, admin group), then M4 content: Ac-sandhi lessons + vidyut WASM tools. Original M1 list: pnpm monorepo scaffold (`apps/web` Astro + Preact, `packages/engine`, `services/api`, `infra/terraform`) → design tokens/layers (Manuscript) → app shell layout (§8.2) → `@vl/engine` lipi + varṇa (Śivasūtra, pratyāhāra) with tests → sūtra data for Saṃjñā → Primer + Saṃjñā lessons → sūtra pages → local build passes.
 - Checkpoint after each bullet.
 
 ---
@@ -195,3 +198,4 @@ IaC: Terraform (remote state S3 + lock) · CI/CD: GitHub Actions + OIDC role · 
 - **2026-10-29 · S1** — M2 infra + CI/CD written; CSP verified in browser. Waiting on user AWS bootstrap.
 - **2026-10-29 · S1** — M3 API written + tested (22 tests). Found & fixed DynamoDB reserved-word bug via tests. Next: M3 infra modules.
 - **2026-10-29 · S1** — M3 Terraform modules written and wired behind toggles. Next: web auth + practice.
+- **2026-10-29 · S1** — M3 web done: sign-in, practice, reviews, dashboard, leaderboard; 72 exercises; e2e 11/11 under CSP.

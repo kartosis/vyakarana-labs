@@ -1,0 +1,63 @@
+cards:
+  - id: shiva.1-4
+    front: Śivasūtras 1–4
+    back: ‹aïuṇ› ‹ṛḷk› ‹eoṅ› ‹aiauc›
+  - id: shiva.5-6
+    front: Śivasūtras 5–6
+    back: ‹hayavaraṭ› ‹laṇ›
+  - id: shiva.7-10
+    front: Śivasūtras 7–10
+    back: ‹ñamaṅaṇanam› ‹jhabhañ› ‹ghaḍhadhaṣ› ‹jabagaḍadaś›
+  - id: shiva.11-14
+    front: Śivasūtras 11–14
+    back: ‹khaphachaṭhathacaṭatav› ‹kapay› ‹śaṣasar› ‹hal›
+items:
+  - id: shiva1
+    type: choice
+    prompt: Which line lists the five nasals?
+    options: [line 7, line 5, line 10, line 13]
+    answer: 0
+  - id: shiva2
+    type: choice
+    prompt: In ‹hayavaraṭ›, what is the final ‹ṭ›?
+    options: [a marker (it), a member of the list, a vowel, a copying error]
+    answer: 0
+  - id: shiva3
+    type: choice
+    prompt: Which sound appears in two different lines?
+    options: [‹ha›, ‹ka›, ‹ya›, ‹śa›]
+    answer: 0
+    explain: ha sits in line 5 and again in line 14, so it can belong to two groups.
+  - id: shiva4
+    type: choice
+    prompt: Why are the long vowels missing from the lists?
+    options:
+      - In a rule, a short vowel stands for its long forms too (1.1.69).
+      - Sanskrit has no long vowels.
+      - They are listed in line 14.
+      - Pāṇini treats them as consonants.
+    answer: 0
+  - id: shiva5
+    type: choice
+    prompt: Line 10, ‹jabagaḍadaś›, lists…
+    options: [voiced unaspirated stops, voiceless stops, nasals, sibilants]
+    answer: 0
+  - id: shiva6
+    type: choice
+    prompt: Which marker closes two lines?
+    options: [‹ṇ›, ‹k›, ‹c›, ‹l›]
+    answer: 0
+  - id: shiva7
+    type: choice
+    prompt: Lines 1 to 4 contain…
+    options: [every vowel, every semivowel, every nasal, every sibilant]
+    answer: 0
+  - id: shiva8
+    type: choice
+    prompt: Why are consonants written with an a in the lists?
+    options:
+      - So they can be pronounced; the a is not a member.
+      - Because a is a marker.
+      - To mark them as long.
+      - Because every list must contain a vowel.
+    answer: 0

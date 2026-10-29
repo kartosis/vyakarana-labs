@@ -1,0 +1,17 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../layouts/Base.astro";
+import Dashboard from "../islands/Dashboard.tsx";
+const modules = (await getCollection("modules")).sort((a, b) => a.data.order - b.data.order);
+const lessons = (await getCollection("lessons"))
+  .sort((a, b) => modules.findIndex((m) => m.id === a.data.module) - modules.findIndex((m) => m.id === b.data.module) || a.data.order - b.data.order)
+  .map((l) => ({ id: `${l.data.module}/${l.id.split("/").pop()}`, title: l.data.title, module: l.data.module }));
+---
+<Base title="Your progress" description="Your streak, lessons, reviews and settings.">
+  <div class="page-narrow">
+    <header class="page-head">
+      <h1>Your progress</h1>
+    </header>
+    <Dashboard client:load lessons={lessons} />
+  </div>
+</Base>

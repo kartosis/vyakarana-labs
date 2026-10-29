@@ -1,0 +1,58 @@
+cards:
+  - id: len.hrasva
+    front: ‹hrasva›
+    back: a short vowel, one mātrā, timed like ‹u›
+  - id: len.dirgha
+    front: ‹dīrgha›
+    back: a long vowel, two mātrās, timed like ‹ū›
+  - id: len.pluta
+    front: ‹pluta›
+    back: a prolated vowel, three mātrās, timed like ‹ū3›
+  - id: len.svarita
+    front: ‹svarita›
+    back: a vowel that combines high and low pitch (1.2.31)
+  - id: len.anunasika
+    front: ‹anunāsika›
+    back: made through mouth and nose together (1.1.8)
+items:
+  - id: len1
+    type: choice
+    prompt: A vowel that lasts as long as ‹ū› is…
+    options: [‹dīrgha›, ‹hrasva›, ‹pluta›, ‹svarita›]
+    answer: 0
+  - id: len2
+    type: choice
+    prompt: How many mātrās does a prolated vowel take?
+    options: ["3", "2", "1", "4"]
+    answer: 0
+  - id: len3
+    type: choice
+    prompt: ‹udātta› means a vowel pronounced…
+    options: [high, low, high then low, through the nose]
+    answer: 0
+  - id: len4
+    type: choice
+    prompt: ‹svarita› is…
+    options: [a combination of high and low, high, low, nasal]
+    answer: 0
+  - id: len5
+    type: choice
+    prompt: How many varieties of ‹a› does the grammar count?
+    options: ["18", "12", "9", "6"]
+    answer: 0
+    explain: 3 lengths × 3 pitches × 2 (oral, nasal) = 18.
+  - id: len6
+    type: choice
+    prompt: Why does ‹ḷ› have only twelve varieties?
+    options: [It has no long form, It has no pitch, It is never nasal, It is a consonant]
+    answer: 0
+  - id: len7
+    type: choice
+    prompt: An ‹anunāsika› sound is made…
+    options: [through mouth and nose together, through the nose only, with the lips closed, without voice]
+    answer: 0
+  - id: len8
+    type: choice
+    prompt: Which vowel does 1.2.27 use as its measuring stick?
+    options: [‹u›, ‹a›, ‹i›, ‹ṛ›]
+    answer: 0

@@ -1,0 +1,54 @@
+cards:
+  - id: read.gen
+    front: A word in the genitive (6th case) inside a sūtra
+    back: What is replaced, by 1.1.49 ‹ṣaṣṭhī sthāneyogā›.
+  - id: read.loc
+    front: A word in the locative (7th case) inside a sūtra
+    back: What must follow, by 1.1.66.
+  - id: read.abl
+    front: A word in the ablative (5th case) inside a sūtra
+    back: What must precede, by 1.1.67.
+  - id: read.anuvrtti
+    front: ‹anuvṛtti›
+    back: A word carried over from an earlier sūtra into a later one.
+items:
+  - id: read1
+    type: choice
+    prompt: In ‹iko yaṇ aci›, which word names what is replaced?
+    options: [‹ikaḥ›, ‹yaṇ›, ‹aci›]
+    answer: 0
+    explain: ‹ikaḥ› is genitive, and the genitive marks the thing replaced (1.1.49).
+  - id: read2
+    type: choice
+    prompt: A word in the locative case tells you…
+    options: [what must follow, what is replaced, what replaces it, what must precede]
+    answer: 0
+  - id: read3
+    type: choice
+    prompt: What is ‹anuvṛtti›?
+    options: [carrying a word over from an earlier sūtra, splitting a sūtra into words, a heading over many rules, a commentary]
+    answer: 0
+  - id: read4
+    type: text
+    prompt: ‹dadhi› + ‹atra› in close junction gives…
+    answers: [dadhyatra, dadhy atra]
+    explain: i is replaced by y before a vowel (6.1.77), y being the closest semivowel (1.1.50).
+  - id: read5
+    type: choice
+    prompt: By 1.1.50, ‹u› before a vowel becomes…
+    options: [‹v›, ‹y›, ‹r›, ‹l›]
+    answer: 0
+  - id: read6
+    type: choice
+    prompt: Which sūtra supplies ‹saṃhitāyām› to 6.1.77?
+    options: [6.1.72, 1.1.49, 1.3.3, 1.1.66]
+    answer: 0
+  - id: read7
+    type: text
+    prompt: ‹madhu› + ‹atra› gives…
+    answers: [madhvatra, madhv atra]
+  - id: read8
+    type: choice
+    prompt: What is ‹padaccheda›?
+    options: [splitting a sūtra into its words, a carried-over word, a technical name, a long vowel]
+    answer: 0

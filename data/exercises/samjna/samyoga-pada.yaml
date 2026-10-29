@@ -1,0 +1,55 @@
+cards:
+  - id: sam.1-1-7
+    front: ‹halo 'nantarāḥ saṃyogaḥ› (1.1.7)
+    back: Consonants with no vowel between them form a saṃyoga.
+  - id: pada.1-4-14
+    front: ‹suptiṅantaṃ padam› (1.4.14)
+    back: What ends in a sup or a tiṅ ending is a pada, a usable word.
+  - id: sam.guru
+    front: A short vowel before a saṃyoga
+    back: counts as heavy (‹guru›), by 1.4.11
+items:
+  - id: sam1
+    type: choice
+    prompt: In ‹agni›, the saṃyoga is…
+    options: [‹gn›, ‹ag›, ‹ni›, there is none]
+    answer: 0
+  - id: sam2
+    type: choice
+    prompt: Is the bare stem ‹rāma› a pada?
+    options:
+      - "No: it has no ending yet."
+      - "Yes"
+      - Only in verse
+      - Only with a long vowel
+    answer: 0
+  - id: sam3
+    type: choice
+    prompt: Why is ‹rāmaḥ› a pada?
+    options: [It ends in a sup ending, It ends in a tiṅ ending, It has a saṃyoga, It has a long vowel]
+    answer: 0
+  - id: sam4
+    type: choice
+    prompt: ‹bhavati› ends in a…
+    options: [tiṅ ending, sup ending, saṃyoga, marker]
+    answer: 0
+  - id: sam5
+    type: choice
+    prompt: A short vowel before a saṃyoga is…
+    options: [heavy (guru), light (laghu), prolated, nasal]
+    answer: 0
+  - id: sam6
+    type: choice
+    prompt: What is ‹sup›?
+    options: [a pratyāhāra naming the nominal endings, a verb ending, a sound class, a marker]
+    answer: 0
+  - id: sam7
+    type: choice
+    prompt: How many consonants make up the saṃyoga in ‹indra›?
+    options: ["3", "2", "1", "4"]
+    answer: 0
+  - id: sam8
+    type: choice
+    prompt: Which LSK number defines pada?
+    options: ["14", "13", "1", "4"]
+    answer: 0

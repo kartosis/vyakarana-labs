@@ -4,7 +4,7 @@ const nav = [
   { href: "/course/", label: "Course" },
   { href: "/tools/", label: "Tools" },
   { href: "/sutras/", label: "Sūtras" },
-  { href: "/sources/", label: "Sources" },
+  { href: "/review/", label: "Review" },
 ];
 const current = (href: string) => (path.startsWith(href) ? "page" : undefined);
 ---
@@ -40,7 +40,7 @@ const current = (href: string) => (path.startsWith(href) ? "page" : undefined);
         </svg>
         <span class="visually-hidden" data-theme-label>Switch theme</span>
       </button>
-      <a class="signin-link" href="/signin/">Sign in</a>
+      <a class="signin-link" href="/signin/" data-account-link>Sign in</a>
     </div>
   </div>
 </header>
@@ -104,6 +104,17 @@ const current = (href: string) => (path.startsWith(href) ? "page" : undefined);
   });
   mq.addEventListener("change", syncTheme);
   syncTheme();
+
+  // Signed-in learners get a link to their progress instead of "Sign in" (no network call).
+  try {
+    if (localStorage.getItem("vl:signedIn") === "1") {
+      const a = document.querySelector<HTMLAnchorElement>("[data-account-link]");
+      if (a) {
+        a.textContent = "Your progress";
+        a.href = "/me/";
+      }
+    }
+  } catch {}
 </script>
 
 <style>

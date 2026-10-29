@@ -1,0 +1,60 @@
+cards:
+  - id: sav.1-1-9
+    front: ‹tulyāsyaprayatnaṃ savarṇam› (1.1.9)
+    back: Same place in the mouth and same internal effort make two sounds savarṇa.
+  - id: sav.1-1-10
+    front: ‹nājjhalau› (1.1.10)
+    back: A vowel and a consonant are never savarṇa (so ‹i› and ‹ś› are not).
+  - id: sav.1-1-69
+    front: ‹aṇudit savarṇasya cāpratyayaḥ› (1.1.69)
+    back: An aṇ sound or a u-marked item names its whole class — except in a suffix.
+  - id: sav.ku
+    front: ‹ku›
+    back: ‹k kh g gh ṅ›, the whole velar row
+items:
+  - id: sav1
+    type: choice
+    prompt: Are ‹ka› and ‹ṅa› savarṇa?
+    options: ["Yes", "No"]
+    answer: 0
+    explain: Same place and same contact; the nose is an extra passage, not a place in the mouth.
+  - id: sav2
+    type: choice
+    prompt: Are ‹i› and ‹śa› savarṇa?
+    options:
+      - "No: 1.1.10 forbids it."
+      - "Yes"
+      - Only when i is long
+      - Only in the Veda
+    answer: 0
+  - id: sav3
+    type: choice
+    prompt: What does ‹ku› stand for in a rule?
+    options: [‹k kh g gh ṅ›, ‹k› only, ‹k› and ‹u›, every consonant]
+    answer: 0
+  - id: sav4
+    type: choice
+    prompt: In a rule, short ‹a› stands for…
+    options: [all eighteen varieties of a, only short a, a and i, every vowel]
+    answer: 0
+  - id: sav5
+    type: choice
+    prompt: What must two sounds share to be savarṇa?
+    options: [place and internal effort, place and voicing, length and pitch, effort and aspiration]
+    answer: 0
+  - id: sav6
+    type: choice
+    prompt: Does 1.1.69 apply to suffixes?
+    options: ["No", "Yes", Only to long ones, Only in the Veda]
+    answer: 0
+  - id: sav7
+    type: choice
+    prompt: Are ‹va› and ‹la› savarṇa?
+    options: ["No", "Yes"]
+    answer: 0
+    explain: ‹va› is made at the teeth and lips together, ‹la› at the teeth alone.
+  - id: sav8
+    type: choice
+    prompt: What does the vārttika on 1.1.9 add?
+    options: [‹ṛ› and ‹ḷ› count as savarṇa, ‹i› and ‹y› count as savarṇa, nasals have no class, ‹a› has no long form]
+    answer: 0

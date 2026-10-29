@@ -1,0 +1,61 @@
+# ‹…› = Sanskrit in IAST, rendered in the learner's chosen script.
+cards:
+  - id: snd.varga-order
+    front: The five rows of stops, from the back of the mouth to the lips
+    back: ‹ka›-varga (throat), ‹ca›-varga (palate), ‹ṭa›-varga (roof), ‹ta›-varga (teeth), ‹pa›-varga (lips)
+  - id: snd.aspiration
+    front: What does the h in ‹kh›, ‹th›, ‹bh› mark?
+    back: Aspiration, a puff of breath released with the stop. ‹th› is never the th of "thin".
+  - id: snd.retroflex
+    front: ‹ṭ› compared with ‹t›
+    back: ‹ṭ› has the tongue tip curled back to the roof of the mouth (retroflex); ‹t› touches the teeth (dental).
+items:
+  - id: snd1
+    type: choice
+    prompt: Where is ‹ca› made?
+    options: [at the palate, in the throat, at the teeth, at the lips]
+    answer: 0
+    explain: The ‹ca›-row is palatal; the flat of the tongue meets the hard palate.
+  - id: snd2
+    type: choice
+    prompt: Which of these is aspirated?
+    options: [‹kha›, ‹ka›, ‹ga›, ‹ṅa›]
+    answer: 0
+    explain: The second and fourth sounds of each row carry a puff of breath.
+  - id: snd3
+    type: choice
+    prompt: Which row is retroflex?
+    options: [‹ṭa ṭha ḍa ḍha ṇa›, ‹ta tha da dha na›, ‹ca cha ja jha ña›, ‹pa pha ba bha ma›]
+    answer: 0
+    explain: The dot under the letter marks the retroflex row.
+  - id: snd4
+    type: choice
+    prompt: The fifth sound of every row is…
+    options: [a nasal, a voiced aspirate, a sibilant, a semivowel]
+    answer: 0
+  - id: snd5
+    type: choice
+    prompt: Which vowel has no short partner?
+    options: [‹ai›, ‹a›, ‹i›, ‹ṛ›]
+    answer: 0
+    explain: e, ai, o and au are long by nature.
+  - id: snd6
+    type: choice
+    prompt: How does ‹tha› sound?
+    options:
+      - t with a puff of breath, as in "hot-house"
+      - the th of "thin"
+      - the th of "this"
+      - a soft s
+    answer: 0
+  - id: snd7
+    type: choice
+    prompt: Which is voiced and unaspirated?
+    options: [‹ga›, ‹ka›, ‹kha›, ‹gha›]
+    answer: 0
+  - id: snd8
+    type: choice
+    prompt: Where is ‹śa› made?
+    options: [at the palate, at the roof of the mouth, at the teeth, at the lips]
+    answer: 0
+    explain: ‹śa› is the palatal sibilant, ‹ṣa› the retroflex, ‹sa› the dental.

@@ -1,0 +1,16 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../layouts/Base.astro";
+import ReviewSession from "../islands/ReviewSession.tsx";
+const all = await getCollection("exercises");
+const cards = Object.fromEntries(all.flatMap((e) => e.data.cards.map((c) => [c.id, { front: c.front, back: c.back, lesson: e.id }])));
+---
+<Base title="Reviews" description="Spaced-repetition reviews of sūtras, terms and forms you have learned.">
+  <div class="page-narrow">
+    <header class="page-head">
+      <h1>Reviews</h1>
+      <p class="lead">Each card comes back just before you would forget it. Rate honestly: the schedule (FSRS) adapts to you.</p>
+    </header>
+    <ReviewSession client:load cards={cards} />
+  </div>
+</Base>

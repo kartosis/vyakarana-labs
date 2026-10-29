@@ -84,4 +84,41 @@ const lessons = defineCollection({
   }),
 });
 
-export const collections = { sutras, quotes, modules, lessons };
+/** Practice items and review cards per lesson: data/exercises/{module}/{lesson}.yaml, id "module/lesson". */
+const choice = z.object({
+  id: z.string().regex(/^[A-Za-z0-9_.:-]{1,80}$/),
+  type: z.literal("choice"),
+  prompt: z.string(),
+  options: z.array(z.string()).min(2).max(4),
+  answer: z.number().int().min(0),
+  explain: z.string().optional(),
+});
+const text = z.object({
+  id: z.string().regex(/^[A-Za-z0-9_.:-]{1,80}$/),
+  type: z.literal("text"),
+  prompt: z.string(),
+  answers: z.array(z.string()).min(1),
+  explain: z.string().optional(),
+});
+const exercises = defineCollection({
+  loader: async () => {
+    const root = new URL("exercises/", DATA);
+    const out: Array<Record<string, unknown>> = [];
+    for (const mod of await readdir(fileURLToPath(root))) {
+      for (const f of (await readdir(fileURLToPath(new URL(`${mod}/`, root)))).filter((x) => x.endsWith(".yaml"))) {
+        const doc = parse(await readFile(new URL(`${mod}/${f}`, root), "utf8")) as Record<string, unknown>;
+        out.push({ ...doc, id: `${mod}/${f.replace(/\.yaml$/, "")}` });
+      }
+    }
+    return out;
+  },
+  schema: z.object({
+    id: z.string(),
+    cards: z.array(
+      z.object({ id: z.string().regex(/^[A-Za-z0-9_.:-]{1,80}$/), front: z.string(), back: z.string() }),
+    ),
+    items: z.array(z.discriminatedUnion("type", [choice, text])).min(1),
+  }),
+});
+
+export const collections = { sutras, quotes, modules, lessons, exercises };

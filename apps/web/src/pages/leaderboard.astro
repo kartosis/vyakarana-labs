@@ -1,0 +1,13 @@
+---
+import Base from "../layouts/Base.astro";
+import Leaderboard from "../islands/Leaderboard.tsx";
+---
+<Base title="Leaderboard" description="This week's most diligent learners on Vyākaraṇa Labs.">
+  <div class="page-narrow">
+    <header class="page-head">
+      <h1>This week</h1>
+      <p class="lead">Learners appear under the name they choose. Anyone can opt out in their settings.</p>
+    </header>
+    <Leaderboard client:load />
+  </div>
+</Base>
