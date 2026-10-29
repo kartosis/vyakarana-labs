@@ -1,0 +1,92 @@
+---
+title: The diphthongs open up
+deva: एचोऽयवायावः
+module: ac-sandhi
+order: 2
+minutes: 20
+summary: LSK 22–24. Before a vowel, e, o, ai and au split into ay, av, āy and āv. A paribhāṣā pairs the two lists in order, and a third rule extends the change to suffixes beginning with y.
+lskRange: 22–24
+sutras: ["6.1.78", "1.3.10", "6.1.79"]
+---
+import Sa from "../../../components/Sa.astro";
+import Voice from "../../../components/Voice.astro";
+import SutraFolio from "../../../components/SutraFolio.astro";
+import SutraRef from "../../../components/SutraRef.astro";
+import Practice from "../../../components/Practice.astro";
+import Steps from "../../../islands/Steps.tsx";
+import SandhiPad from "../../../islands/SandhiPad.tsx";
+
+The ik vowels have semivowels of their own. The four diphthongs <Sa iast="e ai o au" /> (the pratyāhāra <Sa iast="ec" />, which the tradition calls <Sa iast="sandhyakṣara" />, "joined sounds") do not: each is made at two places at once, throat and palate (e, ai) or throat and lips (o, au), and no semivowel is made at the throat. Before a vowel they are handled by the next sūtra, which carries <Sa iast="aci" />, "when a vowel follows", over from 6.1.77.
+
+<SutraFolio id="6.1.78" level={2} />
+
+The rule has four substitutes, <Sa iast="ay av āy āv" />, written together as one compound. Each is a vowel of the a-class plus a semivowel, and each mirrors its diphthong. An *e* is in effect *a* + *i* pronounced as one sound; before a vowel it comes apart as *a* + *y*. *o* comes apart as *a* + *v*; the long-onset *ai* and *au* as *āy* and *āv*.
+
+## Pairing in order
+
+Which of the four replaces which? 1.1.50 could choose by similarity, but a simpler rule settles it first, and Varadarāja places it here.
+
+<SutraFolio id="1.3.10" />
+
+Two lists of equal length are paired member by member: <Sa iast="e" /> with <Sa iast="ay" />, <Sa iast="o" /> with <Sa iast="av" />, <Sa iast="ai" /> with <Sa iast="āy" />, <Sa iast="au" /> with <Sa iast="āv" />. The *ec* list runs e, o, ai, au because that is the order of the Śivasūtras: <Sa iast="eoṅ" />, <Sa iast="aiauc" />. Pāṇini wrote his substitutes in the same order.
+
+Patañjali, you saw in the last lesson, used this rule to argue that 1.1.50 is not needed for 6.1.77 either: *ik* and *yaṇ* are lists of four, so they pair up in order as well.
+
+<Voice quote="kas-6.1.78" voice="bhasya">
+  The Kāśikā's examples are all inside words, where a stem meets a suffix: *ce* + *ana* gives *cayanam* "gathering", *lo* + *ana* gives *lavanam* "cutting", *cai* + *aka* gives *cāyakaḥ* "gatherer", *lau* + *aka* gives *lāvakaḥ* "reaper". The words *yathāsaṃkhyam*, "in order", come straight from 1.3.10.
+</Voice>
+
+Varadarāja's examples under 1.3.10 are of the same kind:
+
+<div class="example">
+  <span><Sa iast="hare" /> + <Sa iast="e" /> → <Sa iast="haraye" />, "for Hari": e becomes ay.</span>
+  <span><Sa iast="viṣṇo" /> + <Sa iast="e" /> → <Sa iast="viṣṇave" />, "for Viṣṇu": o becomes av.</span>
+  <span><Sa iast="nai" /> + <Sa iast="aka" /> → <Sa iast="nāyakaḥ" />, "leader": ai becomes āy.</span>
+  <span><Sa iast="pau" /> + <Sa iast="aka" /> → <Sa iast="pāvakaḥ" />, "purifier, fire": au becomes āv.</span>
+</div>
+
+The stems *hare*, *viṣṇo*, *nai* and *pau* are not where these words start. *hari* and *viṣṇu* take guṇa before the dative ending *e*, and the roots *nī* "lead" and *pū* "purify" take vṛddhi before the suffix *aka*. Those changes are taught with declension and derivation. Here we pick up each word at its last step.
+
+<Steps
+  client:visible
+  label="viṣṇo + e by 6.1.78"
+  steps={[
+    { parts: [["vizRo"], [" "], ["e"]], note: "The stem, already viṣṇo, meets the dative ending e." },
+    { label: "conditions", parts: [["vizR"], ["o", "mark"], ["e"]], note: "o is an ec vowel and a vowel follows: 6.1.78 applies." },
+    { sutra: "1.3.10", parts: [["vizR"], ["o", "mark"], ["e"]], note: "e o ai au are paired with ay av āy āv in order. o is second, so it takes av." },
+    { sutra: "6.1.78", parts: [["vizR"], ["av", "new"], ["e"]], note: "o is replaced by av: viṣṇave, ‘for Viṣṇu’." },
+  ]}
+/>
+
+<Voice quote="vp-1.73" voice="darsana">
+  Grammar takes *e* apart into *a* and *y*. Bhartṛhari reminds us what kind of knowledge that is. For him a word has no sounds inside it, a sound has no parts, and a word cannot be cut out of its sentence absolutely. Analysis into parts is a means of explaining language, not a description of how it exists.
+</Voice>
+
+## Before a suffix beginning with y
+
+6.1.78 needs a following vowel. One more sūtra extends half of it to a consonant.
+
+<SutraFolio id="6.1.79" />
+
+<Sa iast="vāntaḥ" /> means "ending in v": of the four substitutes, only <Sa iast="av" /> and <Sa iast="āv" /> qualify, so the rule is about *o* and *au*. Before a **suffix** that begins with *y*, they open up just as before a vowel:
+
+<div class="example">
+  <span><Sa iast="go" /> + <Sa iast="ya" /> → <Sa iast="gavyam" />, "coming from cows".</span>
+  <span><Sa iast="nau" /> + <Sa iast="ya" /> → <Sa iast="nāvyam" />, "navigable".</span>
+  <span>A vārttika adds the measure of a road: <Sa iast="go" /> + <Sa iast="yūti" /> → <Sa iast="gavyūtiḥ" />, a measure of distance, though <Sa iast="yūti" /> is not a suffix.</span>
+</div>
+
+## Word-final e and o
+
+When *e* or *o* ends a word, 6.1.78 still applies before an unlike vowel: <Sa iast="hare" /> + <Sa iast="iha" /> gives <Sa iast="harayiha" />. But there is a second, optional form, and a striking reason why it stays unjoined. That is the subject of the next lesson. Try it now:
+
+<SandhiPad client:visible level={3} initialA="hare" initialB="iha" showExamples={false} />
+
+<Practice
+  skills={[
+    "Opening e, o, ai, au into ay, av, āy, āv",
+    "Pairing two lists by 1.3.10",
+    "Recognising the last step of haraye, viṣṇave, nāyakaḥ, pāvakaḥ",
+    "Applying 6.1.79 before a suffix in y",
+  ]}
+/>

@@ -1,0 +1,74 @@
+cards:
+  - id: ayadi.6-1-78
+    front: ‹eco 'yavāyāvaḥ› (6.1.78)
+    back: Before a vowel, e o ai au become ay av āy āv.
+  - id: ayadi.1-3-10
+    front: ‹yathāsaṃkhyam anudeśaḥ samānām› (1.3.10)
+    back: Two lists of equal length pair up in order, first with first.
+  - id: ayadi.6-1-79
+    front: ‹vānto yi pratyaye› (6.1.79)
+    back: Before a suffix beginning with y, o and au also become av and āv — gavyam, nāvyam.
+  - id: ayadi.sandhyaksara
+    front: Why can e and o not simply become a semivowel?
+    back: Each is made at two places (throat and palate, throat and lips); no semivowel is made at the throat. So they open into a + y, a + v.
+items:
+  - id: ay1
+    type: text
+    prompt: "‹ce› + ‹anam› (inside a word) gives…"
+    answers: [cayanam]
+    explain: e becomes ay before a vowel.
+  - id: ay2
+    type: text
+    prompt: "‹lau› + ‹akaḥ› (inside a word) gives…"
+    answers: [lāvakaḥ]
+    explain: au becomes āv before a vowel.
+  - id: ay3
+    type: text
+    prompt: "‹viṣṇo› + ‹e› (inside a word) gives…"
+    answers: [viṣṇave]
+  - id: ay4
+    type: text
+    prompt: "‹nai› + ‹akaḥ› (inside a word) gives…"
+    answers: [nāyakaḥ]
+  - id: ay5
+    type: choice
+    prompt: By 1.3.10, which substitute replaces ‹ai›?
+    options: [‹āy›, ‹ay›, ‹av›, ‹āv›]
+    answer: 0
+    explain: The lists e o ai au and ay av āy āv pair in order; ai is third, so it takes āy.
+  - id: ay6
+    type: choice
+    prompt: Why does 6.1.79 apply only to o and au?
+    options:
+      - Only av and āv end in v (‹vāntaḥ›).
+      - e and ai never meet y.
+      - y is a vowel.
+      - It applies to all four.
+    answer: 0
+  - id: ay7
+    type: text
+    prompt: "‹go› + the suffix ‹ya› gives (neuter nominative)…"
+    answers: [gavyam]
+    explain: Before a suffix beginning with y, o becomes av (6.1.79).
+  - id: ay8
+    type: choice
+    prompt: What does ‹yathāsaṃkhyam› mean?
+    options:
+      - in order, member by member
+      - by similarity of sound
+      - optionally
+      - in reverse order
+    answer: 0
+  - id: ay9
+    type: text
+    prompt: "‹hare› + ‹iha›, joined by 6.1.78, gives…"
+    answers: [harayiha]
+  - id: ay10
+    type: choice
+    prompt: Patañjali argues that 1.1.50 is not needed for ‹iko yaṇ aci›. Why?
+    options:
+      - 1.3.10 already pairs ik with yaṇ in order.
+      - ik vowels have no semivowels.
+      - 6.1.77 is a vārttika.
+      - 1.1.50 comes later in the grammar.
+    answer: 0

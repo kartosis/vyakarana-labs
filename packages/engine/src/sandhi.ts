@@ -3,8 +3,14 @@
  * with a sūtra-by-sūtra trace for teaching.
  *
  * Rules are tried in the order that resolves their conflicts the way the tradition does:
- *   prakṛtibhāva (1.1.11 + 6.1.125) → pūrvarūpa 6.1.109 → savarṇa-dīrgha 6.1.101 (beats 6.1.77 and 6.1.87)
- *   → vṛddhi 6.1.88 (exception to 6.1.87) → guṇa 6.1.87 → yaṇ 6.1.77 → ay/av/āy/āv 6.1.78 (+ optional 8.3.19).
+ *   prakṛtibhāva (1.1.11–16 + 6.1.125) → pūrvarūpa 6.1.109 → savarṇa-dīrgha 6.1.101 (beats 6.1.77 and 6.1.87)
+ *   → pararūpa before om 6.1.95 → vṛddhi 6.1.88 (exception to 6.1.87) → guṇa 6.1.87 → yaṇ 6.1.77
+ *   → ay/av/āy/āv 6.1.78.
+ * Optional forms the Laghusiddhāntakaumudī and the Kāśikā accept are returned as alternatives:
+ *   8.3.19 (y/v dropped), 6.1.127 and 6.1.128 (left unjoined, shortened), the vārttika on 6.1.101 (ṛ, ḷ),
+ *   and 8.4.47 + 8.4.53 (consonant doubled before a yaṇ).
+ * Not modelled here (taught in the lessons): upasarga + root (6.1.89, 6.1.91, 6.1.94), āṅ (6.1.95),
+ * go (6.1.122–124), pluta (8.2.84, 6.1.125).
  */
 import { fromSlp1, isVowel } from "./lipi.js";
 import { isSavarna } from "./varna.js";
@@ -23,22 +29,34 @@ export interface Junction {
   out: string;
 }
 
+/** Another correct form, with the rule that allows it. */
+export interface Alternative {
+  form: string;
+  /** a.p.s; a vārttika is cited under its sūtra */
+  sutra: string;
+  /** set when the alternative rests on a vārttika rather than the sūtra itself */
+  varttika?: boolean;
+  note: string;
+}
+
 export interface SandhiResult {
   result: string;
   /** the vowel meeting itself, for the "a + i → e" line; null when untouched */
   junction: Junction | null;
-  /** optional variants (e.g. 8.3.19 lopaḥ śākalyasya) */
-  alternatives: string[];
+  /** other correct forms (8.3.19, 6.1.127, 6.1.128, 8.4.47, vārttika on 6.1.101) */
+  alternatives: Alternative[];
   steps: SandhiStep[];
   /** true when no vowel-sandhi rule applies (e.g. a consonant is involved) */
   untouched: boolean;
 }
 
 export interface SandhiOptions {
-  /** first word ends a pada (default true); 6.1.109 and 8.3.19 apply only at word end */
+  /** first word ends a pada (default true); 6.1.109, 8.3.19, 6.1.127 and 6.1.128 apply only at word end */
   padanta?: boolean;
-  /** first word is pragṛhya (1.1.11: dual ending in ī, ū or e) */
+  /** first word is pragṛhya: a dual in ī, ū or e (1.1.11), amī/amū (1.1.12), a one-vowel particle (1.1.14), a particle in o (1.1.15) */
   pragrhya?: boolean;
+  /** the two words form a compound: Śākalya's unjoined forms (6.1.127, 6.1.128) are then not allowed (vārttika "na samāse") */
+  compound?: boolean;
 }
 
 const AK = "aAiIuUfFxX";
@@ -49,6 +67,12 @@ const GUNA: Record<string, string> = { i: "e", I: "e", u: "o", U: "o", f: "ar", 
 const VRDDHI: Record<string, string> = { e: "E", E: "E", o: "O", O: "O" };
 const YAN: Record<string, string> = { i: "y", I: "y", u: "v", U: "v", f: "r", F: "r", x: "l", X: "l" };
 const AYAV: Record<string, string> = { e: "ay", o: "av", E: "Ay", O: "Av" };
+const SHORT: Record<string, string> = { a: "a", A: "a", i: "i", I: "i", u: "u", U: "u", f: "f", F: "f", x: "x", X: "x" };
+/** voiced stops (part of jhaś) and their jaś (unaspirated voiced) counterparts, for 8.4.53 */
+const JAS: Record<string, string> = { g: "g", G: "g", j: "j", J: "j", q: "q", Q: "q", d: "d", D: "d", b: "b", B: "b" };
+const VOICELESS_PLAIN = "kcwtp";
+const isOm = (w: string) => w === "om" || w === "oM";
+const v = (s: string) => fromSlp1(s, "iast");
 
 export function vowelSandhi(first: string, second: string, opts: SandhiOptions = {}): SandhiResult {
   const padanta = opts.padanta ?? true;
@@ -58,7 +82,7 @@ export function vowelSandhi(first: string, second: string, opts: SandhiOptions =
   const tail = second.slice(1);
   const start = `${first} ${second}`;
   const steps: SandhiStep[] = [];
-  const done = (result: string, out: string, alternatives: string[] = []): SandhiResult => ({
+  const done = (result: string, out: string, alternatives: Alternative[] = []): SandhiResult => ({
     result,
     junction: { left: x, right: y, out },
     alternatives,
@@ -70,10 +94,35 @@ export function vowelSandhi(first: string, second: string, opts: SandhiOptions =
     return { result: `${first} ${second}`, junction: null, alternatives: [], steps: [], untouched: true };
   }
 
-  // 1.1.11 + 6.1.125: a pragṛhya vowel stays as it is before a vowel.
-  if (opts.pragrhya && "IUe".includes(x)) {
-    steps.push({ sutra: "1.1.11", form: start, note: `Final ${x === "e" ? "e" : x === "I" ? "ī" : "ū"} of a dual is pragṛhya.` });
-    steps.push({ sutra: "6.1.125", form: start, note: "A pragṛhya vowel undergoes no sandhi before a vowel." });
+  /**
+   * 6.1.127 iko 'savarṇe śākalyasya hrasvaś ca / 6.1.128 ṛty akaḥ: a word-final ik before a dissimilar vowel,
+   * or a word-final ak before short ṛ, may stay unjoined, shortened if long. Not inside a compound.
+   */
+  function sakalyaUnjoined(): Alternative | null {
+    if (!padanta || opts.compound) return null;
+    const unjoined = `${head}${SHORT[x]} ${second}`;
+    if (y === "f" && AK.includes(x)) {
+      return { form: unjoined, sutra: "6.1.128", note: `Before short ṛ, the word-final ${v(x)} may stay unjoined${SHORT[x] !== x ? `, shortened to ${v(SHORT[x]!)}` : ""} (Śākalya's view).` };
+    }
+    if (IK.includes(x) && !isSavarna(x, y)) {
+      return { form: unjoined, sutra: "6.1.127", note: `The word-final ${v(x)} may stay unjoined before a dissimilar vowel${SHORT[x] !== x ? `, shortened to ${v(SHORT[x]!)}` : ""} (Śākalya's view). The shortening would be pointless if sandhi followed, so none does.` };
+    }
+    return null;
+  }
+
+  // 1.1.11–16 + 6.1.125: a pragṛhya vowel stays as it is before a vowel.
+  if (opts.pragrhya) {
+    const dual = "IUe".includes(x);
+    steps.push({
+      sutra: dual ? "1.1.11" : x === "o" ? "1.1.15" : "1.1.14",
+      form: start,
+      note: dual
+        ? `The final ${v(x)} of a dual form is pragṛhya.`
+        : x === "o"
+          ? "A particle ending in o is pragṛhya."
+          : "A particle consisting of a single vowel is pragṛhya.",
+    });
+    steps.push({ sutra: "6.1.125", form: start, note: "A pragṛhya vowel stays as it is before a vowel: no sandhi." });
     return done(start, `${x} ${y}`);
   }
 
@@ -89,12 +138,29 @@ export function vowelSandhi(first: string, second: string, opts: SandhiOptions =
   if (AK.includes(x) && isSavarna(x, y)) {
     const r = `${head}${LONG[x]}${tail}`;
     steps.push({ sutra: "6.1.84", form: start, note: "One substitute will replace both vowels (heading)." });
-    steps.push({ sutra: "6.1.101", form: r, note: "An ak vowel and a following vowel of its own class become one long vowel. This later rule overrides 6.1.77 and 6.1.87." });
-    return done(r, LONG[x]!);
+    steps.push({ sutra: "6.1.101", form: r, note: "An ak vowel and a following vowel of its own class become one long vowel. This rule sets aside 6.1.77 and 6.1.87." });
+    const alts: Alternative[] = [];
+    if ("fFxX".includes(x) && (y === "f" || y === "x")) {
+      alts.push({
+        form: `${head}${y}${tail}`,
+        sutra: "6.1.101",
+        varttika: true,
+        note: `A vārttika on this rule allows ${v(y)} instead of the long vowel before ${v(y)}: ${y === "f" ? "ṛti ṛ vā" : "ḷti ḷ vā"}.`,
+      });
+    }
+    const unjoined = sakalyaUnjoined();
+    if (unjoined) alts.push(unjoined);
+    return done(r, LONG[x]!, alts);
   }
 
   if (x === "a" || x === "A") {
     steps.push({ sutra: "6.1.84", form: start, note: "One substitute will replace both vowels (heading)." });
+    // 6.1.95 omāṅoś ca: a/ā + om → the later vowel replaces both (pararūpa), setting aside 6.1.88.
+    if (isOm(second)) {
+      const r = `${head}${second}`;
+      steps.push({ sutra: "6.1.95", form: r, note: "a or ā before om: the later vowel alone replaces both (pararūpa). This sets aside vṛddhi (6.1.88)." });
+      return done(r, "o");
+    }
     // 6.1.88 vṛddhir eci: a/ā + e ai o au → vṛddhi.
     if (EC.includes(y)) {
       const r = `${head}${VRDDHI[y]}${tail}`;
@@ -110,30 +176,46 @@ export function vowelSandhi(first: string, second: string, opts: SandhiOptions =
     if (g.length === 2) {
       steps.push({ sutra: "1.1.51", form: r, note: `A guṇa replacing ${y === "x" || y === "X" ? "ḷ" : "ṛ"} is followed by ${g[1] === "r" ? "r" : "l"}: ${g === "ar" ? "ar" : "al"}.` });
     }
-    return done(r, g);
+    const unjoined = sakalyaUnjoined();
+    return done(r, g, unjoined ? [unjoined] : []);
   }
 
   // 6.1.77 iko yaṇ aci: i u ṛ ḷ before a vowel of another class → y v r l.
   if (IK.includes(x)) {
     const r = `${head}${YAN[x]}${second}`;
-    steps.push({ sutra: "6.1.77", form: r, note: `${x} is an ik vowel and a vowel follows: it becomes a yaṇ sound.` });
-    steps.push({ sutra: "1.1.50", form: r, note: `Of y v r l, the closest to ${x} is ${YAN[x] === "y" ? "y (palatal)" : YAN[x] === "v" ? "v (labial)" : YAN[x] === "r" ? "r (retroflex)" : "l (dental)"}.` });
-    return done(r, `${YAN[x]}${y}`);
+    steps.push({ sutra: "6.1.77", form: r, note: `${v(x)} is an ik vowel and a vowel follows: it becomes a yaṇ sound.` });
+    steps.push({ sutra: "1.1.50", form: r, note: `Of y v r l, the closest to ${v(x)} is ${YAN[x] === "y" ? "y (palatal)" : YAN[x] === "v" ? "v (labial)" : YAN[x] === "r" ? "r (retroflex)" : "l (dental)"}.` });
+    const alts: Alternative[] = [];
+    // 8.4.47 anaci ca (+ 8.4.53): the consonant before the new y v r l, if it follows a vowel, may be doubled.
+    const c = head.at(-1) ?? "";
+    const p = head.at(-2) ?? "";
+    if (isVowel(p) && (c in JAS || VOICELESS_PLAIN.includes(c))) {
+      const lead = JAS[c] ?? c;
+      alts.push({
+        form: `${head.slice(0, -1)}${lead}${c}${YAN[x]}${second}`,
+        sutra: "8.4.47",
+        note:
+          lead === c
+            ? `${v(c)} comes after a vowel and is not followed by one, so it may be doubled.`
+            : `${v(c)} comes after a vowel and is not followed by one, so it may be doubled (8.4.47); the first ${v(c)}, before a voiced stop, becomes ${v(lead)} (8.4.53).`,
+      });
+    }
+    const unjoined = sakalyaUnjoined();
+    if (unjoined) alts.push(unjoined);
+    return done(r, `${YAN[x]}${y}`, alts);
   }
 
   // 6.1.78 eco 'yavāyāvaḥ: e o ai au before a vowel → ay av āy āv.
   const sub = AYAV[x]!;
   const r = `${head}${sub}${second}`;
   steps.push({ sutra: "6.1.78", form: r, note: `${x === "E" ? "ai" : x === "O" ? "au" : x} before a vowel becomes ${sub.replace("A", "ā")}.` });
-  const alternatives: string[] = [];
+  const alternatives: Alternative[] = [];
   if (padanta) {
     // 8.3.19 lopaḥ śākalyasya: word-final y/v after a/ā may be dropped before a vowel; the vowels then stay apart.
-    const dropped = `${head}${sub.slice(0, -1)} ${second}`;
-    alternatives.push(dropped);
-    steps.push({
+    alternatives.push({
+      form: `${head}${sub.slice(0, -1)} ${second}`,
       sutra: "8.3.19",
-      form: dropped,
-      note: "Optionally (in Śākalya's view) the word-final y or v is dropped. The two vowels then stay apart: no further sandhi, because 8.3.19 is invisible to the earlier rules (8.2.1).",
+      note: "In Śākalya's view the word-final y or v may be dropped. The two vowels then stay apart: 8.3.19 belongs to the last three quarters of the grammar, so the vowel rules of chapter 6 cannot see its result (8.2.1).",
     });
   }
   return done(r, `${sub}${y}`, alternatives);
@@ -148,8 +230,6 @@ export interface RuleCheck {
   /** why it does or does not apply (IAST in plain English) */
   reason: string;
 }
-
-const v = (s: string) => fromSlp1(s, "iast");
 
 /**
  * Every vowel-sandhi rule, tested on its own conditions, in the order the engine tries them.
@@ -166,9 +246,9 @@ export function sandhiChecks(first: string, second: string, opts: SandhiOptions 
     {
       sutra: "6.1.125",
       name: "no sandhi for pragṛhya (prakṛtibhāva)",
-      ok: !!opts.pragrhya && "IUe".includes(x),
-      yes: `${v(x)} ends a dual, so it is pragṛhya (1.1.11) and is held apart.`,
-      no: !opts.pragrhya ? "The first word is not marked as a dual in ī, ū or e (1.1.11)." : `A pragṛhya dual ends in ī, ū or e, not ${v(x)}.`,
+      ok: !!opts.pragrhya,
+      yes: `The first word is pragṛhya (1.1.11–16), so its ${v(x)} is held apart.`,
+      no: "The first word is not pragṛhya: not a dual in ī, ū or e (1.1.11) or a particle of 1.1.14–15.",
     },
     {
       sutra: "6.1.109",
@@ -188,6 +268,13 @@ export function sandhiChecks(first: string, second: string, opts: SandhiOptions 
       ok: AK.includes(x) && isSavarna(x, y),
       yes: `${v(x)} and ${v(y)} are of one class (savarṇa, 1.1.9).`,
       no: !AK.includes(x) ? `${v(x)} is not an ak vowel (a i u ṛ ḷ).` : `${v(x)} and ${v(y)} are not of one class.`,
+    },
+    {
+      sutra: "6.1.95",
+      name: "a + om → om (pararūpa)",
+      ok: isA && isOm(second),
+      yes: `${v(x)} meets the word om.`,
+      no: !isA ? `Needs a or ā first, not ${v(x)}.` : "The second word is not om.",
     },
     {
       sutra: "6.1.88",

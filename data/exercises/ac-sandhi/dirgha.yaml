@@ -1,0 +1,88 @@
+cards:
+  - id: dirgha.6-1-101
+    front: ‹akaḥ savarṇe dīrghaḥ› (6.1.101)
+    back: A vowel and a following vowel of its own class become one long vowel — daityāriḥ, śrīśaḥ.
+  - id: dirgha.6-1-109
+    front: ‹eṅaḥ padāntād ati› (6.1.109)
+    back: Word-final e or o swallows a following short a; writing marks it with ऽ — hare 'va.
+  - id: dirgha.1-1-53
+    front: ‹ṅic ca› (1.1.53)
+    back: A substitute marked with ṅ replaces only the last sound — go → g + ava.
+  - id: dirgha.6-1-123
+    front: ‹avaṅ sphoṭāyanasya› (6.1.123)
+    back: In Sphoṭāyana's view word-final go may take ava before a vowel — gavāgram.
+  - id: dirgha.6-1-124
+    front: ‹indre ca› (6.1.124)
+    back: Before indra, go always takes ava — gavendraḥ.
+  - id: dirgha.6-1-125
+    front: ‹plutapragṛhyā aci nityam› (6.1.125)
+    back: Pluta and pragṛhya vowels always stay as they are before a vowel.
+items:
+  - id: di1
+    type: text
+    prompt: "‹daitya› + ‹ariḥ› gives…"
+    answers: [daityāriḥ]
+  - id: di2
+    type: text
+    prompt: "‹śrī› + ‹īśaḥ› gives…"
+    answers: [śrīśaḥ]
+  - id: di3
+    type: text
+    prompt: "‹viṣṇu› + ‹udayaḥ› gives…"
+    answers: [viṣṇūdayaḥ]
+  - id: di4
+    type: text
+    prompt: "‹hotṛ› + ‹ṛkāraḥ› (compound) gives…"
+    answers: [hotṝkāraḥ, hotṛkāraḥ]
+    explain: 6.1.101 gives the long ṝ; a vārttika also allows short ṛ.
+  - id: di5
+    type: text
+    prompt: "‹hare› + ‹ava› gives…"
+    answers: [hare'va, hareva]
+    explain: Word-final e swallows the short a (6.1.109). It is written हरेऽव, with the avagraha.
+  - id: di6
+    type: choice
+    prompt: What does the avagraha (ऽ) mark?
+    options:
+      - an a swallowed by a word-final e or o
+      - a long vowel
+      - a pause in recitation
+      - a nasal vowel
+    answer: 0
+  - id: di7
+    type: choice
+    prompt: Which set gives all the forms of ‹go› + ‹agram› that Varadarāja accepts?
+    options:
+      - ‹go 'gram›, ‹go agram› and ‹gavāgram›
+      - ‹gavāgram› only
+      - ‹go 'gram› only
+      - ‹gāgram› and ‹go agram›
+    answer: 0
+  - id: di8
+    type: choice
+    prompt: Why does ‹avaṅ› replace only the o of ‹go›, not the whole word?
+    options:
+      - It is marked with ṅ (1.1.53).
+      - It has a single sound (1.1.52).
+      - It is marked with ś (1.1.55).
+      - go is pragṛhya.
+    answer: 0
+  - id: di9
+    type: text
+    prompt: "‹go› + ‹indraḥ› gives…"
+    answers: [gavendraḥ]
+    explain: Before indra, go must take ava (6.1.124); then a + i gives e (6.1.87).
+  - id: di10
+    type: choice
+    prompt: In ‹āgaccha kṛṣṇa3 atra gauś carati›, why do the two a's not merge?
+    options:
+      - The first is pluta, and 6.1.125 keeps it as it is.
+      - atra is a particle.
+      - kṛṣṇa is a dual.
+      - 6.1.109 applies.
+    answer: 0
+  - id: di11
+    type: text
+    prompt: "‹dadhi› + ‹indraḥ› gives…"
+    answers: [dadhīndraḥ]
+    explain: i and i are of one class, so they merge into ī (6.1.101), setting 6.1.77 aside.

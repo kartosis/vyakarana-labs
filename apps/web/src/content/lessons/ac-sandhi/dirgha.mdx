@@ -1,0 +1,122 @@
+---
+title: Like vowels, the avagraha, and the word go
+deva: अकः सवर्णे दीर्घः
+module: ac-sandhi
+order: 5
+minutes: 30
+summary: LSK 42–50. Two vowels of one class merge into one long vowel. A word-final e or o swallows a following a, which writing marks with the avagraha. The word go gets three rules of its own, and a vowel prolated in calling stays untouched.
+lskRange: 42–50
+sutras: ["6.1.101", "6.1.109", "6.1.122", "1.1.55", "1.1.53", "6.1.123", "6.1.124", "8.2.84", "6.1.125"]
+---
+import Sa from "../../../components/Sa.astro";
+import Voice from "../../../components/Voice.astro";
+import SutraFolio from "../../../components/SutraFolio.astro";
+import SutraRef from "../../../components/SutraRef.astro";
+import Practice from "../../../components/Practice.astro";
+import Steps from "../../../islands/Steps.tsx";
+import SandhiPad from "../../../islands/SandhiPad.tsx";
+
+So far every rule has met two vowels of **different** classes. When the two are of the same class, savarṇa in the sense of 1.1.9, the result is simpler and the rule is one of the most used in the language.
+
+## Like vowels merge
+
+<SutraFolio id="6.1.101" level={2} />
+
+An <Sa iast="ak" /> vowel (a, i, u, ṛ or ḷ, short or long) followed by a vowel of its own class: one long vowel replaces both. Which long vowel? 1.1.50 picks the one of the same class. Varadarāja's examples:
+
+<div class="example">
+  <span><Sa iast="daitya" /> + <Sa iast="ariḥ" /> → <Sa iast="daityāriḥ" />, "enemy of the demons"</span>
+  <span><Sa iast="śrī" /> + <Sa iast="īśaḥ" /> → <Sa iast="śrīśaḥ" />, "lord of Śrī"</span>
+  <span><Sa iast="viṣṇu" /> + <Sa iast="udayaḥ" /> → <Sa iast="viṣṇūdayaḥ" />, "the rise of Viṣṇu"</span>
+  <span><Sa iast="hotṛ" /> + <Sa iast="ṛkāraḥ" /> → <Sa iast="hotṝkāraḥ" />, a grammarians' example: the word *hotṛ* before the letter ṛ</span>
+</div>
+
+Look at what this rule displaces. *dadhi* + *iha* fits 6.1.77 as well (i before a vowel), and *daitya* + *ariḥ* fits 6.1.87 (a before a vowel). 6.1.101 wins over both. And because ṛ and ḷ count as one class (the vārttika under 1.1.9), *hotṛ* + *ḷkāraḥ* merges too. ḷ has no long form, so the long vowel is ṝ.
+
+<Voice quote="kas-6.1.101-vt" voice="bhasya">
+  A vārttika, reported in the Kāśikā, adds a second form for ṛ. Before ṛ the merged vowel may also be the short ṛ: *hotṛkāraḥ* beside *hotṝkāraḥ*. A companion vārttika does the same for ḷ. The tool on this site lists the short form as a vārttika alternative.
+</Voice>
+
+## e and o swallow a following a
+
+<SutraFolio id="6.1.109" />
+
+At the end of a word, *e* or *o* before short *a* (<Sa iast="ati" />, tapara) takes over both vowels: the earlier form replaces the pair, <Sa iast="pūrvarūpa" />. In writing, the lost *a* is marked by the sign <Sa deva="ऽ" />, the <Sa iast="avagraha" />. Varadarāja:
+
+<div class="example">
+  <span><Sa iast="hare" /> + <Sa iast="ava" /> → <Sa iast="hare 'va" />, "O Hari, protect!"</span>
+  <span><Sa iast="viṣṇo" /> + <Sa iast="ava" /> → <Sa iast="viṣṇo 'va" />, "O Viṣṇu, protect!"</span>
+</div>
+
+<Voice quote="kas-6.1.109" voice="bhasya">
+  The Kāśikā names what this rule sets aside: the substitutes *ay* and *av* of 6.1.78. Without 6.1.109, *agne* + *atra* would be *agnayatra*. With it, the result is *agne 'tra*.
+</Voice>
+
+The avagraha is a reading aid, not a sound. *hare 'va* is pronounced *hareva*. Students meet it constantly in the Bhagavad-gītā and elsewhere, and it always marks the same thing: a word-final *e* or *o* that has swallowed an *a*.
+
+## The word go
+
+<Sa iast="go" />, "cow", ends in *o*. Before short *a* it should follow 6.1.109, and it may, but Pāṇini gives it two more options.
+
+<SutraFolio id="6.1.122" />
+
+<SutraFolio id="6.1.123" />
+
+A substitute <Sa iast="avaṅ" /> for the *o* raises a question that two paribhāṣās settle. <Sa iast="ava" /> has two sounds, and a substitute of more than one sound normally replaces the **whole** item:
+
+<SutraFolio id="1.1.55" compact />
+
+That would turn *go* into *ava*. Varadarāja: <Sa iast="iti prāpte" />, "this being the case", the next rule intervenes.
+
+<SutraFolio id="1.1.53" compact />
+
+*avaṅ* is marked with ṅ, so it replaces only the last sound, *o*. *go* becomes *g* + *ava*, *gava*, and *gava* + *agram* merges by 6.1.101.
+
+<Steps
+  client:visible
+  label="go + agram, three correct results"
+  steps={[
+    { parts: [["go"], [" "], ["agram"]], note: "go ‘cow’ and agram ‘front, foremost part’." },
+    { sutra: "6.1.109", parts: [["go"], ["'", "new"], ["gram"]], note: "First result: go 'gram, by pūrvarūpa." },
+    { sutra: "6.1.122", parts: [["go"], [" "], ["agram"]], note: "Second result: go agram. go may stay as it is before a, in everyday speech as in the Veda." },
+    { sutra: "1.1.53", parts: [["g"], ["ava", "new"], [" "], ["agram"]], note: "Third: by 6.1.123 avaṅ comes in. 1.1.55 would let it replace all of go; 1.1.53 limits it to the final o, since avaṅ is marked with ṅ." },
+    { sutra: "6.1.101", parts: [["gav"], ["A", "new"], ["gram"]], note: "a + a merge into ā: gavāgram. Varadarāja lists gavāgram, go 'gram and go agram." },
+  ]}
+/>
+
+Varadarāja's counter-examples show the limits. *citragu* + *agram* gives *citragvagram* by 6.1.77: the word must end in *e* or *o*. And inside a word, *go* + *i* gives *gavi*, "in the cow", by 6.1.78: the *o* must end a pada.
+
+<SutraFolio id="6.1.124" />
+
+Before *indra*, *avaṅ* is compulsory: *go* + *indraḥ* → *gava* + *indraḥ* → *gavendraḥ*, "lord of cows", by guṇa.
+
+## A vowel held in calling
+
+The last two rules of this stretch concern <Sa iast="pluta" />, the prolated vowel of three morae that you met with 1.2.27.
+
+<SutraFolio id="8.2.84" compact />
+
+When you call to someone far away, the last vowel of the sentence may be prolated. Its sign is a ३ after the vowel: <Sa deva="कृष्ण३" />, "Kṛṣṇaaa!".
+
+<SutraFolio id="6.1.125" />
+
+A pluta vowel, and a pragṛhya vowel (the subject of the next lesson), stays as it is before a vowel. Varadarāja's example is a small scene: <Sa iast="āgaccha kṛṣṇa3 atra gauś carati" />, "Come, Kṛṣṇa! A cow is grazing here." The prolated *a* of the call does not merge with the *a* of *atra*, though 6.1.101 would otherwise fuse them.
+
+<Voice quote="vp-1.77" voice="darsana">
+  Does a word change when a vowel in it is drawn out to three morae? For Bhartṛhari the word itself has no duration. Short, long and prolated belong to the audible sound that carries the word, and are only attributed to the word by a figure of speech. The calling voice stretches the sound; *kṛṣṇa* remains the same word.
+</Voice>
+
+## Try it
+
+<SandhiPad client:visible level={3} initialA="daitya" initialB="ariḥ" showExamples={false} />
+
+Try *hare* + *ava*, *śrī* + *īśaḥ*, and *go* + *agram*. For *go*, the tool shows the 6.1.109 form and reminds you of the other two.
+
+<Practice
+  skills={[
+    "Merging like vowels into a long vowel",
+    "Writing and reading the avagraha",
+    "Giving all three results of go + agram",
+    "Saying why a pluta vowel stays unjoined",
+  ]}
+/>

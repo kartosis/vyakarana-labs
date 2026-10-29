@@ -1,0 +1,107 @@
+cards:
+  - id: pragrhya.1-1-11
+    front: ‹īdūded dvivacanaṃ pragṛhyam› (1.1.11)
+    back: A dual ending in ī, ū or e is pragṛhya — harī etau, viṣṇū imau, gaṅge amū.
+  - id: pragrhya.1-1-12
+    front: ‹adaso māt› (1.1.12)
+    back: ī and ū after the m of adas are pragṛhya — amī īśāḥ.
+  - id: pragrhya.1-1-14
+    front: ‹nipāta ekāj anāṅ› (1.1.14)
+    back: A one-vowel particle, except āṅ, is pragṛhya — i indraḥ, u umeśaḥ.
+  - id: pragrhya.1-1-15
+    front: ‹ot› (1.1.15)
+    back: A particle ending in o is pragṛhya — aho īśāḥ.
+  - id: pragrhya.6-1-127
+    front: ‹iko 'savarṇe śākalyasya hrasvaś ca› (6.1.127)
+    back: A word-final ik before an unlike vowel may stay unjoined, shortened if long — cakri atra.
+  - id: pragrhya.6-1-128
+    front: ‹ṛty akaḥ› (6.1.128)
+    back: Before short ṛ, a word-final ak may stay unjoined, shortened if long — brahma ṛṣiḥ.
+  - id: pragrhya.na-samase
+    front: vārttika ‹na samāse›
+    back: Śākalya's unjoined forms are not used inside a compound — only vāpyaśvaḥ.
+items:
+  - id: pr1
+    type: choice
+    prompt: Why does ‹harī etau› stay unjoined?
+    options:
+      - harī is a dual in ī, so it is pragṛhya (1.1.11).
+      - harī is a particle.
+      - etau begins with e.
+      - It is Śākalya's option.
+    answer: 0
+  - id: pr2
+    type: choice
+    prompt: Which of these is pragṛhya?
+    options:
+      - ‹gaṅge›, "two Ganges rivers" (dual)
+      - ‹gaṅge›, "O Gaṅgā" (vocative)
+      - ‹vane›, "in the forest" (locative)
+      - ‹hare›, "O Hari" (vocative)
+    answer: 0
+  - id: pr3
+    type: text
+    prompt: "‹cakrī› + ‹atra›: give Śākalya's unjoined form"
+    answers: [cakri atra]
+    explain: The ik stays unjoined and is shortened (6.1.127).
+  - id: pr4
+    type: text
+    prompt: "‹brahma› + ‹ṛṣiḥ›: give Śākalya's unjoined form"
+    answers: [brahma ṛṣiḥ]
+  - id: pr5
+    type: choice
+    prompt: Why is ‹vāpī› + ‹aśvaḥ› only ‹vāpyaśvaḥ›?
+    options:
+      - Inside a compound Śākalya's unjoined form is not used (vārttika ‹na samāse›).
+      - vāpī is a dual.
+      - ī and a are of one class.
+      - aśva begins with a consonant.
+    answer: 0
+  - id: pr6
+    type: choice
+    prompt: Is the ‹ā› of ‹ā evaṃ nu manyase› pragṛhya?
+    options:
+      - "Yes: before a sentence or in recollection it is not āṅ (1.1.14)."
+      - "No: every ā is āṅ."
+      - "No: only duals are pragṛhya."
+      - "Yes, because evaṃ begins with e."
+    answer: 0
+  - id: pr7
+    type: choice
+    prompt: ‹aho› + ‹īśāḥ› gives…
+    options: [‹aho īśāḥ›, ‹ahavīśāḥ›, ‹aha īśāḥ›, ‹ahośāḥ›]
+    answer: 0
+    explain: aho is a particle ending in o, so it is pragṛhya (1.1.15).
+  - id: pr8
+    type: choice
+    prompt: Which three forms does Varadarāja give for the vocative ‹viṣṇo› + ‹iti›?
+    options:
+      - ‹viṣṇo iti›, ‹viṣṇa iti› and ‹viṣṇaviti›
+      - ‹viṣṇaviti› only
+      - ‹viṣṇo iti› only
+      - ‹viṣṇeti› and ‹viṣṇaviti›
+    answer: 0
+  - id: pr9
+    type: text
+    prompt: "‹gaurī› + ‹au› (inside a word) gives…"
+    answers: [gauryau, gauryyau]
+    explain: Inside a word Śākalya's unjoined form is not available; y may double after r (8.4.46).
+  - id: pr10
+    type: choice
+    prompt: When two vowels meet, which rule is tested first?
+    options:
+      - "6.1.125: pragṛhya and pluta vowels stay as they are."
+      - "6.1.77: yaṇ"
+      - "6.1.78: ay, av, āy, āv"
+      - "6.1.87: guṇa"
+    answer: 0
+  - id: pr11
+    type: text
+    prompt: "‹madhu› + ‹atra›: give Śākalya's unjoined form"
+    answers: [madhu atra]
+  - id: pr12
+    type: choice
+    prompt: The particle ‹u› after ‹kim›, before ‹uktam›, may also appear as…
+    options: [‹kimv uktam›, ‹kimūktam›, ‹kim vuktam›, ‹kimo uktam›]
+    answer: 0
+    explain: By 8.3.33 u may become v after m. It is pragṛhya (1.1.14), so it never merges into kimūktam.

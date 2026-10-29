@@ -1,0 +1,160 @@
+---
+title: a meets e, ai, o, au — vṛddhi, and prefixes on verbs
+deva: वृद्धिरेचि
+module: ac-sandhi
+order: 4
+minutes: 35
+summary: LSK 32–41. Before e, ai, o or au, a fuses into vṛddhi, ai or au. Then come the exceptions to the exceptions — prefixes on verbs, the word om, the preposition ā — and the rule that lets one fused vowel belong to both words.
+lskRange: 32–41
+sutras: ["1.1.1", "6.1.88", "6.1.89", "1.4.59", "1.3.1", "6.1.91", "6.1.94", "1.1.64", "6.1.95", "6.1.85"]
+---
+import Sa from "../../../components/Sa.astro";
+import Voice from "../../../components/Voice.astro";
+import SutraFolio from "../../../components/SutraFolio.astro";
+import SutraRef from "../../../components/SutraRef.astro";
+import Practice from "../../../components/Practice.astro";
+import Steps from "../../../islands/Steps.tsx";
+import SandhiPad from "../../../islands/SandhiPad.tsx";
+
+6.1.87 fuses *a* with any following vowel into guṇa. Taken alone it would turn *kṛṣṇa* + *ekatvam* into *kṛṣṇekatvam*, with the guṇa vowel *e*. The language says *kṛṣṇaikatvam*. Before *e ai o au*, a stronger grade of vowel is needed, and it has its own name.
+
+## The first sūtra of the Aṣṭādhyāyī
+
+<SutraFolio id="1.1.1" level={2} />
+
+<Sa iast="ā" />, <Sa iast="ai" /> and <Sa iast="au" /> are called <Sa iast="vṛddhi" />. Split the sūtra and <Sa iast="ādaic" /> is <Sa iast="āt" /> + <Sa iast="aic" />: the *d* is a *t*, voiced before the vowel. That *t* makes the vowels tapara (1.1.70), so only vowels of these lengths are vṛddhi. The Kāśikā points out that the *t* stands before *ai* and *au* as well as after *ā*, and keeps out their longer, three- and four-mora varieties. Compare the two definitions: *vṛddhir ādaic* puts the name first, *adeṅ guṇaḥ* puts it last.
+
+<Voice quote="mbh-1.1.1-mangala" voice="bhasya">
+  Patañjali notices the reversed order and explains it. The Aṣṭādhyāyī is meant to open with an auspicious word, and *vṛddhi* means "growth". So the very first syllables of the grammar are a blessing on its students.
+</Voice>
+
+## a + e ai o au
+
+<SutraFolio id="6.1.88" />
+
+When *a* or *ā* (<Sa iast="āt" />, carried over from 6.1.87) meets <Sa iast="ec" />, one vṛddhi vowel replaces both. 1.1.50 again picks the closest: *ai* for *a* + *e* or *ai*, *au* for *a* + *o* or *au*. Varadarāja's examples:
+
+<div class="example">
+  <span><Sa iast="kṛṣṇa" /> + <Sa iast="ekatvam" /> → <Sa iast="kṛṣṇaikatvam" />, "oneness with Kṛṣṇa"</span>
+  <span><Sa iast="gaṅgā" /> + <Sa iast="oghaḥ" /> → <Sa iast="gaṅgaughaḥ" />, "the flood of the Ganges"</span>
+  <span><Sa iast="deva" /> + <Sa iast="aiśvaryam" /> → <Sa iast="devaiśvaryam" />, "the lordship of the gods"</span>
+  <span><Sa iast="kṛṣṇa" /> + <Sa iast="autkaṇṭhyam" /> → <Sa iast="kṛṣṇautkaṇṭhyam" />, "longing for Kṛṣṇa"</span>
+</div>
+
+Varadarāja adds one word: <Sa iast="guṇāpavādaḥ" />, "an exception to guṇa". Every case of *a* + *ec* is also a case of *a* + *ac*, so 6.1.87 always fits too. A rule whose cases all fall inside another rule's is an <Sa iast="apavāda" />, and it wins: otherwise it could never apply at all.
+
+<Voice quote="kas-6.1.88" voice="bhasya">
+  The Kāśikā states the same relation in the same words, <Sa iast="ādguṇasyāpavādaḥ" />. It doubles each example with a short and a long *a*: *brahmaiḍakā* and *khaṭvaiḍakā*, *brahmaudanaḥ* and *khaṭvaudanaḥ*. The length of the first vowel makes no difference.
+</Voice>
+
+## The forms of i "go" and edh "grow"
+
+<SutraFolio id="6.1.89" />
+
+Before forms of the roots *i* "go" and *edh* "grow" that begin with *ec*, and before the substitute <Sa iast="ūṭh" />, *a* also takes vṛddhi:
+
+<div class="example">
+  <span><Sa iast="upa" /> + <Sa iast="eti" /> → <Sa iast="upaiti" />, "approaches"</span>
+  <span><Sa iast="upa" /> + <Sa iast="edhate" /> → <Sa iast="upaidhate" />, "thrives"</span>
+  <span><Sa iast="praṣṭha" /> + <Sa iast="ūhaḥ" /> → <Sa iast="praṣṭhauhaḥ" />, where <Sa iast="ūṭh" /> has replaced the v of <Sa iast="vāh" /></span>
+</div>
+
+Why "beginning with *ec*"? Varadarāja's counter-example: *upa* + *itaḥ* gives *upetaḥ*, "approached", by ordinary guṇa, because *itaḥ* begins with *i*. Four vārttikas extend the rule, and Varadarāja lists them:
+
+<div class="table-wrap">
+<table>
+<thead><tr><th scope="col">Vārttika</th><th scope="col">Varadarāja's examples</th></tr></thead>
+<tbody>
+<tr><td><Sa iast="akṣād ūhinyām upasaṃkhyānam" />: akṣa before ūhinī</td><td><Sa iast="akṣauhiṇī senā" />, "an army division"</td></tr>
+<tr><td><Sa iast="prād ūhoḍhoḍhyeṣaiṣyeṣu" />: pra before ūha, ūḍha, ūḍhi, eṣa, eṣya</td><td><Sa iast="prauhaḥ, prauḍhaḥ, prauḍhiḥ, praiṣaḥ, praiṣyaḥ" /></td></tr>
+<tr><td><Sa iast="ṛte ca tṛtīyāsamāse" />: before ṛta, in a compound of the instrumental</td><td><Sa iast="sukhena ṛtaḥ" /> → <Sa iast="sukhārtaḥ" />; but <Sa iast="paramartaḥ" />, which is not such a compound</td></tr>
+<tr><td><Sa iast="pravatsatarakambalavasanārṇadaśānām ṛṇe" />: pra, vatsatara, kambala, vasana, ṛṇa and daśa before ṛṇa</td><td><Sa iast="prārṇam, vatsatarārṇam" /> and the rest</td></tr>
+</tbody>
+</table>
+</div>
+
+Here *ā* and *ār* are vṛddhi too: 1.1.51 adds the r when a vṛddhi vowel replaces ṛ, exactly as it does for guṇa.
+
+## Prefixes on verbs
+
+The next rules need two more names, and Varadarāja defines them on the spot.
+
+<SutraFolio id="1.4.59" compact />
+
+<SutraFolio id="1.3.1" compact />
+
+Varadarāja lists the twenty-two <Sa iast="prādi" />: <Sa iast="pra, parā, apa, sam, anu, ava, nis, nir, dus, dur, vi, āṅ, ni, adhi, api, ati, su, ut, abhi, prati, pari, upa" />. Joined to a verb, each is an <Sa iast="upasarga" />, a prefix. A <Sa iast="dhātu" /> is a verbal root, an item of the list that begins with *bhū*.
+
+<SutraFolio id="6.1.91" />
+
+A prefix ending in *a* or *ā* before a root beginning with *ṛ* takes vṛddhi, not guṇa: *pra* + *ṛcchati* → *prārcchati*, "goes forth". Without a prefix, guṇa applies as usual: the Kāśikā contrasts *khaṭvā* + *ṛcchati* → *khaṭvarcchati*.
+
+<SutraFolio id="6.1.94" />
+
+Before a root beginning with *e* or *o*, the same prefix does not take vṛddhi either. The **later** vowel replaces both, a substitution called <Sa iast="pararūpa" />, "the form of the second": *pra* + *ejate* → *prejate*, "trembles"; *upa* + *oṣati* → *upoṣati*, "burns". This sets aside 6.1.88. So *upa* + *eti* would become *upeti* — except that 6.1.89 sets 6.1.94 aside in turn, giving *upaiti*. An exception can have its own exception.
+
+<Steps
+  client:visible
+  label="Three prefixes, three rules"
+  steps={[
+    { label: "pra + ṛcchati", parts: [["pr"], ["A", "mark"], ["f", "mark"], ["cCati"]], note: "A prefix in a before a root in ṛ. 6.1.87 would give guṇa (prarcchati)." },
+    { sutra: "6.1.91", parts: [["pr"], ["Ar", "new"], ["cCati"]], note: "Vṛddhi instead, with r by 1.1.51: prārcchati." },
+    { label: "pra + ejate", parts: [["pr"], ["a", "mark"], ["e", "mark"], ["jate"]], note: "A prefix in a before a root in e. 6.1.88 would give vṛddhi (praijate)." },
+    { sutra: "6.1.94", parts: [["pr"], ["e", "new"], ["jate"]], note: "Pararūpa instead: the later vowel replaces both. prejate." },
+    { label: "upa + eti", parts: [["up"], ["a", "mark"], ["e", "mark"], ["ti"]], note: "A prefix in a before a form of i ‘go’ beginning with e. 6.1.94 would give pararūpa (upeti)." },
+    { sutra: "6.1.89", parts: [["up"], ["E", "new"], ["ti"]], note: "6.1.89 sets 6.1.94 aside: vṛddhi. upaiti." },
+  ]}
+/>
+
+<Voice quote="vp-2.188" voice="darsana">
+  What does a prefix contribute? Bhartṛhari gives three views, and does not choose between them. It expresses a meaning of its own; or the meaning was already latent in the root and the prefix only brings it to light; or it lends the root a new power. Pāṇini's sandhi rules treat the prefix as a separate item joined to the verb, and 6.1.89, 6.1.91 and 6.1.94 show how tightly the joining binds.
+</Voice>
+
+## Pararūpa elsewhere
+
+Pararūpa also replaces two vowels in a list of words that Varadarāja attaches here, by a vārttika on the definition of <Sa iast="ṭi" />.
+
+<SutraFolio id="1.1.64" compact />
+
+The <Sa iast="ṭi" /> of an item is its last vowel with whatever follows. The vārttika <Sa iast="śakandhvādiṣu pararūpaṃ vācyam" />, "in śakandhu and the like, pararūpa should be stated", applies to the ṭi (<Sa iast="tac ca ṭeḥ" />):
+
+<div class="example">
+  <span><Sa iast="śaka" /> + <Sa iast="andhu" /> → <Sa iast="śakandhuḥ" />, "well of the Śakas", not *śakāndhu*</span>
+  <span><Sa iast="karka" /> + <Sa iast="andhu" /> → <Sa iast="karkandhuḥ" />, the jujube tree</span>
+  <span><Sa iast="manas" /> + <Sa iast="īṣā" /> → <Sa iast="manīṣā" />, "wisdom": the whole ṭi *as* gives way to *ī*</span>
+  <span><Sa iast="mārtaṇḍaḥ" />, the sun. The list is open-ended (<Sa iast="ākṛtigaṇa" />): words of this pattern in good usage belong to it.</span>
+</div>
+
+<SutraFolio id="6.1.95" />
+
+Before *om*, and before the preposition <Sa iast="āṅ" /> (*ā*, "up to, slightly"), *a* again gives way to the following vowel: *śivāya* + *om* → *śivāyoṃ namaḥ*, "Oṃ, homage to Śiva". The second example needs one more rule.
+
+<SutraFolio id="6.1.85" />
+
+A single substitute for two vowels counts as the end of the first item and the beginning of the second. Take *śiva* + *ā* + *ihi*, "Śiva, come here". First *ā* + *ihi* fuse by guṇa into *ehi*. That *e* replaced the *ā* of the preposition, so by 6.1.85 it still counts as *āṅ*, and 6.1.95 applies: *śiva* + *ehi* → *śivehi*.
+
+<Steps
+  client:visible
+  label="śiva + ā + ihi"
+  steps={[
+    { parts: [["Siva"], [" "], ["A"], [" "], ["ihi"]], note: "śiva ‘O Śiva’, the preposition ā (āṅ) and ihi ‘go’: ā + ihi means ‘come’." },
+    { sutra: "6.1.87", parts: [["Siva"], [" "], ["e", "new"], ["hi"]], note: "ā + i fuse into the guṇa vowel e: ehi, ‘come’." },
+    { sutra: "6.1.85", parts: [["Siva"], [" "], ["e", "mark"], ["hi"]], note: "The e replaced both ā and i, so it counts as the end of āṅ (and the beginning of ihi)." },
+    { sutra: "6.1.95", parts: [["Siv"], ["e", "new"], ["hi"]], note: "a before āṅ: the later vowel replaces both. śivehi, as Varadarāja gives it — not *śivaihi by 6.1.88." },
+  ]}
+/>
+
+## Try it
+
+<SandhiPad client:visible level={3} initialA="gaṅgā" initialB="oghaḥ" showExamples={false} />
+
+The tool treats both words as independent, so it cannot know whether your first word is a prefix. When it is one of *pra, parā, apa, ava, upa*, it warns you that 6.1.89, 6.1.91 or 6.1.94 may decide instead.
+
+<Practice
+  skills={[
+    "Naming the vṛddhi vowels",
+    "Fusing a with e, ai, o, au",
+    "Telling guṇa, vṛddhi and pararūpa apart after a prefix",
+    "Explaining what an apavāda is",
+  ]}
+/>

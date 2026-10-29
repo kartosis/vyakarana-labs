@@ -20,9 +20,9 @@ modules:
     order: 2
     deva: अच्सन्धिप्रकरणम्
     title: Vowel sandhi
-    summary: What happens when vowels meet — yaṇ, guṇa, vṛddhi, savarṇa-dīrgha, ayādi, pūrvarūpa, prakṛtibhāva.
+    summary: What happens when vowels meet, LSK 15–61 — yaṇ, ayādi, guṇa, vṛddhi, pararūpa, savarṇa-dīrgha, pūrvarūpa and the words that stay apart.
     lsk: true
-    status: soon
+    status: open
   - id: hal-sandhi
     order: 3
     deva: हल्सन्धिप्रकरणम्

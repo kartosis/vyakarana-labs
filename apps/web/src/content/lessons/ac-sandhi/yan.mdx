@@ -1,0 +1,127 @@
+---
+title: Vowels that become semivowels
+deva: इको यणचि
+module: ac-sandhi
+order: 1
+minutes: 30
+summary: LSK 15–21. When i, u, ṛ or ḷ meets a vowel of another class, it turns into y, v, r or l. Varadarāja carries one word, sudhyupāsyaḥ, through seven sūtras, and three interpretive rules settle which sound changes, into what, and how much of it.
+lskRange: 15–21
+sutras: ["6.1.77", "1.1.66", "1.1.50", "8.4.47", "8.4.53", "8.2.23", "1.1.52"]
+---
+import Sa from "../../../components/Sa.astro";
+import Voice from "../../../components/Voice.astro";
+import SutraFolio from "../../../components/SutraFolio.astro";
+import SutraRef from "../../../components/SutraRef.astro";
+import Practice from "../../../components/Practice.astro";
+import Steps from "../../../islands/Steps.tsx";
+import SandhiPad from "../../../islands/SandhiPad.tsx";
+
+The Saṃjñā-prakaraṇa gave you names. From here on the names go to work. The Ac-sandhi-prakaraṇa, LSK 15 to 61, settles what happens when a vowel meets a vowel in <Sa iast="saṃhitā" />, the unbroken flow of speech defined by <SutraRef id="1.4.109" />. It opens with the change you will meet most often.
+
+<SutraFolio id="6.1.77" level={2} />
+
+You unpacked this rule in [How to read a sūtra](/course/varnamala/reading-sutras/): *in place of ik, a yaṇ comes in, when an ac follows*, all under the heading <Sa iast="saṃhitāyām" /> (<SutraRef id="6.1.72" />). The four ik vowels and the four yaṇ sounds line up exactly:
+
+<div class="table-wrap">
+<table>
+<thead><tr><th scope="col">ik (with its long form)</th><th scope="col">becomes</th><th scope="col">shared place</th></tr></thead>
+<tbody>
+<tr><td><Sa iast="i, ī" /></td><td><Sa iast="y" /></td><td>palate</td></tr>
+<tr><td><Sa iast="u, ū" /></td><td><Sa iast="v" /></td><td>lips (v: teeth and lips)</td></tr>
+<tr><td><Sa iast="ṛ, ṝ" /></td><td><Sa iast="r" /></td><td>roof of the mouth (retroflex)</td></tr>
+<tr><td><Sa iast="ḷ" /></td><td><Sa iast="l" /></td><td>teeth</td></tr>
+</tbody>
+</table>
+</div>
+
+Varadarāja's vṛtti ends by setting up one example, <Sa iast="sudhī upāsya iti sthite" />, "when we have *sudhī upāsya*". He carries it through the next six sūtras, and this lesson follows him. The two words form a compound, *sudhyupāsyaḥ*, "to be worshipped by the wise" (the Bālamanoramā analyses it as <Sa iast="sudhībhir upāsyaḥ" />).
+
+<Voice quote="kas-6.1.77" voice="bhasya">
+  The Kāśikā gives an example for each ik vowel in turn: i in *dadhyatra*, u in *madhvatra*, ṛ in *kartrartham* and *hartrartham*, and ḷ in *lākṛtiḥ*. ḷ is rare, but the rule covers it: its semivowel is l, as ṛ's is r.
+</Voice>
+
+## Before, not after
+
+The rule says *aci*, a locative: "when a vowel (follows)". Which of the two meeting vowels changes, then, the first or the second? A paribhāṣā from the first pāda of the Aṣṭādhyāyī answers, and it is LSK 16.
+
+<SutraFolio id="1.1.66" />
+
+A word in the locative names what must come **immediately after** the sound that changes. In *sudhī upāsya* the ī changes, because u follows it. The u is only the condition for the change.
+
+<Voice quote="kas-1.1.66" voice="bhasya">
+  The word <Sa iast="nirdiṣṭe" />, "named", is read as requiring contact. In *agnicid atra* the i of *-cit* reaches the vowel a only across a consonant, so 6.1.77 cannot touch it. The examples *dadhy udakam*, *madhv idam* and *pacaty odanam* show the rule where the two vowels do touch.
+</Voice>
+
+## Which semivowel
+
+6.1.77 names four substitutes at once. Nothing in it says that ī must become y and not v, r or l. Varadarāja brings in the general principle for choosing among substitutes:
+
+<SutraFolio id="1.1.50" />
+
+Of y, v, r and l, the sound most like the palatal ī is the palatal y. Varadarāja: <Sa iast="sudhy upāsya iti jāte" />, "so we have *sudhy upāsya*".
+
+<Voice quote="mbh-1.1.50" voice="bhasya">
+  Patañjali tries this very example on 1.1.50 and rejects it. Here the pairing i to y, u to v, ṛ to r, ḷ to l already follows from <SutraRef id="1.3.10" />, which pairs the members of two lists in order. You will meet that rule in the next lesson. 1.1.50 earns its place elsewhere: when two a's merge by <SutraRef id="6.1.101" />, only 1.1.50 makes the long vowel ā and not ī or ū.
+</Voice>
+
+## To the finished word
+
+Varadarāja does not stop at *sudhy upāsya*. He takes it to its final form with three rules from the eighth chapter and one more paribhāṣā. Rules from <SutraRef id="8.2.1" /> onward apply after all the others, and among themselves in the order of their numbers (the third lesson of this module explains why). So they meet the word only once the yaṇ is in place, and 8.2.23 acts before 8.4.47 and 8.4.53, although Varadarāja introduces it after them.
+
+<SutraFolio id="8.4.47" compact />
+
+<SutraFolio id="8.4.53" compact />
+
+<SutraFolio id="8.2.23" compact />
+
+<SutraFolio id="1.1.52" compact />
+
+Step through the whole derivation:
+
+<Steps
+  client:visible
+  label="sudhī + upāsya, LSK 15–21"
+  steps={[
+    { parts: [["suDI"], [" "], ["upAsya"]], note: "Two words joined in a compound: sudhī ‘the wise’ and upāsya ‘to be worshipped’. Inside a compound, joining is compulsory." },
+    { label: "1.1.66", parts: [["suD"], ["I", "mark"], [" "], ["upAsya"]], note: "ī is an ik vowel, and the vowel u follows it with nothing between. The locative aci points at the ī, not at the u." },
+    { sutra: "6.1.77", parts: [["suD"], ["y", "new"], [" "], ["upAsya"]], note: "ī is replaced by a yaṇ sound. Of y v r l, the palatal y is closest to the palatal ī (1.1.50). Varadarāja: sudhy upāsya iti jāte." },
+    { sutra: "8.2.23", parts: [["suD"], ["y", "mark"], [" "], ["upAsya"]], note: "sudhy is a word ending in a cluster, dhy, so this rule would drop its final sound, y (1.1.52 limits an operation to the last sound). A vārttika forbids that when the sound is a yaṇ: yaṇaḥ pratiṣedho vācyaḥ. The y stays." },
+    { sutra: "8.4.47", parts: [["suD"], ["D", "new"], ["y"], [" "], ["upAsya"]], note: "dh follows a vowel and is followed by a consonant, not a vowel. It may be doubled: sudhdhy." },
+    { sutra: "8.4.53", parts: [["su"], ["d", "new"], ["Dy"], [" "], ["upAsya"]], note: "The first dh stands before a voiced stop, so it becomes the unaspirated voiced d. Varadarāja: the earlier dh becomes d." },
+    { label: "result", parts: [["sudDyupAsyaH"]], note: "suddhyupāsyaḥ, with its nominative ending. The doubling is optional (vā), so sudhyupāsyaḥ is equally correct." },
+  ]}
+/>
+
+Varadarāja closes the passage with three more examples, each worked the same way:
+
+<div class="example">
+  <span><Sa iast="madhu" /> + <Sa iast="ari" /> → <Sa iast="maddhvariḥ" /> or <Sa iast="madhvariḥ" />, "enemy of Madhu": u becomes v, and dh may double.</span>
+  <span><Sa iast="dhātṛ" /> + <Sa iast="aṃśa" /> → <Sa iast="dhātraṃśaḥ" />, "a portion of the Creator": ṛ becomes r.</span>
+  <span><Sa iast="ḷ" /> + <Sa iast="ākṛti" /> → <Sa iast="lākṛtiḥ" />, "the shape of ḷ": ḷ becomes l.</span>
+</div>
+
+<Voice quote="vp-2.104" voice="darsana">
+  Has the ī of *sudhī* really turned into a y? Bhartṛhari says no. In joined speech the sounds keep their own nature and only *seem* to become other sounds, because they take on a different capacity. Pāṇini's "substitution" describes how the joined form can be produced. It does not claim that one sound was destroyed and another created.
+</Voice>
+
+## Not every vowel junction
+
+6.1.77 is the most general vowel rule in this chapter, and the later lessons are largely about its exceptions. Two you can see already:
+
+- When the second vowel is **of the same class**, the two merge into one long vowel instead: *dadhi* + *iha* gives *dadhīha*, not *dadhyiha* (<SutraRef id="6.1.101" />, lesson 5).
+- Outside compounds, Śākalya allows the ik to stay **unjoined**: *dadhi atra* beside *dadhyatra* (<SutraRef id="6.1.127" />, lesson 6).
+
+## Try it
+
+The tool below runs the same engine as the [vowel sandhi tool](/tools/sandhi/). Change the words and watch which rules apply.
+
+<SandhiPad client:visible level={3} initialA="madhu" initialB="ariḥ" initialCompound showExamples={false} />
+
+<Practice
+  skills={[
+    "Turning i, u, ṛ, ḷ into y, v, r, l before a vowel",
+    "Saying which of two vowels a locative rule changes",
+    "Choosing a substitute by 1.1.50",
+    "Following sudhī + upāsya through LSK 15–21",
+  ]}
+/>

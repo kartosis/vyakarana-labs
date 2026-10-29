@@ -1,0 +1,100 @@
+cards:
+  - id: vrddhi.1-1-1
+    front: ‹vṛddhir ādaic› (1.1.1)
+    back: ā, ai and au are called vṛddhi. The first sūtra of the Aṣṭādhyāyī, opening with an auspicious word.
+  - id: vrddhi.6-1-88
+    front: ‹vṛddhir eci› (6.1.88)
+    back: a or ā and a following e ai o au become one vṛddhi vowel — gaṅgaughaḥ. An apavāda of 6.1.87.
+  - id: vrddhi.apavada
+    front: apavāda
+    back: A rule whose cases all fall inside another rule's; it wins, or it could never apply.
+  - id: vrddhi.6-1-89
+    front: ‹etyedhatyūṭhsu› (6.1.89)
+    back: a + forms of i and edh beginning with e or ai, or ūṭh → vṛddhi — upaiti, upaidhate.
+  - id: vrddhi.6-1-94
+    front: ‹eṅi pararūpam› (6.1.94)
+    back: A prefix in a + a root in e or o → the later vowel replaces both — prejate, upoṣati.
+  - id: vrddhi.6-1-91
+    front: ‹upasargād ṛti dhātau› (6.1.91)
+    back: A prefix in a + a root in ṛ → vṛddhi with r — prārcchati.
+  - id: vrddhi.6-1-95
+    front: ‹omāṅoś ca› (6.1.95)
+    back: a before om or āṅ → pararūpa — śivāyoṃ namaḥ, śivehi.
+items:
+  - id: vr1
+    type: text
+    prompt: "‹kṛṣṇa› + ‹ekatvam› gives…"
+    answers: [kṛṣṇaikatvam]
+  - id: vr2
+    type: text
+    prompt: "‹gaṅgā› + ‹oghaḥ› gives…"
+    answers: [gaṅgaughaḥ]
+  - id: vr3
+    type: text
+    prompt: "‹deva› + ‹aiśvaryam› gives…"
+    answers: [devaiśvaryam]
+  - id: vr4
+    type: choice
+    prompt: The prefix ‹pra› + the verb ‹ejate› gives…
+    options: [‹prejate›, ‹praijate›, ‹prāijate›, ‹pra ejate›]
+    answer: 0
+    explain: A prefix in a before a root in e takes pararūpa (6.1.94), setting vṛddhi aside.
+  - id: vr5
+    type: choice
+    prompt: The prefix ‹upa› + the verb ‹eti› gives…
+    options: [‹upaiti›, ‹upeti›, ‹upāiti›, ‹upayeti›]
+    answer: 0
+    explain: For forms of i "go" beginning with e, 6.1.89 gives vṛddhi and sets pararūpa (6.1.94) aside.
+  - id: vr6
+    type: choice
+    prompt: The prefix ‹pra› + the verb ‹ṛcchati› gives…
+    options: [‹prārcchati›, ‹prarcchati›, ‹pra ṛcchati›, ‹praṛcchati›]
+    answer: 0
+    explain: 6.1.91 gives vṛddhi before a root in ṛ, with r by 1.1.51.
+  - id: vr7
+    type: text
+    prompt: "‹śivāya› + ‹om› gives…"
+    answers: [śivāyom, śivāyoṃ]
+    explain: Before om, a gives way to the following vowel (6.1.95). Before namaḥ, the m is written as anusvāra — śivāyoṃ namaḥ.
+  - id: vr8
+    type: choice
+    prompt: Why is 6.1.88 called an apavāda of 6.1.87?
+    options:
+      - Every case of a + e ai o au is also a case of a + vowel, so it could never apply unless it wins.
+      - It comes later in the grammar.
+      - It is optional.
+      - It applies only in compounds.
+    answer: 0
+  - id: vr9
+    type: choice
+    prompt: According to Patañjali, why does the Aṣṭādhyāyī begin with the word ‹vṛddhi›?
+    options:
+      - It means "growth", an auspicious beginning.
+      - It is the most frequent term.
+      - It is the shortest name.
+      - Kātyāyana required it.
+    answer: 0
+  - id: vr10
+    type: choice
+    prompt: ‹śiva› + ‹ehi› (from ‹ā› + ‹ihi›) gives ‹śivehi›, not ‹śivaihi›. Which rules decide?
+    options:
+      - 6.1.85 lets the e count as āṅ, so 6.1.95 gives pararūpa.
+      - 6.1.88 gives vṛddhi.
+      - 6.1.109 gives pūrvarūpa.
+      - 1.1.11 makes it pragṛhya.
+    answer: 0
+  - id: vr11
+    type: choice
+    prompt: ‹manas› + ‹īṣā› gives…
+    options: [‹manīṣā›, ‹manaseṣā›, ‹manaḥ īṣā›, ‹manāṣā›]
+    answer: 0
+    explain: By the vārttika on 1.1.64, the ṭi (as) gives way to the following vowel.
+  - id: vr12
+    type: choice
+    prompt: ‹upa› + ‹itaḥ› gives ‹upetaḥ›, not ‹upaitaḥ›. Why?
+    options:
+      - itaḥ begins with i, not e or ai, so 6.1.89 does not apply.
+      - upa is not a prefix.
+      - itaḥ is a particle.
+      - 6.1.94 applies.
+    answer: 0

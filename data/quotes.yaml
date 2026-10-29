@@ -239,8 +239,8 @@
   author: Patañjali
   work: Mahābhāṣya
   ref: on 1.1.1
-  deva: माङ्गलिक आचार्यो महतः शास्त्रौघस्य मङ्गलार्थं वृद्धिशब्दमादितः प्रयुङ्क्ते । मङ्गलादीनि हि शास्त्राणि प्रथन्ते वीरपुरुषकाणि भवन्त्यायुष्मत्पुरुषकाणि चाध्येतारश्च वृद्धियुक्ता यथा स्युरिति ।
-  translation: The teacher cares about good beginnings. For the sake of good fortune he puts the word vṛddhi, "growth", at the head of his great flood of teaching. For sciences that begin auspiciously spread far and have heroic and long-lived men among them, and he wants those who study it to be blessed with growth.
+  deva: कथं वृद्धिरादैज् इति । एतदेकमाचार्यस्य मङ्गलार्थं मृष्यताम् । माङ्गलिक आचार्यो महतः शास्त्रौघस्य मङ्गलार्थं वृद्धिशब्दमादितः प्रयुङ्क्ते । मङ्गलादीनि हि शास्त्राणि प्रथन्ते वीरपुरुषकाणि भवन्त्यायुष्मत्पुरुषकाणि चाध्येतारश्च वृद्धियुक्ता यथा स्युरिति । सर्वत्रैव हि व्याकरणे पूर्वोच्चारिता संज्ञी, परोच्चारिता संज्ञा अदेङ् गुण इति यथा ॥
+  translation: "Then how can he say vṛddhir ādaic? Let this one case be pardoned: it is for the sake of good fortune. The teacher cares about good beginnings, and puts the word vṛddhi, ‘growth’, at the head of his great flood of teaching. For sciences that begin auspiciously spread far and have heroic and long-lived men among them, and he wants those who study it to be blessed with growth. Everywhere else in grammar, what is named is stated first and its name after it, as in adeṅ guṇaḥ."
   verified: true
   checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/sutraani/bhashya.txt
 - id: mbh-1.1.50
@@ -339,3 +339,35 @@
   translation: dadhi atra or dadhyatra; madhu atra or madhvatra; kumāri atra or kumāryatra.
   verified: true
   checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/sutraani/kashika.txt
+- id: vp-2.238
+  author: Bhartṛhari
+  work: Vākyapadīya
+  ref: Vākyakāṇḍa 2.238 (verse numbering of the ashtadhyayi.com text)
+  deva: उपायाः शिक्षमाणानां बालानां उपलापनाः । असत्ये वर्त्मनि स्थित्वा ततः सत्यं समीहते ॥
+  translation: The devices of teaching are ways of coaxing children who are learning. Standing first on a path that is not real, one then reaches for the real.
+  verified: true
+  checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/vakyapadeeyam/data.txt
+- id: vp-2.188
+  author: Bhartṛhari
+  work: Vākyapadīya
+  ref: Vākyakāṇḍa 2.188 (verse numbering of the ashtadhyayi.com text)
+  deva: स वाचको विशेषाणां संभवाद्द्योतकोऽपि वा । शक्त्याधानाय वा धातोः सहकारी प्रयुज्यते ॥
+  translation: The prefix either expresses particular meanings itself; or, since those meanings are already possible in the root, it only brings them to light; or it is used as a helper that lends the root a new power.
+  verified: true
+  checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/vakyapadeeyam/data.txt
+- id: vp-1.77
+  author: Bhartṛhari
+  work: Vākyapadīya
+  ref: Brahmakāṇḍa 1.77 (verse numbering of the ashtadhyayi.com text)
+  deva: स्वभावभेदान्नित्यत्वे ह्रस्वदीर्घप्लुतादिषु । प्राकृतस्य ध्वनेः कालः शब्दस्येत्युपचर्यते ॥
+  translation: Since the word itself is eternal, in short, long and prolated vowels it is the duration of the primary sound, which differs by its own nature, that is figuratively ascribed to the word.
+  verified: true
+  checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/vakyapadeeyam/data.txt
+- id: vp-2.38
+  author: Bhartṛhari
+  work: Vākyapadīya
+  ref: Vākyakāṇḍa 2.38 (verse numbering of the ashtadhyayi.com text)
+  deva: उपादायापि ये हेयास्तानुपायान्प्रचक्षते । उपायानां च नियमो नावश्यं अवतिष्ठते ॥
+  translation: What is taken up only to be let go again is called a means. And among means, no single fixed rule need hold.
+  verified: true
+  checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/vakyapadeeyam/data.txt

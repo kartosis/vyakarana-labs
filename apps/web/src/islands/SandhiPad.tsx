@@ -10,15 +10,17 @@ interface Example {
   shows: string;
 }
 
-/** Each example is chosen to make one rule win. */
+/** Each example makes a different rule win; all are textbook examples (LSK or Kāśikā). */
 const EXAMPLES: Example[] = [
   { a: "dadhi", b: "atra", shows: "yaṇ" },
-  { a: "deva", b: "indraḥ", shows: "guṇa" },
-  { a: "sītā", b: "ṛcchati", shows: "guṇa + r" },
-  { a: "sadā", b: "eva", shows: "vṛddhi" },
-  { a: "daitya", b: "ariḥ", shows: "lengthening" },
   { a: "hare", b: "iha", shows: "ay, av" },
-  { a: "te", b: "atra", shows: "avagraha" },
+  { a: "upa", b: "indraḥ", shows: "guṇa" },
+  { a: "kṛṣṇa", b: "ṛddhiḥ", shows: "guṇa + r" },
+  { a: "gaṅgā", b: "oghaḥ", shows: "vṛddhi" },
+  { a: "daitya", b: "ariḥ", shows: "lengthening" },
+  { a: "hare", b: "ava", shows: "avagraha" },
+  { a: "śivāya", b: "om", shows: "om" },
+  { a: "brahma", b: "ṛṣiḥ", shows: "two forms" },
   { a: "harī", b: "etau", pragrhya: true, shows: "no sandhi" },
 ];
 
@@ -27,6 +29,9 @@ const STATUS_TEXT: Record<CheckStatus, string> = {
   "set-aside": "set aside",
   no: "does not apply",
 };
+
+/** a-final upasargas (1.4.59): before a root, 6.1.89, 6.1.91 and 6.1.94 take over. */
+const A_UPASARGA = new Set(["pra", "parA", "apa", "ava", "upa"]);
 
 const slp = (text: string) => {
   const t = text.trim().normalize("NFC");
@@ -43,15 +48,40 @@ function Sa({ s, block = false }: { s: string; block?: boolean }) {
   );
 }
 
-export default function SandhiPad({ level = 2, syncUrl = false }: { level?: 2 | 3; syncUrl?: boolean }) {
+function SutraLink({ id }: { id: string }) {
+  return <a class="sandhi-sutra" href={`/sutra/${id}/`}>{id}</a>;
+}
+
+interface Props {
+  level?: 2 | 3;
+  /** keep the words in the address bar so a result can be shared (tool page only) */
+  syncUrl?: boolean;
+  initialA?: string;
+  initialB?: string;
+  initialPragrhya?: boolean;
+  initialCompound?: boolean;
+  /** hide the example buttons (lessons supply their own context) */
+  showExamples?: boolean;
+}
+
+export default function SandhiPad({
+  level = 2,
+  syncUrl = false,
+  initialA = "upa",
+  initialB = "indraḥ",
+  initialPragrhya = false,
+  initialCompound = false,
+  showExamples = true,
+}: Props) {
   const id = useId();
   const H = `h${level}` as "h2" | "h3";
-  const [a, setA] = useState("deva");
-  const [b, setB] = useState("indraḥ");
+  const [a, setA] = useState(initialA);
+  const [b, setB] = useState(initialB);
   const [padanta, setPadanta] = useState(true);
-  const [pragrhya, setPragrhya] = useState(false);
+  const [compound, setCompound] = useState(initialCompound);
+  const [pragrhya, setPragrhya] = useState(initialPragrhya);
 
-  // Shareable state on the tool page: ?a=…&b=…&pragrhya=1&padanta=0 (written only after the first change).
+  // Shareable state on the tool page: ?a=…&b=…&pragrhya=1&padanta=0&compound=1 (written only after the first change).
   const ready = useRef(false);
   useEffect(() => {
     if (!syncUrl) return;
@@ -60,6 +90,7 @@ export default function SandhiPad({ level = 2, syncUrl = false }: { level?: 2 | 
     if (q.has("b")) setB(q.get("b") ?? "");
     if (q.get("pragrhya") === "1") setPragrhya(true);
     if (q.get("padanta") === "0") setPadanta(false);
+    if (q.get("compound") === "1") setCompound(true);
   }, []);
   useEffect(() => {
     if (!syncUrl) return;
@@ -70,26 +101,29 @@ export default function SandhiPad({ level = 2, syncUrl = false }: { level?: 2 | 
     const q = new URLSearchParams({ a, b });
     if (pragrhya) q.set("pragrhya", "1");
     if (!padanta) q.set("padanta", "0");
+    if (compound) q.set("compound", "1");
     history.replaceState(null, "", `${location.pathname}?${q}`);
-  }, [a, b, padanta, pragrhya]);
+  }, [a, b, padanta, compound, pragrhya]);
 
   const first = slp(a);
   const second = slp(b);
   const last = first.at(-1) ?? "";
-  const canBePragrhya = "IUe".includes(last) && last !== "";
-  const opts = { padanta, pragrhya: pragrhya && canBePragrhya };
+  const opts = { padanta, compound, pragrhya };
   const res = first && second ? vowelSandhi(first, second, opts) : null;
   const checks = first && second ? sandhiChecks(first, second, opts) : [];
+  const upasargaNote = res && !res.untouched && !pragrhya && A_UPASARGA.has(first);
+  const goNote = res && !res.untouched && !pragrhya && first === "go" && padanta;
 
   const pick = (e: Example) => {
     setA(e.a);
     setB(e.b);
     setPragrhya(!!e.pragrhya);
     setPadanta(true);
+    setCompound(false);
   };
 
   return (
-    <section class="sandhi" aria-label="Vowel sandhi playground">
+    <section class="sandhi" aria-label="Vowel sandhi tool">
       <div class="sandhi-in">
         <div class="sandhi-words">
           <div class="sandhi-word">
@@ -104,35 +138,44 @@ export default function SandhiPad({ level = 2, syncUrl = false }: { level?: 2 | 
               onInput={(e) => setB((e.target as HTMLInputElement).value)} />
           </div>
         </div>
-        <div class="sandhi-opts">
+        <fieldset class="sandhi-opts">
+          <legend class="visually-hidden">About the first word</legend>
           <p>
             <input id={`${id}-pad`} type="checkbox" checked={padanta} onChange={(e) => setPadanta((e.target as HTMLInputElement).checked)} />
-            <label for={`${id}-pad`}>The first word is a complete word (padānta)</label>
+            <label for={`${id}-pad`}>The first word is a finished word (padānta), not a stem meeting a suffix</label>
           </p>
           <p>
-            <input id={`${id}-pr`} type="checkbox" checked={pragrhya && canBePragrhya} disabled={!canBePragrhya}
-              aria-describedby={canBePragrhya ? undefined : `${id}-pr-help`} onChange={(e) => setPragrhya((e.target as HTMLInputElement).checked)} />
-            <label for={`${id}-pr`}>The first word is a dual form (pragṛhya, <a href="/sutra/1.1.11/">1.1.11</a>)</label>
-            {!canBePragrhya && <span id={`${id}-pr-help`} class="sandhi-hint">Only duals ending in ī, ū or e count.</span>}
+            <input id={`${id}-cmp`} type="checkbox" checked={compound} disabled={!padanta}
+              onChange={(e) => setCompound((e.target as HTMLInputElement).checked)} />
+            <label for={`${id}-cmp`}>The two words form a compound (samāsa)</label>
           </p>
-        </div>
-        <p class="sandhi-hint">Type in Devanagari, IAST, Harvard-Kyoto or SLP1. Clear the first box to start fresh.</p>
+          <p>
+            <input id={`${id}-pr`} type="checkbox" checked={pragrhya} onChange={(e) => setPragrhya((e.target as HTMLInputElement).checked)} />
+            <label for={`${id}-pr`}>
+              The first word is pragṛhya: a dual in ī, ū or e (<a href="/sutra/1.1.11/">1.1.11</a>) or a particle such as
+              aho (<a href="/sutra/1.1.15/">1.1.15</a>)
+            </label>
+          </p>
+        </fieldset>
+        <p class="sandhi-hint">Type in Devanagari, IAST, Harvard-Kyoto or SLP1.</p>
       </div>
 
-      <div class="sandhi-examples">
-        <p id={`${id}-ex`}>Examples</p>
-        <ul aria-labelledby={`${id}-ex`}>
-          {EXAMPLES.map((e) => (
-            <li>
-              <button type="button" class="sandhi-example" onClick={() => pick(e)}
-                aria-pressed={a === e.a && b === e.b}>
-                <span lang="sa-Latn">{e.a} + {e.b}</span>
-                <span class="sandhi-example-shows">{e.shows}</span>
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
+      {showExamples && (
+        <div class="sandhi-examples">
+          <p id={`${id}-ex`}>Textbook examples</p>
+          <ul aria-labelledby={`${id}-ex`}>
+            {EXAMPLES.map((e) => (
+              <li>
+                <button type="button" class="sandhi-example" onClick={() => pick(e)}
+                  aria-pressed={a === e.a && b === e.b && pragrhya === !!e.pragrhya}>
+                  <span lang="sa-Latn">{e.a} + {e.b}</span>
+                  <span class="sandhi-example-shows">{e.shows}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <div class="sandhi-out" aria-live="polite">
         {!res ? (
@@ -140,7 +183,7 @@ export default function SandhiPad({ level = 2, syncUrl = false }: { level?: 2 | 
         ) : res.untouched ? (
           <p class="sandhi-empty">
             The sounds at the junction are <Sa s={last} /> and <Sa s={second[0] ?? ""} />. At least one is a consonant (or
-            visarga), so vowel sandhi has nothing to do. Consonant and visarga sandhi come in the next two modules.
+            visarga), so vowel sandhi has nothing to do here. Consonant and visarga sandhi come in the next two modules.
           </p>
         ) : (
           <>
@@ -152,24 +195,55 @@ export default function SandhiPad({ level = 2, syncUrl = false }: { level?: 2 | 
               </p>
             )}
             <p class="sandhi-result"><Sa s={res.result} block /></p>
-            {res.alternatives.map((alt) => (
-              <p class="sandhi-alt">
-                Also correct, by <a href="/sutra/8.3.19/">8.3.19</a>: <Sa s={alt} />
-              </p>
-            ))}
+            {res.alternatives.length > 0 && (
+              <div class="sandhi-alts">
+                <p class="sandhi-alts-h">Also correct</p>
+                <ul>
+                  {res.alternatives.map((alt) => (
+                    <li>
+                      <span class="sandhi-alt-form"><Sa s={alt.form} /></span>
+                      <span class="sandhi-alt-why">
+                        <SutraLink id={alt.sutra} />
+                        {alt.varttika && <span class="sandhi-vt"> vārttika</span>} {alt.note}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </>
         )}
       </div>
+
+      {(upasargaNote || goNote) && (
+        <p class="sandhi-caution" role="note">
+          {upasargaNote && (
+            <>
+              If <Sa s={first} /> is a prefix (upasarga, <SutraLink id="1.4.59" />) on a verb, three rules take over:{" "}
+              <SutraLink id="6.1.91" /> before ṛ (pra + ṛcchati → prārcchati), <SutraLink id="6.1.94" /> before e or o
+              (pra + ejate → prejate), and <SutraLink id="6.1.89" /> for forms of i "go" and edh "grow"
+              (upa + eti → upaiti). The result above treats it as a separate word.
+            </>
+          )}
+          {goNote && (
+            <>
+              The word go has rules of its own: <SutraLink id="6.1.122" />, <SutraLink id="6.1.123" /> and{" "}
+              <SutraLink id="6.1.124" />. Before agram, for example, all of go 'gram, go agram and gavāgram are correct,
+              and before indra only gavendraḥ.
+            </>
+          )}
+        </p>
+      )}
 
       {res && !res.untouched && (
         <div class="sandhi-explain">
           <section aria-labelledby={`${id}-checks`}>
             <H id={`${id}-checks`}>Which rule applies?</H>
-            <p class="sandhi-hint">The rules are tried from the most specific down. The first that fits wins.</p>
+            <p class="sandhi-hint">The rules are tested from the most specific down. The first that fits wins; a general rule that also fits is set aside.</p>
             <ol class="sandhi-checks">
               {checks.map((c) => (
                 <li data-status={c.status}>
-                  <a class="sandhi-sutra" href={`/sutra/${c.sutra}/`}>{c.sutra}</a>
+                  <SutraLink id={c.sutra} />
                   <span class="sandhi-check-name">{c.name}</span>
                   <span class="sandhi-status">{STATUS_TEXT[c.status]}</span>
                   <span class="sandhi-reason">{c.reason}</span>
@@ -186,7 +260,7 @@ export default function SandhiPad({ level = 2, syncUrl = false }: { level?: 2 | 
               </li>
               {res.steps.map((s) => (
                 <li>
-                  <a class="sandhi-sutra" href={`/sutra/${s.sutra}/`}>{s.sutra}</a>
+                  <SutraLink id={s.sutra} />
                   <Sa s={s.form} block />
                   <span class="sandhi-reason">{s.note}</span>
                 </li>

@@ -1,0 +1,95 @@
+cards:
+  - id: yan.6-1-77
+    front: ‹iko yaṇ aci› (6.1.77)
+    back: Before a vowel, i u ṛ ḷ (short or long) become y v r l.
+  - id: yan.1-1-66
+    front: ‹tasminn iti nirdiṣṭe pūrvasya› (1.1.66)
+    back: A word in the locative names what immediately follows; the sound before it is the one that changes.
+  - id: yan.1-1-50
+    front: ‹sthāne 'ntaratamaḥ› (1.1.50)
+    back: Of several possible substitutes, the one closest to the original comes in.
+  - id: yan.8-4-47
+    front: ‹anaci ca› (8.4.47)
+    back: A consonant other than h, after a vowel and not before one, may be doubled — suddhyupāsyaḥ.
+  - id: yan.vt-yan
+    front: Why does ‹sudhy› keep its y against 8.2.23?
+    back: A vārttika — ‹yaṇaḥ pratiṣedho vācyaḥ› — says the dropping does not apply to a yaṇ.
+items:
+  - id: yan1
+    type: text
+    prompt: "‹madhu› + ‹ariḥ› (compound) gives…"
+    answers: [madhvariḥ, maddhvariḥ]
+    explain: u becomes v before a (6.1.77); dh may double (8.4.47) and the first dh becomes d (8.4.53).
+  - id: yan2
+    type: text
+    prompt: "‹dhātṛ› + ‹aṃśaḥ› (compound) gives…"
+    answers: [dhātraṃśaḥ, dhāttraṃśaḥ]
+    explain: ṛ becomes r before a (6.1.77). Varadarāja gives dhātraṃśaḥ; the doubled t is also allowed by 8.4.47.
+  - id: yan3
+    type: text
+    prompt: "‹ḷ› + ‹ākṛtiḥ› (compound) gives…"
+    answers: [lākṛtiḥ]
+    explain: ḷ becomes its semivowel l before ā.
+  - id: yan4
+    type: choice
+    prompt: In ‹sudhī upāsya›, which vowel does 6.1.77 change?
+    options:
+      - "The ī of sudhī: the locative ‹aci› names what follows it (1.1.66)."
+      - The u of upāsya
+      - Both vowels
+      - Neither
+    answer: 0
+  - id: yan5
+    type: choice
+    prompt: Why does ī become y and not v, r or l?
+    options:
+      - y is the palatal semivowel, closest to the palatal ī (1.1.50).
+      - y is the only voiced semivowel.
+      - v, r and l are not semivowels.
+      - 8.4.47 requires it.
+    answer: 0
+  - id: yan6
+    type: text
+    prompt: "Join ‹dadhi› + ‹udakam› by 6.1.77:"
+    answers: [dadhyudakam, daddhyudakam]
+  - id: yan7
+    type: choice
+    prompt: In ‹agnicid atra›, why does the i of ‹-cit› not become y?
+    options:
+      - A consonant stands between it and the vowel, and 1.1.66 needs contact.
+      - i never becomes y before a.
+      - agnicit is a compound.
+      - 6.1.101 applies instead.
+    answer: 0
+  - id: yan8
+    type: choice
+    prompt: In the derivation of ‹sudhyupāsyaḥ›, which applies first, 8.2.23 or 8.4.47?
+    options:
+      - "8.2.23: within the last three quarters, rules apply in the order of their numbers."
+      - 8.4.47, because Varadarāja introduces it first.
+      - Both at once.
+      - Neither applies to sudhy.
+    answer: 0
+  - id: yan9
+    type: text
+    prompt: "‹pitṛ› + ‹artham› (compound) gives…"
+    answers: [pitrartham, pittrartham]
+  - id: yan10
+    type: choice
+    prompt: Which pair shows 6.1.77 acting on ḷ?
+    options:
+      - ‹ḷ› + ‹ākṛtiḥ› → ‹lākṛtiḥ›
+      - ‹tava› + ‹ḷkāraḥ› → ‹tavalkāraḥ›
+      - ‹dadhi› + ‹atra› → ‹dadhyatra›
+      - ‹hotṛ› + ‹ṛkāraḥ› → ‹hotṝkāraḥ›
+    answer: 0
+    explain: ‹tavalkāraḥ› is guṇa with l (6.1.87, 1.1.51), and ‹hotṝkāraḥ› merges like vowels (6.1.101).
+  - id: yan11
+    type: choice
+    prompt: ‹dadhi› + ‹iha› gives ‹dadhīha›, not ‹dadhyiha›. Why?
+    options:
+      - i and i are of one class, so 6.1.101 sets 6.1.77 aside.
+      - 6.1.77 only applies to u.
+      - iha is a particle.
+      - 8.4.47 forbids it.
+    answer: 0

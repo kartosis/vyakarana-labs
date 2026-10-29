@@ -1,0 +1,83 @@
+cards:
+  - id: guna.1-1-2
+    front: ‹adeṅ guṇaḥ› (1.1.2)
+    back: a, e and o are called guṇa. The t limits a to short a.
+  - id: guna.1-1-70
+    front: ‹taparas tatkālasya› (1.1.70)
+    back: A vowel marked by t names only vowels of its own length.
+  - id: guna.6-1-87
+    front: ‹ād guṇaḥ› (6.1.87)
+    back: a or ā and a following vowel are replaced by one guṇa vowel — upendraḥ, gaṅgodakam.
+  - id: guna.6-1-84
+    front: ‹ekaḥ pūrvaparayoḥ› (6.1.84)
+    back: Heading — one substitute replaces both the earlier and the later sound.
+  - id: guna.1-1-51
+    front: ‹uraṇ raparaḥ› (1.1.51)
+    back: An a, i or u that replaces ṛ comes with r (with l for ḷ) — kṛṣṇarddhiḥ, tavalkāraḥ.
+  - id: guna.8-2-1
+    front: ‹pūrvatrāsiddham› (8.2.1)
+    back: The last three quarters of the grammar count as not applied for the rules before them — so hara iha stays apart.
+items:
+  - id: gu1
+    type: text
+    prompt: "‹upa› + ‹indraḥ› gives…"
+    answers: [upendraḥ]
+  - id: gu2
+    type: text
+    prompt: "‹gaṅgā› + ‹udakam› gives…"
+    answers: [gaṅgodakam]
+  - id: gu3
+    type: text
+    prompt: "‹kṛṣṇa› + ‹ṛddhiḥ› (compound) gives…"
+    answers: [kṛṣṇarddhiḥ]
+    explain: a + ṛ gives guṇa a (6.1.87), which comes with r (1.1.51).
+  - id: gu4
+    type: text
+    prompt: "‹tava› + ‹ḷkāraḥ› (compound) gives…"
+    answers: [tavalkāraḥ]
+  - id: gu5
+    type: choice
+    prompt: Which vowels are called guṇa?
+    options: [‹a e o›, ‹ā ai au›, ‹i u ṛ ḷ›, ‹a ā e o›]
+    answer: 0
+  - id: gu6
+    type: choice
+    prompt: Why is long ā not a guṇa vowel?
+    options:
+      - "1.1.2 writes ‹at›: a vowel marked by t names only its own length (1.1.70)."
+      - ā is a consonant.
+      - 6.1.88 reserves ā for vṛddhi.
+      - 1.1.69 excludes long vowels.
+    answer: 0
+  - id: gu7
+    type: choice
+    prompt: In 1.1.51, ‹raparaḥ› means "followed by ra". What does ‹ra› name?
+    options: [r and l, r only, ṛ and ḷ, all four semivowels]
+    answer: 0
+    explain: Varadarāja under 1.3.2 — r taken with the nasal a of laṇ names r and l.
+  - id: gu8
+    type: text
+    prompt: "‹hare› + ‹iha›: give the form with the y dropped (8.3.19)"
+    answers: [hara iha]
+  - id: gu9
+    type: choice
+    prompt: Why does ‹hara iha› not go on to become ‹hareha›?
+    options:
+      - 8.3.19 is in the last three quarters, so for 6.1.87 the y is still there (8.2.1).
+      - a and i never fuse.
+      - hara is pragṛhya.
+      - 6.1.109 blocks it.
+    answer: 0
+  - id: gu10
+    type: text
+    prompt: "‹khaṭvā› + ‹indraḥ› gives…"
+    answers: [khaṭvendraḥ]
+  - id: gu11
+    type: choice
+    prompt: What does the heading 6.1.84 ‹ekaḥ pūrvaparayoḥ› add to 6.1.87?
+    options:
+      - One substitute replaces both vowels.
+      - Only the first vowel changes.
+      - Only the second vowel changes.
+      - The vowels stay apart.
+    answer: 0
