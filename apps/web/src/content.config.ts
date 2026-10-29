@@ -109,7 +109,7 @@ const text = z.object({
 const exercises = defineCollection({
   loader: async () => {
     const root = new URL("exercises/", DATA);
-    const out: Array<Record<string, unknown>> = [];
+    const out: Array<Record<string, unknown> & { id: string }> = [];
     for (const mod of await readdir(fileURLToPath(root))) {
       for (const f of (await readdir(fileURLToPath(new URL(`${mod}/`, root)))).filter((x) => x.endsWith(".yaml"))) {
         const doc = parse(await readFile(new URL(`${mod}/${f}`, root), "utf8")) as Record<string, unknown>;
