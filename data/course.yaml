@@ -27,9 +27,9 @@ modules:
     order: 3
     deva: हल्सन्धिप्रकरणम्
     title: Consonant sandhi
-    summary: Assimilation of consonants at word junctions — ścutva, ṣṭutva, jaśtva, anunāsika and more.
+    summary: What happens when consonants meet, LSK 62–102 — palatal and retroflex assimilation, voicing, nasals, anusvāra, augments, ru, and t before ch.
     lsk: true
-    status: soon
+    status: open
   - id: visarga-sandhi
     order: 4
     deva: विसर्गसन्धिप्रकरणम्

@@ -10,6 +10,9 @@ const urls = [
   '/course/samjna/samyoga-pada/', '/course/ac-sandhi/yan/', '/course/ac-sandhi/ayadi/', '/course/ac-sandhi/guna/',
   '/course/ac-sandhi/vrddhi/', '/course/ac-sandhi/dirgha/', '/course/ac-sandhi/pragrhya/', '/tools/sandhi/',
   '/tools/sandhi/?a=pra&b=ejate', '/sutra/1.1.9/', '/sutra/6.1.125/',
+  '/course/hal-sandhi/scutva/', '/course/hal-sandhi/jastva/', '/course/hal-sandhi/anusvara/',
+  '/course/hal-sandhi/augments/', '/course/hal-sandhi/ru/', '/tools/sandhi/?a=san&b=%C5%9Bambhu%E1%B8%A5',
+  '/sutra/8.3.37/', '/sutra/8.4.40/',
 ];
 /** Scroll through the page so every client:visible island hydrates before the audit. */
 async function hydrateAll(p) {

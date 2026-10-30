@@ -104,7 +104,7 @@ const RULES: RuleDef[] = [
     sutra: "8.3.7",
     run: ({ pre, post }) => {
       if (pre.at(-1) !== "n" || !CHAV.includes(post[0]!) || !AM.includes(post[1] ?? "") || pre === "praSAn") return null;
-      return { obligatory: { pre: pre.slice(0, -1) + "~r", post }, note: "A word-final n before c, ch, ṭ, ṭh, t or th (followed by a vowel, semivowel, h or nasal) becomes ru, written r here. By 8.3.2 the vowel before it is nasalised." };
+      return { obligatory: { pre: pre.slice(0, -1) + "~r", post }, note: "A word-final n before c, ch, ṭ, ṭh, t or th (followed by a vowel, semivowel, h or nasal) becomes ru, written r here. By 8.3.2 the vowel before it may be nasalised, as here." };
     },
   },
   {
@@ -319,7 +319,7 @@ const RULES: RuleDef[] = [
     run: ({ pre, post }) => {
       const x = pre.at(-1)!;
       if (!STOPS.includes(x) || post[0] !== "S" || !AM.includes(post[1] ?? "")) return null;
-      return { optional: { pre, post: "C" + post.slice(1) }, note: "After a stop, ś before a vowel, semivowel, h or nasal may become ch.", byDefault: true };
+      return { optional: { pre, post: "C" + post.slice(1) }, note: "After a stop, ś may become ch before a vowel, h, y, v or r (aṭ); a vārttika extends this to l and the nasals (am).", byDefault: true };
     },
   },
   {
