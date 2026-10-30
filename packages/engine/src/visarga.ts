@@ -133,7 +133,7 @@ export function visargaSandhi(first: string, second: string, opts: VisargaOption
     if (KU_PU.includes(y)) {
       const breath = "kK".includes(y) ? "Z" : "V";
       say("8.3.37", `${pre}H ${second}`, "Before k, kh, p or ph the visarga stays, or becomes the jihvāmūlīya (before k, kh) or the upadhmānīya (before p, ph).");
-      alternatives.push({ form: `${pre}${breath}${second}`, sutra: "8.3.37", note: `With the ${breath === "Z" ? "jihvāmūlīya" : "upadhmānīya"}, also correct (8.3.37).` });
+      alternatives.push({ form: `${pre}${breath}${second}`, sutra: "8.3.37", note: `With the ${breath === "Z" ? "jihvāmūlīya" : "upadhmānīya"}, also correct; Varadarāja and the Kāśikā list this form first (8.3.37).` });
       return done(`${pre}H ${second}`);
     }
     if (SAR.includes(y)) {

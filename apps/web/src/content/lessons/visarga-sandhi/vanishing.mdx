@@ -1,0 +1,130 @@
+---
+title: Sounds that vanish
+deva: भोभगोअघोअपूर्वस्य योऽशि
+module: visarga-sandhi
+order: 3
+minutes: 30
+summary: LSK 107–114 close the Visarga-sandhi-prakaraṇa. After ā, ru becomes a y that drops; r before r drops and lengthens the vowel before it; ahan keeps an r; and saḥ and eṣaḥ lose their ending before a consonant.
+lskRange: 107–114
+sutras: ["8.3.17", "8.3.22", "8.2.69", "8.3.14", "6.3.111", "1.4.2", "6.1.132", "6.1.134"]
+---
+import Sa from "../../../components/Sa.astro";
+import Voice from "../../../components/Voice.astro";
+import SutraFolio from "../../../components/SutraFolio.astro";
+import SutraRef from "../../../components/SutraRef.astro";
+import Practice from "../../../components/Practice.astro";
+import Steps from "../../../islands/Steps.tsx";
+import SandhiPad from "../../../islands/SandhiPad.tsx";
+
+The last lesson left two cases open: *ru* after *ā*, and *ru* after *a* before any vowel but *a*. Both go through a *y* that you rarely hear.
+
+## ru becomes y
+
+<SutraFolio id="8.3.17" level={2} />
+
+After *a* or *ā*, and after the three particles <Sa iast="bhos" />, <Sa iast="bhagos" /> and <Sa iast="aghos" /> (particles of address that end in *s*), *ru* becomes *y* before a vowel or a voiced consonant (<Sa iast="aś" />). Before a vowel, Śākalya's rule from the vowel-sandhi module may drop that *y* (<SutraRef id="8.3.19" />). Since 8.3.19 is invisible to the vowel rules of chapter 6 (<SutraRef id="8.2.1" />), the two vowels then stay apart. Varadarāja: <Sa iast="devā iha" /> or <Sa iast="devāy iha" />, "the gods are here".
+
+<Voice quote="kas-8.3.17" voice="bhasya">
+  The Kāśikā's examples cover both conditions. After the particles: *bho atra*, *bhago dadāti*. After *ā*: *brāhmaṇā dadati*, *puruṣā dadati*, "the brahmins give, the men give". After short *a* before a vowel other than *a*, its example on this rule is *ka āste* or *kay āste*, "who sits?".
+</Voice>
+
+## Before a consonant the y always goes
+
+<SutraFolio id="8.3.22" />
+
+Before a consonant the *y* is dropped, and not only in Śākalya's view: in everyone's (<Sa iast="sarveṣām" />). Varadarāja: <Sa iast="bho devāḥ" />, "O gods!", <Sa iast="bhago namaste" />, "O blessed one, homage to you", <Sa iast="agho yāhi" />, "go, sinner". The same holds after *ā*: the Kāśikā's <Sa iast="vṛkṣā hasanti" />.
+
+## ahan keeps an r
+
+<SutraFolio id="8.2.69" />
+
+The word <Sa iast="ahan" />, "day", replaces its *n* with *r* where no case ending follows it, for example inside a compound. This is an original *r*, not *ru*, so it does not turn into *o* the way *-aḥ* does: <Sa iast="aharahaḥ" />, "day after day", <Sa iast="ahargaṇaḥ" />, "a series of days". Before a case ending the rule just before it gives *ru* instead, and then *o* does appear: <Sa iast="ahobhyām" /> (<SutraRef id="8.2.68" />).
+
+## r before r
+
+<SutraFolio id="8.3.14" />
+
+<SutraFolio id="6.3.111" />
+
+An *r* before another *r* is dropped, and the *a*, *i* or *u* before it becomes long. Varadarāja: <Sa iast="punā ramate" />, "he enjoys again", <Sa iast="harī ramyaḥ" />, "Hari is delightful", <Sa iast="śambhū rājate" />, "Śambhu shines".
+
+<Voice quote="kas-6.3.111" voice="bhasya">
+  The rule covers two drops, of *ḍh* and of *r*. The Kāśikā's first examples are inside words, *līḍham* and *mūḍhaḥ*, where a *ḍh* has been dropped; then come the *r* examples, *nīraktam*, *agnī rathaḥ*, *indū rathaḥ*, *punā raktaṃ vāsaḥ* and *prātā rājakrayaḥ*.
+</Voice>
+
+### When two rules compete
+
+<SutraFolio id="1.4.2" compact />
+
+What happens to *manas* + *rathaḥ*? After *ru* (8.2.66), two rules apply at once. Varadarāja works the case through:
+
+<Steps
+  client:visible
+  label="manas + rathaḥ, LSK 111–112"
+  steps={[
+    { parts: [["manas"], [" "], ["raTaH"]], note: "manas ‘mind’ and rathaḥ ‘chariot’, joined in the compound manorathaḥ, ‘wish’." },
+    { sutra: "8.2.66", parts: [["mana"], ["r", "new"], [" "], ["raTaH"]], note: "Word-final s becomes ru." },
+    { label: "conflict", parts: [["mana"], ["r", "mark"], [" "], ["r", "mark"], ["aTaH"]], note: "6.1.114 would turn ru after a, before the voiced r, into u. 8.3.14 would drop r before r. By 1.4.2 the later rule, 8.3.14, should win." },
+    { sutra: "6.1.114", parts: [["mana"], ["u", "new"], ["raTaH"]], note: "But 8.3.14 is in the last three pādas, so 6.1.114 cannot see it as a rival (8.2.1). 6.1.114 applies: ru becomes u." },
+    { sutra: "6.1.87", parts: [["man"], ["o", "new"], ["raTaH"]], note: "a + u become o. manorathaḥ." },
+  ]}
+/>
+
+## saḥ and eṣaḥ
+
+<SutraFolio id="6.1.132" />
+
+The nominatives <Sa iast="saḥ" />, "he, that", and <Sa iast="eṣaḥ" />, "this", lose their ending before a consonant: <Sa iast="eṣa viṣṇuḥ" />, "this is Viṣṇu", <Sa iast="sa śambhuḥ" />, "he is Śambhu". Not the forms with the suffix *ak* (<Sa iast="eṣakaḥ" />), not in a negative compound, and not before a vowel, where the ordinary rules apply: <Sa iast="so 'tra" />, "he is here".
+
+<Voice quote="kas-6.1.132" voice="bhasya">
+  The Kāśikā tests each condition with a pair. Other pronouns keep the ending: *yo dadāti*, "who gives". So do the forms with *ak*: *eṣako dadāti*. So does the negative compound: *aneṣo dadāti*. And before a vowel: *eṣo 'tra*, *so 'tra*.
+</Voice>
+
+<SutraFolio id="6.1.134" />
+
+In verse, *saḥ* may lose its ending before a vowel too, when that is needed to fill the metre: <Sa iast="saiṣa" />, from *sa* + *eṣa* by vṛddhi (<SutraRef id="6.1.88" />). The Kāśikā's main examples are Vedic; it reports that some take "line" to include the lines of ordinary verse, and quotes this one:
+
+<Voice quote="kas-6.1.134" voice="bhasya">
+  Each line opens with *saiṣa*, two syllables where *sa eṣa* would have three. The Kāśikā's counter-example shows the condition: in *sa iva vyāghro bhavet*, "he would be like a tiger", the metre does not need the drop, so it does not happen.
+</Voice>
+
+<Voice quote="vp-1.87" voice="darsana">
+  The *y* of *devāy iha*, the *ru* of *śivo 'rcyaḥ*: forms that the derivation passes through and the ear rarely or never hears. Bhartṛhari says something similar of the words we pick out inside a sentence: taking them to exist is the listener's limitation, and a means of grasping.
+</Voice>
+
+## The prakaraṇa on one page
+
+Before a voiceless consonant, see the first lesson. Before a vowel or a voiced consonant:
+
+<div class="table-wrap">
+<table>
+<thead><tr><th scope="col">Before the visarga</th><th scope="col">Next sound</th><th scope="col">Rule</th><th scope="col">Example</th></tr></thead>
+<tbody>
+<tr><td>short a</td><td>short a</td><td>o, then avagraha (<SutraRef id="6.1.113" />)</td><td><Sa iast="śivo 'rcyaḥ" /></td></tr>
+<tr><td>short a</td><td>voiced consonant</td><td>o (<SutraRef id="6.1.114" />)</td><td><Sa iast="śivo vandyaḥ" /></td></tr>
+<tr><td>short a</td><td>another vowel</td><td>y, which may drop (<SutraRef id="8.3.17" />, <SutraRef id="8.3.19" />)</td><td><Sa iast="vṛkṣa iha" /></td></tr>
+<tr><td>ā, or bho, bhago, agho</td><td>vowel</td><td>y, which may drop (<SutraRef id="8.3.17" />, <SutraRef id="8.3.19" />)</td><td><Sa iast="devā iha" /></td></tr>
+<tr><td>ā, or bho, bhago, agho</td><td>voiced consonant</td><td>y, which must drop (<SutraRef id="8.3.17" />, <SutraRef id="8.3.22" />)</td><td><Sa iast="bho devāḥ" /></td></tr>
+<tr><td>any other vowel</td><td>r</td><td>r drops, vowel lengthens (<SutraRef id="8.3.14" />, <SutraRef id="6.3.111" />)</td><td><Sa iast="harī ramyaḥ" /></td></tr>
+<tr><td>any other vowel</td><td>other vowel or voiced consonant</td><td>r (<SutraRef id="8.2.66" />)</td><td><Sa iast="agnir atra" /></td></tr>
+<tr><td>an original r</td><td>r</td><td>r drops, vowel lengthens (<SutraRef id="8.3.14" />, <SutraRef id="6.3.111" />)</td><td><Sa iast="punā ramate" /></td></tr>
+<tr><td>an original r</td><td>other vowel or voiced consonant</td><td>r stays</td><td><Sa iast="prātar atra" /></td></tr>
+<tr><td>saḥ, eṣaḥ</td><td>consonant</td><td>ending dropped (<SutraRef id="6.1.132" />)</td><td><Sa iast="sa śambhuḥ" /></td></tr>
+<tr><td>ahan, no case ending</td><td>any</td><td>r (<SutraRef id="8.2.69" />)</td><td><Sa iast="aharahaḥ" /></td></tr>
+</tbody>
+</table>
+</div>
+
+## Try it
+
+<SandhiPad client:visible level={3} initialA="devāḥ" initialB="iha" exampleSet="visarga" />
+
+<Practice
+  skills={[
+    "Giving both forms after ā before a vowel",
+    "Dropping the y before a consonant",
+    "Dropping r before r and lengthening the vowel",
+    "Deriving manorathaḥ",
+    "The ending of saḥ and eṣaḥ",
+  ]}
+/>

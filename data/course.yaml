@@ -34,9 +34,9 @@ modules:
     order: 4
     deva: विसर्गसन्धिप्रकरणम्
     title: Visarga sandhi
-    summary: How visarga changes before vowels and consonants.
+    summary: What a final s or r becomes before the next word, LSK 103–114 — ś, ṣ and s, the o of śivo 'rcyaḥ, the y that drops, r before r, and saḥ.
     lsk: true
-    status: soon
+    status: open
   - id: ajanta-pum
     order: 5
     deva: अजन्तपुंलिङ्गाः

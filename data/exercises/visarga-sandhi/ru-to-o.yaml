@@ -1,0 +1,76 @@
+cards:
+  - id: ru-to-o.8-2-66
+    front: ‹sasajuṣo ruḥ› (8.2.66)
+    back: A word-final s, and the s of sajuṣ, becomes ru — agnir atra.
+  - id: ru-to-o.6-1-113
+    front: ‹ato ror aplutād aplute› (6.1.113)
+    back: After short a, ru becomes u before short a; then o, and the a becomes avagraha — śivo 'rcyaḥ.
+  - id: ru-to-o.6-1-114
+    front: ‹haśi ca› (6.1.114)
+    back: After short a, ru becomes u before a voiced consonant too; then o — śivo vandyaḥ.
+  - id: ru-to-o.original-r
+    front: Why is ‹prātar atra› not ‹prāto 'tra›?
+    back: prātar ends in an original r, not ru, and 6.1.113 names ru (Kāśikā — svar atra, prātar atra).
+items:
+  - id: ro1
+    type: text
+    prompt: "‹śivaḥ› + ‹arcyaḥ› gives…"
+    answers: [śivo 'rcyaḥ]
+    explain: s becomes ru (8.2.66), ru becomes u (6.1.113), a + u become o (6.1.87), and the a of arcyaḥ merges into the o (6.1.109).
+  - id: ro2
+    type: text
+    prompt: "‹śivaḥ› + ‹vandyaḥ› gives…"
+    answers: [śivo vandyaḥ]
+    explain: ru after short a, before the voiced v, becomes u (6.1.114); a + u become o.
+  - id: ro3
+    type: text
+    prompt: "‹vṛkṣaḥ› + ‹atra› gives…"
+    answers: [vṛkṣo 'tra]
+  - id: ro4
+    type: text
+    prompt: "‹puruṣaḥ› + ‹hasati› gives…"
+    answers: [puruṣo hasati]
+    explain: h is a voiced consonant, so 6.1.114 applies.
+  - id: ro5
+    type: text
+    prompt: "‹agniḥ› + ‹atra› gives…"
+    answers: [agnir atra]
+    explain: 6.1.113 needs a short a before the ru; after i, ru is heard as r.
+  - id: ro6
+    type: text
+    prompt: "‹prātaḥ› + ‹atra› (original r) gives…"
+    answers: [prātar atra]
+    explain: prātar ends in an original r, which 6.1.113 does not touch.
+  - id: ro7
+    type: choice
+    prompt: In ‹śivo 'rcyaḥ›, what does the avagraha (') mark?
+    options:
+      - The short a of arcyaḥ, taken into the o (6.1.109)
+      - A dropped s
+      - A pause between the words
+      - That the o is long
+    answer: 0
+  - id: ro8
+    type: choice
+    prompt: How can 6.1.113, in chapter 6, see the ru that 8.2.66 makes?
+    options:
+      - A rule about ru depends on it, so ru is not invisible to that rule (Kāśikā).
+      - 8.2.66 is not one of the last three pādas.
+      - 6.1.113 comes after 8.2.66 in the grammar.
+      - The ru is only a spelling.
+    answer: 0
+  - id: ro9
+    type: choice
+    prompt: Which of these is not formed by 6.1.113?
+    options: [‹agnir atra›, ‹vṛkṣo 'tra›, ‹plakṣo 'tra›, ‹śivo 'rcyaḥ›]
+    answer: 0
+    explain: In agnir atra the ru follows i, not short a.
+  - id: ro10
+    type: choice
+    prompt: Why is there no avagraha in ‹śivo vandyaḥ›?
+    options:
+      - No vowel follows the o, so 6.1.109 has nothing to merge.
+      - The v takes the a's place.
+      - 6.1.114 forbids it.
+      - vandyaḥ begins with a long vowel.
+    answer: 0

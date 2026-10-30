@@ -1,0 +1,94 @@
+cards:
+  - id: vanishing.8-3-17
+    front: ‹bhobhagoaghoapūrvasya yo 'śi› (8.3.17)
+    back: After a or ā, or bho, bhago, agho, ru becomes y before a vowel or voiced consonant — devā iha or devāy iha.
+  - id: vanishing.8-3-22
+    front: ‹hali sarveṣām› (8.3.22)
+    back: Before a consonant that y is dropped, in every teacher's view — bho devāḥ, agho yāhi.
+  - id: vanishing.8-2-69
+    front: ‹ro 'supi› (8.2.69)
+    back: The n of ahan becomes r, not ru, where no case ending follows — aharahaḥ, ahargaṇaḥ.
+  - id: vanishing.8-3-14
+    front: ‹ro ri› (8.3.14)
+    back: r is dropped before r.
+  - id: vanishing.6-3-111
+    front: ‹ḍhralope pūrvasya dīrgho 'ṇaḥ› (6.3.111)
+    back: When ḍh or r is dropped, the a, i or u before it is lengthened — punā ramate, harī ramyaḥ, śambhū rājate.
+  - id: vanishing.1-4-2
+    front: ‹vipratiṣedhe paraṃ kāryam› (1.4.2)
+    back: When two rules of equal strength conflict, the later one applies — but a rule of the last three pādas is invisible to an earlier one (8.2.1), so manas + rathaḥ gives manorathaḥ.
+  - id: vanishing.6-1-132
+    front: ‹etattadoḥ sulopo 'kor anañsamāse hali› (6.1.132)
+    back: saḥ and eṣaḥ lose their ending before a consonant — sa śambhuḥ, eṣa viṣṇuḥ; but eṣako dadāti, aneṣo dadāti, eṣo 'tra.
+  - id: vanishing.6-1-134
+    front: ‹so 'ci lope cet pādapūraṇam› (6.1.134)
+    back: saḥ loses its ending before a vowel when the line of verse needs it — saiṣa dāśarathī rāmaḥ.
+items:
+  - id: va1
+    type: text
+    prompt: "‹devāḥ› + ‹iha› gives…"
+    answers: [devā iha, devāy iha]
+    explain: ru after ā becomes y (8.3.17), which may drop before a vowel (8.3.19). The vowels then stay apart.
+  - id: va2
+    type: text
+    prompt: "‹bhoḥ› + ‹devāḥ› gives…"
+    answers: [bho devāḥ]
+    explain: ru after bho becomes y (8.3.17), which must drop before a consonant (8.3.22).
+  - id: va3
+    type: text
+    prompt: "‹kaḥ› + ‹āste› gives…"
+    answers: [ka āste, kay āste]
+    explain: Before ā, not short a, 6.1.113 does not apply; ru becomes y (8.3.17), which may drop (8.3.19).
+  - id: va4
+    type: text
+    prompt: "‹hariḥ› + ‹ramyaḥ› gives…"
+    answers: [harī ramyaḥ]
+    explain: r before r drops (8.3.14) and the i before it becomes long (6.3.111).
+  - id: va5
+    type: text
+    prompt: "‹punaḥ› + ‹ramate› gives…"
+    answers: [punā ramate]
+  - id: va6
+    type: text
+    prompt: "‹śambhuḥ› + ‹rājate› gives…"
+    answers: [śambhū rājate]
+  - id: va7
+    type: text
+    prompt: "‹saḥ› + ‹śambhuḥ› gives…"
+    answers: [sa śambhuḥ]
+    explain: The ending of saḥ is dropped before a consonant (6.1.132).
+  - id: va8
+    type: text
+    prompt: "‹eṣaḥ› + ‹viṣṇuḥ› gives…"
+    answers: [eṣa viṣṇuḥ]
+  - id: va9
+    type: text
+    prompt: "‹manaḥ› + ‹rathaḥ› (compound) gives…"
+    answers: [manorathaḥ]
+    explain: 6.1.114 turns ru into u; 8.3.14, the later rule, is invisible to it (8.2.1). a + u become o.
+  - id: va10
+    type: text
+    prompt: "‹ahan› + ‹ahaḥ› gives…"
+    answers: [aharahaḥ]
+    explain: Without a case ending, the n of ahan becomes r (8.2.69), which is not ru, so it stays r before the vowel.
+  - id: va11
+    type: choice
+    prompt: "‹brāhmaṇāḥ› + ‹dadati› gives…"
+    options: [‹brāhmaṇā dadati›, ‹brāhmaṇo dadati›, ‹brāhmaṇāy dadati›, ‹brāhmaṇār dadati›]
+    answer: 0
+    explain: ru after ā becomes y (8.3.17), and before a consonant the y must drop (8.3.22).
+  - id: va12
+    type: choice
+    prompt: "‹eṣaḥ› + ‹atra› gives…"
+    options: [‹eṣo 'tra›, ‹eṣa atra›, ‹eṣātra›, ‹eṣar atra›]
+    answer: 0
+    explain: 6.1.132 drops the ending only before a consonant. Before a vowel the ordinary rules apply, as in śivo 'rcyaḥ.
+  - id: va13
+    type: choice
+    prompt: When may ‹saḥ› lose its ending before a vowel?
+    options:
+      - In verse, when the line needs it (6.1.134) — saiṣa dāśarathī rāmaḥ
+      - Always
+      - Never
+      - Only inside a compound
+    answer: 0

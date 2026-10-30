@@ -1,0 +1,89 @@
+---
+title: Visarga before a voiceless sound
+deva: वा शरि
+module: visarga-sandhi
+order: 1
+minutes: 20
+summary: LSK 103, with three rules met in the last module. Before c, ṭ or t a visarga becomes ś, ṣ or s; before ś, ṣ or s it may also stay; before k or p it stays, or becomes a rarer breath sound.
+lskRange: "103"
+sutras: ["8.3.36"]
+---
+import Sa from "../../../components/Sa.astro";
+import Voice from "../../../components/Voice.astro";
+import SutraFolio from "../../../components/SutraFolio.astro";
+import SutraRef from "../../../components/SutraRef.astro";
+import Practice from "../../../components/Practice.astro";
+import SandhiPad from "../../../islands/SandhiPad.tsx";
+
+A word that ends in *s* or *r* is written with a visarga when nothing follows it: <Sa iast="rāmaḥ" />, <Sa iast="punaḥ" />. That is its form at a pause. The Visarga-sandhi-prakaraṇa, LSK 103 to 114, asks what the *s* or *r* becomes when another word follows. This lesson takes the voiceless consonants; the next two take the vowels and voiced consonants.
+
+## The path to s
+
+Three rules from the last module do most of the work. A word-final *s* first becomes *ru* (<SutraRef id="8.2.66" />, next lesson). Before a voiceless consonant, *ru* or *r* becomes visarga:
+
+<SutraFolio id="8.3.15" compact />
+
+and before a voiceless consonant, visarga becomes *s*:
+
+<SutraFolio id="8.3.34" compact />
+
+That *s* then takes the place of the sound after it, by ścutva and ṣṭutva (<SutraRef id="8.4.40" />, <SutraRef id="8.4.41" />). Varadarāja's examples are in the first lesson of the last module:
+
+<div class="example">
+  <span><Sa iast="rāmaḥ" /> + <Sa iast="cinoti" /> → <Sa iast="rāmaś cinoti" />, "Rāma gathers"</span>
+  <span><Sa iast="rāmaḥ" /> + <Sa iast="ṭīkate" /> → <Sa iast="rāmaṣ ṭīkate" />, "Rāma goes"</span>
+  <span><Sa iast="vṛkṣaḥ" /> + <Sa iast="tarati" /> → <Sa iast="vṛkṣas tarati" /> (the Kāśikā's example on 8.3.34)</span>
+</div>
+
+## Before a sibilant: two forms
+
+<SutraFolio id="8.3.36" level={2} />
+
+Before *ś*, *ṣ* or *s* (<Sa iast="śar" />), 8.3.34 would give *s*, which ścutva or ṣṭutva turns into the same sibilant. This rule offers a second form: the visarga may simply stay. Varadarāja: <Sa iast="hariḥ śete" /> or <Sa iast="hariś śete" />, "Hari lies down".
+
+<Voice quote="kas-8.3.36" voice="bhasya">
+  The Kāśikā gives one pair for each sibilant: *vṛkṣaḥ śete* or *vṛkṣaś śete*, *vṛkṣaḥ ṣaṇḍe* or *vṛkṣaṣ ṣaṇḍe*, *vṛkṣaḥ sāye* or *vṛkṣas sāye*. Then it adds a vārttika: when the sibilant is itself followed by a voiceless consonant, as in *sthātāraḥ*, the visarga may also be dropped. That gives three correct forms of *vṛkṣāḥ sthātāraḥ*, "trees that stand": *vṛkṣā sthātāraḥ*, *vṛkṣāḥ sthātāraḥ*, *vṛkṣās sthātāraḥ*.
+</Voice>
+
+## Before k and p
+
+<SutraFolio id="8.3.37" compact />
+
+Before a velar or labial stop, the visarga does not become *s*. It stays, or turns into one of two breath sounds made at the place of the next stop: the <Sa iast="jihvāmūlīya" />, at the root of the tongue, before *k* and *kh*, and the <Sa iast="upadhmānīya" />, at the lips, before *p* and *ph*. In Devanagari they are written <Sa deva="ᳵ" /> and <Sa deva="ᳶ" />. The Kāśikā's pairs: <Sa deva="वृक्षᳵ करोति" /> or <Sa iast="vṛkṣaḥ karoti" />, and <Sa deva="वृक्षᳶ फलति" /> or <Sa iast="vṛkṣaḥ phalati" />, "the tree bears fruit". Most printed texts write the visarga.
+
+<Voice quote="kas-8.3.35" voice="bhasya">
+  One more rule, which Varadarāja leaves out, covers a voiceless consonant that is followed by a sibilant, as in *kṣ*, *ps* and *ts*. There the visarga stays visarga: *puruṣaḥ kṣuram*. The Kāśikā notes why the rule says "visarga becomes visarga" instead of just "no change": so that even the breath sounds of 8.3.37 are ruled out.
+</Voice>
+
+## The whole picture
+
+<div class="table-wrap">
+<table>
+<thead><tr><th scope="col">Next sound</th><th scope="col">Visarga becomes</th><th scope="col">Example</th></tr></thead>
+<tbody>
+<tr><td>c, ch</td><td>ś (<SutraRef id="8.3.34" />, <SutraRef id="8.4.40" />)</td><td><Sa iast="rāmaś cinoti" /></td></tr>
+<tr><td>ṭ, ṭh</td><td>ṣ (<SutraRef id="8.3.34" />, <SutraRef id="8.4.41" />)</td><td><Sa iast="rāmaṣ ṭīkate" /></td></tr>
+<tr><td>t, th</td><td>s (<SutraRef id="8.3.34" />)</td><td><Sa iast="vṛkṣas tarati" /></td></tr>
+<tr><td>ś, ṣ, s</td><td>stays, or the same sibilant (<SutraRef id="8.3.36" />)</td><td><Sa iast="hariḥ śete" />, <Sa iast="hariś śete" /></td></tr>
+<tr><td>k, kh, p, ph</td><td>stays, or a breath sound (<SutraRef id="8.3.37" />)</td><td><Sa iast="vṛkṣaḥ karoti" /></td></tr>
+<tr><td>kṣ, ps, ts</td><td>stays (<SutraRef id="8.3.35" />, not in LSK)</td><td><Sa iast="puruṣaḥ kṣuram" /></td></tr>
+<tr><td>nothing (a pause)</td><td>stays (<SutraRef id="8.3.15" />)</td><td><Sa iast="rāmaḥ" /></td></tr>
+</tbody>
+</table>
+</div>
+
+<Voice quote="vp-1.72" voice="darsana">
+  *hariḥ*, *hariś*, *rāmaṣ*, *vṛkṣas*: the end of the word changes with each sentence. Bhartṛhari holds that one word is found in different sentences, as a sound stays one in different words. His own commentary compares the variation to the reflections of one thing in shade, a mirror or water.
+</Voice>
+
+## Try it
+
+<SandhiPad client:visible level={3} initialA="hariḥ" initialB="śete" exampleSet="visarga" />
+
+<Practice
+  skills={[
+    "Turning visarga into ś, ṣ or s before a voiceless stop",
+    "Giving both forms before a sibilant",
+    "Knowing what happens before k, kh, p and ph",
+  ]}
+/>

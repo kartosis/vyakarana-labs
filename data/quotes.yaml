@@ -527,3 +527,91 @@
   translation: Just as milk or a seed changes through stages in a fixed order, so the order in which understanding arises in the mind of the listener is fixed.
   verified: true
   checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/vakyapadeeyam/data.txt
+- id: kas-8.3.36
+  author: Jayāditya & Vāmana
+  work: Kāśikāvṛtti
+  ref: on 8.3.36
+  deva: विसर्जनीयस्य विसर्जनीयादेशो वा भवति शरि परे। वृक्षः शेते, वृक्षश्शेते। … खर्परे शरि वा लोपो वक्तव्यः॥ वृक्षा स्थातारः, वृक्षाः स्थातारः, वृक्षास्स्थातारः॥
+  translation: Before a sibilant, visarga is optionally replaced by visarga — vṛkṣaḥ śete or vṛkṣaś śete. … It should be stated that before a sibilant followed by a voiceless consonant it may also be dropped — vṛkṣā sthātāraḥ, vṛkṣāḥ sthātāraḥ, vṛkṣās sthātāraḥ.
+  verified: true
+  checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/sutraani/kashika.txt
+- id: kas-8.3.35
+  author: Jayāditya & Vāmana
+  work: Kāśikāvṛtti
+  ref: on 8.3.35
+  deva: शर्परे खरि परतो विसर्जनीयस्य विसर्जनीयादेशो भवति। शशः क्षुरम्। पुरुषः क्षुरम्। … नेति वक्तव्ये विसर्जनीयस्य विसर्जनीयादेशविधानं विकारनिवृत्त्यर्थम्। तेन जिह्वामूलीयोपध्मानीयौ न भवतः॥
+  translation: Before a voiceless consonant followed by a sibilant, visarga is replaced by visarga — śaśaḥ kṣuram, puruṣaḥ kṣuram. … Where it could have said "not", the rule replaces visarga with visarga to stop every change; so the jihvāmūlīya and upadhmānīya do not occur either.
+  verified: true
+  checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/sutraani/kashika.txt
+- id: kas-6.1.113
+  author: Jayāditya & Vāmana
+  work: Kāśikāvṛtti
+  ref: on 6.1.113
+  deva: अकारादप्लुतादुत्तरस्य रो रेफस्य उकारानुबन्धविशिष्टस्याकारेऽप्लुते परत उकारादेशो भवति। वृक्षोऽत्र। प्लक्षोऽत्र। … अत इति किम्? अग्निरत्र। तपरकरणं किम्? वृक्षा अत्र। सानुबन्धग्रहणं किम्? स्वरत्र। प्रातरत्र।
+  translation: After a non-pluta short a, the r that carries the marker u (ru) becomes u before a non-pluta short a — vṛkṣo 'tra, plakṣo 'tra. … Why "after a"? Because of agnir atra. Why short a only? Because of vṛkṣā atra. Why ru, with its marker? Because of svar atra and prātar atra.
+  verified: true
+  checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/sutraani/kashika.txt
+- id: kas-6.1.114
+  author: Jayāditya & Vāmana
+  work: Kāśikāvṛtti
+  ref: on 6.1.114
+  deva: हशि च परतोऽत उत्तरस्य रोरुकारादेशो भवति। पुरुषो याति। पुरुषो हसति। पुरुषो ददाति॥
+  translation: Before a voiced consonant (haś), too, ru after short a becomes u — puruṣo yāti, puruṣo hasati, puruṣo dadāti.
+  verified: true
+  checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/sutraani/kashika.txt
+- id: kas-8.3.17
+  author: Jayāditya & Vāmana
+  work: Kāśikāvṛtti
+  ref: on 8.3.17
+  deva: भोर् भगोर् अघोर् इत्येवंपूर्वस्यावर्णपूर्वस्य च रो रेफस्य यकारादेशो भवत्यशि परतः। भो अत्र। भगो अत्र। अघो अत्र। भो ददाति। भगो ददाति। अघो ददाति। … ब्राह्मणा ददति। पुरुषा ददति।
+  translation: After bho, bhago, agho, and after a or ā, ru is replaced by y before a vowel or voiced consonant — bho atra, bhago atra, agho atra; bho dadāti, bhago dadāti, agho dadāti … brāhmaṇā dadati, puruṣā dadati.
+  verified: true
+  checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/sutraani/kashika.txt
+- id: kas-6.3.111
+  author: Jayāditya & Vāmana
+  work: Kāśikāvṛtti
+  ref: on 6.3.111
+  deva: ढकाररेफयोर्लोपो यस्मिन् स ढ्रलोपः, तत्र पूर्वस्याणो दीर्घो भवति। लीढम्। मीढम्। उपगूढम्। मूढः। रलोपे — नीरक्तम्। अग्नी रथः। इन्दू रथः। पुना रक्तं वासः। प्राता राजक्रयः।
+  translation: Where ḍh or r has been dropped, the a, i or u before it is lengthened — līḍham, mīḍham, upagūḍham, mūḍhaḥ. Where r is dropped — nīraktam, agnī rathaḥ, indū rathaḥ, punā raktaṃ vāsaḥ, prātā rājakrayaḥ.
+  verified: true
+  checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/sutraani/kashika.txt
+- id: kas-6.1.132
+  author: Jayāditya & Vāmana
+  work: Kāśikāvṛtti
+  ref: on 6.1.132
+  deva: एष ददाति। स ददाति। एष भुङ्क्ते। स भुङ्क्ते। एतत्तदोरिति किम्? यो ददाति। … अकोरिति किम्? एषको ददाति। सको ददाति। … अनञ्समास इति किम्? अनेषो ददाति। असो ददाति। … हलीति किम्? एषोऽत्र। सोऽत्र॥
+  translation: eṣa dadāti, sa dadāti, eṣa bhuṅkte, sa bhuṅkte. Why "of etad and tad"? Because of yo dadāti. … Why "without k"? Because of eṣako dadāti, sako dadāti. … Why "not in a negative compound"? Because of aneṣo dadāti, aso dadāti. … Why "before a consonant"? Because of eṣo 'tra, so 'tra.
+  verified: true
+  checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/sutraani/kashika.txt
+- id: kas-6.1.134
+  author: Jayāditya & Vāmana
+  work: Kāśikāvṛtti
+  ref: on 6.1.134
+  deva: सैष दाशरथी रामः सैष राजा युधिष्ठिरः। सैष कर्णो महात्यागी सैष भीमो महाबलः॥
+  translation: He is Rāma, son of Daśaratha; he is King Yudhiṣṭhira; he is Karṇa, the great giver; he is Bhīma, the mighty.
+  verified: true
+  checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/sutraani/kashika.txt
+- id: vp-1.72
+  author: Bhartṛhari
+  work: Vākyapadīya
+  ref: Brahmakāṇḍa 1.72 (verse numbering of the ashtadhyayi.com text)
+  deva: पदभेदेऽपि वर्णानां एकत्वं न निवर्तते । वाक्येषु पदं एकं च भिन्नेष्वप्युपलभ्यते ॥
+  translation: Even when the words differ, a sound stays one and the same; and one and the same word is found in different sentences.
+  verified: true
+  checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/vakyapadeeyam/data.txt
+- id: vp-1.93
+  author: Bhartṛhari
+  work: Vākyapadīya
+  ref: Brahmakāṇḍa 1.93 (verse numbering of the ashtadhyayi.com text)
+  deva: व्यज्यमाने तथा वाक्ये वाक्याभिव्यक्तिहेतुभिः । भागावग्रहरूपेण पूर्वं बुद्धिः प्रवर्तते ॥
+  translation: So too, when a sentence is being revealed by what reveals it, the mind first works by grasping it in parts.
+  verified: true
+  checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/vakyapadeeyam/data.txt
+- id: vp-1.87
+  author: Bhartṛhari
+  work: Vākyapadīya
+  ref: Brahmakāṇḍa 1.87 (verse numbering of the ashtadhyayi.com text)
+  deva: असतश्चान्तराले याञ् छब्दानस्तीति मन्यते । प्रतिपत्तुरशक्तिः सा ग्रहणोपाय एव सः ॥
+  translation: The words, not really there, that a listener takes to exist in between — that is the listener's limitation, and it is only a means of grasping.
+  verified: true
+  checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/vakyapadeeyam/data.txt

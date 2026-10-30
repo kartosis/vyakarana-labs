@@ -1,0 +1,88 @@
+---
+title: How aḥ becomes o
+deva: अतो रोरप्लुतादप्लुते
+module: visarga-sandhi
+order: 2
+minutes: 25
+summary: LSK 104–106. Every word-final s becomes ru. After short a, ru turns into u before short a or a voiced consonant, and a + u fuse into o — śivo 'rcyaḥ, śivo vandyaḥ.
+lskRange: 104–106
+sutras: ["8.2.66", "6.1.113", "6.1.114"]
+---
+import Sa from "../../../components/Sa.astro";
+import Voice from "../../../components/Voice.astro";
+import SutraFolio from "../../../components/SutraFolio.astro";
+import SutraRef from "../../../components/SutraRef.astro";
+import Practice from "../../../components/Practice.astro";
+import Steps from "../../../islands/Steps.tsx";
+import SandhiPad from "../../../islands/SandhiPad.tsx";
+
+Before a vowel or a voiced consonant, a visarga does not stay a visarga. What it becomes depends on two things: the vowel before it, and whether it comes from *s* or from an original *r*.
+
+## s becomes ru
+
+<SutraFolio id="8.2.66" level={2} />
+
+Every word-final *s* becomes <Sa iast="ru" />, the *r* marked with *u* that you met with *n* and *m* in the last module. Before a voiced sound nothing turns it into visarga, so it can be heard as *r*: <Sa iast="agnis" /> + <Sa iast="atra" /> → <Sa iast="agnir atra" />, "the fire is here" (the Kāśikā's example). The marker matters. The rules below name *ru*, so they apply to an *r* that replaced *s*, and not to a word that always ended in *r*, such as <Sa iast="punar" />, "again", or <Sa iast="prātar" />, "early".
+
+## After short a, before short a
+
+<SutraFolio id="6.1.113" />
+
+After a short *a*, *ru* becomes *u* before a short *a*. Neither *a* may be prolonged (<Sa iast="pluta" />). The *u* then meets the *a* before it, and the vowel rules you learned in the second module take over:
+
+<Steps
+  client:visible
+  label="śivas + arcyaḥ, LSK 105"
+  steps={[
+    { parts: [["Siva"], ["s"], [" "], ["arcyaH"]], note: "śivas, the nominative of śiva, and arcyaḥ, ‘to be worshipped’." },
+    { sutra: "8.2.66", parts: [["Siva"], ["r", "new"], [" "], ["arcyaH"]], note: "Word-final s becomes ru." },
+    { sutra: "6.1.113", parts: [["Siva"], ["u", "new"], [" "], ["arcyaH"]], note: "After short a and before short a, ru becomes u." },
+    { sutra: "6.1.87", parts: [["Siv"], ["o", "new"], [" "], ["arcyaH"]], note: "a + u fuse into the guṇa vowel o." },
+    { sutra: "6.1.109", parts: [["Sivo"], ["'", "new"], ["rcyaH"]], note: "Word-final o before short a: the o takes the a's place too (pūrvarūpa), and the avagraha marks where the a was. śivo ’rcyaḥ, ‘Śiva is to be worshipped’." },
+  ]}
+/>
+
+There is a puzzle here. *ru* comes from 8.2.66, in the last three pādas, and those rules are invisible to the rules of chapter 6 (<SutraRef id="8.2.1" />). How can 6.1.113 see it? The Kāśikā's answer: a rule that is about *ru* depends on it, so for that rule *ru* is not invisible.
+
+<Voice quote="kas-6.1.113" voice="bhasya">
+  The Kāśikā tests every word of the rule. Not after *i*: *agnir atra*. Not after long *ā*: *vṛkṣā atra*, which belongs to the next lesson. Not for an original *r*, which has no marker: *svar atra*, *prātar atra*. And before *i* the rule does not apply either: *vṛkṣa iha*.
+</Voice>
+
+## After short a, before a voiced consonant
+
+<SutraFolio id="6.1.114" />
+
+The same happens before a voiced consonant (<Sa iast="haś" />): *ru* after short *a* becomes *u*, and *a* + *u* become *o*. Varadarāja: <Sa iast="śivo vandyaḥ" />, "Śiva is to be praised". There is no avagraha this time, because no vowel follows.
+
+<Voice quote="kas-6.1.114" voice="bhasya">
+  *puruṣo yāti*, *puruṣo hasati*, *puruṣo dadāti*: "the man goes, laughs, gives". Before *y*, *h* or *d* alike, *-aḥ* becomes *-o*. This is the visarga sandhi you will meet most often: almost every word in *-aḥ* does it before a voiced consonant.
+</Voice>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th scope="col">Before the visarga</th><th scope="col">Next sound</th><th scope="col">Result</th><th scope="col">Example</th></tr></thead>
+<tbody>
+<tr><td>short a</td><td>short a</td><td>o, and the a becomes avagraha (<SutraRef id="6.1.113" />, <SutraRef id="6.1.109" />)</td><td><Sa iast="śivo 'rcyaḥ" /></td></tr>
+<tr><td>short a</td><td>voiced consonant</td><td>o (<SutraRef id="6.1.114" />)</td><td><Sa iast="śivo vandyaḥ" /></td></tr>
+<tr><td>short a</td><td>any other vowel</td><td>next lesson (<SutraRef id="8.3.17" />)</td><td><Sa iast="vṛkṣa iha" /></td></tr>
+<tr><td>ā</td><td>vowel or voiced consonant</td><td>next lesson (<SutraRef id="8.3.17" />)</td><td><Sa iast="vṛkṣā atra" /></td></tr>
+<tr><td>any other vowel</td><td>vowel or voiced consonant</td><td>r (<SutraRef id="8.2.66" />); before r, next lesson</td><td><Sa iast="agnir atra" /></td></tr>
+</tbody>
+</table>
+</div>
+
+<Voice quote="vp-1.93" voice="darsana">
+  To understand *śivo 'rcyaḥ* you take it apart again: *śivaḥ*, *arcyaḥ*. Bhartṛhari describes exactly this. A sentence is one whole, he holds, but the mind meets it first by grasping parts; his own commentary says the sounds set the mind working "in the form of grasping parts that appear as sounds and words".
+</Voice>
+
+## Try it
+
+<SandhiPad client:visible level={3} initialA="śivaḥ" initialB="arcyaḥ" exampleSet="visarga" />
+
+<Practice
+  skills={[
+    "Knowing which s becomes ru, and which r is not ru",
+    "Turning -aḥ into -o before short a, with the avagraha",
+    "Turning -aḥ into -o before a voiced consonant",
+  ]}
+/>

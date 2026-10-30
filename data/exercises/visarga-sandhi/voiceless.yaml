@@ -1,0 +1,75 @@
+cards:
+  - id: voiceless.8-3-34
+    front: ‹visarjanīyasya saḥ› (8.3.34)
+    back: Before a voiceless consonant, visarga becomes s, which then follows the next sound's place — rāmaś cinoti, rāmaṣ ṭīkate, vṛkṣas tarati.
+  - id: voiceless.8-3-36
+    front: ‹vā śari› (8.3.36)
+    back: Before ś, ṣ or s, the visarga may also stay — hariḥ śete or hariś śete.
+  - id: voiceless.kharpare
+    front: vārttika ‹kharpare śari vā lopaḥ› (in the Kāśikā on 8.3.36)
+    back: Before a sibilant that is followed by a voiceless consonant, the visarga may also drop — vṛkṣā sthātāraḥ.
+  - id: voiceless.8-3-37
+    front: ‹kupvoḥ ẖkaḫpau ca› (8.3.37)
+    back: Before k, kh, p, ph the visarga stays, or becomes the jihvāmūlīya (before k, kh) or the upadhmānīya (before p, ph).
+  - id: voiceless.8-3-35
+    front: ‹śarpare visarjanīyaḥ› (8.3.35, not in the Laghusiddhāntakaumudī)
+    back: Before a voiceless consonant followed by a sibilant (kṣ, ps, ts) the visarga stays — puruṣaḥ kṣuram.
+items:
+  - id: vl1
+    type: text
+    prompt: "‹rāmaḥ› + ‹cinoti› gives…"
+    answers: [rāmaś cinoti]
+    explain: Visarga becomes s before a voiceless consonant (8.3.34), and s next to c becomes ś (8.4.40).
+  - id: vl2
+    type: text
+    prompt: "‹rāmaḥ› + ‹ṭīkate› gives…"
+    answers: [rāmaṣ ṭīkate]
+    explain: s (8.3.34) next to ṭ becomes ṣ (8.4.41).
+  - id: vl3
+    type: text
+    prompt: "‹vṛkṣaḥ› + ‹tarati› gives…"
+    answers: [vṛkṣas tarati]
+    explain: Before t the visarga becomes s (8.3.34), and s is already a dental.
+  - id: vl4
+    type: text
+    prompt: "‹hariḥ› + ‹śete› gives…"
+    answers: [hariḥ śete, hariś śete]
+    explain: Before a sibilant the visarga may stay (8.3.36) or become the same sibilant (8.3.34, 8.4.40). Both are correct.
+  - id: vl5
+    type: text
+    prompt: "‹vṛkṣāḥ› + ‹sthātāraḥ› gives…"
+    answers: [vṛkṣāḥ sthātāraḥ, vṛkṣās sthātāraḥ, vṛkṣā sthātāraḥ]
+    explain: Before s followed by the voiceless th, a vārttika also allows dropping the visarga. All three are correct.
+  - id: vl6
+    type: text
+    prompt: "‹vṛkṣaḥ› + ‹karoti› gives…"
+    answers: [vṛkṣaḥ karoti, vṛkṣaẖ karoti]
+    explain: Before k the visarga stays or becomes the jihvāmūlīya (8.3.37). It does not become s.
+  - id: vl7
+    type: choice
+    prompt: "In ‹puruṣaḥ› + ‹kṣuram›, what happens to the visarga?"
+    options:
+      - It stays, because kṣ is a voiceless consonant followed by a sibilant (8.3.35).
+      - It becomes s.
+      - It becomes ś.
+      - It becomes the jihvāmūlīya.
+    answer: 0
+  - id: vl8
+    type: choice
+    prompt: What is the upadhmānīya?
+    options:
+      - A breath sound at the lips, which a visarga may become before p or ph
+      - A breath sound at the root of the tongue, before k or kh
+      - A nasalised vowel
+      - The visarga before s
+    answer: 0
+  - id: vl9
+    type: choice
+    prompt: Before which sounds can a visarga stay as it is?
+    options:
+      - ś ṣ s, and k kh p ph
+      - c ch ṭ ṭh
+      - t th
+      - Only before vowels
+    answer: 0
+    explain: Before c, ṭ or t and their aspirates it must become s, and then ś or ṣ.
