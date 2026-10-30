@@ -14,5 +14,5 @@ git -C "$WORK/vidyut" checkout --quiet "$VIDYUT_COMMIT"
 (cd "$WORK/vidyut/vidyut-prakriya" && wasm-pack build --target web --release --out-dir "$WORK/pkg" -- --features serde)
 mkdir -p "$OUT"
 cp "$WORK/pkg/vidyut_prakriya.js" "$WORK/pkg/vidyut_prakriya_bg.wasm" "$OUT/"
-echo "$VIDYUT_COMMIT" > "$OUT/VERSION"
+echo "$VIDYUT_COMMIT" > "$OUT/version.txt"
 ls -l "$OUT"

@@ -20,7 +20,7 @@ let loading: Promise<VidyutApi | null> | null = null;
 function loadVidyut(): Promise<VidyutApi | null> {
   loading ??= (async () => {
     try {
-      const version = await fetch(`${BASE}VERSION`);
+      const version = await fetch(`${BASE}version.txt`);
       if (!version.ok) return null;
       const v = (await version.text()).trim().slice(0, 12);
       const mod = await import(/* @vite-ignore */ `${BASE}vidyut_prakriya.js?v=${v}`);
@@ -57,6 +57,22 @@ const VACANAS = [
 
 /** vidyut writes accents (\ ^) and keeps markers; accents are not taught yet, so drop them for display. */
 const clean = (s: string) => s.replace(/[\\^]/g, "");
+
+/**
+ * A term that is only a sign (visarga, anusvāra, candrabindu) cannot stand alone in Devanagari; join it to the
+ * term before it, so the step reads rāmaḥ rather than rāma + ◌ḥ.
+ */
+function chunks(terms: WebTerm[]): WebTerm[] {
+  const out: WebTerm[] = [];
+  for (const t of terms) {
+    const text = clean(t.text);
+    if (!text) continue;
+    const prev = out.at(-1);
+    if (prev && /^[MH~]/.test(text)) out[out.length - 1] = { text: prev.text + text, wasChanged: prev.wasChanged || t.wasChanged };
+    else out.push({ text, wasChanged: t.wasChanged });
+  }
+  return out;
+}
 
 function Sa({ s, block = false }: { s: string; block?: boolean }) {
   const t = clean(s);
@@ -220,7 +236,7 @@ export default function PrakriyaStepper({ known, initialStem = "rāma", initialL
                   <li>
                     <RuleRef source={s.rule.source} code={s.rule.code} known={knownSet} />
                     <span class="prakriya-terms">
-                      {s.result.map((t, i) => (
+                      {chunks(s.result).map((t, i) => (
                         <>
                           {i > 0 && <span class="prakriya-plus" aria-hidden="true"> + </span>}
                           <span class={t.wasChanged ? "prakriya-term is-changed" : "prakriya-term"}><Sa s={t.text} /></span>
@@ -231,8 +247,8 @@ export default function PrakriyaStepper({ known, initialStem = "rāma", initialL
                 ))}
               </ol>
               <p class="prakriya-hint">
-                Highlighted parts changed at that step. Markers (it) such as the ~ of su~ are shown until the rule that
-                removes them. Derivation by <a href="https://github.com/ambuda-org/vidyut" rel="external">vidyut-prakriyā</a> (Ambuda, MIT licence).
+                Highlighted parts changed at that step. Markers (it), such as the nasalised u of su, are shown until the
+                rule that removes them. Derivation by <a href="https://github.com/ambuda-org/vidyut" rel="external">vidyut-prakriyā</a> (Ambuda, MIT licence).
               </p>
             </section>
           )}
