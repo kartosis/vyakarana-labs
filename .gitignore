@@ -14,5 +14,8 @@ playwright-report/
 test-results/
 .DS_Store
 
+# built in CI by scripts/build-vidyut.sh
+apps/web/public/vidyut/
+
 # generated at deploy time
 infra/terraform/envs/prod/csp.auto.tfvars*.json

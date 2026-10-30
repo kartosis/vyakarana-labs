@@ -43,6 +43,8 @@ jobs:
           uv sync --frozen
           uv run pytest -q
           ./build.sh
+      - name: vidyut-prakriya WebAssembly (derivation stepper)
+        uses: ./.github/actions/vidyut
       - name: Build site
         run: pnpm --filter @vl/web build
         env:

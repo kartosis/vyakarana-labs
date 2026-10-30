@@ -1,0 +1,20 @@
+name: vidyut-wasm
+description: Build vidyut-prakriya's WebAssembly into apps/web/public/vidyut, or restore it from the cache.
+runs:
+  using: composite
+  steps:
+    - id: cache
+      uses: actions/cache@v4
+      with:
+        path: apps/web/public/vidyut
+        key: vidyut-wasm-${{ hashFiles('scripts/build-vidyut.sh') }}
+    - if: steps.cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: rustup target add wasm32-unknown-unknown
+    - if: steps.cache.outputs.cache-hit != 'true'
+      uses: taiki-e/install-action@v2
+      with:
+        tool: wasm-pack
+    - if: steps.cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: scripts/build-vidyut.sh apps/web/public/vidyut
