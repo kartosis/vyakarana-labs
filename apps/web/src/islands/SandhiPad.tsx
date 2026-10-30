@@ -291,7 +291,7 @@ export default function SandhiPad({
           )}
           <section aria-labelledby={`${id}-steps`}>
             <H id={`${id}-steps`}>Derivation</H>
-            {!vowelMode && <p class="sandhi-hint">Consonant rules come from the last three quarters of the grammar, so they apply one after another in the order of their numbers (8.2.1).</p>}
+            {!vowelMode && <p class="sandhi-hint">Consonant rules come from the last three pādas of the grammar (8.2–8.4), so they apply one after another in the order of their numbers (8.2.1).</p>}
             <ol class="sandhi-steps">
               <li>
                 <span class="sandhi-step-label">start</span>

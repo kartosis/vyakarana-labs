@@ -101,7 +101,7 @@
   vrtti: "तवर्गस्य लकारे परे परसवर्णः। तल्लयः। विद्वाँल्लिखति। नस्यानुनासिको लः॥"
   vrttiVerified: true
   kind: vidhi
-  meaning: "A dental before l becomes l, and n becomes a nasalised l: tal layaḥ, vidvāṃl likhati."
+  meaning: "A dental before l becomes l, and n becomes a nasalised l: tallayaḥ, vidvām̐llikhati."
 - id: "8.4.61"
   lsk: 70
   lskVerified: true
@@ -161,7 +161,7 @@
   vrtti: "खरि झलां चरः स्युः । इत्युदो दस्य तः। उत्थानम्। उत्तम्भनम्॥"
   vrttiVerified: true
   kind: vidhi
-  meaning: "Before a voiceless consonant (khar), a stop or sibilant (jhal) becomes the unaspirated voiceless stop of its row (car): utthānam, uttambhanam."
+  meaning: "Before a voiceless consonant (khar), a jhal is replaced by a car (c ṭ t k p ś ṣ s): a stop becomes the unaspirated voiceless stop of its row, and a sibilant stays as it is: utthānam, uttambhanam."
 - id: "8.4.62"
   lsk: 75
   lskVerified: true
@@ -244,8 +244,8 @@
   adhikara: [["पदस्य", "8.1.16"], ["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
   vrtti: "क्विबन्ते राजतौ परे समो मस्य म एव स्यात्। सम्राट्॥"
   vrttiVerified: true
-  kind: niṣedha
-  meaning: "The m of sam stays m before rāj formed with kvip: samrāṭ."
+  kind: vidhi
+  meaning: "The m of sam is replaced by m, so it stays m, before rāj formed with kvip: samrāṭ."
 - id: "8.3.26"
   lsk: 82
   lskVerified: true
@@ -329,7 +329,7 @@
   vrtti: "पदान्तस्य नस्य शे परे तुग्वा। सञ्छम्भुः, सञ्च्छम्भुः, सञ्च्शम्भुः, सञ्शम्भुः॥"
   vrttiVerified: true
   kind: vidhi
-  meaning: "A word-final n before ś may take the augment t (tuk): sañc chambhuḥ, sañc śambhuḥ, sañ chambhuḥ or sañ śambhuḥ."
+  meaning: "A word-final n before ś may take the augment t (tuk): sañchambhuḥ, sañcchambhuḥ, sañcśambhuḥ or sañśambhuḥ."
 - id: "8.3.32"
   lsk: 89
   lskVerified: true
@@ -442,11 +442,11 @@
   lsk: 98
   lskVerified: true
   sk: 142
-  deva: "कुप्वोः ≍क≍पौ च"
-  pada: ["कुप्वोः", "≍क≍पौ", "च"]
+  deva: "कुप्वोः ᳵकᳶपौ च"
+  pada: ["कुप्वोः", "ᳵकᳶपौ", "च"]
   anuvrtti: [["विसर्जनीयस्य", "8.3.34"]]
   adhikara: [["पदस्य", "8.1.16"], ["पूर्वत्रासिद्धम्", "8.2.1"], ["संहितायाम्", "8.2.108"]]
-  vrtti: "कवर्गे पवर्गे च विसर्गस्य ᳵक ᳶपौ स्तः, चाद्विसर्गः । नॄँ ᳶपाहि, नॄँः पाहि, नॄं≍ पाहि नॄंः पाहि । नॄन्पाहि॥"
+  vrtti: "कवर्गे पवर्गे च विसर्गस्य ᳵक ᳶपौ स्तः, चाद्विसर्गः । नॄँ ᳶपाहि, नॄँः पाहि, नॄंᳶपाहि नॄंः पाहि । नॄन्पाहि॥"
   vrttiVerified: true
   kind: vidhi
   meaning: "Before a velar or labial stop, visarga becomes the jihvāmūlīya or the upadhmānīya, or stays visarga."

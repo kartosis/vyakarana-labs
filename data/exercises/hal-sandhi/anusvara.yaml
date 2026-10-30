@@ -61,7 +61,7 @@ items:
     type: choice
     prompt: "For ‹kim› + ‹hyaḥ›, which forms does Varadarāja give?"
     options:
-      - ‹kiym̐ hyaḥ› and ‹kiṃ hyaḥ›
+      - ‹kiy̐ hyaḥ› and ‹kiṃ hyaḥ›
       - ‹kim hyaḥ› and ‹kiṃ hyaḥ›
       - ‹kin hyaḥ› and ‹kiṃ hyaḥ›
       - ‹kiṃ hyaḥ› only

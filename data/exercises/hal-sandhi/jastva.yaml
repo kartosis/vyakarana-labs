@@ -1,7 +1,7 @@
 cards:
   - id: jastva.8-2-39
     front: ‹jhalāṃ jaśo 'nte› (8.2.39)
-    back: At the end of a word, a stop (jhal) becomes the voiced unaspirated stop of its row (jaś) — vāgīśaḥ.
+    back: At the end of a word, a jhal (non-nasal stop, sibilant or h) is replaced by a jaś (j b g ḍ d) — in practice a stop becomes the voiced unaspirated stop of its row — vāgīśaḥ.
   - id: jastva.8-4-45
     front: ‹yaro 'nunāsike 'nunāsiko vā› (8.4.45)
     back: Before a nasal, a word-final consonant may become the nasal of its row — etan murāriḥ or etad murāriḥ. Before a suffix it must — tanmātram, cinmayam.
@@ -22,7 +22,7 @@ cards:
     back: After a consonant, a stop or sibilant (jhar) before a like one may be dropped — utthānam.
   - id: jastva.8-4-55
     front: ‹khari ca› (8.4.55)
-    back: Before a voiceless consonant (khar), a jhal becomes the voiceless unaspirated stop of its row — vākpatiḥ, utthānam.
+    back: Before a voiceless consonant (khar), a jhal is replaced by a car (c ṭ t k p ś ṣ s) — a stop becomes the voiceless unaspirated stop of its row, a sibilant stays — vākpatiḥ, utthānam.
 items:
   - id: ja1
     type: text

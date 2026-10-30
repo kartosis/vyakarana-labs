@@ -424,8 +424,8 @@
   author: Jayāditya & Vāmana
   work: Kāśikāvṛtti
   ref: on 8.4.63
-  deva: झय उत्तरस्य शकारस्याटि परतश्छकारादेशो भवत्यन्यतरस्याम्। वाक्छेते, वाक् शेते। अग्निचिच्छेते, अग्निचित् शेते।
-  translation: After a stop, ś is optionally replaced by ch when a vowel, h, y, v or r (aṭ) follows — vāk chete or vāk śete; agnicic chete or agnicit śete.
+  deva: झय उत्तरस्य शकारस्याटि परतश्छकारादेशो भवत्यन्यतरस्याम्। वाक्छेते, वाक् शेते। … श्वलिट् छेते, श्वलिट् शेते। त्रिष्टुप् छेते, त्रिष्टुप् शेते॥
+  translation: After a stop, ś is optionally replaced by ch when a vowel, h, y, v or r (aṭ) follows — vāk chete or vāk śete … śvaliṭ chete or śvaliṭ śete; triṣṭup chete or triṣṭup śete.
   verified: true
   checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/sutraani/kashika.txt
 - id: kas-8.3.23

@@ -51,3 +51,18 @@ describe("lipi: IAST ↔ SLP1 ↔ Devanagari", () => {
     expect(normalizeAnswer(" rAmaH ", "hk")).toBe("rAmaH");
   });
 });
+
+describe("candrabindu on a semivowel; jihvāmūlīya and upadhmānīya", () => {
+  it("writes a nasalised semivowel with the candrabindu on it, not as m̐", () => {
+    expect(transliterate("kiy~ hyaH", "slp1", "iast")).toBe("kiy̐ hyaḥ");
+    expect(transliterate("kiy̐ hyaḥ", "iast", "slp1")).toBe("kiy~ hyaH");
+    expect(transliterate("kiy̐ hyaḥ", "iast", "deva")).toBe("किय्ँ ह्यः");
+    expect(transliterate("vidvām̐llikhati", "iast", "slp1")).toBe("vidvA~lliKati");
+    expect(transliterate("vidvA~lliKati", "slp1", "iast")).toBe("vidvām̐llikhati");
+  });
+  it("reads and writes ᳵ and ᳶ", () => {
+    expect(transliterate("कुप्वोः ᳵकᳶपौ च", "deva", "iast")).toBe("kupvoḥ ẖkaḫpau ca");
+    expect(transliterate("नॄंᳶपाहि", "deva", "slp1")).toBe("nFMVpAhi");
+    expect(transliterate("nFMVpAhi", "slp1", "deva")).toBe("नॄंᳶपाहि");
+  });
+});

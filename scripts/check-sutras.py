@@ -24,6 +24,7 @@ _spec = importlib.util.spec_from_file_location("imp", Path(__file__).with_name("
 _imp = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(_imp)
 clean_vrtti = _imp.clean_vrtti
+clean_marks = _imp.clean_marks
 
 
 def norm(s: str) -> str:
@@ -46,10 +47,10 @@ def main() -> int:
             ref = by.get(sid)
             if not ref:
                 print(f"✗ {f.name} {sid}: not in dataset"); bad += 1; continue
-            if norm(row["deva"]) != norm(ref["s"]):
+            if norm(row["deva"]) != norm(clean_marks(ref["s"])):
                 print(f"✗ {f.name} {sid}: deva {row['deva']!r} ≠ {ref['s']!r}"); bad += 1
             pc = [p.split("$")[0].strip() for p in ref["pc"].split("##") if p.split("$")[0].strip()]
-            if [norm(p) for p in row.get("pada", [])] != [norm(p) for p in pc]:
+            if [norm(p) for p in row.get("pada", [])] != [norm(clean_marks(p)) for p in pc]:
                 print(f"✗ {f.name} {sid}: pada {row.get('pada')} ≠ {pc}"); bad += 1
             sk = int(ref.get("skn") or 0) or None
             if row.get("sk") != sk:

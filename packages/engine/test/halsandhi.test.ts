@@ -91,7 +91,7 @@ describe("hal-sandhi: Varadarāja's examples", () => {
 
   it("LSK 82–83, 8.3.26–27 and the vārttika", () => {
     expect(join("kim", "hmalayati").all).toEqual(["kimhmalayati", "kiṃ hmalayati"]);
-    expect(join("kim", "hyaḥ").all).toEqual(["kiym̐ hyaḥ", "kiṃ hyaḥ"]);
+    expect(join("kim", "hyaḥ").all).toEqual(["kiy̐ hyaḥ", "kiṃ hyaḥ"]);
     expect(join("kim", "hnute").all).toEqual(["kinhnute", "kiṃ hnute"]);
   });
 

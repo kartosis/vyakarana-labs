@@ -44,12 +44,18 @@ def words(field: str, adhikara: bool = False) -> list[list[str]]:
     return out
 
 
+def clean_marks(v: str) -> str:
+    """The dataset writes the jihvāmūlīya / upadhmānīya as "≍" before k/kh or p/ph, sometimes with a space between."""
+    v = re.sub(r"≍\s?(?=[कख])", "ᳵ", v)
+    return re.sub(r"≍\s?(?=[पफ])", "ᳶ", v)
+
+
 def clean_vrtti(v: str) -> str:
     v = v.strip()
     # vārttikas are marked <!…!> or <<…>>; keep the text and label it once
     v = re.sub(r"<!(.+?)!>\s*(\(वार्त्तिकम्\))?", lambda m: f"{m.group(1).strip()} (वार्त्तिकम्)", v)
     v = re.sub(r"<<(.+?)>>\s*(\(वार्त्तिकम्\))?", lambda m: f"{m.group(1).strip()} (वार्त्तिकम्)", v)
-    v = v.replace("≍क", "ᳵक").replace("≍ख", "ᳵख").replace("≍प", "ᳶप").replace("≍फ", "ᳶफ")
+    v = clean_marks(v)
     v = re.sub(r"(?<=[ऀ-ॿ])3", "३", v)  # pluta mark written as ASCII 3
     v = v.translate(DEVA_DIGITS) if re.search(r"[ऀ-ॿ]\d", v) else v
     v = re.sub(r"\s+", " ", v)
@@ -107,8 +113,8 @@ def main() -> int:
                 "lsk": lsk,
                 "lskVerified": lsk is not None,
                 "sk": sk,
-                "deva": ref["s"].strip(),
-                "pada": [p.split("$")[0].strip() for p in ref["pc"].split("##") if p.split("$")[0].strip()],
+                "deva": clean_marks(ref["s"].strip()),
+                "pada": [clean_marks(p.split("$")[0].strip()) for p in ref["pc"].split("##") if p.split("$")[0].strip()],
                 "anuvrtti": words(ref.get("an", "")),
                 "adhikara": words(ref.get("ad", ""), adhikara=True),
                 "vrtti": v,

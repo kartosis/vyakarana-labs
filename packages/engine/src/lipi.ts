@@ -33,6 +33,8 @@ const IAST_TO_SLP1: ReadonlyArray<readonly [string, string]> = [
   ["ï", "i"], ["ü", "u"], // hiatus markers
   ["e", "e"], ["o", "o"],
   ["ṃ", "M"], ["ṁ", "M"], ["ḥ", "H"], ["m̐", "~"],
+  ["\u0310", "~"], // candrabindu on a consonant: y̐, v̐, l̐
+  ["ẖ", "Z"], ["ḫ", "V"], // jihvāmūlīya, upadhmānīya
   ["k", "k"], ["g", "g"], ["ṅ", "N"], ["c", "c"], ["j", "j"], ["ñ", "Y"],
   ["ṭ", "w"], ["ḍ", "q"], ["ṇ", "R"], ["t", "t"], ["d", "d"], ["n", "n"],
   ["p", "p"], ["b", "b"], ["m", "m"], ["y", "y"], ["r", "r"], ["l", "l"], ["v", "v"],
@@ -42,7 +44,7 @@ const IAST_TO_SLP1: ReadonlyArray<readonly [string, string]> = [
 
 const SLP1_TO_IAST: Record<string, string> = {
   a: "a", A: "ā", i: "i", I: "ī", u: "u", U: "ū", f: "ṛ", F: "ṝ", x: "ḷ", X: "ḹ",
-  e: "e", E: "ai", o: "o", O: "au", M: "ṃ", H: "ḥ", "~": "m̐",
+  e: "e", E: "ai", o: "o", O: "au", M: "ṃ", H: "ḥ", "~": "m̐", Z: "ẖ", V: "ḫ",
   k: "k", K: "kh", g: "g", G: "gh", N: "ṅ", c: "c", C: "ch", j: "j", J: "jh", Y: "ñ",
   w: "ṭ", W: "ṭh", q: "ḍ", Q: "ḍh", R: "ṇ", t: "t", T: "th", d: "d", D: "dh", n: "n",
   p: "p", P: "ph", b: "b", B: "bh", m: "m", y: "y", r: "r", l: "l", v: "v",
@@ -88,7 +90,7 @@ const DEVA_CONS: Record<string, string> = {
   p: "प", P: "फ", b: "ब", B: "भ", m: "म", y: "य", r: "र", l: "ल", v: "व",
   S: "श", z: "ष", s: "स", h: "ह", L: "ळ",
 };
-const DEVA_SIGN: Record<string, string> = { M: "ं", H: "ः", "~": "ँ", "'": "ऽ" };
+const DEVA_SIGN: Record<string, string> = { M: "ं", H: "ः", "~": "ँ", "'": "ऽ", Z: "ᳵ", V: "ᳶ" };
 const VIRAMA = "्";
 const DEVA_DIGITS = "०१२३४५६७८९";
 
@@ -210,6 +212,11 @@ function slp1ToIast(text: string): string {
     // Mark vowel hiatus so "a" + "i" is not read as the diphthong "ai".
     if (prev === "a" && (ch === "i" || ch === "u")) {
       out += ch === "i" ? "ï" : "ü";
+      continue;
+    }
+    // A nasalised semivowel (8.3.26 vārttika: kiy̐ hyaḥ) takes the candrabindu itself, not "m̐".
+    if (ch === "~" && prev && SLP1_CONSONANTS.includes(prev)) {
+      out += "\u0310";
       continue;
     }
     out += SLP1_TO_IAST[ch] ?? ch;

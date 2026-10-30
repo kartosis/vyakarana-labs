@@ -13,7 +13,7 @@ cards:
     back: s or a dental in contact with ṣ or a retroflex becomes ṣ or the retroflex of its position — taṭṭīkā, peṣṭā, cakriṇ ḍhaukase.
   - id: scutva.8-4-42
     front: ‹na padāntāṭ ṭor anām› (8.4.42)
-    back: After a word-final ṭ-row consonant, s and dentals stay — ṣaṭ santaḥ, ṣaṭ te. A vārttika excepts nām, navati and nagarī — ṣaṇṇām.
+    back: After a word-final ṭ-row consonant, s and dentals stay — ṣaṭ santaḥ, ṣaṭ te. The sūtra's own word anām keeps nām out of this — ṣaṇṇām; a vārttika adds navati and nagarī.
   - id: scutva.8-4-43
     front: ‹toḥ ṣi› (8.4.43)
     back: A dental before ṣ is not made retroflex — san ṣaṣṭhaḥ.
@@ -57,7 +57,7 @@ items:
     type: text
     prompt: "‹ṣaṭ› + ‹nām› gives…"
     answers: [ṣaṇṇām]
-    explain: Before nām the vārttika on 8.4.42 lets n turn retroflex after ṭ, and before the nasal of a suffix ṭ must become ṇ (8.4.45 with its vārttika).
+    explain: 8.4.42 does not cover nām (its word anām), so the n turns retroflex after the ṭ-row sound (8.4.41). The final stop (ṣaṣ → ṣaḍ by 8.2.39) must then become ṇ before the nasal of a suffix (8.4.45 with its vārttika).
   - id: sc8
     type: choice
     prompt: Which rule keeps the s of ‹ṣaṭ santaḥ›, "six good people", dental?
@@ -72,7 +72,7 @@ items:
     prompt: Why is ‹īḍ› + ‹te› ‹īṭṭe›, "he praises", when ‹ṣaṭ› + ‹te› stays ‹ṣaṭ te›?
     options:
       - 8.4.42 applies only after a ṭ-row consonant at the end of a word; ‹īḍ› + ‹te› is inside one word.
-      - ‹te› is a different word in each.
+      - ḍ never changes before t.
       - ḍ is not a ṭ-row consonant.
       - ‹īṭṭe› is an irregular form.
     answer: 0

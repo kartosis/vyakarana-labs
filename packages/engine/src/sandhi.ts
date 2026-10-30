@@ -216,7 +216,7 @@ export function vowelSandhi(first: string, second: string, opts: SandhiOptions =
     alternatives.push({
       form: `${head}${sub.slice(0, -1)} ${second}`,
       sutra: "8.3.19",
-      note: "In Śākalya's view the word-final y or v may be dropped. The two vowels then stay apart: 8.3.19 belongs to the last three quarters of the grammar, so the vowel rules of chapter 6 cannot see its result (8.2.1).",
+      note: "In Śākalya's view the word-final y or v may be dropped. The two vowels then stay apart: 8.3.19 belongs to the last three pādas of the grammar (8.2–8.4), so the vowel rules of chapter 6 cannot see its result (8.2.1).",
     });
   }
   return done(r, `${sub}${y}`, alternatives);
