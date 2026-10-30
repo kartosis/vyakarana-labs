@@ -32,8 +32,9 @@ function shuffle<T>(xs: T[]): T[] {
 
 /** Typed answers are compared as phonemes (SLP1), so Devanagari, IAST and Harvard-Kyoto all count. */
 const matches = (given: string, answers: string[]) => {
-  const g = normalizeAnswer(given).replace(/\s+/g, "");
-  return answers.some((a) => normalizeAnswer(a, "iast").replace(/\s+/g, "") === g);
+  // spaces and the avagraha are optional in writing: śivo 'rcyaḥ = śivo rcyaḥ = śivorcyaḥ
+  const g = normalizeAnswer(given).replace(/[\s']+/g, "");
+  return answers.some((a) => normalizeAnswer(a, "iast").replace(/[\s']+/g, "") === g);
 };
 
 export default function PracticeSession({ lessonId, items, cards }: { lessonId: string; items: Item[]; cards: string[] }) {

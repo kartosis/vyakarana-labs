@@ -99,7 +99,30 @@ describe("visarga sandhi: the Kāśikā's examples", () => {
     expect(join("rāmaḥ", "atra", true).result).toBe("rāmaratra");
   });
 
+  it("ahan: ru before rūpa, rātri, rathantara (vārttika); ahar, gīr, dhūr may keep r before pati", () => {
+    expect(join("ahan", "rātraḥ").all).toEqual(["ahorātraḥ"]);
+    expect(join("ahan", "rūpam").all).toEqual(["ahorūpam"]);
+    expect(join("ahaḥ", "rathantaram").all).toEqual(["ahorathantaram"]);
+    expect(join("ahaḥ", "patiḥ").all).toEqual(["ahaḥpatiḥ", "aharpatiḥ", "ahaḫpatiḥ"]);
+    expect(join("gīḥ", "patiḥ").all).toContain("gīrpatiḥ");
+  });
+
+  it("after bho, bhago, agho the y before a vowel always drops (8.3.20); a light y may remain (8.3.18)", () => {
+    expect(join("bhoḥ", "atra")).toMatchObject({ all: ["bhoatra", "bhoyatra"], sutras: ["8.2.66", "8.3.17", "8.3.20"] });
+    expect(join("bhagoḥ", "idam").all).toEqual(["bhagoidam", "bhagoyidam"]);
+  });
+
+  it("in verse saḥ may lose its ending before a vowel (6.1.134)", () => {
+    expect(join("saḥ", "eṣaḥ").all).toEqual(["saeṣaḥ", "sayeṣaḥ", "saiṣaḥ"]);
+    expect(join("saḥ", "atra").all).toEqual(["so'tra", "sātra"]);
+  });
+
+  it("ṛ-stem vocatives end in an original r", () => {
+    expect(join("kartaḥ", "atra").result).toBe("kartaratra");
+  });
+
   it("orders the steps by the rules that apply", () => {
+    expect(join("devāḥ", "ramante")).toMatchObject({ all: ["devāramante"], sutras: ["8.2.66", "8.3.14"] });
     expect(join("śivaḥ", "arcyaḥ").sutras).toEqual(["8.2.66", "6.1.113", "6.1.87", "6.1.109"]);
     expect(join("hariḥ", "ramyaḥ").sutras).toEqual(["8.2.66", "8.3.14", "6.3.111"]);
     expect(join("devāḥ", "gacchanti").sutras).toEqual(["8.2.66", "8.3.17", "8.3.22"]);

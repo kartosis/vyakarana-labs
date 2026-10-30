@@ -572,7 +572,7 @@
   work: Kāśikāvṛtti
   ref: on 6.3.111
   deva: ढकाररेफयोर्लोपो यस्मिन् स ढ्रलोपः, तत्र पूर्वस्याणो दीर्घो भवति। लीढम्। मीढम्। उपगूढम्। मूढः। रलोपे — नीरक्तम्। अग्नी रथः। इन्दू रथः। पुना रक्तं वासः। प्राता राजक्रयः।
-  translation: Where ḍh or r has been dropped, the a, i or u before it is lengthened — līḍham, mīḍham, upagūḍham, mūḍhaḥ. Where r is dropped — nīraktam, agnī rathaḥ, indū rathaḥ, punā raktaṃ vāsaḥ, prātā rājakrayaḥ.
+  translation: Before a ḍh or r that causes a ḍh or r to be dropped, the a, i or u before it is lengthened — līḍham, mīḍham, upagūḍham, mūḍhaḥ. Where r is dropped — nīraktam, agnī rathaḥ, indū rathaḥ, punā raktaṃ vāsaḥ, prātā rājakrayaḥ.
   verified: true
   checkedAt: https://github.com/ashtadhyayi-com/data/blob/master/sutraani/kashika.txt
 - id: kas-6.1.132

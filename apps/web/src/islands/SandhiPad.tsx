@@ -333,7 +333,7 @@ export default function SandhiPad({
           )}
           <section aria-labelledby={`${id}-steps`}>
             <H id={`${id}-steps`}>Derivation</H>
-            {visargaMode && <p class="sandhi-hint">A final s or r is written as visarga; the derivation starts from the sound it stands for. Rules about ru, the r that replaces s, include three from chapter 6 (6.1.113, 6.1.114, 6.1.132).</p>}
+            {visargaMode && <p class="sandhi-hint">A final s or r is written as visarga; the derivation starts from the sound it stands for. Two rules about ru, the r that replaces s, come from chapter 6 (6.1.113, 6.1.114); so does 6.1.132, which drops the ending of saḥ and eṣaḥ.</p>}
             {!vowelMode && !visargaMode && <p class="sandhi-hint">Consonant rules come from the last three pādas of the grammar (8.2–8.4), so they apply one after another in the order of their numbers (8.2.1).</p>}
             <ol class="sandhi-steps">
               <li>

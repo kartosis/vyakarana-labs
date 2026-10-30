@@ -1,7 +1,7 @@
 cards:
   - id: vanishing.8-3-17
     front: ‹bhobhagoaghoapūrvasya yo 'śi› (8.3.17)
-    back: After a or ā, or bho, bhago, agho, ru becomes y before a vowel or voiced consonant — devā iha or devāy iha.
+    back: After a or ā, or bho, bhago, agho, ru becomes y before a vowel or voiced consonant — devā iha or devāy iha (after a/ā the y may drop, 8.3.19; after bho etc. it always drops, 8.3.20).
   - id: vanishing.8-3-22
     front: ‹hali sarveṣām› (8.3.22)
     back: Before a consonant that y is dropped, in every teacher's view — bho devāḥ, agho yāhi.
@@ -85,7 +85,7 @@ items:
     explain: 6.1.132 drops the ending only before a consonant. Before a vowel the ordinary rules apply, as in śivo 'rcyaḥ.
   - id: va13
     type: choice
-    prompt: When may ‹saḥ› lose its ending before a vowel?
+    prompt: When may ‹saḥ› lose its ending before a vowel so that the two vowels combine, as in ‹saiṣa›?
     options:
       - In verse, when the line needs it (6.1.134) — saiṣa dāśarathī rāmaḥ
       - Always

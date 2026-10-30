@@ -15,7 +15,9 @@
  *       before ś ṣ s it stays (8.3.36) or becomes s (8.3.34, then ścutva / ṣṭutva); before a sibilant that is
  *       itself followed by a voiceless consonant it may also drop (vārttika): vṛkṣā sthātāraḥ
  *       before c ch ṭ ṭh t th it becomes s (8.3.34), then ś or ṣ (8.4.40, 8.4.41)
- * Two special words: saḥ and eṣaḥ lose their case ending before a consonant (6.1.132); ahan becomes ahar (8.2.69).
+ * Special words: saḥ and eṣaḥ lose their case ending before a consonant (6.1.132), and in verse saḥ may lose it
+ * before a vowel (6.1.134); ahan becomes ahar (8.2.69), but ru before rūpa, rātri, rathantara (vārttika on 8.2.68),
+ * and ahar, gīr, dhūr may keep r before pati (vārttika on 8.2.69, in the Siddhāntakaumudī).
  * All forms are SLP1; Z and V are the jihvāmūlīya and upadhmānīya.
  */
 import { isConsonant, isVowel } from "./lipi.js";
@@ -29,7 +31,11 @@ export interface VisargaOptions {
 }
 
 /** Words whose final visarga stands for an original r (stem as written before a vowel, SLP1). */
-export const R_WORDS = ["punar", "prAtar", "antar", "svar", "ahar", "pitar", "mAtar", "BrAtar", "gIr", "DUr", "dvAr"];
+export const R_WORDS = [
+  "punar", "prAtar", "antar", "svar", "ahar", "gIr", "DUr", "dvAr",
+  // vocatives of ṛ-stems
+  "pitar", "mAtar", "BrAtar", "svasar", "duhitar", "kartar", "dAtar", "hotar", "netar",
+];
 
 const HAS = "hyvrlYmNRnJBGQDjbgqd"; // haś: the voiced consonants
 const KHAR = "kKcCwWtTpPSzs"; // khar: the voiceless consonants
@@ -51,7 +57,13 @@ export function visargaSandhi(first: string, second: string, opts: VisargaOption
   const steps: SandhiStep[] = [];
   const alternatives: Alternative[] = [];
   const say = (sutra: string, form: string, note: string) => steps.push({ sutra, form, note });
-  const done = (result: string): HalSandhiResult => ({ result, junction: null, alternatives, steps, untouched: false });
+  const done = (result: string): HalSandhiResult => {
+    // 6.1.134: in verse, saḥ may lose its ending before a vowel when the line needs it; the vowels then combine.
+    if (first.replace(/[sH]$/, "") === "sa" && /[sH]$/.test(first) && isVowel(y)) {
+      alternatives.push({ form: vowelSandhi("sa", second).result, sutra: "6.1.134", note: "In verse only, when the line needs it: saḥ loses its ending and the vowels combine (saiṣa dāśarathī rāmaḥ)." });
+    }
+    return { result, junction: null, alternatives, steps, untouched: false };
+  };
 
   // 1. What the final is.
   let pre: string;
@@ -77,10 +89,18 @@ export function visargaSandhi(first: string, second: string, opts: VisargaOption
     }
     if (ru) say("8.2.66", `${pre}r ${second}`, "A word-final s becomes ru, written r here.");
   }
+  // vārttika on 8.2.68 (Kāśikā, Siddhāntakaumudī): the final of ahan is ru, not r, before rūpa, rātri, rathantara
+  if (pre === "aha" && !ru && /^(rUp|rAtr|raTantar)/.test(second)) {
+    ru = true;
+    steps.length = 0;
+    say("8.2.68", `ahar ${second}`, "A vārttika: before rūpa, rātri and rathantara the n of ahan becomes ru, not r (ahorūpam, ahorātraḥ).");
+  }
   const last = pre.at(-1) ?? "";
 
   // 2. Before a vowel or a voiced consonant (aś).
   if (isVowel(y) || HAS.includes(y)) {
+    // 6.1.113 / 6.1.114 come first: 8.3.14 and 8.3.17 are invisible to them (8.2.1), so ru after short a becomes u
+    // even before r (manorathaḥ).
     if (ru && last === "a" && (y === "a" || HAS.includes(y))) {
       const sutra = y === "a" ? "6.1.113" : "6.1.114";
       say(sutra, `${pre}u ${second}`, y === "a" ? "After short a, ru before short a becomes u." : "After short a, ru before a voiced consonant becomes u.");
@@ -95,23 +115,29 @@ export function visargaSandhi(first: string, second: string, opts: VisargaOption
       }
       return done(`${word} ${second}`);
     }
+    // Within the last three pādas the rules apply in number order: 8.3.14 (r before r) acts before 8.3.17.
+    if (y === "r") {
+      say("8.3.14", `${pre} ${second}`, "r before r is dropped.");
+      if ("aiu".includes(last)) {
+        const long = pre.slice(0, -1) + lengthen(last);
+        say("6.3.111", `${long} ${second}`, "When r drops before r, the a, i or u before it is lengthened.");
+        return done(`${long} ${second}`);
+      }
+      return done(`${pre} ${second}`);
+    }
     if (ru && (last === "a" || last === "A" || /^(Bo|Bago|aGo)$/.test(pre))) {
       say("8.3.17", `${pre}y ${second}`, "After a or ā (and after bho, bhago, agho), ru before a vowel or voiced consonant becomes y.");
+      if (isVowel(y) && last === "o") {
+        say("8.3.20", `${pre} ${second}`, "After o the y is always dropped (Gārgya's rule; the Kāśikā reads it as compulsory).");
+        alternatives.push({ form: `${pre}y${second}`, sutra: "8.3.18", note: "With a lightly pronounced y (Śākaṭāyana, 8.3.18), which the Kāśikā allows here." });
+        return done(`${pre} ${second}`);
+      }
       if (isVowel(y)) {
         say("8.3.19", `${pre} ${second}`, "In Śākalya's view the y is dropped. The vowels then stay apart: 8.3.19 is invisible to the vowel rules of chapter 6 (8.2.1).");
         alternatives.push({ form: `${pre}y${second}`, sutra: "8.3.19", note: "Keeping the y, which is optional (8.3.19)." });
         return done(`${pre} ${second}`);
       }
       say("8.3.22", `${pre} ${second}`, "Before a consonant the y is dropped, in every teacher's view.");
-      return done(`${pre} ${second}`);
-    }
-    if (y === "r") {
-      say("8.3.14", `${pre} ${second}`, "r before r is dropped.");
-      if ("aiu".includes(last)) {
-        const long = pre.slice(0, -1) + lengthen(last);
-        say("6.3.111", `${long} ${second}`, "When r drops before r, the vowel before it is lengthened.");
-        return done(`${long} ${second}`);
-      }
       return done(`${pre} ${second}`);
     }
     // ru after another vowel, or an original r: it stays r.
@@ -132,6 +158,9 @@ export function visargaSandhi(first: string, second: string, opts: VisargaOption
     }
     if (KU_PU.includes(y)) {
       const breath = "kK".includes(y) ? "Z" : "V";
+      if (!ru && ["aha", "gI", "DU"].includes(pre) && second.startsWith("pati")) {
+        alternatives.push({ form: `${pre}r${second}`, sutra: "8.2.69", varttika: true, note: "Keeping r before pati (vārttika in the Siddhāntakaumudī on 8.2.69): aharpatiḥ, gīrpatiḥ, dhūrpatiḥ." });
+      }
       say("8.3.37", `${pre}H ${second}`, "Before k, kh, p or ph the visarga stays, or becomes the jihvāmūlīya (before k, kh) or the upadhmānīya (before p, ph).");
       alternatives.push({ form: `${pre}${breath}${second}`, sutra: "8.3.37", note: `With the ${breath === "Z" ? "jihvāmūlīya" : "upadhmānīya"}, also correct; Varadarāja and the Kāśikā list this form first (8.3.37).` });
       return done(`${pre}H ${second}`);
