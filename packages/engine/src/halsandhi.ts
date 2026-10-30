@@ -338,6 +338,8 @@ const RULES: RuleDef[] = [
 export interface HalSandhiResult extends SandhiResult {
   /** why nothing happened, when untouched */
   note?: string;
+  /** the junction belongs to another prakaraṇa (visarga sandhi, declension); no rule here was tried */
+  outOfScope?: true;
 }
 
 const notApplicable = (first: string, second: string, why: string): HalSandhiResult => ({
@@ -347,6 +349,7 @@ const notApplicable = (first: string, second: string, why: string): HalSandhiRes
   steps: [],
   untouched: true,
   note: why,
+  outOfScope: true,
 });
 
 export function consonantSandhi(first: string, second: string, opts: HalSandhiOptions = {}): HalSandhiResult {
@@ -397,7 +400,7 @@ export function consonantSandhi(first: string, second: string, opts: HalSandhiOp
     });
   }
   if (!main.steps.length) {
-    return { result: form(main), junction: null, alternatives, steps: [], untouched: true, note: "No consonant-sandhi rule applies: the words are simply written side by side." };
+    return { result: form(main), junction: null, alternatives, steps: [], untouched: true, note: whyUntouched(first, second) };
   }
   const result = form(main);
   const compact = result.replace(" ", "");
@@ -412,6 +415,16 @@ export function consonantSandhi(first: string, second: string, opts: HalSandhiOp
       ? { left: first.slice(head.length), right: y, out: compact.slice(head.length, compact.length - tail.length) }
       : null;
   return { result, junction, alternatives, steps: main.steps, untouched: false };
+}
+
+/** Why a junction is left as it is, naming the rule or condition a learner might expect to apply. */
+function whyUntouched(first: string, second: string): string {
+  const x = first.at(-1)!;
+  const y = second[0]!;
+  if (T_ROW.includes(x) && y === "z") return "A dental before ṣ is not made retroflex (8.4.43), so the words stand side by side.";
+  if (first === "praSAn" && CHAV.includes(y)) return "praśān is the one word excepted from 8.3.7, so its n stays (Varadarāja: praśān tanoti).";
+  if ("NRn".includes(x) && isVowel(y) && !HRASVA.includes(first.at(-2) ?? "")) return "8.3.32 doubles a final ṅ, ṇ or n only after a short vowel; here the vowel before it is long (Kāśikā: bhavān āste).";
+  return "No consonant-sandhi rule applies: the words are simply written side by side.";
 }
 
 /** Short names of the optional rules, for the notes on alternative forms. */

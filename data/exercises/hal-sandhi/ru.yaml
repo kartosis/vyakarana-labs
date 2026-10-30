@@ -1,0 +1,124 @@
+cards:
+  - id: ru.8-3-5
+    front: ‹samaḥ suṭi› (8.3.5)
+    back: The m of sam becomes ru before the augment s (suṭ) — sam̐sskartā or saṃsskartā.
+  - id: ru.8-3-2
+    front: ‹atrānunāsikaḥ pūrvasya tu vā› (8.3.2)
+    back: In this section, the vowel before a ru may be nasalised.
+  - id: ru.8-3-4
+    front: ‹anunāsikāt paro 'nusvāraḥ› (8.3.4)
+    back: Where that vowel is not nasalised, an anusvāra is added after it.
+  - id: ru.8-3-15
+    front: ‹kharavasānayor visarjanīyaḥ› (8.3.15)
+    back: A word-final r becomes visarga before a voiceless consonant or a pause.
+  - id: ru.sampumkanam
+    front: vārttika ‹saṃpuṃkānāṃ so vaktavyaḥ› (on 8.3.5)
+    back: For sam, pum and kān, the visarga always becomes s.
+  - id: ru.8-3-6
+    front: ‹pumaḥ khayy ampare› (8.3.6)
+    back: The m of pum becomes ru before a voiceless stop followed by am — puṃskokilaḥ.
+  - id: ru.8-3-7
+    front: ‹naś chavy apraśān› (8.3.7)
+    back: A word-final n becomes ru before ch ṭh th c ṭ t followed by am — except in praśān — cakriṃstrāyasva.
+  - id: ru.8-3-34
+    front: ‹visarjanīyasya saḥ› (8.3.34)
+    back: Visarga becomes s before a voiceless consonant.
+  - id: ru.8-3-10
+    front: ‹nṝn pe› (8.3.10)
+    back: The n of nṝn may become ru before p — five forms of nṝn pāhi.
+  - id: ru.8-1-2
+    front: ‹tasya param āmreḍitam› (8.1.2)
+    back: Of a word said twice, the second is called āmreḍita.
+  - id: ru.8-3-12
+    front: ‹kān āmreḍite› (8.3.12)
+    back: The n of kān becomes ru before its repetition — kām̐skān or kāṃskān.
+  - id: ru.6-1-73
+    front: ‹che ca› (6.1.73)
+    back: A short vowel before ch takes the augment t — śivacchāyā.
+  - id: ru.6-1-76
+    front: ‹padāntād vā› (6.1.76)
+    back: After a long vowel at the end of a word the t is optional — lakṣmīcchāyā or lakṣmīchāyā.
+items:
+  - id: ru1
+    type: text
+    prompt: "‹śiva› + ‹chāyā› gives…"
+    answers: [śivacchāyā]
+    explain: The short a takes t before ch (6.1.73), and t becomes c by ścutva (8.4.40).
+  - id: ru2
+    type: text
+    prompt: "‹lakṣmī› + ‹chāyā› gives…"
+    answers: [lakṣmīcchāyā, lakṣmīchāyā]
+    explain: After a long vowel at the end of a word the t is optional (6.1.76).
+  - id: ru3
+    type: text
+    prompt: "‹cakrin› + ‹trāyasva› gives…"
+    answers: [cakrim̐strāyasva, cakriṃstrāyasva]
+    explain: n becomes ru (8.3.7) with a nasal vowel (8.3.2) or an anusvāra (8.3.4); ru becomes visarga (8.3.15), and visarga s (8.3.34).
+  - id: ru4
+    type: text
+    prompt: "‹bhavān› + ‹ca› gives…"
+    answers: [bhavām̐ś ca, bhavāṃś ca]
+    explain: n becomes ru before c (8.3.7), then visarga (8.3.15), then s (8.3.34), and s next to c becomes ś (8.4.40).
+  - id: ru5
+    type: text
+    prompt: "‹praśān› + ‹tanoti› gives…"
+    answers: [praśān tanoti]
+    explain: praśān is the one word excepted from 8.3.7.
+  - id: ru6
+    type: choice
+    prompt: Why does ‹hanti›, "he strikes", keep its n before t?
+    options:
+      - 8.3.7 applies only to an n at the end of a word.
+      - t is not one of the sounds called chav.
+      - hanti is excepted like praśān.
+      - The t is followed by a vowel.
+    answer: 0
+  - id: ru7
+    type: choice
+    prompt: "‹bhavān› + ‹karoti› gives…"
+    options: [‹bhavān karoti›, ‹bhavāṃs karoti›, ‹bhavāṅ karoti›, ‹bhavāṃḥ karoti›]
+    answer: 0
+    explain: k is not one of ch ṭh th c ṭ t, so 8.3.7 does not apply (Kāśikā).
+  - id: ru8
+    type: choice
+    prompt: What does ‹ru› become before a voiceless consonant?
+    options: [visarga (8.3.15), anusvāra (8.3.23), the nasal of that consonant, r]
+    answer: 0
+  - id: ru9
+    type: choice
+    prompt: Which forms does Varadarāja give for ‹pum› + ‹kokilaḥ›, "the male cuckoo"?
+    options:
+      - ‹pum̐skokilaḥ› and ‹puṃskokilaḥ›
+      - ‹puṅkokilaḥ› and ‹puṃkokilaḥ›
+      - ‹puṃḥkokilaḥ› only
+      - ‹pumkokilaḥ› only
+    answer: 0
+    explain: m becomes ru before k + vowel (8.3.6); the vārttika saṃpuṃkānām makes its visarga s.
+  - id: ru10
+    type: choice
+    prompt: Why must the form be ‹saṃsskartā›, with s, and not a visarga before the second s?
+    options:
+      - The vārttika ‹saṃpuṃkānāṃ so vaktavyaḥ› makes the visarga of sam always s.
+      - A visarga never stands before s.
+      - 8.3.7 applies to sam.
+      - The augment s doubles itself.
+    answer: 0
+  - id: ru11
+    type: choice
+    prompt: In ‹kāṃskān›, why does the first ‹kān› change?
+    options:
+      - It stands before its own repetition, the āmreḍita (8.3.12, with 8.1.2).
+      - k is a voiceless stop, so 8.3.7 applies.
+      - kān is like praśān.
+      - Every repeated word doubles its last sound.
+    answer: 0
+  - id: ru12
+    type: choice
+    prompt: Inside a word, after a long vowel, the t before ch is…
+    options:
+      - compulsory, by 6.1.75 — mlecchati.
+      - optional, as at the end of a word.
+      - never added.
+      - added only after a, i and u.
+    answer: 0
+    explain: 6.1.76 makes it optional only at the end of a word. Varadarāja leaves 6.1.75 out; the Kāśikā gives hrīcchati and mlecchati.

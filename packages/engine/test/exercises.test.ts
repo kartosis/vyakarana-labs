@@ -1,9 +1,11 @@
 /**
  * Every exercise file in data/exercises is checked here:
  *  - structure: unique ids, a valid answer index, distinct options;
- *  - vowel-sandhi answers: for a typed item whose prompt joins two words ("‹A› + ‹B›"), each accepted answer
- *    must be a form the engine produces (the result or one of its alternatives), and the main result must be
- *    accepted unless the prompt asks for one particular alternative.
+ *  - sandhi answers: for a typed item whose prompt joins two words ("‹A› + ‹B›"), each accepted answer must be a
+ *    form the engine produces (the result or one of its alternatives), and the main result must be accepted
+ *    unless the prompt asks for one particular alternative. Vowel + vowel goes to vowelSandhi ("(compound)",
+ *    "(inside a word)" set its options); any other junction goes to consonantSandhi ("(suffix)" sets its option),
+ *    and there every correct form must also be accepted, since the optional consonant rules give several.
  * Prompts that depend on things the engine does not model (prefix + root, the word go, suffixes in y) are listed
  * in MANUAL with the reason they were checked by hand.
  */
@@ -11,7 +13,8 @@ import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { parse } from "yaml";
-import { toSlp1 } from "../src/lipi.js";
+import { consonantSandhi } from "../src/halsandhi.js";
+import { isVowel, toSlp1 } from "../src/lipi.js";
 import { vowelSandhi } from "../src/sandhi.js";
 
 const ROOT = join(import.meta.dirname, "..", "..", "..", "data", "exercises");
@@ -72,14 +75,19 @@ describe("exercise files", () => {
   it.each(joins)("$id: every accepted answer is a form the engine derives", ({ id, item }: { id: string; item: Item }) => {
     if (MANUAL[id]) return;
     const [, a, b] = /‹([^›]+)› \+ ‹([^›]+)›/.exec(item.prompt)!;
-    const res = vowelSandhi(toSlp1(a!, "iast"), toSlp1(b!, "iast"), {
-      compound: /\(compound\)/.test(item.prompt),
-      padanta: !/\(inside a word\)/.test(item.prompt),
-    });
-    expect(res.untouched, `${id}: no vowel junction`).toBe(false);
+    const first = toSlp1(a!, "iast");
+    const second = toSlp1(b!, "iast");
+    const vowels = isVowel(first.at(-1)!) && isVowel(second[0]!);
+    const res = vowels
+      ? vowelSandhi(first, second, { compound: /\(compound\)/.test(item.prompt), padanta: !/\(inside a word\)/.test(item.prompt) })
+      : consonantSandhi(first, second, { suffix: /\(suffix\)/.test(item.prompt) });
+    if (vowels) expect(res.untouched, `${id}: no vowel junction`).toBe(false);
+    else expect("outOfScope" in res, `${id}: junction outside consonant sandhi`).toBe(false);
     const forms = new Set([key(res.result, "slp1"), ...res.alternatives.map((x) => key(x.form, "slp1"))]);
+    const given = item.answers!.map((x) => key(x));
     for (const ans of item.answers!) expect(forms, `${id}: ${ans}`).toContain(key(ans));
     const asksForAlternative = /give the form|unjoined form/.test(item.prompt);
-    if (!asksForAlternative) expect(item.answers!.map((x) => key(x))).toContain(key(res.result, "slp1"));
+    if (!asksForAlternative) expect(given).toContain(key(res.result, "slp1"));
+    if (!vowels && !asksForAlternative) for (const f of forms) expect(given, `${id}: also correct, not accepted`).toContain(f);
   });
 });

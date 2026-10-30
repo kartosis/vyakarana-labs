@@ -1,0 +1,89 @@
+cards:
+  - id: jastva.8-2-39
+    front: ‹jhalāṃ jaśo 'nte› (8.2.39)
+    back: At the end of a word, a stop (jhal) becomes the voiced unaspirated stop of its row (jaś) — vāgīśaḥ.
+  - id: jastva.8-4-45
+    front: ‹yaro 'nunāsike 'nunāsiko vā› (8.4.45)
+    back: Before a nasal, a word-final consonant may become the nasal of its row — etan murāriḥ or etad murāriḥ. Before a suffix it must — tanmātram, cinmayam.
+  - id: jastva.8-4-60
+    front: ‹tor li› (8.4.60)
+    back: A dental before l becomes l — tallayaḥ. n becomes a nasalised l — vidvām̐l likhati.
+  - id: jastva.8-4-61
+    front: ‹udaḥ sthāstambhoḥ pūrvasya› (8.4.61)
+    back: After the prefix ud, the first sound of sthā and stambh becomes like the sound before it — the s becomes th.
+  - id: jastva.1-1-67
+    front: ‹tasmād ity uttarasya› (1.1.67)
+    back: When a rule names something in the ablative, the change applies to what immediately follows it.
+  - id: jastva.1-1-54
+    front: ‹ādeḥ parasya› (1.1.54)
+    back: An operation on what follows applies to its first sound.
+  - id: jastva.8-4-65
+    front: ‹jharo jhari savarṇe› (8.4.65)
+    back: After a consonant, a stop or sibilant (jhar) before a like one may be dropped — utthānam.
+  - id: jastva.8-4-55
+    front: ‹khari ca› (8.4.55)
+    back: Before a voiceless consonant (khar), a jhal becomes the voiceless unaspirated stop of its row — vākpatiḥ, utthānam.
+items:
+  - id: ja1
+    type: text
+    prompt: "‹vāk› + ‹īśaḥ› gives…"
+    answers: [vāgīśaḥ]
+    explain: At the end of a word k becomes g (8.2.39), and nothing turns it back before a vowel.
+  - id: ja2
+    type: text
+    prompt: "‹etad› + ‹murāriḥ› gives…"
+    answers: [etan murāriḥ, etad murāriḥ]
+    explain: Before a nasal the d may become n (8.4.45). Both forms are correct.
+  - id: ja3
+    type: text
+    prompt: "‹tad› + ‹mātram› (suffix) gives…"
+    answers: [tanmātram]
+    explain: Before the nasal of a suffix the nasal is compulsory (vārttika on 8.4.45).
+  - id: ja4
+    type: text
+    prompt: "‹cit› + ‹mayam› (suffix) gives…"
+    answers: [cinmayam]
+    explain: t becomes d (8.2.39), and before the suffix maya the d must become n (vārttika on 8.4.45).
+  - id: ja5
+    type: text
+    prompt: "‹tad› + ‹layaḥ› gives…"
+    answers: [tallayaḥ]
+    explain: A dental before l becomes l (8.4.60).
+  - id: ja6
+    type: choice
+    prompt: "‹vidvān› + ‹likhati› gives…"
+    options: [‹vidvām̐llikhati›, ‹vidvāllikhati›, ‹vidvān likhati›, ‹vidvāṇ likhati›]
+    answer: 0
+    explain: n before l becomes a nasalised l (8.4.60 with ‹nasyānunāsiko laḥ›), written with the candrabindu.
+  - id: ja7
+    type: text
+    prompt: "‹vāk› + ‹patiḥ› gives…"
+    answers: [vākpatiḥ]
+    explain: k becomes g at the end of the word (8.2.39), then k again before the voiceless p (8.4.55).
+  - id: ja8
+    type: choice
+    prompt: "In ‹ud› + ‹sthānam› → ‹utthānam›, which rule turns the s of sthā into th?"
+    options: [8.4.61, 8.4.55, 8.4.65, 8.2.39]
+    answer: 0
+    explain: After ud the first sound of sthā becomes like the sound before it (8.4.61); th is the dental closest to s.
+  - id: ja9
+    type: choice
+    prompt: Which rule may drop the middle t of ‹uttthānam›, giving ‹utthānam›?
+    options: [8.4.65, 8.4.55, 8.4.61, 1.1.54]
+    answer: 0
+    explain: After a consonant, a stop before a like stop may be dropped (8.4.65). Keeping it is also correct.
+  - id: ja10
+    type: choice
+    prompt: Which sounds are ‹jaś›?
+    options: [‹j b g ḍ d›, ‹c ṭ t k p›, ‹jh bh gh ḍh dh›, ‹ñ m ṅ ṇ n›]
+    answer: 0
+  - id: ja11
+    type: choice
+    prompt: For ‹vāk› + ‹nayati›, what does the Kāśikā give?
+    options:
+      - ‹vāṅ nayati› and ‹vāg nayati›
+      - ‹vāṅ nayati› only
+      - ‹vāk nayati› and ‹vāg nayati›
+      - ‹vāg nayati› only
+    answer: 0
+    explain: 8.4.45 is optional, so both forms are correct.

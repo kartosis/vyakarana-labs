@@ -1,0 +1,114 @@
+cards:
+  - id: anusvara.8-4-62
+    front: ‹jhayo ho 'nyatarasyām› (8.4.62)
+    back: After a stop, h may become the voiced aspirate of that row — vāgghariḥ or vāg hariḥ.
+  - id: anusvara.8-4-63
+    front: ‹śaś cho 'ṭi› (8.4.63)
+    back: After a stop, ś before a vowel, h, y, v or r may become ch — tacchivaḥ or tacśivaḥ. A vārttika widens aṭ to am — tacchlokena.
+  - id: anusvara.8-3-23
+    front: ‹mo 'nusvāraḥ› (8.3.23)
+    back: A word-final m before a consonant becomes anusvāra — hariṃ vande.
+  - id: anusvara.8-3-24
+    front: ‹naś cāpadāntasya jhali› (8.3.24)
+    back: Inside a word, n and m become anusvāra before a stop, sibilant or h — yaśāṃsi, ākraṃsyate; but manyate.
+  - id: anusvara.8-4-58
+    front: ‹anusvārasya yayi parasavarṇaḥ› (8.4.58)
+    back: Before a consonant other than a sibilant or h, anusvāra takes the class of the next sound; before a stop, its nasal — śāntaḥ.
+  - id: anusvara.8-4-59
+    front: ‹vā padāntasya› (8.4.59)
+    back: At the end of a word 8.4.58 is optional — tvaṅ karoṣi or tvaṃ karoṣi.
+  - id: anusvara.8-3-25
+    front: ‹mo rāji samaḥ kvau› (8.3.25)
+    back: The m of sam stays m before rāj (with the suffix kvip) — samrāṭ.
+  - id: anusvara.8-3-26
+    front: ‹he mapare vā› (8.3.26)
+    back: Before h followed by m, a final m may stay — kim hmalayati or kiṃ hmalayati. A vārttika adds nasal y, v, l before h + y, v, l.
+  - id: anusvara.8-3-27
+    front: ‹napare naḥ› (8.3.27)
+    back: Before h followed by n, a final m may become n — kin hnute or kiṃ hnute.
+items:
+  - id: an1
+    type: text
+    prompt: "‹vāk› + ‹hariḥ› gives…"
+    answers: [vāgghariḥ, vāg hariḥ]
+    explain: k becomes g (8.2.39); after it h may become gh, the voiced aspirate of the velar row (8.4.62).
+  - id: an2
+    type: text
+    prompt: "‹tad› + ‹śivaḥ› gives…"
+    answers: [tacchivaḥ, tacśivaḥ]
+    explain: d next to ś becomes j (8.4.40), j becomes c before the voiceless ś (8.4.55), and ś may become ch (8.4.63).
+  - id: an3
+    type: text
+    prompt: "‹harim› + ‹vande› gives…"
+    answers: [hariṃ vande]
+    explain: A word-final m before a consonant becomes anusvāra (8.3.23).
+  - id: an4
+    type: text
+    prompt: "‹tvam› + ‹karoṣi› gives…"
+    answers: [tvaṅ karoṣi, tvaṃ karoṣi]
+    explain: m becomes anusvāra (8.3.23), which at the end of a word may take the nasal of the next stop, ṅ before k (8.4.59).
+  - id: an5
+    type: text
+    prompt: "‹kim› + ‹hnute› gives…"
+    answers: [kin hnute, kiṃ hnute]
+    explain: Before h followed by n, the m may become n (8.3.27); otherwise it becomes anusvāra.
+  - id: an6
+    type: text
+    prompt: "‹kim› + ‹hmalayati› gives…"
+    answers: [kim hmalayati, kiṃ hmalayati]
+    explain: Before h followed by m, the m may stay (8.3.26).
+  - id: an7
+    type: choice
+    prompt: "For ‹kim› + ‹hyaḥ›, which forms does Varadarāja give?"
+    options:
+      - ‹kiym̐ hyaḥ› and ‹kiṃ hyaḥ›
+      - ‹kim hyaḥ› and ‹kiṃ hyaḥ›
+      - ‹kin hyaḥ› and ‹kiṃ hyaḥ›
+      - ‹kiṃ hyaḥ› only
+    answer: 0
+    explain: The vārttika on 8.3.26 lets m become a nasalised y before h followed by y.
+  - id: an8
+    type: choice
+    prompt: Why is "emperor" ‹samrāṭ›, not ‹saṃrāṭ›?
+    options:
+      - The m of sam stays m before rāj (8.3.25).
+      - r is not a consonant.
+      - Anusvāra is never written before r.
+      - 8.4.59 turns the anusvāra back into m.
+    answer: 0
+  - id: an9
+    type: choice
+    prompt: In ‹śāntaḥ›, "calm", from the root ‹śam›, how did the m become n?
+    options:
+      - It became anusvāra before t (8.3.24), and the anusvāra took the nasal of t (8.4.58).
+      - m becomes n before any dental (8.4.45).
+      - It became n by ścutva (8.4.40).
+      - The root is śan, not śam.
+    answer: 0
+  - id: an10
+    type: choice
+    prompt: Which is true of ‹tvaṅ karoṣi› and ‹tvaṃ karoṣi›?
+    options:
+      - Both are correct; at the end of a word 8.4.59 makes the nasal optional.
+      - Only tvaṅ karoṣi is correct.
+      - Only tvaṃ karoṣi is correct.
+      - tvaṅ karoṣi is correct only inside a compound.
+    answer: 0
+  - id: an11
+    type: choice
+    prompt: In ‹tacchlokena›, "by that verse", why may ś become ch before l, which is not in aṭ?
+    options:
+      - A vārttika on 8.4.63 widens aṭ to am, which includes l and the nasals.
+      - l counts as a vowel.
+      - 8.4.62 applies.
+      - ś always becomes ch after a stop.
+    answer: 0
+  - id: an12
+    type: choice
+    prompt: Why does the m of ‹gamyate›, "is gone to", stay m?
+    options:
+      - It is not at the end of a word, and inside a word only a following stop, sibilant or h causes anusvāra (8.3.24).
+      - y is a vowel.
+      - m never changes before y.
+      - gamyate is a compound.
+    answer: 0

@@ -143,3 +143,16 @@ describe("hal-sandhi: Varadarāja's examples", () => {
     expect(join("vāc", "atra").untouched).toBe(true);
   });
 });
+
+describe("hal-sandhi: why nothing happens", () => {
+  const note = (a: string, b: string) => consonantSandhi(toSlp1(a, "iast"), toSlp1(b, "iast")).note ?? "";
+  it.each([
+    ["san", "ṣaṣṭhaḥ", "8.4.43"],
+    ["praśān", "tanoti", "8.3.7"],
+    ["bhavān", "āste", "8.3.32"],
+    ["prāṅ", "āste", "8.3.32"],
+    ["bhavān", "karoti", "No consonant-sandhi rule applies"],
+  ])("%s + %s: the note names %s", (a, b, expected) => {
+    expect(note(a, b)).toContain(expected);
+  });
+});

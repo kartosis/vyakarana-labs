@@ -1,0 +1,93 @@
+cards:
+  - id: scutva.names
+    front: What do ‹stu›, ‹ścu› and ‹ṣṭu› stand for?
+    back: s with the dental row (t th d dh n); ś with the palatal row (c ch j jh ñ); ṣ with the retroflex row (ṭ ṭh ḍ ḍh ṇ). tu, cu and ṭu name whole rows by 1.1.69.
+  - id: scutva.8-4-40
+    front: ‹stoḥ ścunā ścuḥ› (8.4.40)
+    back: s or a dental in contact with ś or a palatal becomes ś or the palatal of its position — saccit, śārṅgiñ jaya, rāmaś śete.
+  - id: scutva.8-4-44
+    front: ‹śāt› (8.4.44)
+    back: After ś, a dental does not turn palatal — praśnaḥ, viśnaḥ.
+  - id: scutva.8-4-41
+    front: ‹ṣṭunā ṣṭuḥ› (8.4.41)
+    back: s or a dental in contact with ṣ or a retroflex becomes ṣ or the retroflex of its position — taṭṭīkā, peṣṭā, cakriṇ ḍhaukase.
+  - id: scutva.8-4-42
+    front: ‹na padāntāṭ ṭor anām› (8.4.42)
+    back: After a word-final ṭ-row consonant, s and dentals stay — ṣaṭ santaḥ, ṣaṭ te. A vārttika excepts nām, navati and nagarī — ṣaṇṇām.
+  - id: scutva.8-4-43
+    front: ‹toḥ ṣi› (8.4.43)
+    back: A dental before ṣ is not made retroflex — san ṣaṣṭhaḥ.
+items:
+  - id: sc1
+    type: text
+    prompt: "‹sat› + ‹cit› gives…"
+    answers: [saccit]
+    explain: t next to the palatal c becomes the palatal of its position, c (8.4.40).
+  - id: sc2
+    type: text
+    prompt: "‹śārṅgin› + ‹jaya› gives…"
+    answers: [śārṅgiñ jaya]
+    explain: n next to the palatal j becomes ñ (8.4.40).
+  - id: sc3
+    type: text
+    prompt: "‹tat› + ‹ṭīkā› gives…"
+    answers: [taṭṭīkā]
+    explain: t next to the retroflex ṭ becomes ṭ (8.4.41).
+  - id: sc4
+    type: text
+    prompt: "‹cakrin› + ‹ḍhaukase› gives…"
+    answers: [cakriṇ ḍhaukase]
+    explain: n next to the retroflex ḍh becomes ṇ (8.4.41).
+  - id: sc5
+    type: choice
+    prompt: "‹rāmas› + ‹śete› (the s that a visarga becomes) gives…"
+    options: [‹rāmaś śete›, ‹rāmas śete›, ‹rāmaṣ śete›, ‹rāmac śete›]
+    answer: 0
+    explain: s next to ś becomes ś (8.4.40). An s always becomes ś, never a palatal stop.
+  - id: sc6
+    type: choice
+    prompt: Why is ‹praśnaḥ›, "question", not ‹praśñaḥ›?
+    options:
+      - After ś, a dental keeps its place (8.4.44).
+      - n is not a dental.
+      - ś is not one of the sounds called ścu.
+      - The two sounds are in different words.
+    answer: 0
+  - id: sc7
+    type: text
+    prompt: "‹ṣaṭ› + ‹nām› gives…"
+    answers: [ṣaṇṇām]
+    explain: Before nām the vārttika on 8.4.42 lets n turn retroflex after ṭ, and before the nasal of a suffix ṭ must become ṇ (8.4.45 with its vārttika).
+  - id: sc8
+    type: choice
+    prompt: Which rule keeps the s of ‹ṣaṭ santaḥ›, "six good people", dental?
+    options:
+      - 8.4.42 — after a word-final ṭ-row consonant, s and dentals are not made retroflex.
+      - 8.4.43 — a dental before ṣ stays.
+      - 8.4.44 — after ś, dentals stay.
+      - 8.4.41 — it makes s retroflex only inside a word.
+    answer: 0
+  - id: sc9
+    type: choice
+    prompt: Why is ‹īḍ› + ‹te› ‹īṭṭe›, "he praises", when ‹ṣaṭ› + ‹te› stays ‹ṣaṭ te›?
+    options:
+      - 8.4.42 applies only after a ṭ-row consonant at the end of a word; ‹īḍ› + ‹te› is inside one word.
+      - ‹te› is a different word in each.
+      - ḍ is not a ṭ-row consonant.
+      - ‹īṭṭe› is an irregular form.
+    answer: 0
+  - id: sc10
+    type: choice
+    prompt: In ‹san ṣaṣṭhaḥ›, "being sixth", why does the n stay dental?
+    options:
+      - A dental before ṣ is not made retroflex (8.4.43).
+      - n is not a dental.
+      - ṣ is not a retroflex sound.
+      - 8.4.42 blocks it.
+    answer: 0
+  - id: sc11
+    type: choice
+    prompt: "‹peṣ› + ‹tā›, inside one word, gives…"
+    options: [‹peṣṭā›, ‹peṣtā›, ‹peṭṭā›, ‹peśtā›]
+    answer: 0
+    explain: t after ṣ becomes ṭ (8.4.41); ṣ itself does not change.

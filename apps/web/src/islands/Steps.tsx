@@ -19,10 +19,13 @@ const iast = (s: string) => transliterate(s, "slp1", "iast");
 const SLP1_CONS = "kKgGNcCjJYwWqQRtTdDnpPbBmyrlvSzshL";
 /**
  * Devanagari can only be split into styled spans at akṣara boundaries: if any segment but the last
- * ends in a consonant, the following segment would join it in a conjunct, so render it whole.
+ * ends in a consonant, the following segment would join it in a conjunct, and a segment that starts
+ * with anusvāra, visarga or candrabindu would stand alone as a combining sign, so render it whole.
  */
+const SLP1_SIGNS = "MH~";
 const splittable = (parts: Step["parts"]) =>
-  parts.slice(0, -1).every(([t]) => !SLP1_CONS.includes(t.at(-1) ?? ""));
+  parts.slice(0, -1).every(([t]) => !SLP1_CONS.includes(t.at(-1) ?? "")) &&
+  parts.slice(1).every(([t]) => !SLP1_SIGNS.includes(t[0] ?? ""));
 
 function Form({ parts }: { parts: Step["parts"] }) {
   const whole = parts.map(([t]) => t).join("");

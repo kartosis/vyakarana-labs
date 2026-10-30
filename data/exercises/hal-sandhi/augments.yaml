@@ -1,0 +1,96 @@
+cards:
+  - id: augments.1-1-46
+    front: ‹ādyantau ṭakitau› (1.1.46)
+    back: An augment marked with ṭ goes at the beginning of its item, one marked with k at the end.
+  - id: augments.8-3-28
+    front: ‹ṅṇoḥ kukṭuk śari› (8.3.28)
+    back: After a word-final ṅ or ṇ, before a sibilant, k or ṭ may be added — prāṅk ṣaṣṭhaḥ, sugaṇṭ ṣaṣṭhaḥ.
+  - id: augments.cayo-dvitiyah
+    front: vārttika ‹cayo dvitīyāḥ śari pauṣkarasādeḥ› (on 8.4.48)
+    back: In Pauṣkarasādi's view, c ṭ t k p before a sibilant become the second of their rows — prāṅkh ṣaṣṭhaḥ, sugaṇṭh ṣaṣṭhaḥ.
+  - id: augments.8-3-29
+    front: ‹ḍaḥ si dhuṭ› (8.3.29)
+    back: After ḍ, an s may take the augment dh, which becomes t before the s — ṣaṭ tsantaḥ or ṣaṭ santaḥ.
+  - id: augments.8-3-30
+    front: ‹naś ca› (8.3.30)
+    back: After n, too, an s may take dh → t — san tsaḥ or san saḥ.
+  - id: augments.8-3-31
+    front: ‹śi tuk› (8.3.31)
+    back: A word-final n before ś may take t at its end — sañchambhuḥ, sañcchambhuḥ, sañcśambhuḥ, sañśambhuḥ.
+  - id: augments.8-3-32
+    front: ‹ṅamo hrasvād aci ṅamuṇ nityam› (8.3.32)
+    back: After a short vowel, a word-final ṅ, ṇ or n is doubled before a vowel — pratyaṅṅ ātmā, sugaṇṇ īśaḥ, sann acyutaḥ.
+items:
+  - id: ag1
+    type: text
+    prompt: "‹prāṅ› + ‹ṣaṣṭhaḥ› gives…"
+    answers: [prāṅkh ṣaṣṭhaḥ, prāṅk ṣaṣṭhaḥ, prāṅ ṣaṣṭhaḥ]
+    explain: k may be added (8.3.28), and that k may be aspirated before the sibilant (vārttika on 8.4.48). All three are correct.
+  - id: ag2
+    type: text
+    prompt: "‹sugaṇ› + ‹ṣaṣṭhaḥ› gives…"
+    answers: [sugaṇṭh ṣaṣṭhaḥ, sugaṇṭ ṣaṣṭhaḥ, sugaṇ ṣaṣṭhaḥ]
+    explain: After ṇ the augment is ṭ (8.3.28), which may be aspirated (vārttika on 8.4.48).
+  - id: ag3
+    type: text
+    prompt: "‹ṣaṭ› + ‹santaḥ› gives…"
+    answers: [ṣaṭ tsantaḥ, ṣaṭ santaḥ]
+    explain: s after ḍ may take dh (8.3.29), which becomes t before s (8.4.55). The t stays dental after the word-final ṭ (8.4.42).
+  - id: ag4
+    type: text
+    prompt: "‹san› + ‹saḥ› gives…"
+    answers: [san tsaḥ, san saḥ]
+    explain: After n, too, s may take dh, which becomes t (8.3.30, 8.4.55).
+  - id: ag5
+    type: text
+    prompt: "‹san› + ‹śambhuḥ› gives…"
+    answers: [sañchambhuḥ, sañcchambhuḥ, sañcśambhuḥ, sañśambhuḥ]
+    explain: t may be added (8.3.31); t and n turn palatal (8.4.40); ś may become ch (8.4.63); c before ch may be dropped (8.4.65). All four are correct.
+  - id: ag6
+    type: text
+    prompt: "‹pratyaṅ› + ‹ātmā› gives…"
+    answers: [pratyaṅṅātmā]
+    explain: After the short a, ṅ is doubled before the vowel (8.3.32). This is compulsory.
+  - id: ag7
+    type: text
+    prompt: "‹san› + ‹acyutaḥ› gives…"
+    answers: [sannacyutaḥ]
+    explain: After the short a, n is doubled before the vowel (8.3.32).
+  - id: ag8
+    type: text
+    prompt: "‹sugaṇ› + ‹īśaḥ› gives…"
+    answers: [sugaṇṇīśaḥ]
+    explain: After the short a, ṇ is doubled before the vowel (8.3.32).
+  - id: ag9
+    type: choice
+    prompt: Why is ‹bhavān› + ‹āste› just ‹bhavān āste›?
+    options:
+      - 8.3.32 doubles the nasal only after a short vowel, and the ā of bhavān is long.
+      - n is never doubled.
+      - āste begins with a long vowel.
+      - 8.3.32 is optional.
+    answer: 0
+  - id: ag10
+    type: choice
+    prompt: Where does the augment ‹kuk› go?
+    options:
+      - At the end of the first word, because it is marked with k (1.1.46).
+      - At the beginning of the second word, because it is marked with k.
+      - Between any two consonants.
+      - In place of the ṅ.
+    answer: 0
+  - id: ag11
+    type: choice
+    prompt: "‹prāṅ› + ‹śete›: which form is possible only because the added k ends the first word?"
+    options: [‹prāṅk chete›, ‹prāṅ chete›, ‹prāk chete›, ‹prāñ chete›]
+    answer: 0
+    explain: The Kāśikā reads 8.4.63 as applying only after a stop that ends a word, so ś can become ch after the k of prāṅk.
+  - id: ag12
+    type: choice
+    prompt: Why does the augment of 8.3.29 begin the second word, not end the first?
+    options:
+      - It is dhuṭ, marked with ṭ (1.1.46); so its t follows a word-final ṭ and stays dental by 8.4.42.
+      - Augments always begin the later word.
+      - Because s is a sibilant.
+      - So that 8.4.63 can apply.
+    answer: 0
