@@ -185,6 +185,12 @@
   - VP 1.94 (ashtadhyayi.com numbering): यथानुपूर्वीनियमो विकारे क्षीरबीजयोः । तथैव प्रतिपत्तॄणां नियतो बुद्धिषु क्रमः — milk and seed only; no "curd"/"plant" in the verse.
 - **Not verified (excluded from site)**: Mahābhāṣya maṅgala passage on 1.1.1 (“माङ्गलिक आचार्यो…वृद्धिशब्दमादितः प्रयुङ्क्ते”), “so 'yam akṣarasamāmnāyaḥ”.
 
+### 4.5 vidyut-prakriya WASM (researched 2026-10-30, for M6)
+- Repo github.com/ambuda-org/vidyut (MIT; crate `vidyut-prakriya` 0.2.0, MIT). Sparse clone (read-only, untrusted) at `/home/claude/ext/vidyut` @ 8da2f90 (2026-06-24). GitHub API for that repo is not enabled in this session; plain `git clone` works.
+- No published npm package. Build: `vidyut-prakriya/Makefile` target `wasm_release` = `wasm-pack build --target web --release -- --features serde` → `pkg/vidyut_prakriya.js` + `.wasm`. Deps: wasm-bindgen 0.2, serde-wasm-bindgen 0.4, path deps `../vidyut-akshara` (so build from the workspace).
+- JS API (`src/wasm.rs`): `Vidyut.init()`; methods `deriveSubantas({pratipadika, linga, vibhakti, vacana})`, `deriveTinantas({dhatu, lakara, prayoga, purusha, vacana, skip_at_agama, …})`, `deriveKrdantas`, `deriveDhatus`, `deriveTaddhitantas`, `deriveStryantas` → array of `{text, history: [{rule: {source, code}, result: [{text, wasChanged}]}]}` (SLP1). Rule sources: ashtadhyayi, linganushasanam, … (`www/static/vidyut-prakriya-app.js` shows usage, incl. `new Vidyut()` wrapper in `www/static/vidyut-prakriya.js` after `await init()`).
+- Plan: build in CI (rustup + wasm-pack; GitHub Actions has network) → publish `apps/web/public/wasm/` artifacts (or commit the built pkg, pinned to the commit above); load lazily in a `PrakriyaStepper` island; CSP needs `'wasm-unsafe-eval'` in script-src (check `scripts/csp-hashes.mjs` + CloudFront policy). Rust/wasm-pack cannot be installed in this sandbox if crates.io / static.rust-lang.org are blocked → verify first (`curl -sI https://static.rust-lang.org`).
+
 ---
 
 ## 5. Architecture — **superseded by `docs/ARCHITECTURE.md` (2026-10-29)**; sketch below kept for history (API Gateway replaced by CloudFront → Lambda Function URL)
