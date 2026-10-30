@@ -14,7 +14,7 @@ const urls = [
   '/course/hal-sandhi/augments/', '/course/hal-sandhi/ru/', '/tools/sandhi/?a=san&b=%C5%9Bambhu%E1%B8%A5',
   '/sutra/8.3.37/', '/sutra/8.4.40/',
   '/course/visarga-sandhi/voiceless/', '/course/visarga-sandhi/ru-to-o/', '/course/visarga-sandhi/vanishing/',
-  '/tools/sandhi/?a=%C5%9Biva%E1%B8%A5&b=arcya%E1%B8%A5', '/sutra/6.1.113/',
+  '/tools/sandhi/?a=%C5%9Biva%E1%B8%A5&b=arcya%E1%B8%A5', '/sutra/6.1.113/', '/tools/prakriya/',
 ];
 /** Scroll through the page so every client:visible island hydrates before the audit. */
 async function hydrateAll(p) {

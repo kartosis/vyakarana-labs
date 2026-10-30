@@ -1,0 +1,22 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import PrakriyaStepper from "../../islands/PrakriyaStepper.tsx";
+
+const known = (await getCollection("sutras")).map((s) => s.id);
+---
+<Base title="Derivation" kind="tool" description="Decline any noun stem in all twenty-four forms and step through the derivation of each, sūtra by sūtra.">
+  <div class="page-narrow">
+    <header class="page-head">
+      <p class="crumbs"><a href="/tools/">Tools</a></p>
+      <h1>Derivation</h1>
+      <p class="lead">
+        Type a stem and choose its gender. You get its full declension, and for any form the prakriyā: every sūtra the
+        grammar applies, in order, from stem and ending to the finished word. The derivations come from
+        vidyut-prakriyā, an open implementation of the Aṣṭādhyāyī by Ambuda; sūtras taught on this site link to their
+        pages, the rest to Pramāṇa.
+      </p>
+    </header>
+    <PrakriyaStepper client:load known={known} />
+  </div>
+</Base>

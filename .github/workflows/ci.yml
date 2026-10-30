@@ -74,6 +74,9 @@ jobs:
       - name: Account flows with stubbed Cognito and API, production CSP enforced
         working-directory: apps/web
         run: node e2e/accounts.cjs /tmp/csp.json
+      - name: Derivation tool (vidyut-prakriyā WebAssembly), production CSP enforced
+        working-directory: apps/web
+        run: node e2e/prakriya.cjs /tmp/csp.json
 
   api:
     name: API lint and tests

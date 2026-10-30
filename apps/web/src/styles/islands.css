@@ -420,4 +420,74 @@
   .sandhi-steps .sa-block .sa-iast { font-size: 0.7em; color: var(--s-color-text-soft); }
   .sandhi-steps .sandhi-reason { grid-column: 2; font-size: var(--s-text-small); color: var(--s-color-text-soft); max-inline-size: 62ch; }
   .sandhi-step-label { font-size: var(--s-text-small); color: var(--s-color-text-faint); }
+
+  /* ---------- PrakriyaStepper: declension table + derivation (vidyut-prakriyā) ---------- */
+  .prakriya { container: prakriya / inline-size; display: grid; gap: var(--p-space-5); }
+  .prakriya-in {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    align-items: end;
+    gap: var(--p-space-3);
+    padding: var(--p-space-5);
+    background: var(--s-color-leaf);
+    border-radius: var(--s-radius-control);
+  }
+  .prakriya-field { display: grid; gap: var(--p-space-1); margin: 0; }
+  .prakriya-field label { font-weight: 700; font-size: var(--s-text-small); }
+  .prakriya-field input { font-size: 1.3rem; inline-size: 100%; min-block-size: 3.25rem; }
+  .prakriya-field select { font-size: 1rem; inline-size: 100%; min-block-size: 3.25rem; }
+  .prakriya-hint { grid-column: 1 / -1; margin: 0; font-size: var(--s-text-small); color: var(--s-color-text-soft); max-inline-size: 62ch; }
+  @container prakriya (inline-size < 30rem) {
+    .prakriya-in { grid-template-columns: 1fr; }
+  }
+  .prakriya-status { margin: 0; color: var(--s-color-text-soft); font-style: italic; }
+  .prakriya-table { inline-size: 100%; border-collapse: collapse; }
+  .prakriya-table th { text-align: start; font-weight: 600; font-size: var(--s-text-small); vertical-align: top; padding: 0.4rem 0.5rem; }
+  .prakriya-table thead th { border-block-end: 2px solid var(--s-color-rubric); }
+  .prakriya-table tbody th, .prakriya-table td { border-block-end: 1px solid var(--s-color-hairline); }
+  .prakriya-table td { padding: 0.15rem 0.25rem; }
+  .prakriya-th-sa { display: block; font-weight: 400; font-style: italic; color: var(--s-color-text-faint); }
+  .prakriya-cell {
+    inline-size: 100%;
+    text-align: start;
+    padding: 0.35rem 0.4rem;
+    font: inherit;
+    font-size: 1.1rem;
+    color: var(--s-color-text);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--s-radius-control);
+    cursor: pointer;
+  }
+  .prakriya-cell:hover { background: var(--s-color-leaf); border-color: var(--s-color-hairline); }
+  .prakriya-cell[aria-pressed="true"] { background: var(--s-color-mark); border-color: var(--s-color-mark-strong); }
+  .prakriya-cell .sa-iast { font-size: 0.8em; color: var(--s-color-text-soft); }
+  .prakriya-or, .prakriya-none { color: var(--s-color-text-faint); }
+  .prakriya-steps-wrap { display: grid; gap: var(--p-space-3); }
+  .prakriya-steps-wrap > :is(h2, h3) { margin: 0; }
+  .prakriya-steps-sub { font-size: var(--s-text-small); font-weight: 400; color: var(--s-color-text-soft); }
+  .prakriya-variants { margin: 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--p-space-2); }
+  .prakriya-variant { font: inherit; padding: 0.15rem 0.5rem; background: transparent; border: 1px solid var(--s-color-border); border-radius: var(--s-radius-control); cursor: pointer; color: var(--s-color-text); }
+  .prakriya-variant[aria-pressed="true"] { background: var(--s-color-inverse-bg); color: var(--s-color-inverse-text); }
+  .prakriya-steps { list-style: none; margin: 0; padding: 0; counter-reset: pstep; }
+  .prakriya-steps li {
+    counter-increment: pstep;
+    display: grid;
+    grid-template-columns: 2rem 6.5rem 1fr;
+    gap: var(--p-space-3);
+    align-items: baseline;
+    padding-block: var(--p-space-2);
+    border-block-start: 1px solid var(--s-color-hairline);
+  }
+  .prakriya-steps li::before { content: counter(pstep); color: var(--s-color-text-faint); font-size: var(--s-text-small); font-variant-numeric: lining-nums tabular-nums; }
+  .prakriya-rule { color: var(--s-color-rubric); font-variant-numeric: lining-nums tabular-nums; }
+  .prakriya-rule--other { color: var(--s-color-text-soft); font-size: var(--s-text-small); }
+  .prakriya-terms { font-size: 1.25rem; line-height: 1.4; }
+  .prakriya-terms .sa-iast { font-size: 0.75em; color: var(--s-color-text-soft); }
+  .prakriya-plus { color: var(--s-color-text-faint); }
+  .prakriya-term.is-changed { background: var(--s-color-mark); border-radius: 2px; padding-inline: 0.1em; }
+  @container prakriya (inline-size < 30rem) {
+    .prakriya-steps li { grid-template-columns: 1.5rem 1fr; }
+    .prakriya-terms { grid-column: 2; }
+  }
 }
