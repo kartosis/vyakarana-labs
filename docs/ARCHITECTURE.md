@@ -457,6 +457,8 @@ infra/terraform/
 
 ## 11. CI/CD
 
+> **Superseded in detail by `docs/QUALITY.md` §2–§3 (2026-10-30).** The vidyut WASM is now built in CI by `scripts/build-vidyut.sh` (no `wasm.yml`, nothing committed).
+
 | Workflow | Trigger | Steps |
 |---|---|---|
 | `ci.yml` | PR | pnpm install → lint/typecheck → Vitest (engine) → Astro build + content checks → Playwright smoke + **axe** → ruff + mypy + pytest (moto) → terraform fmt/validate/tflint → `terraform plan` (read-only OIDC role) posted to the PR |
@@ -477,6 +479,8 @@ infra/terraform/
 **Expected monthly bill**: **$0.00**, apart from SES at about **$0.10 per 1,000 OTP emails** (covered by new-account credits where applicable) and fractions of a cent for S3 storage. **⚑ verify** whether CloudFront's flat-rate Free plan (which bundles WAF) is available and worth switching to.
 
 ## 13. Quality targets
+
+> **Expanded in `docs/QUALITY.md` §4–§5 (2026-10-30).**
 
 | Area | Target |
 |---|---|
