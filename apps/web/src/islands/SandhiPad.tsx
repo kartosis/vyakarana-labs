@@ -1,6 +1,9 @@
 /** @jsxImportSource preact */
 import { useEffect, useId, useRef, useState } from "preact/hooks";
-import { consonantSandhi, detectScheme, fromSlp1, isVowel, sandhiChecks, toSlp1, vowelSandhi, type CheckStatus } from "@vl/engine";
+import {
+  consonantSandhi, detectScheme, fromSlp1, isVisargaJunction, isVowel, sandhiChecks, toSlp1, visargaFromR, visargaSandhi,
+  vowelSandhi, type CheckStatus,
+} from "@vl/engine";
 
 interface Example {
   a: string;
@@ -34,6 +37,19 @@ const HAL_EXAMPLES: Example[] = [
   { a: "vāk", b: "hariḥ", shows: "h" },
   { a: "san", b: "śambhuḥ", shows: "four forms" },
   { a: "śiva", b: "chāyā", shows: "tuk" },
+];
+
+/** Visarga junctions, from Varadarāja's Visarga-sandhi examples. */
+const VISARGA_EXAMPLES: Example[] = [
+  { a: "hariḥ", b: "śete", shows: "two forms" },
+  { a: "rāmaḥ", b: "cinoti", shows: "s → ś" },
+  { a: "śivaḥ", b: "arcyaḥ", shows: "o + avagraha" },
+  { a: "śivaḥ", b: "vandyaḥ", shows: "o" },
+  { a: "devāḥ", b: "iha", shows: "y dropped" },
+  { a: "bhoḥ", b: "devāḥ", shows: "bho" },
+  { a: "hariḥ", b: "ramyaḥ", shows: "r before r" },
+  { a: "punaḥ", b: "ramate", shows: "original r" },
+  { a: "saḥ", b: "śambhuḥ", shows: "saḥ" },
 ];
 
 const STATUS_TEXT: Record<CheckStatus, string> = {
@@ -74,8 +90,8 @@ interface Props {
   initialCompound?: boolean;
   /** hide the example buttons (lessons supply their own context) */
   showExamples?: boolean;
-  /** which example set to offer: vowel junctions, consonant junctions, or both */
-  exampleSet?: "vowel" | "consonant" | "both";
+  /** which example set to offer: vowel, consonant or visarga junctions, or all of them ("both" is kept for old pages) */
+  exampleSet?: "vowel" | "consonant" | "visarga" | "both";
   initialSuffix?: boolean;
 }
 
@@ -98,6 +114,8 @@ export default function SandhiPad({
   const [compound, setCompound] = useState(initialCompound);
   const [pragrhya, setPragrhya] = useState(initialPragrhya);
   const [suffix, setSuffix] = useState(initialSuffix);
+  /** null: decide from the word (punaḥ, prātaḥ … stand for r); true / false: the learner's choice */
+  const [fromR, setFromR] = useState<boolean | null>(null);
 
   // Shareable state on the tool page: ?a=…&b=…&pragrhya=1&padanta=0&compound=1 (written only after the first change).
   const ready = useRef(false);
@@ -110,6 +128,7 @@ export default function SandhiPad({
     if (q.get("padanta") === "0") setPadanta(false);
     if (q.get("compound") === "1") setCompound(true);
     if (q.get("suffix") === "1") setSuffix(true);
+    if (q.has("r")) setFromR(q.get("r") === "1");
   }, []);
   useEffect(() => {
     if (!syncUrl) return;
@@ -122,16 +141,25 @@ export default function SandhiPad({
     if (!padanta) q.set("padanta", "0");
     if (compound) q.set("compound", "1");
     if (suffix) q.set("suffix", "1");
+    if (fromR !== null) q.set("r", fromR ? "1" : "0");
     history.replaceState(null, "", `${location.pathname}?${q}`);
-  }, [a, b, padanta, compound, pragrhya, suffix]);
+  }, [a, b, padanta, compound, pragrhya, suffix, fromR]);
 
   const first = slp(a);
   const second = slp(b);
   const last = first.at(-1) ?? "";
   const opts = { padanta, compound, pragrhya };
-  // two vowels meet: Ac-sandhi; otherwise the consonant rules of the Hal-sandhi-prakaraṇa
+  // two vowels meet: Ac-sandhi; a final s, r or visarga: Visarga-sandhi; otherwise the Hal-sandhi-prakaraṇa
   const vowelMode = isVowel(last) && isVowel(second[0] ?? "");
-  const res = !first || !second ? null : vowelMode ? vowelSandhi(first, second, opts) : consonantSandhi(first, second, { suffix });
+  const visargaMode = !vowelMode && isVisargaJunction(first);
+  const rOrigin = fromR ?? visargaFromR(first);
+  const res = !first || !second
+    ? null
+    : vowelMode
+      ? vowelSandhi(first, second, opts)
+      : visargaMode
+        ? visargaSandhi(first, second, { fromR: rOrigin })
+        : consonantSandhi(first, second, { suffix });
   const checks = first && second && vowelMode ? sandhiChecks(first, second, opts) : [];
   const halNote = res && !vowelMode && "note" in res ? (res as { note?: string }).note : undefined;
   const upasargaNote = vowelMode && res && !res.untouched && !pragrhya && A_UPASARGA.has(first);
@@ -144,8 +172,13 @@ export default function SandhiPad({
     setPadanta(true);
     setCompound(false);
     setSuffix(false);
+    setFromR(null);
   };
-  const examples = exampleSet === "vowel" ? EXAMPLES : exampleSet === "consonant" ? HAL_EXAMPLES : [...EXAMPLES, ...HAL_EXAMPLES];
+  const examples =
+    exampleSet === "vowel" ? EXAMPLES
+    : exampleSet === "consonant" ? HAL_EXAMPLES
+    : exampleSet === "visarga" ? VISARGA_EXAMPLES
+    : [...EXAMPLES, ...HAL_EXAMPLES, ...VISARGA_EXAMPLES];
 
   return (
     <section class="sandhi" aria-label="Sandhi tool">
@@ -165,7 +198,16 @@ export default function SandhiPad({
         </div>
         <fieldset class="sandhi-opts">
           <legend class="visually-hidden">About the two words</legend>
-          {!vowelMode && first && second ? (
+          {visargaMode && first && second ? (
+            last === "H" ? (
+              <p>
+                <input id={`${id}-r`} type="checkbox" checked={rOrigin} onChange={(e) => setFromR((e.target as HTMLInputElement).checked)} />
+                <label for={`${id}-r`}>The visarga stands for an original r, as in punaḥ, prātaḥ and antaḥ, not for s</label>
+              </p>
+            ) : (
+              <p class="sandhi-hint">{last === "r" ? "The word ends in r, so it is treated as an original r." : "The word ends in s, which becomes ru (8.2.66)."}</p>
+            )
+          ) : !vowelMode && first && second ? (
             <p>
               <input id={`${id}-sfx`} type="checkbox" checked={suffix} onChange={(e) => setSuffix((e.target as HTMLInputElement).checked)} />
               <label for={`${id}-sfx`}>The second item is a suffix (pratyaya), as maya in vāṅmaya</label>
@@ -291,7 +333,8 @@ export default function SandhiPad({
           )}
           <section aria-labelledby={`${id}-steps`}>
             <H id={`${id}-steps`}>Derivation</H>
-            {!vowelMode && <p class="sandhi-hint">Consonant rules come from the last three pādas of the grammar (8.2–8.4), so they apply one after another in the order of their numbers (8.2.1).</p>}
+            {visargaMode && <p class="sandhi-hint">A final s or r is written as visarga; the derivation starts from the sound it stands for. Rules about ru, the r that replaces s, include three from chapter 6 (6.1.113, 6.1.114, 6.1.132).</p>}
+            {!vowelMode && !visargaMode && <p class="sandhi-hint">Consonant rules come from the last three pādas of the grammar (8.2–8.4), so they apply one after another in the order of their numbers (8.2.1).</p>}
             <ol class="sandhi-steps">
               <li>
                 <span class="sandhi-step-label">start</span>

@@ -65,7 +65,7 @@
   vrtti: "एतत्पूर्वस्य रोर्यादेशोऽशि। देवा इह, देवायिह। भोस् भगोस् अघोस् इति सान्ता निपाताः। तेषां रोर्यत्वे कृते॥"
   vrttiVerified: true
   kind: vidhi
-  meaning: "After bhos, bhagos, aghos, or after a or ā, a word-final r that comes from s becomes y before a vowel or voiced consonant."
+  meaning: "After bho, bhago and agho (from bhos, bhagos, aghos), or after a or ā, ru becomes y before a vowel or voiced consonant (aś): devā iha or devāy iha."
 - id: "8.3.22"
   lsk: 108
   lskVerified: true
@@ -101,7 +101,7 @@
   vrtti: "रेफस्य रेफे परे लोपः ॥"
   vrttiVerified: true
   kind: vidhi
-  meaning: "r is dropped before r."
+  meaning: "r is dropped before r: punar + ramate → puna ramate, then punā ramate by 6.3.111."
 - id: "6.3.111"
   lsk: 111
   lskVerified: true
