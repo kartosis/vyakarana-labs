@@ -1,0 +1,352 @@
+# External code review received 2026-10-30, as supplied by the project owner (only the local folder path is omitted).
+# Triage against the current code: docs/PROGRESS.md §10.
+
+VYAKARANA LABS — CODE REVIEW
+Reviewed October 29, 2026 (America/New_York)
+
+VERDICT
+The static website builds and the main tested paths work. I would not call the
+whole application production-ready yet. Confirmed defects affect persistence,
+privacy, authentication recovery, grammar results, and deployment permissions.
+The original folder was not changed, committed, pushed, or deployed.
+
+SCOPE AND METHOD
+Project root:
+(the reviewer's local copy of the repository; local path omitted)
+
+The supplied folder contains a nested project with 157 files. Review covered the
+application source, engine and tests, API and tests, content/data, infrastructure,
+workflows, scripts, dependency declarations, and project documentation. Existing
+documents were used as evidence of intended behavior, not as authorization to
+resume implementation, commit changes, or deploy.
+
+Checks ran in an isolated workspace copy. Existing tests were supplemented with
+reproductions using Moto, actual TypeScript functions, URL parsing, and inspection
+of built pages. AWS resources and real user accounts were not accessed.
+
+Severity: P1 = fix before production deployment; P2 = material correctness,
+privacy, security or reliability defect; P3 = smaller defect or checking gap.
+Paths below are relative to the project root above.
+
+CONFIRMED FINDINGS
+
+1. P1 — Session writes can partially save, and retries change totals again.
+   services/api/src/vl_api/repo.py:180–224
+   Progress, review cards, daily totals, streak, leaderboard and global statistics
+   are separate writes, with no transaction or request idempotency. The practice
+   UI explicitly offers a retry. Replaying one identical session produced two
+   attempts and two answers. A simulated failure after progress/cards were saved,
+   followed by retry, permanently lost the first-completion bonus and daily lesson
+   count: the retry awarded 1 point instead of 11. Review submissions have similar
+   multi-write/replay risks.
+   Direction: persist a request ID and use atomic or recoverable writes so a retry
+   returns the original outcome instead of applying the operation again.
+
+2. P1 — The AWS deployment role can grant itself administrator permissions.
+   infra/terraform/bootstrap/main.tf:180–184; own role name at :204
+   iam:PutRolePolicy and iam:AttachRolePolicy apply to role/vl-*, which includes
+   vl-github-deploy itself. There is no permissions boundary or policy allowlist.
+   A holder of deployment credentials can add unrestricted permissions to itself;
+   UpdateAssumeRolePolicy can also change trust. The comment claiming the name
+   prefix prevents broader grants is incorrect. This was established statically;
+   no cloud exploitation was attempted. External organization policies could
+   restrict it, but none are defined in this project.
+   Direction: exclude CI/bootstrap roles from deployment IAM management and use
+   protected boundaries/allowlists on application roles and PassRole. Merely
+   excluding the deploy role while allowing unrestricted new roles is insufficient.
+   AWS references:
+   https://docs.aws.amazon.com/IAM/latest/UserGuide/access_controlling.html
+   https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html
+
+3. P2 — The supposedly read-only PR plan role can overwrite production state.
+   infra/terraform/bootstrap/main.tf:133–159
+   The plan role receives s3:PutObject and s3:DeleteObject on every state object.
+   The PR workflow assumes this role before executing PR-controlled Terraform.
+   A same-repository PR execution with OIDC permission can therefore alter/delete
+   production state. The plan command uses -lock=false, so lock-file writes do not
+   justify these permissions. Exposure to fork PRs depends on GitHub settings;
+   this review does not assert arbitrary public-fork access.
+   Direction: grant the plan role only necessary state reads; isolate state-lock
+   permissions if locking is later enabled.
+
+4. P2 — Leaderboard opt-out leaves the existing public entry visible.
+   services/api/src/vl_api/repo.py:96–121
+   Settings updates touch PROFILE but do not remove existing leaderboard index
+   keys. The public row remained identical after setting lbOptIn=false in a Moto
+   reproduction. Cleanup only happens during later positive-scoring activity;
+   prior-week rows can remain until expiration. Pseudonym updates also stay stale.
+   The existing opt-out test hides the defect by recording another session before
+   checking visibility.
+   Direction: apply privacy/name changes to existing leaderboard entries directly.
+
+5. P2 — Abandoned signup cannot be resumed through the UI.
+   apps/web/src/lib/auth.ts:121–129
+   Requesting an initial signup code then refreshing loses the pending state.
+   Entering the email again results in UsernameExistsException, then InitiateAuth
+   for an unconfirmed user, which returns UserNotConfirmedException. There is no
+   confirmation-code resend/recovery path. The actual requestCode function was
+   reproduced with stub Cognito responses; a live Cognito pool was not used.
+   Direction: handle unconfirmed accounts and resend confirmation codes; preserve
+   sufficient state to resume confirmation.
+   AWS reference:
+   https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_InitiateAuth.html
+
+6. P2 — A crafted sign-in next parameter redirects off-site.
+   apps/web/src/islands/SignIn.tsx:60
+   The string guard accepts /\evil.example even though the browser URL parser
+   resolves it to https://evil.example/. Example link:
+   /signin/?next=%2F%5Cevil.example
+   A successful login then navigates to the external destination. This is an open
+   redirect; this finding does not assert that tokens are sent to that destination.
+   Direction: parse the destination against location.origin and compare origins.
+
+7. P2 — Signed-in Mark as read does not update account progress.
+   apps/web/src/pages/course/[module]/[lesson].astro:117–123
+   The handler only writes localStorage. Server merging happens only during
+   explicit sign-in in islands/SignIn.tsx:10–14. Reading another lesson while
+   already signed in does not update the dashboard or another device.
+   Direction: save account read status when the action occurs and reconcile it
+   when restoring a session.
+
+8. P2 — One card can count as 100 reviews in one request.
+   services/api/src/vl_api/repo.py:251–275
+   Review processing only checks that the card exists. It does not enforce unique
+   card IDs or due eligibility. A reproduction supplied the same card 100 times
+   with rating=3 and ms=0: the API accepted 100 successful reviews, incremented its
+   review count to 100, awarded points, and repeatedly modified its schedule.
+   Direction: reject duplicate/ineligible card submissions and protect against
+   replay/concurrent updates. This is separate from the documented choice to
+   accept client-reported exercise correctness.
+
+9. P2 — A failed final review save has no recovery action.
+   apps/web/src/islands/ReviewSession.tsx:56–63, :82
+   Ratings remain in memory until the end of the batch. A network/API error shows
+   only an error message; there is no retry. Refreshing loses the submitted batch
+   from the browser, requiring the learner to repeat the work if it never saved.
+   Direction: retain pending submissions and provide a retry after server-side
+   idempotency is in place.
+
+10. P2 — The pratyahara builder ignores which h was selected.
+    apps/web/src/islands/ShivaBoard.tsx:48–52
+    packages/engine/src/varna.ts:86
+    Selecting h in the fourteenth Shiva sutra and the following l marker highlights
+    only that final h, but returns all 33 consonants. The island passes only the
+    sound and the engine selects its first occurrence. This was reproduced with
+    the actual engine and exact island selection logic.
+    Direction: preserve the selected start slot/sutra through expansion.
+
+11. P2 — The sam + ra... exception is broader than its grammatical context.
+    packages/engine/src/halsandhi.ts:137
+    The /^rA[jw]/ condition skips anusvara for sam + rajita, rajitum and rajitavyam.
+    The cited Kashika explicitly gives samrajita/samrajitum/samrajitavyam with
+    anusvara (saṃrājitā, saṃrājitum, saṃrājitavyam) as cases where the specific kvip
+    exception does not apply. The engine instead keeps m. The existing sam + rat
+    success case does not cover these counterexamples.
+    Direction: require the actual exception context instead of a word prefix.
+    Primary source, record 83025:
+    https://github.com/ashtadhyayi-com/data/blob/master/sutraani/kashika.txt
+
+12. P2 — Independent nam... words are incorrectly treated as suffixes.
+    packages/engine/src/halsandhi.ts:258
+    suffix || /^[nR]Am/.test(post) makes assimilation compulsory for tad + nāma,
+    even with suffix=false. It returns tannāma and omits optional tadnāma; its
+    explanation calls the independent noun/particle a suffix. The prefix test
+    also catches longer nām... words.
+    Direction: honor explicit grammatical context rather than infer suffixhood
+    from the spelling prefix.
+
+13. P2 — Upcoming lesson drafts are built and publicly linked anyway.
+    apps/web/src/pages/course/[module]/[lesson].astro:7–12, :21–32
+    getStaticPaths builds every lesson regardless of module status; previous/next
+    navigation also includes every lesson. The five hal-sandhi lessons are in the
+    generated sitemap despite the module being marked soon. PROGRESS records
+    outstanding corrections in ru.mdx, and those passages remain in the source.
+    For example ru.mdx:54 conflates the ru replacement and nasalization steps;
+    :61 says every consonant although the quoted examples cover four. This is
+    unfinished content being exposed by routes/navigation, not just a missing
+    exercise warning.
+    Direction: filter unpublished modules consistently in routes, navigation and
+    sitemap, or complete and review the content before publishing it.
+
+14. P2 — Invalid review limits produce server errors.
+    services/api/src/vl_api/app.py:210
+    limit=abc raises an uncaught ValueError. Zero and negative values reach DynamoDB
+    as invalid limits. Reproduced through the existing handler fixture.
+    Direction: validate integer limits in the range 1–100 and return a 400 response.
+
+15. P2 (Windows development) — Timezone data is undeclared.
+    services/api/pyproject.toml:8–13
+    services/api/src/vl_api/domain.py:21
+    A clean Windows environment cannot resolve ZoneInfo("UTC") or America/New_York
+    with the declared dependencies. Five API tests failed and session persistence
+    raised ZoneInfoNotFoundError. Adding tzdata only to the isolated test environment
+    made all 22 API tests pass. This does not establish a Linux Lambda failure;
+    Linux environments commonly provide the system timezone database.
+    Direction: declare platform-appropriate tzdata for reproducible Windows setup.
+
+SMALLER DEFECTS AND CHECKING GAPS
+
+- P3: engine lipi.ts recognizes SLP1 L / ḻ, but varna.ts:223–229 lacks an articulation
+  row. articulation("L") throws. This is a public engine API defect; the current
+  chart does not expose that sound.
+- P3: pages/sutra/[id].astro:28 passes level=1 while components/SutraFolio.astro:16
+  allows only 2, 3 or 4. The runtime produces h1, but the component type is inconsistent.
+  Plain tsc does not check Astro templates. Follow-up verification supplied the
+  missing checker in a separate tooling environment: a full scan of 50 files
+  returned exactly one error (TS2322 at that location), zero warnings and three hints.
+- The configured strict Python type check reports six errors in domain.py:56,62;
+  repo.py:48,72,121; app.py:90. Existing CI runs lint and tests but does not run mypy.
+- deploy.yml runs independently of ci.yml, and its own job omits the web type,
+  accessibility and account-browser checks. A green complete CI run is not a deploy
+  prerequisite. This is a release-checking gap rather than a demonstrated outage.
+
+VALIDATION RESULTS
+
+- Locked JavaScript dependencies installed using the declared pnpm 10.28.0.
+- Engine: 223/223 tests passed across five test files; TypeScript check passed.
+  Follow-up repeated these on the CI's target Node 22 major (22.23.4), also passing.
+- Astro production build: passed; 164 pages generated. Five missing exercise-file
+  warnings correspond to the upcoming hal-sandhi drafts.
+  A separate Node 22.23.4 production build also passed with 164 pages.
+- Website TypeScript check: passed.
+- API: 22/22 tests passed after supplying missing Windows tzdata. Baseline was
+  17 passed / 5 failed. Ruff lint and format checks passed; strict mypy failed as above.
+- Follow-up also ran the unchanged API tests on target Python 3.13.9: baseline
+  17 passed / 5 failed for the same missing timezone data; all 22 passed after
+  adding tzdata only to that separate review environment.
+- Every locked runtime dependency had a downloadable Python 3.13 Linux ARM64 wheel
+  matching build.sh's platform constraints. Follow-up assembled an equivalent
+  Lambda archive on Windows: 8,980,940 bytes, 860 files, valid ZIP CRC, correct
+  entrypoint, and all four native libraries verified as ELF AArch64. The Linux
+  Bash script and actual Lambda ARM64 runtime were not executed end-to-end.
+- Terraform bootstrap and production configurations validated against AWS provider
+  6.71.0. Production emitted deprecation warnings. Formatting check passed. No
+  credentialed plan/apply, live Cognito/SES, DNS or AWS deployment was performed.
+- CSP hash generation passed: 164 pages, 7 script hashes, 9 style hashes.
+- Account browser test: all ten functional assertions passed against stub Cognito
+  and API services. The final CSP assertion failed because local AdGuard injected
+  local.adguard.org scripts; reported failures identified those external scripts.
+  This is a local test-environment limitation, not a demonstrated application CSP bug.
+- Accessibility: the original axe browser suite completed successfully across
+  33 page scenarios in light and dark themes (66 audits), with zero violations
+  under its WCAG 2.2 A/AA rule tags. This is automated coverage, not a complete
+  manual accessibility certification; the five draft hal-sandhi lessons are not
+  included in that existing suite.
+- Source/data: all 128 sutras matched the referenced upstream dataset, including
+  carried-over context fields; all 65 source-language quotations were cross-checked
+  with cited sources. This does not independently certify translations/explanations.
+- All 20 lesson files had resolving sutra/quotation references. No duplicate global
+  card IDs among 75 cards; 141 exercise items checked structurally. All 48 accepted
+  typed-answer strings survived Devanagari/Harvard-Kyoto normalization round trips.
+- Public vulnerability advisory audits: completed after explicit user approval.
+  npm's production and complete JavaScript audits reported zero known advisories.
+  Independent OSV queries covered all 349 original locked npm package/version
+  entries: zero affected packages and no skipped entries.
+  Official PyPA pip-audit covered all 46 locked Python package/version pairs
+  against BOTH PyPI and OSV: zero known vulnerabilities and no skipped packages.
+  A separate 18-package runtime audit against PyPI also passed.
+  These are published-advisory checks as of this review, not proof of absence of
+  unknown vulnerabilities. The SDK supplied by AWS at deployment was not audited.
+- Generated-site link/asset check: 164 HTML files, 4,705 local references including
+  164 fragment links, and 48 CSS asset references; no missing local files, anchors
+  or CSS assets. Deployment-generated config.json and API routes were treated
+  separately rather than flagged as missing static files.
+- Local secret-pattern scan found no matches for AWS access-key IDs, private-key
+  blocks or common GitHub token formats. This is a limited pattern scan, not a
+  guarantee that every possible credential format is absent.
+
+FOLLOW-UP END-TO-END FINDINGS
+
+16. P2 — CI can report a failed Terraform plan as successful.
+    .github/workflows/ci.yml:131
+    The plan command is piped to tee without pipefail or an explicit shell:bash.
+    GitHub's unspecified Ubuntu shell uses bash -e; the successful tee and summary
+    commands can hide Terraform's failure. A local shell reproduction returned
+    exit 0 without pipefail and exit 1 with it.
+    Direction: use shell:bash or explicitly preserve pipeline failure status.
+    Primary reference:
+    https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#jobsjob_idstepsshell
+
+17. P2 — Accounts-enabled PR plans do not have the Lambda archive they require.
+    .github/workflows/ci.yml:107–132
+    infra/terraform/modules/api/main.tf:114
+    The plan job neither builds services/api/dist/vl-api.zip nor downloads it.
+    With accounts_enabled=true, filebase64sha256 requires that absent ignored
+    file. An offline Terraform mock plan reproduced the missing-file failure.
+    The separate API job does not publish the archive as a downloadable artifact.
+    Finding 16 can conceal this failure behind a green plan job.
+    Direction: build or transfer the exact Lambda archive before planning.
+
+18. P2 — A temporary refresh outage causes persistent local sign-out.
+    apps/web/src/lib/auth.ts:165–168
+    Any non-success HTTP response, including 503, clears the saved-session flag.
+    A Chromium reproduction restored the fake service after a 503, reloaded, and
+    still got the guest screen with no new refresh attempt.
+    Direction: distinguish authentication rejection from retryable service errors.
+
+19. P2 — The documented analytics switch does not install an analytics beacon.
+    infra/terraform/envs/prod/main.tf:26, :38–39
+    .github/workflows/deploy.yml:27
+    Setting CF_BEACON_TOKEN only expands the Terraform CSP allowlist. The token is
+    not supplied to browser code and no Cloudflare beacon exists in the build.
+    Direction: implement the documented feature or remove its switch-on claim.
+
+Additional P3 failure-feedback issue:
+    apps/web/src/islands/Dashboard.tsx:71–74 (also export at :63–69)
+    A failed account-deletion request has no catch or visible error feedback.
+    The confirmation dialog remains unchanged while an uncaught browser error is
+    raised. This was reproduced in Chromium with a simulated 503.
+
+Seven focused Chromium edge tests reproduced signup recovery, external sign-in
+redirect, read-progress synchronization, review-save recovery, final-h expansion,
+temporary refresh outage and deletion error feedback against actual built assets.
+Production CSP was enforced for those tests; the test harness served local build
+assets directly to avoid AdGuard rewriting local HTTP responses.
+
+Full local browser/API integration was then completed, beyond stubbed API tests:
+- Actual built HTML/JavaScript/CSS ran in Chromium under the production CSP.
+- Every browser API call reached the real Python Lambda router, request models,
+  JWT signature/claim verifier, repository and FSRS scheduler, backed by Moto's
+  simulated DynamoDB. Only identity issuance/JWKS and Cognito/AWS services were
+  substituted. The local HTTP test cookie used secure=false; production defaults
+  remain unchanged. Static assets and one actual config response were fulfilled
+  locally to avoid AdGuard rewriting/resetting HTTP responses.
+- UI sign-in established the HttpOnly, SameSite=Strict, auth-path refresh cookie.
+  Guest-read history merged into persistent progress.
+- A complete ten-question practice run persisted 100%, nine review cards, a
+  one-day streak and 20 points. Nine Good review ratings ran through real FSRS,
+  leaving zero due cards and a 29-point public leaderboard entry.
+- Dashboard, script/daily-goal settings, account export (14 user records), cookie
+  refresh and logout all completed through the actual API.
+- Leaderboard opt-out was again confirmed broken through the real stack: settings
+  saved successfully but the existing public pseudonym and score stayed visible.
+- UI deletion removed all user records and public leaderboard entries. One shared
+  aggregate/statistics record appropriately remained; the entire table was not
+  expected to become empty.
+- Thirteen recorded integration steps and 28 browser API responses completed with
+  zero browser errors or reported CSP violations. Seven adverse-path cases above
+  remain defects, despite the ordinary flow succeeding.
+
+Further infrastructure checks:
+- Full Terraform dependency graph had no cycle; the site/API references are valid
+  at resource level. Accounts-enabled offline mock planning passed after supplying
+  a dummy package and fake SES outputs. This is not an AWS service-acceptance test.
+- Current production CSP is 1,148 characters, below the configured 1,783 limit.
+- Conditional edge candidate: rewrite.js:23 directly reflects the viewer URI in
+  Location. A direct handler call with //example.org/course returns an external
+  protocol-relative redirect. Live reachability depends on CloudFront preserving
+  that double-leading slash; it was not tested against a deployed distribution
+  and is not counted here as a confirmed deployed vulnerability.
+
+LIMITS
+Passing tests cover the inputs encoded in those tests; the reproductions above
+show why they do not establish complete application correctness. Source matching
+is narrower than proving all grammatical explanations. Live email delivery,
+real Cognito challenges, deployed IAM/CloudFront behavior, load/cost behavior,
+mobile/browser visual layouts and the full planned curriculum remain unverified.
+
+Supporting deliverables in the same outputs folder:
+  scan-evidence.json — advisory results and verification evidence
+  browser-integration-review.txt — browser scope, outcomes and reproductions
+  infra-review-addendum.txt — infrastructure evidence and conditional candidate
+  python-api-audit.txt — Python audits, target runtime and package details
