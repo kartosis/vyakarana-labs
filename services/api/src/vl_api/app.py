@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 from functools import lru_cache
 from typing import Any
 
@@ -10,6 +11,7 @@ import boto3
 from aws_lambda_powertools import Logger, Tracer
 from aws_lambda_powertools.event_handler import LambdaFunctionUrlResolver, Response
 from aws_lambda_powertools.shared.cookies import Cookie, SameSite
+from botocore.exceptions import ClientError
 from pydantic import ValidationError
 
 from . import domain
@@ -17,7 +19,7 @@ from .auth import Principal, principal_from_headers
 from .config import settings
 from .errors import ApiError, bad_request, unauthorized
 from .models import MergeIn, ReadIn, ReviewsIn, SessionIn, SessionTokensIn, SettingsIn, normalize_tz
-from .repo import Contended, Repo, RequestIdReused
+from .repo import AccountDeleted, Contended, Repo, RequestIdReused
 
 logger = Logger(service="vl-api")
 tracer = Tracer(service="vl-api")
@@ -99,6 +101,13 @@ def _reused(_: RequestIdReused) -> Response[str]:
         "request-id-reused",
         "Request id already used",
         "This request id was used for different data. Send a new id for new data.",
+    ).response()
+
+
+@app.exception_handler(AccountDeleted)  # type: ignore[untyped-decorator]
+def _deleted(_: AccountDeleted) -> Response[str]:
+    return ApiError(
+        401, "account-deleted", "Account deleted", "This account was deleted. Nothing was saved."
     ).response()
 
 
@@ -184,8 +193,13 @@ def patch_me() -> Response[str]:
 @app.delete(f"{PREFIX}/me")
 def delete_me() -> Response[str]:
     p = me()
-    removed = repo().delete_user(p.sub)
-    cognito().admin_delete_user(UserPoolId=settings().user_pool_id, Username=p.username)
+    removed = repo().delete_user(p.sub, domain.utcnow())
+    try:
+        cognito().admin_delete_user(UserPoolId=settings().user_pool_id, Username=p.username)
+    except ClientError as e:
+        # a retry after a lost response finds the user already gone: that is success (P1 exit review X13)
+        if e.response.get("Error", {}).get("Code") != "UserNotFoundException":
+            raise
     return ok({"deletedItems": removed}, cookies=[refresh_cookie("", 0)])
 
 
@@ -241,7 +255,8 @@ def post_session() -> Response[str]:
 def get_due() -> Response[str]:
     p = me()
     raw = app.current_event.get_query_string_value("limit", "") or "50"
-    if not raw.isdigit() or not 1 <= int(raw) <= 100:
+    # ASCII digits only: str.isdigit() accepts "²" and int() refuses 5000-digit numbers (P1 exit review X8)
+    if not re.fullmatch(r"[0-9]{1,3}", raw) or not 1 <= int(raw) <= 100:
         raise ApiError(400, "invalid-limit", "limit must be a whole number from 1 to 100")
     return ok({"cards": repo().due_cards(p.sub, domain.utcnow(), int(raw))})
 

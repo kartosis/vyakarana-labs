@@ -232,6 +232,7 @@ sequenceDiagram
 | Day activity | `USER#{sub}` | `DAY#{yyyy-mm-dd}` | `ttl` 400 d | reviews, lessons, ms |
 | Streak | `USER#{sub}` | `STREAK` | — | current, longest, lastDate, version |
 | Request record | `USER#{sub}` | `REQ#{requestId}` | `ttl` 7 d | kind, fingerprint (SHA-256 of the body), response (JSON), at |
+| Deletion tombstone | `USER#{sub}` | `DELETED` | `ttl` 1 d | at — written before an account's items are deleted; every transaction has a `ConditionCheck` that it is absent, profile creation is such a transaction, and plain writes re-check it afterwards, so a still-valid access token cannot recreate a deleted account (P1 exit review X2) |
 | Note | `USER#{sub}` | `NOTE#{lessonId}#{ulid}` | — | anchor, text, color |
 | Cert pointer | `USER#{sub}` | `CERT#{track}` | — | certId |
 | Leaderboard row | `LB#{yyyy-Www}` | `U#{sub}` | `GSI1PK=LB#{week}`, `GSI1SK={score:08d}#{sub}` (opted-in only) | pseudonym, score |

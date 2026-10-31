@@ -427,3 +427,119 @@ def test_read_marks_need_sign_in_and_valid_ids(call: Call) -> None:
     assert call("POST", "/api/v1/progress/read", {"lessonId": "../x", "read": True}, token=t)[0] == 400
     with_id = {"lessonId": "a/b", "read": True, "requestId": str(uuid.uuid4())}  # sent through the outbox
     assert call("POST", "/api/v1/progress/read", with_id, token=t)[0] == 200
+
+
+# ---------------------------------------------------------------- P1 exit review X2, X13: deletion is final
+def user_partition(aws: Any, sub: str) -> list[str]:
+    from boto3.dynamodb.conditions import Key
+
+    return [it["SK"] for it in aws.query(KeyConditionExpression=Key("PK").eq(f"USER#{sub}"))["Items"]]
+
+
+def delete_account(call: Call, t: str) -> tuple[int, Any]:
+    from unittest.mock import patch
+
+    with patch("vl_api.app.cognito"):
+        status, body, _ = call("DELETE", "/api/v1/me", token=t)
+    return status, body
+
+
+def test_deleted_account_is_not_recreated_by_its_still_valid_token(call: Call, aws: Any) -> None:
+    t = make_token("gone")
+    call("POST", "/api/v1/sessions", session(), token=t)
+    assert delete_account(call, t)[0] == 200
+    # another tab still holds the access token (valid up to an hour) and flushes its outbox
+    attempts = [
+        ("POST", "/api/v1/sessions", session()),
+        ("POST", "/api/v1/reviews", reviews(("prat:ac", 3))),
+        ("POST", "/api/v1/progress/read", {"lessonId": "a/b", "read": True}),
+        ("POST", "/api/v1/progress/merge", {"read": ["a/b"]}),
+        ("PATCH", "/api/v1/me", {"dailyGoal": 20}),
+        ("GET", "/api/v1/me", None),
+    ]
+    for method, path, body in attempts:
+        status, problem, _ = call(method, path, body, token=t)
+        assert status == 401 and problem["type"].endswith("account-deleted"), (method, path, status)
+    assert user_partition(aws, "gone") == ["DELETED"]  # only the tombstone: no profile, no data
+    assert call("GET", "/api/v1/leaderboard/current")[1]["rows"] == []
+
+
+def test_save_in_flight_when_deletion_starts_is_refused(call: Call, aws: Any) -> None:
+    """The tombstone is written first; a transaction computed before it must not land after it."""
+    t = make_token("racing")
+    call("POST", "/api/v1/sessions", session(), token=t)
+    before = sorted(user_partition(aws, "racing"))
+    aws.put_item(Item={"PK": "USER#racing", "SK": "DELETED", "at": "now"})  # deletion has begun
+    status, problem, _ = call(
+        "POST", "/api/v1/sessions", session(correct=0), token=t
+    )  # 0 points: no leaderboard op
+    assert status == 401 and problem["type"].endswith("account-deleted")
+    assert sorted(user_partition(aws, "racing")) == sorted([*before, "DELETED"])  # nothing new written
+
+
+def test_delete_retry_after_lost_response_succeeds(call: Call) -> None:
+    from unittest.mock import patch
+
+    from botocore.exceptions import ClientError
+
+    t = make_token("twice")
+    call("POST", "/api/v1/sessions", session(), token=t)
+    assert delete_account(call, t)[0] == 200
+    gone = ClientError({"Error": {"Code": "UserNotFoundException", "Message": "x"}}, "AdminDeleteUser")
+    with patch("vl_api.app.cognito") as cog:
+        cog.return_value.admin_delete_user.side_effect = gone
+        status, body, _ = call("DELETE", "/api/v1/me", token=t)
+    assert status == 200 and body["deletedItems"] == 0
+
+
+# ---------------------------------------------------------------- X4: a retry repairs a failed row sync
+def test_failed_opt_out_sync_is_repaired_by_retrying(call: Call, monkeypatch: pytest.MonkeyPatch) -> None:
+    from vl_api.repo import Repo
+
+    t = make_token("shy2")
+    call("POST", "/api/v1/sessions", session(), token=t)
+    real = Repo._sync_leaderboard_rows
+    failed = {"n": 0}
+
+    def flaky(self: Repo, *a: Any) -> None:
+        if failed["n"] == 0:
+            failed["n"] += 1
+            raise TimeoutError("throttled")
+        real(self, *a)
+
+    monkeypatch.setattr(Repo, "_sync_leaderboard_rows", flaky)
+    with pytest.raises(TimeoutError):
+        call("PATCH", "/api/v1/me", {"lbOptIn": False}, token=t)
+    assert call("PATCH", "/api/v1/me", {"lbOptIn": False}, token=t)[0] == 200  # profile already says False
+    assert call("GET", "/api/v1/leaderboard/current")[1]["rows"] == []
+
+
+# ---------------------------------------------------------------- X8: limit
+@pytest.mark.parametrize("raw", ["%C2%B2", "²", "9" * 5000, "١٢"])
+def test_review_limit_rejects_non_ascii_and_huge_numbers(call: Call, raw: str) -> None:
+    status, problem, _ = call("GET", "/api/v1/reviews/due", token=make_token(), query=f"limit={raw}")
+    assert status == 400 and problem["type"].endswith("invalid-limit")
+
+
+# ---------------------------------------------------------------- X15: retry only retryable cancellations
+def test_invalid_transaction_is_not_retried(call: Call, monkeypatch: pytest.MonkeyPatch) -> None:
+    from botocore.exceptions import ClientError
+
+    from vl_api.repo import Repo
+
+    calls = {"n": 0}
+
+    def invalid(self: Repo, items: list[dict[str, Any]]) -> None:
+        calls["n"] += 1
+        raise ClientError(
+            {
+                "Error": {"Code": "TransactionCanceledException", "Message": "x"},
+                "CancellationReasons": [{"Code": "ValidationError", "Message": "bad"}],
+            },
+            "TransactWriteItems",
+        )
+
+    monkeypatch.setattr(Repo, "_transact", invalid)
+    with pytest.raises(ClientError):
+        call("POST", "/api/v1/sessions", session(), token=make_token())
+    assert calls["n"] == 1

@@ -85,8 +85,9 @@ export default function Dashboard({ lessons }: { lessons: Lesson[] }) {
     try {
       await api("/api/v1/me", { method: "DELETE" });
     } catch {
-      // nothing was deleted: say so, and leave the dialog open (external review, P3)
-      setDelErr("Your account was not deleted: the server could not be reached. Try again in a minute.");
+      // The answer did not arrive, so part of the account may already be gone. Deleting again is safe and
+      // finishes the job (the API treats an already-deleted sign-in as done: P1 exit review X13).
+      setDelErr("Deleting did not finish: the server could not be reached. Try again — repeating is safe and completes the deletion.");
       setDeleting(false);
       return;
     }

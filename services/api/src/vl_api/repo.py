@@ -9,6 +9,7 @@ from __future__ import annotations
 import hashlib
 import json
 import logging
+import random
 import time
 from collections.abc import Callable, Iterable, Iterator
 from datetime import datetime, timedelta
@@ -37,6 +38,21 @@ class RequestIdReused(Exception):
 
 class Contended(Exception):
     """The learner's data kept changing between read and write; retrying with the same request id is safe."""
+
+
+class AccountDeleted(Exception):
+    """The account was deleted; a still-valid access token must not bring it back (P1 exit review X2)."""
+
+
+TOMBSTONE = "DELETED"  # SK of the marker written before an account's items are deleted
+TOMBSTONE_TTL = timedelta(days=1)  # far longer than an access token lives (60 min)
+RETRYABLE = {
+    "None",
+    "ConditionalCheckFailed",
+    "TransactionConflict",
+    "ThrottlingError",
+    "ProvisionedThroughputExceeded",
+}
 
 
 def plain(v: Any) -> Any:
@@ -98,6 +114,13 @@ def _update(
     return {"Update": op}
 
 
+def _cancel_codes(e: ClientError) -> list[str]:
+    """Per-item reasons of a cancelled transaction ([] when the error is something else)."""
+    if e.response.get("Error", {}).get("Code") != "TransactionCanceledException":
+        return []
+    return [str(r.get("Code", "None")) for r in e.response.get("CancellationReasons", [])]
+
+
 def _opted_in(prof: Item) -> bool:
     return bool(prof.get("settings", {}).get("lbOptIn", True))
 
@@ -138,13 +161,25 @@ class Repo:
             "role": "learner",
             "createdAt": now.isoformat(),
         }
+        userdir = {"PK": f"USERDIR#{now:%Y-%m}", "SK": f"{now.isoformat()}#{sub}", "sub": sub}
         try:
-            self.t.put_item(Item=item, ConditionExpression="attribute_not_exists(PK)")
-            self.t.put_item(Item={"PK": f"USERDIR#{now:%Y-%m}", "SK": f"{now.isoformat()}#{sub}", "sub": sub})
+            self._transact(
+                [
+                    _put(self.t.name, item, "attribute_not_exists(PK)"),
+                    _put(self.t.name, userdir, "attribute_not_exists(PK)"),
+                    self._alive_check(sub),
+                ]
+            )
         except ClientError as e:
-            if not _conditional_failed(e):
+            codes = _cancel_codes(e)
+            if len(codes) == 3 and codes[2] == "ConditionalCheckFailed":
+                raise AccountDeleted from e
+            if not codes or codes[0] != "ConditionalCheckFailed":
                 raise
-            return self.get(pk(sub), "PROFILE") or item
+            # created meanwhile by a concurrent first request
+            return cast(
+                "Item", self.t.get_item(Key={"PK": pk(sub), "SK": "PROFILE"}, ConsistentRead=True)["Item"]
+            )
         return item
 
     def update_settings(self, sub: str, s: SettingsIn, now: datetime) -> Item:
@@ -166,16 +201,24 @@ class Repo:
         if s.pseudonym:
             expr += ", pseudonym = :p"
             values[":p"] = s.pseudonym
-        out = self.t.update_item(
-            Key={"PK": pk(sub), "SK": "PROFILE"},
-            UpdateExpression=expr,
-            ExpressionAttributeNames=names,
-            ExpressionAttributeValues=values,
-            ReturnValues="ALL_NEW",
-        )
+        try:
+            out = self.t.update_item(
+                Key={"PK": pk(sub), "SK": "PROFILE"},
+                UpdateExpression=expr,
+                ConditionExpression="attribute_exists(PK)",  # never re-create a deleted profile (X2)
+                ExpressionAttributeNames=names,
+                ExpressionAttributeValues=values,
+                ReturnValues="ALL_NEW",
+            )
+        except ClientError as e:
+            if _conditional_failed(e):
+                raise AccountDeleted from e
+            raise
         new = cast("Item", out["Attributes"])
-        if (_opted_in(new), new.get("pseudonym")) != before:
-            self._sync_leaderboard_rows(sub, new, now)  # review #4: at once, not on the next activity
+        # Review #4: at once, not on the next activity. Whenever the request names the opt-in or the
+        # pseudonym, even if unchanged: syncing is idempotent, and a retry must repair a failed sync (X4).
+        if s.lb_opt_in is not None or s.pseudonym or (_opted_in(new), new.get("pseudonym")) != before:
+            self._sync_leaderboard_rows(sub, new, now)
         return new
 
     # ------------------------------------------------------------ progress
@@ -214,6 +257,7 @@ class Repo:
     def set_read(self, sub: str, lesson_id: str, read: bool, now: datetime) -> str:
         """Mark or unmark a lesson as read. Never touches a lesson that has been practised or completed.
         Returns the lesson's status afterwards ("none" when there is no record)."""
+        self.profile(sub, now)  # refuses a deleted account
         key = {"PK": pk(sub), "SK": f"PROG#{lesson_id}"}
         try:
             if read:
@@ -221,6 +265,7 @@ class Repo:
                     Item={**key, "status": "read", "readAt": now.isoformat(), "attempts": 0},
                     ConditionExpression="attribute_not_exists(SK)",
                 )
+                self._undo_if_deleted(sub, [key])
                 return "read"
             self.t.delete_item(
                 Key=key,
@@ -237,7 +282,8 @@ class Repo:
 
     def merge_read(self, sub: str, lesson_ids: Iterable[str], now: datetime) -> int:
         """Guest 'mark as read' history → account. Server data always wins."""
-        added = 0
+        self.profile(sub, now)  # refuses a deleted account
+        added: list[Item] = []
         for lid in set(lesson_ids):
             try:
                 self.t.put_item(
@@ -250,11 +296,12 @@ class Repo:
                     },
                     ConditionExpression="attribute_not_exists(SK)",
                 )
-                added += 1
+                added.append({"PK": pk(sub), "SK": f"PROG#{lid}"})
             except ClientError as e:
                 if not _conditional_failed(e):
                     raise
-        return added
+        self._undo_if_deleted(sub, added)
+        return len(added)
 
     # ------------------------------------------------------------ practice sessions
     def record_session(self, sub: str, s: SessionIn, now: datetime) -> dict[str, Any]:
@@ -419,10 +466,20 @@ class Repo:
 
     # ------------------------------------------------------------ account lifecycle
     def export(self, sub: str) -> list[Item]:
-        return [plain(it) for it in self.user_items(sub)]
+        return [plain(it) for it in self.user_items(sub) if it["SK"] != TOMBSTONE]
 
-    def delete_user(self, sub: str) -> int:
-        items = self.user_items(sub)
+    def delete_user(self, sub: str, now: datetime) -> int:
+        """Delete everything of the account. The tombstone goes first, so a request still carrying a valid
+        access token cannot write anything meanwhile or afterwards (P1 exit review X2). Safe to repeat."""
+        self.t.put_item(
+            Item={
+                "PK": pk(sub),
+                "SK": TOMBSTONE,
+                "at": now.isoformat(),
+                "ttl": int((now + TOMBSTONE_TTL).timestamp()),
+            }
+        )
+        items = [it for it in self.user_items(sub) if it["SK"] != TOMBSTONE]
         weeks = set()
         created = None
         for it in items:
@@ -440,6 +497,26 @@ class Repo:
         return len(items)
 
     # ------------------------------------------------------------ internals
+    def _alive_check(self, sub: str) -> Item:
+        """Transaction item that fails once the account's deletion has begun."""
+        return {
+            "ConditionCheck": {
+                "TableName": self.t.name,
+                "Key": {"PK": pk(sub), "SK": TOMBSTONE},
+                "ConditionExpression": "attribute_not_exists(SK)",
+            }
+        }
+
+    def _undo_if_deleted(self, sub: str, keys: list[Item]) -> None:
+        """For plain (non-transactional) writes: if deletion began meanwhile, remove what was just written.
+        A deletion that listed the items before these writes is caught here; one listing them after deletes
+        them itself."""
+        if keys and self.t.get_item(Key={"PK": pk(sub), "SK": TOMBSTONE}, ConsistentRead=True).get("Item"):
+            with self.t.batch_writer() as bw:
+                for k in keys:
+                    bw.delete_item(Key=k)
+            raise AccountDeleted
+
     def _transact(self, items: list[Item]) -> None:
         """One atomic write of up to 100 items (a method of its own so tests can inject faults)."""
         self.t.meta.client.transact_write_items(TransactItems=items)
@@ -455,7 +532,7 @@ class Repo:
         """
         key = {"PK": pk(sub), "SK": f"REQ#{request_id}"}
         fingerprint = hashlib.sha256(f"{kind}\n{body}".encode()).hexdigest()
-        for _ in range(TX_ATTEMPTS):
+        for attempt in range(TX_ATTEMPTS):
             done = self.t.get_item(Key=key, ConsistentRead=True).get("Item")
             if done:
                 if done.get("fingerprint") != fingerprint:
@@ -470,13 +547,19 @@ class Repo:
                 "at": now.isoformat(),
                 "ttl": int((now + timedelta(days=REQ_TTL_DAYS)).timestamp()),
             }
-            items.append(_put(self.t.name, record, "attribute_not_exists(SK)"))
+            alive = len(items)
+            items += [self._alive_check(sub), _put(self.t.name, record, "attribute_not_exists(SK)")]
             try:
                 self._transact(items)
             except ClientError as e:
-                if e.response.get("Error", {}).get("Code") == "TransactionCanceledException":
-                    continue  # something we read changed, or the same request landed meanwhile
-                raise
+                codes = _cancel_codes(e)
+                if not codes or not set(codes) <= RETRYABLE:
+                    raise  # not a cancellation, or one a retry cannot fix (e.g. ValidationError)
+                if codes[alive] == "ConditionalCheckFailed":
+                    raise AccountDeleted from e
+                # something we read changed, or the same request landed meanwhile: re-read after a pause
+                time.sleep(random.uniform(0, 0.02 * 2**attempt))  # noqa: S311 (jitter, not cryptography)
+                continue
             # site-wide counters (one hot item) stay outside the transaction; a lost bump is harmless
             try:
                 self._bump_stats(now, **stats)
