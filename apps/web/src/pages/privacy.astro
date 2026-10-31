@@ -1,5 +1,6 @@
 ---
 import Base from "../layouts/Base.astro";
+import { beaconToken } from "../lib/analytics";
 ---
 <Base title="Privacy" description="What Vyākaraṇa Labs stores and why.">
   <div class="page-narrow prose">
@@ -10,7 +11,11 @@ import Base from "../layouts/Base.astro";
     <h2>Without an account</h2>
     <ul>
       <li>Your script and theme choices, and the lessons you mark as read, are kept in your own browser's storage. They never leave your device.</li>
-      <li>Page visits are counted with cookieless, aggregate analytics. No cookies, no cross-site tracking, no personal profile.</li>
+      {beaconToken ? (
+        <li>Page visits are counted with Cloudflare Web Analytics: cookieless and aggregate. No cookies, no cross-site tracking, no personal profile.</li>
+      ) : (
+        <li>Page visits are not counted.</li>
+      )}
     </ul>
     <h2>With an account</h2>
     <ul>

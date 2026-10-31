@@ -7,6 +7,8 @@
 //   W3  the PR plan job builds the Lambda package before `terraform plan` (the plan reads services/api/dist/vl-api.zip — #17)
 //   W4  deploy runs only after a green `ci` run on main, and deploys exactly the commit CI tested
 //   W5  composite actions give every `run:` step `shell: bash`
+//   W6  deploy hands the analytics token to both the site build and Terraform from the same variable, so the
+//       beacon tag and the CSP that allows it switch together (review #19)
 import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { parse } from "yaml";
@@ -66,6 +68,17 @@ else {
   }
 }
 
+// W6 — analytics token reaches the build and Terraform together
+if (deploy) {
+  for (const [id, job] of Object.entries(deploy.jobs ?? {})) {
+    const tf = String(job.env?.TF_VAR_cf_beacon_token ?? "");
+    const build = (job.steps ?? []).find((st) => typeof st.run === "string" && /@vl\/web build/.test(st.run));
+    const pub = String(build?.env?.PUBLIC_CF_BEACON_TOKEN ?? job.env?.PUBLIC_CF_BEACON_TOKEN ?? "");
+    if (!tf || tf !== pub || !/vars\.CF_BEACON_TOKEN/.test(tf))
+      fail("deploy.yml", `W6 job \`${id}\`: the site build's PUBLIC_CF_BEACON_TOKEN (${pub || "unset"}) must equal TF_VAR_cf_beacon_token (${tf || "unset"}), both from vars.CF_BEACON_TOKEN`);
+  }
+}
+
 // W5 — composite actions
 const actionsDir = join(root, ".github/actions");
 if (existsSync(actionsDir)) {
@@ -86,4 +99,4 @@ if (problems.length) {
   }
   process.exit(1);
 }
-console.log(`workflow policy: ${Object.keys(workflows).length} workflows OK (W1–W5)`);
+console.log(`workflow policy: ${Object.keys(workflows).length} workflows OK (W1–W6)`);

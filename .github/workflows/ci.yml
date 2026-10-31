@@ -92,6 +92,13 @@ jobs:
       - name: Saving practice and reviews exactly once (review #1, #9) — outbox, retries, reload, production CSP enforced
         working-directory: apps/web
         run: node e2e/integrity.cjs /tmp/csp.json
+      - name: Cookieless analytics beacon (review #19) — absent without a token; with one, on every page and CSP-clean
+        working-directory: apps/web
+        env:
+          PUBLIC_CF_BEACON_TOKEN: 0123456789abcdef0123456789abcdef # test value, not a real token
+        run: |
+          npx astro build --outDir /tmp/dist-beacon
+          node e2e/beacon.cjs dist /tmp/dist-beacon "$PUBLIC_CF_BEACON_TOKEN"
       - name: Derivation tool (vidyut-prakriyā WebAssembly), production CSP enforced
         working-directory: apps/web
         run: node e2e/prakriya.cjs /tmp/csp.json

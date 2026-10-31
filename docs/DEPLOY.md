@@ -157,7 +157,7 @@ aws cognito-idp admin-add-user-to-group --user-pool-id $pool --username <your em
 
 | When | What you do |
 |---|---|
-| Analytics | Cloudflare → Web Analytics → Add site → copy the token into the repository variable `CF_BEACON_TOKEN`. |
+| Analytics | Cloudflare → Web Analytics → Add site → copy the token into the repository variable `CF_BEACON_TOKEN`. The next deploy adds the beacon to every page and allows its two hosts in the CSP; the privacy page then names Cloudflare Web Analytics. Leave it empty for no analytics. |
 
 ## What it costs
 

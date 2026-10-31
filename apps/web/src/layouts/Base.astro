@@ -9,6 +9,7 @@ import "../styles/layout.css";
 import "../styles/islands.css";
 import SiteHeader from "../components/SiteHeader.astro";
 import SiteFooter from "../components/SiteFooter.astro";
+import { beaconToken } from "../lib/analytics";
 
 interface Props {
   title: string;
@@ -56,6 +57,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <script type="speculationrules" is:inline>
       { "prefetch": [{ "where": { "and": [{ "href_matches": "/*" }, { "not": { "href_matches": "/api/*" } }] }, "eagerness": "moderate" }] }
     </script>
+    {beaconToken && (
+      <script is:inline defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon={JSON.stringify({ token: beaconToken })}></script>
+    )}
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>

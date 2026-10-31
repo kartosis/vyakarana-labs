@@ -72,6 +72,8 @@ jobs:
         run: pnpm --filter @vl/web build
         env:
           SITE_URL: ${{ vars.SITE_URL || 'https://sanskrit.identifyragas.com' }}
+          # same variable as TF_VAR_cf_beacon_token: the beacon tag and the CSP that allows it switch together
+          PUBLIC_CF_BEACON_TOKEN: ${{ vars.CF_BEACON_TOKEN }}
 
       - uses: aws-actions/configure-aws-credentials@v4
         with:
