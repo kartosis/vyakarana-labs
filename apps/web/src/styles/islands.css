@@ -436,6 +436,7 @@
   .prakriya-field label { font-weight: 700; font-size: var(--s-text-small); }
   .prakriya-field input { font-size: 1.3rem; inline-size: 100%; min-block-size: 3.25rem; }
   .prakriya-field select { font-size: 1rem; inline-size: 100%; min-block-size: 3.25rem; }
+  .prakriya-check { grid-column: 1 / -1; margin: 0; display: flex; gap: 0.5rem; align-items: baseline; }
   .prakriya-hint { grid-column: 1 / -1; margin: 0; font-size: var(--s-text-small); color: var(--s-color-text-soft); max-inline-size: 62ch; }
   @container prakriya (inline-size < 30rem) {
     .prakriya-in { grid-template-columns: 1fr; }

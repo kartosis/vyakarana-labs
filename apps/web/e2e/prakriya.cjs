@@ -10,7 +10,7 @@ const csp = ["default-src 'self'", ["script-src 'self' 'wasm-unsafe-eval'", ...h
   "frame-ancestors 'none'", "base-uri 'self'", "form-action 'self'", "object-src 'none'"].join('; ');
 const notice = (title, text) => console.log(`::notice title=${title}::${text.replace(/\n/g, '%0A')}`);
 const fails = [];
-const check = (name, ok, extra = '') => { console.log(`${ok ? 'PASS' : 'FAIL'} ${name}${extra ? ' — ' + extra : ''}`); if (!ok) fails.push(name); };
+const check = (name, ok, extra = '') => { console.log(`${ok ? 'PASS' : 'FAIL'} ${name}${extra ? ' — ' + extra : ''}`); if (!ok) fails.push(extra ? `${name} (got: ${String(extra).slice(0, 120)})` : name); };
 
 (async () => {
   const b = await chromium.launch();
@@ -42,12 +42,23 @@ const check = (name, ok, extra = '') => { console.log(`${ok ? 'PASS' : 'FAIL'} $
     notice('rāmaḥ derivation', steps.join('\n'));
     check('derivation of rāmaḥ has steps', steps.length > 5, String(steps.length));
     check('derivation cites 8.2.66 and 8.3.15', steps.some((s) => s.startsWith('8.2.66')) && steps.some((s) => s.startsWith('8.3.15')));
-    // a feminine stem and an IAST/Devanagari round trip
-    await page.fill('.prakriya-field input', 'रमा');
+    // feminine stems: ramā (ṭāp, typed in Devanagari), gaurī (ṅīṣ), lakṣmī (no feminine suffix: switch off)
+    const cellText = (r, c) => page.$eval(`.prakriya-table tbody tr:nth-child(${r}) td:nth-child(${c + 1})`, (td) =>
+      [...td.querySelectorAll('.sa-iast')].map((s) => s.textContent.trim()).join(' / '));
+    const tableText = () => page.$$eval('.prakriya-table tbody tr', (trs) => trs.map((tr) => [...tr.querySelectorAll('td')].map((td) =>
+      [...td.querySelectorAll('.sa-iast')].map((s) => s.textContent.trim()).join(' / ')).join(' | ')).join('\n'));
     await page.selectOption('.prakriya-field select', 'Stri');
-    await page.waitForTimeout(300);
-    const fem = await page.$eval('.prakriya-table tbody tr:nth-child(3) td:nth-child(2)', (td) => td.textContent);
-    check('ramā, feminine, instrumental singular = ramayā', /ramayā/.test(fem), fem);
+    await page.fill('.prakriya-field input', 'रमा');
+    await page.waitForTimeout(500);
+    notice('ramā (feminine)', await tableText());
+    check('ramā: instrumental singular = ramayā', (await cellText(3, 1)) === 'ramayā', await cellText(3, 1));
+    await page.fill('.prakriya-field input', 'gaurī');
+    await page.waitForTimeout(500);
+    check('gaurī (ṅīṣ): nominative singular = gaurī', (await cellText(1, 1)) === 'gaurī', await cellText(1, 1));
+    await page.fill('.prakriya-field input', 'lakṣmī');
+    await page.uncheck('.prakriya-check input');
+    await page.waitForTimeout(500);
+    check('lakṣmī (no suffix): nominative singular = lakṣmīḥ', (await cellText(1, 1)) === 'lakṣmīḥ', await cellText(1, 1));
   }
   check('no console errors', errors.length === 0, errors.join(' | '));
   await b.close();

@@ -120,6 +120,8 @@ export default function PrakriyaStepper({ known, initialStem = "rāma", initialL
   const [api, setApi] = useState<VidyutApi | null | undefined>(undefined);
   const [stem, setStem] = useState(initialStem);
   const [linga, setLinga] = useState<string>(initialLinga);
+  /** null: decide from the stem (feminine ā / ī usually carry ṭāp, ṅīp or ṅīṣ); true / false: the learner's choice */
+  const [nyapChoice, setNyapChoice] = useState<boolean | null>(null);
   const [cell, setCell] = useState<[number, number]>([0, 0]);
   const [variant, setVariant] = useState(0);
 
@@ -132,17 +134,21 @@ export default function PrakriyaStepper({ known, initialStem = "rāma", initialL
     return t ? toSlp1(t, detectScheme(t)) : "";
   }, [stem]);
 
+  // A feminine stem in ā or ī usually ends in a feminine suffix (ṭāp: ramā; ṅīp / ṅīṣ: nadī, gaurī), which changes
+  // its declension (nominative gaurī, not *gaurīḥ). lakṣmī and śrī do not, so the learner can switch it off.
+  const nyapAuto = linga === "Stri" && /[AI]$/.test(slp);
+  const nyap = linga === "Stri" && (nyapChoice ?? nyapAuto);
   const table = useMemo(() => {
     if (!api || !slp || !/^[a-zA-Z~']+$/.test(slp)) return null;
     try {
       return VIBHAKTIS.map((vi) =>
-        VACANAS.map((va) => api.deriveSubantas({ pratipadika: { basic: slp }, linga, vibhakti: vi.id, vacana: va.id }) ?? []),
+        VACANAS.map((va) => api.deriveSubantas({ pratipadika: nyap ? { nyap: slp } : { basic: slp }, linga, vibhakti: vi.id, vacana: va.id }) ?? []),
       );
     } catch (e) {
       console.error("[vidyut]", e);
       return null;
     }
-  }, [api, slp, linga]);
+  }, [api, slp, linga, nyap]);
 
   const selected = table?.[cell[0]]?.[cell[1]] ?? [];
   const prakriya = selected[Math.min(variant, selected.length - 1)];
@@ -157,14 +163,20 @@ export default function PrakriyaStepper({ known, initialStem = "rāma", initialL
         <p class="prakriya-field">
           <label for={`${id}-stem`}>Stem (prātipadika)</label>
           <input id={`${id}-stem`} type="text" value={stem} spellcheck={false} autocapitalize="off" autocomplete="off"
-            onInput={(e) => setStem((e.target as HTMLInputElement).value)} />
+            onInput={(e) => { setStem((e.target as HTMLInputElement).value); setNyapChoice(null); }} />
         </p>
         <p class="prakriya-field">
           <label for={`${id}-linga`}>Gender (liṅga)</label>
-          <select id={`${id}-linga`} value={linga} onChange={(e) => setLinga((e.target as HTMLSelectElement).value)}>
+          <select id={`${id}-linga`} value={linga} onChange={(e) => { setLinga((e.target as HTMLSelectElement).value); setNyapChoice(null); }}>
             {LINGAS.map((l) => <option value={l.id}>{l.en}, {l.name}</option>)}
           </select>
         </p>
+        {linga === "Stri" && (
+          <p class="prakriya-check">
+            <input id={`${id}-nyap`} type="checkbox" checked={nyap} onChange={(e) => setNyapChoice((e.target as HTMLInputElement).checked)} />
+            <label for={`${id}-nyap`}>The stem ends in a feminine suffix, ā (ṭāp) or ī (ṅīp, ṅīṣ), as ramā, nadī, gaurī. Not lakṣmī or śrī.</label>
+          </p>
+        )}
         <p class="prakriya-hint">Type in Devanagari, IAST, Harvard-Kyoto or SLP1. The stem is declined as given; choose the gender it takes.</p>
       </div>
 
