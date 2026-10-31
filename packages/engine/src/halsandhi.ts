@@ -38,8 +38,12 @@ const nasalOf = (c: string) => ROWS[rowOf(c)]![4]!;
 const voicedAspirate = (c: string) => ROWS[rowOf(c)]![3]!;
 const v = (c: string) => fromSlp1(c, "iast");
 const T_ROW = "tTdDn";
-/** Forms of rāj with the suffix kvip (samrāṭ, samrājau, samrājaḥ …), the only context of 8.3.25 mo rāji samaḥ kvau. */
-const RAJ_KVIP = /^rA(j|w|wsu|q(ByAm|BiH|ByaH)|j(O|aH|am|A|e|oH|Am|i))$/;
+/**
+ * Forms of rāj with the suffix kvip, the only context of 8.3.25 mo rāji samaḥ kvau: the whole declension of samrāj
+ * (ashtadhyayi.com data: samrāḍ/samrāṭ, samrājau … samrāṭsu/samrāṭtsu) and words built on it, such as samrājñī
+ * (Ṛgveda 10.85.46). Not rāj with other suffixes: saṃrājitā, saṃrājitum, saṃrājitavyam (Kāśikā).
+ */
+const RAJ_KVIP = /^rA(j|w|q|wsu|wtsu|q(ByAm|BiH|ByaH)|j(O|aH|am|A|e|oH|Am|i)|jY[Iyi][a-zA-Z]*)$/;
 const C_ROW = "cCjJY";
 const W_ROW = "wWqQR";
 /** s and the t-row ("stu") mapped to ś and the c-row ("ścu") / ṣ and the ṭ-row ("ṣṭu") */

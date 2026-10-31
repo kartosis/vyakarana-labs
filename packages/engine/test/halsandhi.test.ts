@@ -165,6 +165,14 @@ describe("external review fixes (PROGRESS §10)", () => {
     // anusvāra, not m; the engine writes it with a space after a finished word, the Kāśikā joins the upasarga
     for (const w of ["rājitā", "rājitum", "rājitavyam"]) expect(join("sam", w).result.replace(" ", "")).toBe(`saṃ${w}`);
   });
+  // P1 exit review X11: the fix for #11 was too narrow. Every form of samrāj (ashtadhyayi.com declension data:
+  // सम्राड्-सम्राट् … सम्राट्सु-सम्राट्त्सु) and samrājñī (Ṛgveda 10.85.46) keep the m.
+  it.each([
+    "samrāḍ", "samrāṭ", "samrājau", "samrājaḥ", "samrājam", "samrājā", "samrāḍbhyām", "samrāḍbhiḥ", "samrāje",
+    "samrāḍbhyaḥ", "samrājoḥ", "samrājām", "samrāji", "samrāṭsu", "samrāṭtsu", "samrājñī", "samrājñyau", "samrājñīm",
+  ])("X11: sam + %s keeps the m (8.3.25)", (form) => {
+    expect(join("sam", form.slice(3)).result).toBe(form);
+  });
   it("#12: only the bare ending nām counts as a suffix; tad + nāma has both forms", () => {
     expect(join("tad", "nāma").all).toEqual(["tannāma", "tadnāma"]);
     expect(join("ṣaṭ", "nām").all).toEqual(["ṣaṇṇām"]);
