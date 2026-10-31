@@ -3,15 +3,20 @@ import { useEffect, useId, useRef, useState } from "preact/hooks";
 import { getConfig } from "../lib/config";
 import { AuthError, confirmCode, loadPending, requestCode, safeNext, savePending, type Pending } from "../lib/auth";
 import { api } from "../lib/api";
+import { READ_GUEST_KEY } from "../lib/keys";
 
 type Step = "loading" | "closed" | "email" | "code" | "done";
 
-/** Move "mark as read" history from this browser into the new account (server data wins). */
+/**
+ * Move this browser's guest "mark as read" history into the account (server data wins), then forget it here:
+ * it now belongs to the account, and must not be merged into the next account that signs in (P1 exit review X3).
+ */
 async function mergeGuestProgress() {
   try {
-    const read = JSON.parse(localStorage.getItem("vl:read") ?? "[]") as string[];
+    const read = JSON.parse(localStorage.getItem(READ_GUEST_KEY) ?? "[]") as string[];
     if (read.length) await api("/api/v1/progress/merge", { method: "POST", body: { read } });
-  } catch {}
+    localStorage.removeItem(READ_GUEST_KEY);
+  } catch {} // kept for the next sign-in if the merge failed
 }
 
 export default function SignIn() {

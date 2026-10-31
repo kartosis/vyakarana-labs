@@ -19,10 +19,12 @@ const ME = { pseudonym: 'śiṣya-1234', settings: { script: 'deva', dailyGoal: 
 const PROGRESS = { lessons: {}, streak: { current: 3, longest: 5 }, today: { items: 4 }, due: 0 };
 const SESSION_OK = { score: 80, best: 80, status: 'completed', firstCompletion: true, cardsAdded: 9, streak: { current: 1, longest: 1 }, points: 18 };
 const DUE = [{ cardId: 'prat.ac', lesson: 'samjna/pratyahara' }, { cardId: 'prat.hal', lesson: 'samjna/pratyahara' }, { cardId: 'prat.al', lesson: 'samjna/pratyahara' }];
-const signedIn = () => {
-  localStorage.setItem('vl:signedIn', '1');
-  sessionStorage.setItem('vl:session', JSON.stringify({ accessToken: 'acc.tok.en', expiresAt: Date.now() + 3600e3 }));
-};
+/** An access token shaped like Cognito's (only its payload is read by the browser). */
+const jwt = (sub) => `eyJhbGciOiJSUzI1NiJ9.${Buffer.from(JSON.stringify({ sub, token_use: 'access' })).toString('base64url')}.sig`;
+const signInScript = (token) => `localStorage.setItem('vl:signedIn', '1');
+  sessionStorage.setItem('vl:session', JSON.stringify({ accessToken: ${JSON.stringify(token)}, expiresAt: Date.now() + 3600e3 }));`;
+const signedInAs = (token) => new Function(signInScript(token));
+const signedIn = signedInAs(jwt('user-a'));
 
 /** A context whose API answers come from `api(method, path, body, n)` (n = how many times that route was hit). */
 async function context(b, api, init = signedIn) {
@@ -149,14 +151,19 @@ const reviewPosts = (posts) => posts.filter((p) => p[0] === '/api/v1/reviews').m
       body: { items: [{ cardId: 'prat.ac', rating: 3, ms: 1000 }], tz: 'UTC', requestId: '00000000-0000-4000-8000-000000000001' } }];
     const refused = [{ id: '00000000-0000-4000-8000-000000000002', path: '/api/v1/reviews', at: Date.now(),
       body: { items: [{ cardId: 'prat.hal', rating: 3, ms: 1000 }], tz: 'UTC', requestId: '00000000-0000-4000-8000-000000000002' } }];
-    for (const [label, entries, wantPosts] of [['older than a day', old, 0], ['refused with 409', refused, 1]]) {
-      const api = (m, p) => (p === '/api/v1/reviews/due' ? [200, { cards: [] }] : p === '/api/v1/reviews' ? [409, { title: 'Request id already used' }] : base(m, p));
-      const init = new Function(`(${signedIn.toString()})(); if (!sessionStorage.getItem('vl:seeded')) { sessionStorage.setItem('vl:seeded', '1'); sessionStorage.setItem('vl:outbox', ${JSON.stringify(JSON.stringify(entries))}); }`);
+    // X9: only 400/409/422 are final; a 403/404 from the CDN during a deploy must not lose the save
+    for (const [label, entries, wantPosts, status, wantLeft] of [['older than a day', old, 0, 409, 0], ['refused with 409', refused, 1, 409, 0],
+      ['answered 403 by the CDN', refused, 1, 403, 1]]) {
+      const api = (m, p) => (p === '/api/v1/reviews/due' ? [200, { cards: [] }] : p === '/api/v1/reviews' ? [status, { title: 'refused' }] : base(m, p));
+      const owned = entries.map((e) => ({ ...e, owner: 'user-a' }));
+      const init = new Function(`localStorage.setItem('vl:signedIn', '1');
+        sessionStorage.setItem('vl:session', JSON.stringify({ accessToken: ${JSON.stringify(jwt('user-a'))}, expiresAt: Date.now() + 3600e3 }));
+        if (!sessionStorage.getItem('vl:seeded')) { sessionStorage.setItem('vl:seeded', '1'); sessionStorage.setItem('vl:outbox', ${JSON.stringify(JSON.stringify(owned))}); }`);
       const { ctx, page, posts } = await context(b, api, init);
       await page.goto(BASE + '/review/');
       await page.waitForSelector('text=Nothing is due', { timeout: 10000 }).catch(() => {});
       await page.waitForTimeout(500);
-      check(`E entry ${label}: sent ${wantPosts} time(s), then dropped`, reviewPosts(posts).length === wantPosts && (await outbox(page)).length === 0,
+      check(`E entry ${label}: sent ${wantPosts} time(s), ${wantLeft ? 'kept' : 'then dropped'}`, reviewPosts(posts).length === wantPosts && (await outbox(page)).length === wantLeft,
         `${reviewPosts(posts).length} posts, ${(await outbox(page)).length} left`);
       await close(ctx);
     }
@@ -211,6 +218,29 @@ const reviewPosts = (posts) => posts.filter((p) => p[0] === '/api/v1/reviews').m
     await A.page.goto(BASE + '/course/samjna/pratyahara/');
     await A.page.waitForTimeout(1200);
     check('F a practised/completed lesson stays marked (button disabled)', JSON.stringify(await button(A.page)) === JSON.stringify(['true', 'Marked as read', true]), JSON.stringify(await button(A.page)));
+    // X12: mark then unmark quickly while the first answer is slow: the account must end as the page shows
+    {
+      let slow = true;
+      const order = [];
+      const api2 = (m, p, body) => {
+        if (p === '/api/v1/progress/read') order.push(body.read);
+        return api(m, p, body);
+      };
+      const C = await context(b, api2);
+      await C.ctx.route('**/api/v1/progress/read', async (route) => {
+        const body = JSON.parse(route.request().postData());
+        if (slow && body.read) { slow = false; await new Promise((r) => setTimeout(r, 700)); }
+        return route.fallback();
+      });
+      await C.page.goto(BASE + '/course/varnamala/script/');
+      await C.page.waitForTimeout(1000);
+      await C.page.click('[data-mark-read]');
+      await C.page.click('[data-mark-read]');
+      await C.page.waitForTimeout(1800);
+      check('F quick mark + unmark: account ends unread, like the page', !('varnamala/script' in server) &&
+        JSON.stringify(await button(C.page)) === JSON.stringify(['false', 'Mark as read', false]), `${JSON.stringify(order)} server=${JSON.stringify(server)}`);
+      await close(C.ctx);
+    }
     await close(A.ctx); await close(B.ctx);
 
     // guests: unchanged, this browser only
@@ -221,6 +251,48 @@ const reviewPosts = (posts) => posts.filter((p) => p[0] === '/api/v1/reviews').m
     const local = await G.page.evaluate(() => JSON.parse(localStorage.getItem('vl:read') || '[]'));
     check('F guest: kept in this browser, nothing sent', local.includes('varnamala/script') && G.posts.length === 0, JSON.stringify(local));
     await close(G.ctx);
+  }
+
+  // G — X3: nothing saved by one account is sent with another account's token, or survives signing out
+  {
+    const entry = { id: '00000000-0000-4000-8000-000000000003', path: '/api/v1/reviews', at: Date.now(), owner: 'user-a',
+      body: { items: [{ cardId: 'prat.ac', rating: 3, ms: 1000 }], tz: 'UTC', requestId: '00000000-0000-4000-8000-000000000003' } };
+    const draft = { owner: 'user-a', items: [{ cardId: 'prat.hal', rating: 4, ms: 900 }] };
+    const seed = (token) => new Function(`localStorage.setItem('vl:signedIn', '1');
+      ${token ? `sessionStorage.setItem('vl:session', JSON.stringify({ accessToken: ${JSON.stringify(token)}, expiresAt: Date.now() + 3600e3 }));` : ''}
+      if (!sessionStorage.getItem('vl:seeded')) { sessionStorage.setItem('vl:seeded', '1');
+        sessionStorage.setItem('vl:outbox', ${JSON.stringify(JSON.stringify([entry]))});
+        sessionStorage.setItem('vl:review-draft', ${JSON.stringify(JSON.stringify(draft))});
+        localStorage.setItem('vl:read:account', '["samjna/pratyahara"]'); }`);
+    const api = (m, p) => (p === '/api/v1/reviews/due' ? [200, { cards: [] }] : p === '/api/v1/auth/refresh' ? [401, { title: 'expired' }] : base(m, p));
+    const B = await context(b, api, seed(jwt('user-b')));
+    await B.page.goto(BASE + '/review/');
+    await B.page.waitForSelector('text=Nothing is due', { timeout: 10000 }).catch(() => {});
+    await B.page.waitForTimeout(500);
+    check("G another account's outbox entry and review draft are not sent", reviewPosts(B.posts).length === 0, JSON.stringify(B.posts));
+    check("G ...and are dropped", (await outbox(B.page)).length === 0 && (await B.page.evaluate(() => sessionStorage.getItem('vl:review-draft'))) === null);
+    await close(B.ctx);
+
+    const E = await context(b, api, seed(null)); // no access token in this tab and the refresh is refused
+    await E.page.goto(BASE + '/me/');
+    await E.page.waitForTimeout(1500);
+    const left = await E.page.evaluate(() => [localStorage.getItem('vl:signedIn'), sessionStorage.getItem('vl:outbox'), sessionStorage.getItem('vl:review-draft'), localStorage.getItem('vl:read:account')]);
+    check('G a refused refresh signs out and clears the outbox, draft and account read list', JSON.stringify(left) === JSON.stringify([null, null, null, null]), JSON.stringify(left));
+    await close(E.ctx);
+
+    // the lesson page keeps the account's list apart from this browser's guest marks
+    const L = await context(b, (m, p) => (p === '/api/v1/progress/lessons' ? [200, { lessons: { 'samjna/pratyahara': 'completed' } }] : base(m, p)),
+      new Function(`${signInScript(jwt('user-a'))} localStorage.setItem('vl:read', '["varnamala/script"]');`));
+    await L.page.goto(BASE + '/course/varnamala/sounds/');
+    await L.page.waitForTimeout(1200);
+    const keys = await L.page.evaluate(() => [localStorage.getItem('vl:read'), localStorage.getItem('vl:read:account')]);
+    check("G signed in, the account's lessons are kept apart from guest marks", keys[0] === '["varnamala/script"]' && keys[1] === '["samjna/pratyahara"]', JSON.stringify(keys));
+    await L.page.goto(BASE + '/me/');
+    await L.page.waitForSelector('.dash-stats', { timeout: 10000 }).catch(() => {});
+    await L.page.click('button:has-text("Sign out")');
+    await L.page.waitForTimeout(800);
+    check("G signing out removes the account's lesson list", (await L.page.evaluate(() => localStorage.getItem('vl:read:account'))) === null);
+    await close(L.ctx);
   }
 
   console.log(log.join('\n'));

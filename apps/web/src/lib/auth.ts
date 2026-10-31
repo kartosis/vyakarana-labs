@@ -7,6 +7,7 @@
  *   - a localStorage flag remembers that a cookie exists, so guests never trigger refresh calls.
  */
 import { getConfig } from "./config";
+import { clearAccountData } from "./keys";
 
 const SESSION_KEY = "vl:session";
 const FLAG_KEY = "vl:signedIn";
@@ -46,7 +47,10 @@ const store = {
   flag(on?: boolean): boolean {
     try {
       if (on === true) localStorage.setItem(FLAG_KEY, "1");
-      if (on === false) localStorage.removeItem(FLAG_KEY);
+      if (on === false) {
+        localStorage.removeItem(FLAG_KEY);
+        clearAccountData(); // nothing of this account may reach the next one (P1 exit review X3)
+      }
       return localStorage.getItem(FLAG_KEY) === "1";
     } catch {
       return false;
@@ -174,7 +178,9 @@ export function safeNext(search: string, origin: string): string {
   const raw = new URLSearchParams(search).get("next") ?? "/me/";
   try {
     const u = new URL(raw, origin);
-    if (u.origin === origin) return u.pathname + u.search + u.hash;
+    // Same origin only, and never a path that a browser would read as another host: normalisation turns
+    // "/.//evil.example" or "/a/..//evil.example" into "//evil.example" (P1 exit review X1).
+    if (u.origin === origin && !/^[/\\]{2}/.test(u.pathname)) return u.pathname + u.search + u.hash;
   } catch {}
   return "/me/";
 }
@@ -219,9 +225,10 @@ export async function accessToken(): Promise<string | null> {
     return null; // offline: stay signed in, try again later
   }
   if (!res.ok) {
-    // Only a rejected refresh token ends the session; an outage (5xx, 429) keeps it for the next attempt
-    // (external review #18).
-    if (res.status >= 400 && res.status < 500 && res.status !== 429) {
+    // Only the API refusing the refresh token (400/401) ends the session. An outage (5xx, 429) or the CDN
+    // answering for the origin (403/404 while a deploy changes it) keeps it for the next attempt
+    // (external review #18, P1 exit review X9).
+    if (res.status === 400 || res.status === 401) {
       store.flag(false);
       store.set(null);
     }
@@ -236,6 +243,18 @@ export async function signOut(): Promise<void> {
   const { signedBody } = await import("./api");
   await fetch("/api/v1/auth/logout", { method: "POST", credentials: "same-origin", ...(await signedBody("")) }).catch(() => {});
   store.set(null);
-  store.flag(false);
-  (await import("./outbox")).clearOutbox(); // unsent saves belong to this account, not the next one in this tab
+  store.flag(false); // also clears this account's outbox, review draft and lesson list
+}
+
+/** The signed-in account's id (the access token's `sub`), refreshing the token when needed; null when signed out. */
+export async function accountSub(): Promise<string | null> {
+  const token = await accessToken();
+  if (!token) return null;
+  try {
+    const payload = token.split(".")[1]!.replace(/-/g, "+").replace(/_/g, "/");
+    const sub = (JSON.parse(atob(payload)) as { sub?: unknown }).sub;
+    return typeof sub === "string" && sub ? sub : "?";
+  } catch {
+    return "?"; // not a JWT (only in stubbed tests): one unknown owner, still never mixed with a real account
+  }
 }

@@ -88,27 +88,30 @@ const lessonKey = `${entry.data.module}/${slug}`;
 </Base>
 
 <script>
-  // "Mark as read". Guests: kept in this browser and merged into the account on first sign-in.
-  // Signed in (external review #7): the account is the record. Marks go through the outbox (lib/outbox.ts),
-  // so a failed send is retried; the page shows the account's lessons plus marks still waiting to be sent.
+  // "Mark as read". Guests: kept in this browser (READ_GUEST_KEY) and merged into the account on sign-in.
+  // Signed in (external review #7): the account is the record, mirrored under READ_ACCOUNT_KEY (cleared on
+  // sign-out, P1 exit review X3). Marks go through the outbox (lib/outbox.ts), keyed by lesson so a quick
+  // mark/unmark is sent in order (X12); the page shows the account's lessons plus marks still waiting.
   // A lesson that has been practised or completed always counts as read, and cannot be unmarked.
   import { getConfig } from "../../../lib/config";
   import { maybeSignedIn } from "../../../lib/auth";
   import { api } from "../../../lib/api";
   import { enqueue, flush, pending, send } from "../../../lib/outbox";
+  import { READ_ACCOUNT_KEY, READ_GUEST_KEY } from "../../../lib/keys";
 
-  const KEY = "vl:read";
   const READ_PATH = "/api/v1/progress/read";
+  let signedIn = maybeSignedIn(); // confirmed against the site config below
+  const key = () => (signedIn ? READ_ACCOUNT_KEY : READ_GUEST_KEY);
   const read = (): string[] => {
     try {
-      return JSON.parse(localStorage.getItem(KEY) ?? "[]");
+      return JSON.parse(localStorage.getItem(key()) ?? "[]");
     } catch {
       return [];
     }
   };
   const write = (v: string[]) => {
     try {
-      localStorage.setItem(KEY, JSON.stringify(v));
+      localStorage.setItem(key(), JSON.stringify(v));
     } catch {}
   };
   let locked = new Set<string>(); // practised or completed in the account
@@ -133,7 +136,7 @@ const lessonKey = `${entry.data.module}/${slug}`;
     const { lessons } = await api<{ lessons: Record<string, string> }>("/api/v1/progress/lessons");
     const done = new Set(Object.keys(lessons));
     locked = new Set(Object.entries(lessons).filter(([, st]) => st !== "read").map(([k]) => k));
-    for (const e of pending(READ_PATH)) {
+    for (const e of await pending(READ_PATH)) {
       const { lessonId, read: on } = e.body as { lessonId: string; read: boolean };
       if (on) done.add(lessonId);
       else if (!locked.has(lessonId)) done.delete(lessonId);
@@ -142,7 +145,6 @@ const lessonKey = `${entry.data.module}/${slug}`;
     paint();
   }
 
-  let signedIn = false;
   document.querySelectorAll<HTMLButtonElement>("[data-mark-read]").forEach((b) =>
     b.addEventListener("click", () => {
       const k = b.dataset.markRead!;
@@ -153,13 +155,14 @@ const lessonKey = `${entry.data.module}/${slug}`;
       else done.delete(k);
       write([...done]);
       paint();
-      if (signedIn) send(enqueue(READ_PATH, { lessonId: k, read: on })).catch(() => {}); // kept and retried
+      if (signedIn) enqueue(READ_PATH, { lessonId: k, read: on }, k).then(send).catch(() => {}); // kept and retried
     }),
   );
   paint();
   getConfig()
     .then((c) => {
       signedIn = c.accounts && maybeSignedIn();
+      paint();
       return signedIn ? fromAccount() : undefined;
     })
     .catch(() => {}); // offline or signed out: this browser's marks still show

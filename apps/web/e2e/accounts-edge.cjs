@@ -65,7 +65,10 @@ const signedIn = () => {
       t === 'SignUp' ? [400, { __type: 'UsernameExistsException', message: 'exists' }] :
       t === 'InitiateAuth' ? [200, { ChallengeName: 'EMAIL_OTP', Session: 'otp-sess' }] :
       t === 'RespondToAuthChallenge' ? [200, tokens] : [200, {}];
-    for (const [next, want] of [['%2F%5Cevil.example', '/me/'], ['%2F%2Fevil.example%2Fx', '/me/'], ['https%3A%2F%2Fevil.example', '/me/'], ['%2Fcourse%2F', '/course/']]) {
+    // P1 exit review X1: paths that only become "//host" after URL normalisation
+    const bypass = ['%2F.%2F%2Fevil.example', '%2Fa%2F..%2F%2Fevil.example', '%2F%252e%2F%2Fevil.example', encodeURIComponent(BASE + '//evil.example')];
+    for (const [next, want] of [['%2F%5Cevil.example', '/me/'], ['%2F%2Fevil.example%2Fx', '/me/'], ['https%3A%2F%2Fevil.example', '/me/'], ['%2Fcourse%2F', '/course/'],
+      ...bypass.map((n) => [n, '/me/'])]) {
       const { ctx, page } = await context(b, { cognito: existing, api: okApi });
       await page.goto(`${BASE}/signin/?next=${next}`);
       await page.fill('input[type=email]', 'learner@example.com');
@@ -120,6 +123,15 @@ const signedIn = () => {
     await page.reload();
     const ok = await page.waitForSelector('.dash-stats', { timeout: 10000 }).then(() => true, () => false);
     check('#18 after recovery the dashboard loads', ok);
+    await ctx.unrouteAll({ behavior: 'ignoreErrors' }); await ctx.close();
+  }
+  // X9: a 403 from the CDN (e.g. while a deploy changes the origin) is not a rejected session
+  {
+    const api = (m, p) => (p === '/api/v1/auth/refresh' ? [403, { title: 'forbidden' }] : okApi(m, p));
+    const { ctx, page } = await context(b, { cognito: () => [200, {}], api, init: () => localStorage.setItem('vl:signedIn', '1') });
+    await page.goto(`${BASE}/me/`);
+    await page.waitForTimeout(1500);
+    check('X9 a 403 from refresh keeps the signed-in flag', (await page.evaluate(() => localStorage.getItem('vl:signedIn'))) === '1');
     await ctx.unrouteAll({ behavior: 'ignoreErrors' }); await ctx.close();
   }
   // …while a rejected refresh (401) does sign out

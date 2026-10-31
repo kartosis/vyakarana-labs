@@ -103,14 +103,14 @@ export default function PracticeSession({ lessonId, items, cards }: { lessonId: 
     }
     setPhase("saving");
     const completed = pct >= PASS;
-    saving.current ??= enqueue("/api/v1/sessions", {
-      lessonId,
-      attempts,
-      completed,
-      newCards: completed ? cards : [],
-      tz: tz(),
-    });
     try {
+      saving.current ??= await enqueue("/api/v1/sessions", {
+        lessonId,
+        attempts,
+        completed,
+        newCards: completed ? cards : [],
+        tz: tz(),
+      });
       const r = await send<Result>(saving.current);
       setResult(r);
       setPhase("done");

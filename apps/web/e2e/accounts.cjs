@@ -65,6 +65,7 @@ const check = (name, ok, extra = '') => { log.push(`${ok ? 'PASS' : 'FAIL'} ${na
   check('refresh token handed to API cookie endpoint', !!sess && sess[2].refreshToken.length === 40 && sess[3]['x-vl-auth'] === 'Bearer acc.tok.en');
   const merge = calls.find((c) => c[1] === 'POST /api/v1/progress/merge');
   check('guest progress merged', !!merge && merge[2].read.includes('varnamala/sounds'), JSON.stringify(merge && merge[2]));
+  check('guest marks cleared once merged (they now belong to the account)', (await page.evaluate(() => localStorage.getItem('vl:read'))) === null);
   await page.waitForSelector('.dash-stats');
   check('dashboard renders streak', (await page.textContent('.dash-stats')).includes('3'));
   check('header shows Your progress', (await page.textContent('[data-account-link]')).trim() === 'Your progress');

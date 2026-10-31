@@ -1,9 +1,10 @@
 /** @jsxImportSource preact */
 import { useEffect, useRef, useState } from "preact/hooks";
 import { getConfig } from "../lib/config";
-import { maybeSignedIn } from "../lib/auth";
+import { accountSub, maybeSignedIn } from "../lib/auth";
 import { api, ApiError, tz } from "../lib/api";
 import { enqueue, flush, pending } from "../lib/outbox";
+import { REVIEW_DRAFT_KEY } from "../lib/keys";
 import { Rich } from "./rich";
 
 type Card = { front: string; back: string; lesson: string };
@@ -16,32 +17,35 @@ const RATINGS = [
 ] as const;
 
 type Rating = { cardId: string; rating: number; ms: number };
-const DRAFT_KEY = "vl:review-draft"; // ratings made but not yet handed to the outbox (survive a reload)
 const BATCH = 50; // the API takes at most 50 cards per request
 
+/** Ratings made but not yet handed to the outbox (they survive a reload), stamped with the account they belong to. */
 const draft = {
-  get(): Rating[] {
+  get(owner: string): Rating[] {
     try {
-      return JSON.parse(sessionStorage.getItem(DRAFT_KEY) || "[]") as Rating[];
-    } catch {
-      return [];
-    }
+      const d = JSON.parse(sessionStorage.getItem(REVIEW_DRAFT_KEY) || "null") as { owner?: string; items?: Rating[] } | null;
+      if (d && d.owner === owner && Array.isArray(d.items)) return d.items;
+      sessionStorage.removeItem(REVIEW_DRAFT_KEY); // another account's ratings (or an old format): never sent
+    } catch {}
+    return [];
   },
-  set(r: Rating[]) {
+  set(owner: string, items: Rating[]) {
     try {
-      if (r.length) sessionStorage.setItem(DRAFT_KEY, JSON.stringify(r));
-      else sessionStorage.removeItem(DRAFT_KEY);
+      if (items.length) sessionStorage.setItem(REVIEW_DRAFT_KEY, JSON.stringify({ owner, items }));
+      else sessionStorage.removeItem(REVIEW_DRAFT_KEY);
     } catch {}
   },
 };
 
-/** Turns the draft into outbox entries (each with its own request id), then sends everything pending. */
+/** Turns this account's draft into outbox entries (each with its own request id), then sends everything waiting. */
 async function saveAll(): Promise<boolean> {
-  const rated = draft.get();
-  for (let k = 0; k < rated.length; k += BATCH) enqueue("/api/v1/reviews", { items: rated.slice(k, k + BATCH), tz: tz() });
-  draft.set([]);
+  const owner = await accountSub();
+  if (!owner) return false;
+  const rated = draft.get(owner);
+  for (let k = 0; k < rated.length; k += BATCH) await enqueue("/api/v1/reviews", { items: rated.slice(k, k + BATCH), tz: tz() });
+  draft.set(owner, []);
   await flush("/api/v1/reviews");
-  return pending("/api/v1/reviews").length === 0;
+  return (await pending("/api/v1/reviews")).length === 0;
 }
 
 /** Spaced repetition: the server schedules each card with FSRS; this island only shows and rates. */
@@ -78,7 +82,8 @@ export default function ReviewSession({ cards }: { cards: Record<string, Card> }
     const ms = Math.round(performance.now() - shownAt.current);
     const next = [...ratings, { cardId: queue[i]!.cardId, rating: value, ms }];
     setRatings(next);
-    draft.set([...draft.get(), next[next.length - 1]!]);
+    const owner = await accountSub();
+    if (owner) draft.set(owner, [...draft.get(owner), next[next.length - 1]!]);
     if (i + 1 < queue.length) {
       setI(i + 1);
       setState("front");
