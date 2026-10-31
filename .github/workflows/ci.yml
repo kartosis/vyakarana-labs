@@ -89,6 +89,9 @@ jobs:
       - name: Account edge cases from the external review (#5, #6, #18, deletion errors), production CSP enforced
         working-directory: apps/web
         run: node e2e/accounts-edge.cjs /tmp/csp.json
+      - name: Saving practice and reviews exactly once (review #1, #9) — outbox, retries, reload, production CSP enforced
+        working-directory: apps/web
+        run: node e2e/integrity.cjs /tmp/csp.json
       - name: Derivation tool (vidyut-prakriyā WebAssembly), production CSP enforced
         working-directory: apps/web
         run: node e2e/prakriya.cjs /tmp/csp.json

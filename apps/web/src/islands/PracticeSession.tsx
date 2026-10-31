@@ -3,7 +3,8 @@ import { useEffect, useId, useMemo, useRef, useState } from "preact/hooks";
 import { normalizeAnswer, detectScheme, transliterate } from "@vl/engine";
 import { getConfig } from "../lib/config";
 import { maybeSignedIn } from "../lib/auth";
-import { api, ApiError, tz } from "../lib/api";
+import { ApiError, tz } from "../lib/api";
+import { enqueue, flush, send, type Entry } from "../lib/outbox";
 import { Rich } from "./rich";
 
 type Choice = { id: string; type: "choice"; prompt: string; options: string[]; answer: number; explain?: string };
@@ -49,11 +50,16 @@ export default function PracticeSession({ lessonId, items, cards }: { lessonId: 
   const [attempts, setAttempts] = useState<Attempt[]>([]);
   const [result, setResult] = useState<Result | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const saving = useRef<Entry | null>(null); // this round's save: retried with the same request id
   const started = useRef(0);
   const heading = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
-    getConfig().then((c) => setGate(!c.accounts ? "closed" : maybeSignedIn() ? "open" : "guest"));
+    getConfig().then((c) => {
+      const open = c.accounts && maybeSignedIn();
+      setGate(!c.accounts ? "closed" : open ? "open" : "guest");
+      if (open) void flush(); // a save cut off by a reload or lost connection goes now, with its request id
+    });
   }, []);
   useEffect(() => {
     heading.current?.focus();
@@ -74,6 +80,7 @@ export default function PracticeSession({ lessonId, items, cards }: { lessonId: 
     setI(0);
     setAttempts([]);
     setResult(null);
+    saving.current = null;
     setPhase("ask");
     started.current = performance.now();
   }
@@ -96,11 +103,15 @@ export default function PracticeSession({ lessonId, items, cards }: { lessonId: 
     }
     setPhase("saving");
     const completed = pct >= PASS;
+    saving.current ??= enqueue("/api/v1/sessions", {
+      lessonId,
+      attempts,
+      completed,
+      newCards: completed ? cards : [],
+      tz: tz(),
+    });
     try {
-      const r = await api<Result>("/api/v1/sessions", {
-        method: "POST",
-        body: { lessonId, attempts, completed, newCards: completed ? cards : [], tz: tz() },
-      });
+      const r = await send<Result>(saving.current);
       setResult(r);
       setPhase("done");
     } catch (e) {

@@ -6,7 +6,11 @@ Capacity is provisioned inside the always-free tier, so writes are batched per p
 
 from __future__ import annotations
 
-from collections.abc import Iterable, Iterator
+import hashlib
+import json
+import logging
+import time
+from collections.abc import Callable, Iterable, Iterator
 from datetime import datetime, timedelta
 from decimal import Decimal
 from typing import Any, cast
@@ -18,8 +22,21 @@ from . import domain
 from .models import ReviewsIn, SessionIn, SettingsIn
 
 Item = dict[str, Any]
+Plan = tuple[list[Item], dict[str, Any], dict[str, int]]  # transaction items, response, site-wide counts
 DAY_TTL_DAYS = 400
 LB_TTL_DAYS = 120
+REQ_TTL_DAYS = 7  # how long a retry with the same request id gets the stored response
+TX_ATTEMPTS = 4
+REVIEW_GRACE = timedelta(minutes=1)
+log = logging.getLogger(__name__)
+
+
+class RequestIdReused(Exception):
+    """The same request id arrived with a different body."""
+
+
+class Contended(Exception):
+    """The learner's data kept changing between read and write; retrying with the same request id is safe."""
 
 
 def plain(v: Any) -> Any:
@@ -46,6 +63,39 @@ def _num(v: Any) -> Any:
 
 def _conditional_failed(e: ClientError) -> bool:
     return bool(e.response.get("Error", {}).get("Code") == "ConditionalCheckFailedException")
+
+
+def _put(
+    table: str,
+    item: Item,
+    cond: str,
+    names: dict[str, str] | None = None,
+    values: Item | None = None,
+) -> Item:
+    op: Item = {"TableName": table, "Item": item, "ConditionExpression": cond}
+    if names:
+        op["ExpressionAttributeNames"] = names
+    if values:
+        op["ExpressionAttributeValues"] = values
+    return {"Put": op}
+
+
+def _update(
+    table: str,
+    key: Item,
+    expr: str,
+    names: dict[str, str] | None = None,
+    values: Item | None = None,
+    cond: str | None = None,
+) -> Item:
+    op: Item = {"TableName": table, "Key": key, "UpdateExpression": expr}
+    if cond:
+        op["ConditionExpression"] = cond
+    if names:
+        op["ExpressionAttributeNames"] = names
+    if values:
+        op["ExpressionAttributeValues"] = values
+    return {"Update": op}
 
 
 def _opted_in(prof: Item) -> bool:
@@ -175,70 +225,93 @@ class Repo:
 
     # ------------------------------------------------------------ practice sessions
     def record_session(self, sub: str, s: SessionIn, now: datetime) -> dict[str, Any]:
-        prof = self.profile(sub, now)
-        correct = sum(1 for a in s.attempts if a.correct)
-        total = len(s.attempts)
-        pct = round(100 * correct / total)
-        prog = self.get(pk(sub), f"PROG#{s.lesson_id}") or {}
-        was_completed = prog.get("status") == "completed"
-        first_completion = s.completed and not was_completed
-        status = "completed" if (s.completed or was_completed) else "practised"
-        best = max(int(prog.get("bestScore", 0)), pct)
+        def plan() -> Plan:
+            prof = self.profile(sub, now)
+            correct = sum(1 for a in s.attempts if a.correct)
+            total = len(s.attempts)
+            pct = round(100 * correct / total)
+            prog_key = {"PK": pk(sub), "SK": f"PROG#{s.lesson_id}"}
+            prog = self.t.get_item(Key=prog_key, ConsistentRead=True).get("Item") or {}
+            was_completed = prog.get("status") == "completed"
+            first_completion = s.completed and not was_completed
+            status = "completed" if (s.completed or was_completed) else "practised"
+            best = max(int(prog.get("bestScore", 0)), pct)
 
-        self.t.update_item(
-            Key={"PK": pk(sub), "SK": f"PROG#{s.lesson_id}"},
-            UpdateExpression="SET #st = :st, bestScore = :b, lastScore = :l, lastAt = :now"
-            + (", completedAt = :now" if first_completion else "")
-            + " ADD #att :one",
-            ExpressionAttributeNames={"#st": "status", "#att": "attempts"},
-            ExpressionAttributeValues={
-                ":st": status,
-                ":b": best,
-                ":l": pct,
-                ":now": now.isoformat(),
-                ":one": 1,
-            },
-        )
+            # the attempt count doubles as the version of the progress item
+            names = {"#st": "status", "#att": "attempts"}
+            values: Item = {":st": status, ":b": best, ":l": pct, ":now": now.isoformat(), ":one": 1}
+            if not prog:
+                cond = "attribute_not_exists(SK)"
+            elif "attempts" in prog:
+                cond = "#att = :a"
+                values[":a"] = prog["attempts"]
+            else:
+                cond = "attribute_not_exists(#att)"
+            items = [
+                _update(
+                    self.t.name,
+                    prog_key,
+                    "SET #st = :st, bestScore = :b, lastScore = :l, lastAt = :now"
+                    + (", completedAt = :now" if first_completion else "")
+                    + " ADD #att :one",
+                    names,
+                    values,
+                    cond,
+                )
+            ]
 
-        cards_added = 0
-        if s.completed:
-            for cid in s.new_cards:
-                state = _num(domain.new_card_state(now))
-                try:
-                    self.t.put_item(
-                        Item={
-                            "PK": pk(sub),
-                            "SK": f"CARD#{cid}",
-                            "lesson": s.lesson_id,
-                            "state": state,
-                            "due": now.isoformat(),
-                            "LSI1SK": f"DUE#{now.isoformat()}",
-                        },
-                        ConditionExpression="attribute_not_exists(SK)",
+            cards_added = 0
+            if s.completed and s.new_cards:
+                wanted = list(dict.fromkeys(s.new_cards))  # one operation per item in a transaction
+                held = self._get_many([{"PK": pk(sub), "SK": f"CARD#{c}"} for c in wanted])
+                for cid in wanted:
+                    if f"CARD#{cid}" in held:
+                        continue
+                    items.append(
+                        _put(
+                            self.t.name,
+                            {
+                                "PK": pk(sub),
+                                "SK": f"CARD#{cid}",
+                                "lesson": s.lesson_id,
+                                "state": _num(domain.new_card_state(now)),
+                                "due": now.isoformat(),
+                                "LSI1SK": f"DUE#{now.isoformat()}",
+                            },
+                            "attribute_not_exists(SK)",
+                        )
                     )
                     cards_added += 1
-                except ClientError as e:
-                    if not _conditional_failed(e):
-                        raise
 
-        today = domain.local_date(now, s.tz)
-        ms = sum(a.ms for a in s.attempts)
-        self._bump_day(
-            sub, today.isoformat(), now, items=total, correct=correct, ms=ms, lessons=int(first_completion)
-        )
-        streak = self._touch_streak(sub, today)
-        score = domain.session_score(correct, first_completion)
-        self._bump_leaderboard(sub, prof, today, score, now)
-        self._bump_stats(now, sessions=1, items=total)
-        return {
-            "score": pct,
-            "best": best,
-            "status": status,
-            "firstCompletion": first_completion,
-            "cardsAdded": cards_added,
-            "streak": {"current": streak.current, "longest": streak.longest},
-            "points": score,
-        }
+            today = domain.local_date(now, s.tz)
+            ms = sum(a.ms for a in s.attempts)
+            items.append(
+                self._day_op(
+                    sub,
+                    today.isoformat(),
+                    now,
+                    items=total,
+                    correct=correct,
+                    ms=ms,
+                    lessons=int(first_completion),
+                )
+            )
+            streak, streak_op = self._streak_op(sub, today)
+            items += streak_op
+            score = domain.session_score(correct, first_completion)
+            items += self._leaderboard_ops(sub, prof, today, score, now)
+            response = {
+                "score": pct,
+                "best": best,
+                "status": status,
+                "firstCompletion": first_completion,
+                "cardsAdded": cards_added,
+                "streak": {"current": streak.current, "longest": streak.longest},
+                "points": score,
+            }
+            return items, response, {"sessions": 1, "items": total}
+
+        return self._once(sub, "session", s.request_id, s.model_dump_json(), now, plan)
 
     # ------------------------------------------------------------ reviews
     def due_cards(self, sub: str, now: datetime, limit: int = 50) -> list[Item]:
@@ -253,36 +326,50 @@ class Repo:
         ]
 
     def apply_reviews(self, sub: str, r: ReviewsIn, now: datetime) -> dict[str, Any]:
-        prof = self.profile(sub, now)
-        reviewed = 0
-        correct = 0
-        for item in r.items:
-            card = self.get(pk(sub), f"CARD#{item.card_id}")
-            if not card:
-                continue
-            new_state = domain.review(plain(card["state"]), item.rating, now, item.ms)
-            due = str(new_state["due"])
-            self.t.update_item(
-                Key={"PK": pk(sub), "SK": f"CARD#{item.card_id}"},
-                UpdateExpression="SET #state = :s, #due = :d, LSI1SK = :k, lastRating = :r ADD #rev :one",
-                ExpressionAttributeNames={"#state": "state", "#due": "due", "#rev": "reviews"},
-                ExpressionAttributeValues={
-                    ":s": _num(new_state),
-                    ":d": due,
-                    ":k": f"DUE#{due}",
-                    ":r": item.rating,
-                    ":one": 1,
-                },
-            )
-            reviewed += 1
-            correct += int(item.rating >= 3)
-        if reviewed:
-            today = domain.local_date(now, r.tz)
-            self._bump_day(sub, today.isoformat(), now, reviews=reviewed, correct=correct)
-            self._touch_streak(sub, today)
-            self._bump_leaderboard(sub, prof, today, correct, now)
-            self._bump_stats(now, reviews=reviewed)
-        return {"reviewed": reviewed, "correct": correct}
+        """Review #8: each card once per request (models.ReviewsIn), only when due, and only from the state
+        that was read (the update is conditional on the previous due date). Others are counted as skipped."""
+
+        def plan() -> Plan:
+            prof = self.profile(sub, now)
+            held = self._get_many([{"PK": pk(sub), "SK": f"CARD#{i.card_id}"} for i in r.items])
+            latest = (now + REVIEW_GRACE).isoformat()
+            items: list[Item] = []
+            reviewed = correct = skipped = 0
+            for i in r.items:
+                card = held.get(f"CARD#{i.card_id}")
+                if not card or str(card.get("due", "")) > latest:
+                    skipped += 1
+                    continue
+                new_state = domain.review(plain(card["state"]), i.rating, now, i.ms)
+                due = str(new_state["due"])
+                items.append(
+                    _update(
+                        self.t.name,
+                        {"PK": pk(sub), "SK": f"CARD#{i.card_id}"},
+                        "SET #state = :s, #due = :d, LSI1SK = :k, lastRating = :r ADD #rev :one",
+                        {"#state": "state", "#due": "due", "#rev": "reviews"},
+                        {
+                            ":s": _num(new_state),
+                            ":d": due,
+                            ":k": f"DUE#{due}",
+                            ":r": i.rating,
+                            ":one": 1,
+                            ":was": card["due"],
+                        },
+                        "#due = :was",
+                    )
+                )
+                reviewed += 1
+                correct += int(i.rating >= 3)
+            if reviewed:
+                today = domain.local_date(now, r.tz)
+                items.append(self._day_op(sub, today.isoformat(), now, reviews=reviewed, correct=correct))
+                items += self._streak_op(sub, today)[1]
+                items += self._leaderboard_ops(sub, prof, today, correct, now)
+            response = {"reviewed": reviewed, "correct": correct, "skipped": skipped}
+            return items, response, {"reviews": reviewed}
+
+        return self._once(sub, "reviews", r.request_id, r.model_dump_json(), now, plan)
 
     # ------------------------------------------------------------ leaderboard
     def leaderboard(self, week: str, limit: int = 50) -> list[Item]:
@@ -320,78 +407,165 @@ class Repo:
         return len(items)
 
     # ------------------------------------------------------------ internals
-    def _bump_day(self, sub: str, day: str, now: datetime, **counts: int) -> None:
+    def _transact(self, items: list[Item]) -> None:
+        """One atomic write of up to 100 items (a method of its own so tests can inject faults)."""
+        self.t.meta.client.transact_write_items(TransactItems=items)
+
+    def _once(
+        self, sub: str, kind: str, request_id: str, body: str, now: datetime, plan: Callable[[], Plan]
+    ) -> dict[str, Any]:
+        """Apply `plan` exactly once per learner and request id (review #1).
+
+        The request record is written in the same transaction as the changes, so both exist or neither, and
+        a retry gets the stored response. Every value a write was computed from is guarded by a condition, so
+        a concurrent change cancels the transaction and the plan is recomputed from fresh reads.
+        """
+        key = {"PK": pk(sub), "SK": f"REQ#{request_id}"}
+        fingerprint = hashlib.sha256(f"{kind}\n{body}".encode()).hexdigest()
+        for _ in range(TX_ATTEMPTS):
+            done = self.t.get_item(Key=key, ConsistentRead=True).get("Item")
+            if done:
+                if done.get("fingerprint") != fingerprint:
+                    raise RequestIdReused
+                return cast("dict[str, Any]", json.loads(done["response"]))
+            items, response, stats = plan()
+            record = {
+                **key,
+                "kind": kind,
+                "fingerprint": fingerprint,
+                "response": json.dumps(response),
+                "at": now.isoformat(),
+                "ttl": int((now + timedelta(days=REQ_TTL_DAYS)).timestamp()),
+            }
+            items.append(_put(self.t.name, record, "attribute_not_exists(SK)"))
+            try:
+                self._transact(items)
+            except ClientError as e:
+                if e.response.get("Error", {}).get("Code") == "TransactionCanceledException":
+                    continue  # something we read changed, or the same request landed meanwhile
+                raise
+            # site-wide counters (one hot item) stay outside the transaction; a lost bump is harmless
+            try:
+                self._bump_stats(now, **stats)
+            except ClientError:
+                log.warning("stats bump failed", exc_info=True)
+            return response
+        raise Contended
+
+    def _get_many(self, keys: list[Item]) -> dict[str, Item]:
+        """Strongly consistent batch read of items in one learner's partition, keyed by SK."""
+        out: dict[str, Item] = {}
+        pending = list(keys)
+        for attempt in range(8):
+            if not pending:
+                return out
+            batch, pending = pending[:100], pending[100:]
+            res = self.t.meta.client.batch_get_item(
+                RequestItems={self.t.name: {"Keys": batch, "ConsistentRead": True}}
+            )
+            for it in res.get("Responses", {}).get(self.t.name, []):
+                out[it["SK"]] = it
+            left = res.get("UnprocessedKeys", {}).get(self.t.name, {}).get("Keys", [])
+            if left:
+                pending = left + pending
+                time.sleep(0.05 * 2**attempt)
+        if pending:
+            raise Contended
+        return out
+
+    def _day_op(self, sub: str, day: str, now: datetime, **counts: int) -> Item:
         adds = {k: v for k, v in counts.items() if v}
         expr = "SET #ttl = :ttl"
         if adds:  # counter names (items, sessions …) can be DynamoDB reserved words: always alias them
             expr += " ADD " + ", ".join(f"#{k} :{k}" for k in adds)
-        self.t.update_item(
-            Key={"PK": pk(sub), "SK": f"DAY#{day}"},
-            UpdateExpression=expr,
-            ExpressionAttributeNames={"#ttl": "ttl", **{f"#{k}": k for k in adds}},
-            ExpressionAttributeValues={
+        return _update(
+            self.t.name,
+            {"PK": pk(sub), "SK": f"DAY#{day}"},
+            expr,
+            {"#ttl": "ttl", **{f"#{k}": k for k in adds}},
+            {
                 ":ttl": int((now + timedelta(days=DAY_TTL_DAYS)).timestamp()),
                 **{f":{k}": v for k, v in adds.items()},
             },
         )
 
-    def _touch_streak(self, sub: str, today: Any) -> domain.Streak:
-        for _ in range(3):  # optimistic concurrency
-            cur = self.get(pk(sub), "STREAK")
-            old = (
-                domain.Streak(int(cur["current"]), int(cur["longest"]), cur.get("lastDate"))
-                if cur
-                else domain.Streak(0, 0, None)
-            )
-            new = old.touch(today)
-            if new == old:
-                return old
-            version = int(cur.get("version", 0)) if cur else 0
-            try:
-                self.t.put_item(
-                    Item={
-                        "PK": pk(sub),
-                        "SK": "STREAK",
-                        "current": new.current,
-                        "longest": new.longest,
-                        "lastDate": new.last_date,
-                        "version": version + 1,
-                    },
-                    ConditionExpression="attribute_not_exists(SK) OR #ver = :v",
-                    ExpressionAttributeNames={"#ver": "version"},
-                    ExpressionAttributeValues={":v": version},
-                )
-                return new
-            except ClientError as e:
-                if not _conditional_failed(e):
-                    raise
-        return old
-
-    def _bump_leaderboard(self, sub: str, prof: Item, today: Any, points: int, now: datetime) -> None:
-        if points <= 0:
-            return
-        week = domain.iso_week(today)
-        out = self.t.update_item(
-            Key={"PK": f"LB#{week}", "SK": f"U#{sub}"},
-            UpdateExpression="SET pseudonym = :p, #ttl = :ttl ADD #score :n",
-            ExpressionAttributeNames={"#ttl": "ttl", "#score": "score"},
-            ExpressionAttributeValues={
-                ":p": prof.get("pseudonym", "śiṣya"),
-                ":n": points,
-                ":ttl": int((now + timedelta(days=LB_TTL_DAYS)).timestamp()),
-            },
-            ReturnValues="UPDATED_NEW",
+    def _streak_op(self, sub: str, today: Any) -> tuple[domain.Streak, list[Item]]:
+        cur = self.t.get_item(Key={"PK": pk(sub), "SK": "STREAK"}, ConsistentRead=True).get("Item")
+        old = (
+            domain.Streak(int(cur["current"]), int(cur["longest"]), cur.get("lastDate"))
+            if cur
+            else domain.Streak(0, 0, None)
         )
-        score = int(out["Attributes"]["score"])
-        key = {"PK": f"LB#{week}", "SK": f"U#{sub}"}
-        if _opted_in(prof):
-            self.t.update_item(
-                Key=key,
-                UpdateExpression="SET GSI1PK = :g, GSI1SK = :s",
-                ExpressionAttributeValues={":g": f"LB#{week}", ":s": f"{score:08d}#{sub}"},
+        new = old.touch(today)
+        if new == old:
+            return old, []
+        version = int(cur.get("version", 0)) if cur else 0
+        return new, [
+            _put(
+                self.t.name,
+                {
+                    "PK": pk(sub),
+                    "SK": "STREAK",
+                    "current": new.current,
+                    "longest": new.longest,
+                    "lastDate": new.last_date,
+                    "version": version + 1,
+                },
+                "attribute_not_exists(SK) OR #ver = :v",
+                {"#ver": "version"},
+                {":v": version},
             )
+        ]
+
+    def _leaderboard_ops(self, sub: str, prof: Item, today: Any, points: int, now: datetime) -> list[Item]:
+        """The week's row with its new score, plus a check that the profile still says what was read
+        (opt-in and pseudonym), so an opt-out or rename made meanwhile cannot be undone by this write."""
+        if points <= 0:
+            return []
+        week = domain.iso_week(today)
+        key = {"PK": f"LB#{week}", "SK": f"U#{sub}"}
+        row = self.t.get_item(Key=key, ConsistentRead=True).get("Item")
+        old = int(row["score"]) if row and "score" in row else None
+        score = (old or 0) + points
+        listed = _opted_in(prof)
+        name = prof.get("pseudonym")
+        names = {"#ttl": "ttl", "#score": "score"}
+        values: Item = {
+            ":p": name or "śiṣya",
+            ":n": score,
+            ":ttl": int((now + timedelta(days=LB_TTL_DAYS)).timestamp()),
+        }
+        expr = "SET pseudonym = :p, #ttl = :ttl, #score = :n"
+        if listed:
+            expr += ", GSI1PK = :g, GSI1SK = :s"
+            values |= {":g": f"LB#{week}", ":s": f"{score:08d}#{sub}"}
         else:
-            self.t.update_item(Key=key, UpdateExpression="REMOVE GSI1PK, GSI1SK")
+            expr += " REMOVE GSI1PK, GSI1SK"
+        if old is None:
+            cond = "attribute_not_exists(#score)"
+        else:
+            cond = "#score = :old"
+            values[":old"] = old
+        check_names = {"#st": "settings", "#o": "lbOptIn"}
+        check_values: Item = {":opt": listed}
+        check = "#st.#o = :opt" if not listed else "(attribute_not_exists(#st.#o) OR #st.#o = :opt)"
+        if name is None:
+            check += " AND attribute_not_exists(pseudonym)"
+        else:
+            check += " AND pseudonym = :p"
+            check_values[":p"] = name
+        return [
+            _update(self.t.name, key, expr, names, values, cond),
+            {
+                "ConditionCheck": {
+                    "TableName": self.t.name,
+                    "Key": {"PK": pk(sub), "SK": "PROFILE"},
+                    "ConditionExpression": check,
+                    "ExpressionAttributeNames": check_names,
+                    "ExpressionAttributeValues": check_values,
+                }
+            },
+        ]
 
     def _leaderboard_weeks(self, sub: str, now: datetime) -> set[str]:
         """Weeks that can still hold a leaderboard row for this learner. Every leaderboard bump follows a DAY#

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import uuid
 from datetime import timedelta
 from typing import Any
 
@@ -18,6 +19,15 @@ def session(
         "completed": completed,
         "newCards": ["prat:ac", "prat:hal"] if completed else [],
         "tz": "Asia/Kolkata",
+        "requestId": str(uuid.uuid4()),
+    }
+
+
+def reviews(*ratings: tuple[str, int]) -> dict[str, Any]:
+    return {
+        "items": [{"cardId": c, "rating": r, "ms": 2500} for c, r in ratings],
+        "tz": "Asia/Kolkata",
+        "requestId": str(uuid.uuid4()),
     }
 
 
@@ -73,13 +83,8 @@ def test_practice_flow_updates_progress_streak_cards_and_leaderboard(call: Call)
     status, due, _ = call("GET", "/api/v1/reviews/due", token=t)
     assert {c["cardId"] for c in due["cards"]} == {"prat:ac", "prat:hal"}
 
-    status, rev, _ = call(
-        "POST",
-        "/api/v1/reviews",
-        {"items": [{"cardId": "prat:ac", "rating": 3, "ms": 2500}], "tz": "Asia/Kolkata"},
-        token=t,
-    )
-    assert rev == {"reviewed": 1, "correct": 1}
+    status, rev, _ = call("POST", "/api/v1/reviews", reviews(("prat:ac", 3)), token=t)
+    assert rev == {"reviewed": 1, "correct": 1, "skipped": 0}
     status, due, _ = call("GET", "/api/v1/reviews/due", token=t)
     assert [c["cardId"] for c in due["cards"]] == ["prat:hal"]
 
@@ -191,3 +196,187 @@ def test_review_limit_is_validated(call: Call) -> None:
             assert status == 400, (bad, status, body)
     for good in ("1", "50", "100"):
         assert call("GET", "/api/v1/reviews/due", token=t, query=f"limit={good}")[0] == 200
+
+
+# ---------------------------------------------------------------- review #1, #8: session integrity
+def totals(call: Call, t: str) -> tuple[int, int, int, int]:
+    """(attempts on the lesson, items today, due cards, this week's score): what a double count changes."""
+    prog = call("GET", "/api/v1/progress", token=t, query="tz=Asia/Kolkata")[1]
+    rows = call("GET", "/api/v1/leaderboard/current")[1]["rows"]
+    lesson = prog["lessons"].get("samjna/pratyahara", {})
+    return (
+        lesson.get("attempts", 0),
+        prog["today"].get("items", 0),
+        prog["due"],
+        sum(r["score"] for r in rows),
+    )
+
+
+def test_request_id_is_required(call: Call) -> None:
+    s = session()
+    del s["requestId"]
+    assert call("POST", "/api/v1/sessions", s, token=make_token())[0] == 400
+    r = reviews(("prat:ac", 3))
+    del r["requestId"]
+    assert call("POST", "/api/v1/reviews", r, token=make_token())[0] == 400
+
+
+def test_session_replay_returns_the_first_response_and_counts_once(call: Call) -> None:
+    t = make_token()
+    s = session()
+    first = call("POST", "/api/v1/sessions", s, token=t)
+    once = totals(call, t)
+    again = call("POST", "/api/v1/sessions", s, token=t)
+    assert again[0] == 200 and again[1] == first[1] and first[1]["firstCompletion"] is True
+    assert totals(call, t) == once == (1, 5, 2, 14)
+
+
+def test_request_id_reused_with_another_body_is_409(call: Call) -> None:
+    t = make_token()
+    s = session()
+    call("POST", "/api/v1/sessions", s, token=t)
+    other = {**s, "attempts": s["attempts"][:3]}
+    status, problem, _ = call("POST", "/api/v1/sessions", other, token=t)
+    assert status == 409 and problem["type"].endswith("request-id-reused")
+
+
+def test_request_ids_are_per_learner(call: Call) -> None:
+    s = session()
+    a = call("POST", "/api/v1/sessions", s, token=make_token("a"))
+    b = call("POST", "/api/v1/sessions", s, token=make_token("b"))
+    assert a[0] == b[0] == 200 and b[1]["firstCompletion"] is True
+
+
+def test_lost_response_then_retry_counts_once(call: Call, monkeypatch: pytest.MonkeyPatch) -> None:
+    """The write commits but the answer never reaches the learner (timeout): the retry must not count again
+    and must still report the first-completion bonus."""
+    from vl_api.repo import Repo
+
+    real = Repo._transact
+    lost = {"n": 0}
+
+    def commit_then_fail(self: Repo, items: list[dict[str, Any]]) -> None:
+        real(self, items)
+        if lost["n"] == 0:
+            lost["n"] += 1
+            raise TimeoutError("response lost")
+
+    monkeypatch.setattr(Repo, "_transact", commit_then_fail)
+    t = make_token()
+    s = session()
+    with pytest.raises(TimeoutError):
+        call("POST", "/api/v1/sessions", s, token=t)
+    status, body, _ = call("POST", "/api/v1/sessions", s, token=t)
+    assert status == 200 and body["firstCompletion"] is True and body["points"] == 14
+    assert totals(call, t) == (1, 5, 2, 14)
+
+
+def test_failure_before_commit_writes_nothing(call: Call, monkeypatch: pytest.MonkeyPatch) -> None:
+    from vl_api.repo import Repo
+
+    real = Repo._transact
+    failed = {"n": 0}
+
+    def fail_once(self: Repo, items: list[dict[str, Any]]) -> None:
+        if failed["n"] == 0:
+            failed["n"] += 1
+            raise TimeoutError("network")
+        real(self, items)
+
+    monkeypatch.setattr(Repo, "_transact", fail_once)
+    t = make_token()
+    s = session()
+    with pytest.raises(TimeoutError):
+        call("POST", "/api/v1/sessions", s, token=t)
+    assert totals(call, t) == (0, 0, 0, 0)  # all or nothing
+    status, body, _ = call("POST", "/api/v1/sessions", s, token=t)
+    assert status == 200 and body["firstCompletion"] is True
+    assert totals(call, t) == (1, 5, 2, 14)
+
+
+def test_concurrent_write_is_retried_not_lost(call: Call, aws: Any, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Another request changes the leaderboard row between our read and our write: the transaction is refused
+    and recomputed, so neither update is lost."""
+    from vl_api.repo import Repo
+
+    t = make_token("racer")
+    call("POST", "/api/v1/sessions", session(), token=t)  # score 14
+    real = Repo._transact
+    raced = {"n": 0}
+
+    def race(self: Repo, items: list[dict[str, Any]]) -> None:
+        if raced["n"] == 0:
+            raced["n"] += 1
+            week = call("GET", "/api/v1/leaderboard/current")[1]["week"]
+            aws.update_item(
+                Key={"PK": f"LB#{week}", "SK": "U#racer"},
+                UpdateExpression="ADD #s :n",
+                ExpressionAttributeNames={"#s": "score"},
+                ExpressionAttributeValues={":n": 100},
+            )
+        real(self, items)
+
+    monkeypatch.setattr(Repo, "_transact", race)
+    status, body, _ = call("POST", "/api/v1/sessions", session(correct=2), token=t)
+    assert status == 200 and body["points"] == 2
+    assert totals(call, t)[3] == 14 + 100 + 2
+
+
+def test_opt_out_during_a_session_is_not_undone(
+    call: Call, aws: Any, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Left open by the #4 fix: a session that read the profile before an opt-out must not re-list the row."""
+    from vl_api.repo import Repo
+
+    t = make_token("shy")
+    call("POST", "/api/v1/sessions", session(), token=t)
+    real = Repo._transact
+    raced = {"n": 0}
+
+    def opt_out_meanwhile(self: Repo, items: list[dict[str, Any]]) -> None:
+        if raced["n"] == 0:
+            raced["n"] += 1
+            call("PATCH", "/api/v1/me", {"lbOptIn": False}, token=t)
+        real(self, items)
+
+    monkeypatch.setattr(Repo, "_transact", opt_out_meanwhile)
+    assert call("POST", "/api/v1/sessions", session(correct=2), token=t)[0] == 200
+    assert call("GET", "/api/v1/leaderboard/current")[1]["rows"] == []
+
+
+def test_review_rejects_duplicate_cards(call: Call) -> None:
+    t = make_token()
+    call("POST", "/api/v1/sessions", session(), token=t)
+    for n in (2, 50):
+        status, problem, _ = call("POST", "/api/v1/reviews", reviews(*[("prat:ac", 4)] * n), token=t)
+        assert status == 400 and "more than once" in problem["detail"]
+    assert totals(call, t)[3] == 14  # nothing counted
+
+
+def test_review_of_a_card_not_due_is_skipped(call: Call) -> None:
+    t = make_token()
+    call("POST", "/api/v1/sessions", session(), token=t)
+    first = call("POST", "/api/v1/reviews", reviews(("prat:ac", 4), ("prat:hal", 3)), token=t)[1]
+    assert first == {"reviewed": 2, "correct": 2, "skipped": 0}
+    score = totals(call, t)[3]
+    again = call("POST", "/api/v1/reviews", reviews(("prat:ac", 4), ("prat:none", 4)), token=t)[1]
+    assert again == {"reviewed": 0, "correct": 0, "skipped": 2}  # no longer due; not a card of this learner
+    assert totals(call, t)[3] == score
+
+
+def test_review_replay_counts_once(call: Call) -> None:
+    t = make_token()
+    call("POST", "/api/v1/sessions", session(), token=t)
+    r = reviews(("prat:ac", 3))
+    first = call("POST", "/api/v1/reviews", r, token=t)[1]
+    score = totals(call, t)[3]
+    assert (
+        call("POST", "/api/v1/reviews", r, token=t)[1] == first == {"reviewed": 1, "correct": 1, "skipped": 0}
+    )
+    assert totals(call, t)[3] == score
+
+
+def test_review_batch_limit(call: Call) -> None:
+    t = make_token()
+    many = reviews(*[(f"c{i}", 3) for i in range(51)])
+    assert call("POST", "/api/v1/reviews", many, token=t)[0] == 400

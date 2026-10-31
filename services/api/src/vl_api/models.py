@@ -9,6 +9,11 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 LessonId = Annotated[str, Field(pattern=r"^[a-z0-9-]{1,40}/[a-z0-9-]{1,60}$")]
 ItemId = Annotated[str, Field(pattern=r"^[A-Za-z0-9_.:-]{1,80}$")]
 CardId = Annotated[str, Field(pattern=r"^[A-Za-z0-9_.:-]{1,80}$")]
+# Client-generated (crypto.randomUUID) once per save and reused on every retry of it: review #1.
+RequestId = Annotated[
+    str, Field(alias="requestId", pattern=r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
+]
+MAX_REVIEWS = 50  # per request: one transaction holds the cards + day, streak, leaderboard, request (≤ 100)
 
 
 def normalize_tz(v: str) -> str:
@@ -38,6 +43,7 @@ class SessionIn(Strict):
     completed: bool = False
     new_cards: list[CardId] = Field(default_factory=list, alias="newCards", max_length=60)
     tz: str = Field(default="UTC", max_length=64)
+    request_id: RequestId
 
     @field_validator("tz")
     @classmethod
@@ -56,8 +62,17 @@ class ReviewIn(Strict):
 
 
 class ReviewsIn(Strict):
-    items: list[ReviewIn] = Field(min_length=1, max_length=100)
+    items: list[ReviewIn] = Field(min_length=1, max_length=MAX_REVIEWS)
     tz: str = Field(default="UTC", max_length=64)
+    request_id: RequestId
+
+    @field_validator("items")
+    @classmethod
+    def _once_each(cls, v: list[ReviewIn]) -> list[ReviewIn]:
+        ids = [i.card_id for i in v]
+        if len(set(ids)) != len(ids):
+            raise ValueError("the same card appears more than once; each card is reviewed once per request")
+        return v
 
     @field_validator("tz")
     @classmethod

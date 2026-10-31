@@ -176,14 +176,17 @@ sequenceDiagram
   participant A as λ vl-api
   participant D as DynamoDB
   B->>B: learner answers N items, engine grades locally
-  B->>A: POST /api/v1/sessions {lessonId, attempts[], completed}
+  B->>A: POST /api/v1/sessions {lessonId, attempts[], completed, newCards, tz, requestId}
   A->>A: verify JWT · validate (Pydantic) · plausibility checks
-  A->>D: TransactWriteItems (≤ 6 items)
-  Note right of D: PROG#lesson (best, status)<br/>DAY#date (+counts)<br/>STREAK (current/longest)<br/>LB#week (+score, if opted in)<br/>STAT#date (+global counters)<br/>CARD#… created when lesson completed
-  A-->>B: {streak, dailyGoal, newCards, nextDue}
+  A->>D: REQ#requestId exists? → return the stored response (retry)
+  A->>D: TransactWriteItems (≤ 66 items, each guarded by what was read)
+  Note right of D: PROG#lesson (best, status; attempts = version)<br/>CARD#… new cards when completed<br/>DAY#date (+counts)<br/>STREAK (version)<br/>LB#week (score = read score) + ConditionCheck PROFILE (opt-in, pseudonym)<br/>REQ#requestId (response, ttl 7 d)
+  A->>D: STAT#date (+global counters, outside the transaction)
+  A-->>B: {score, best, status, firstCompletion, cardsAdded, streak, points}
 ```
 
-- **Batched writes**: one request per session, not per answer. Base table 10 WCU ⇒ ~5 transactional sessions/second sustained, ample for thousands of learners. Client keeps a retry queue (IndexedDB) for throttling or offline.
+- **Batched writes**: one request per session, not per answer. Transactions cost 2 WCU per item: a typical session is ~7 items (≈ 14 WCU, more on a first completion with new cards), absorbed by the 10 WCU table and its burst capacity at expected load.
+- **Exactly once** (external review #1, fixed 2026-10-31): the client generates `requestId` (UUID) per save and keeps the save, unchanged, in a per-tab outbox (`apps/web/src/lib/outbox.ts`, sessionStorage) until the API confirms it; retries (button, reload, next page) resend the same id. The API writes `REQ#{requestId}` in the same transaction as the changes, so a replay returns the first response and counts nothing again; the same id with a different body → **409** `request-id-reused`. Every written value derived from a read is conditional on that read; a cancelled transaction is recomputed (4 tries, then **503** `busy`, safe to retry). Outbox entries are dropped on success, on a permanent 4xx, after 24 h (< the 7-day REQ TTL) and on sign-out.
 - **Plausibility checks** (scoring is client-side): duration ≥ minimum per item, item IDs belong to the lesson, score ≤ items, monotonic timestamps.
 
 ### 4.3 Guest → account merge
@@ -191,7 +194,7 @@ sequenceDiagram
 
 ### 4.4 Reviews (spaced repetition, FSRS)
 - `GET /api/v1/reviews/due?limit=50` → **Query on LSI1** (`PK=USER#sub`, `LSI1SK ≤ DUE#now`).
-- `POST /api/v1/reviews {items:[{cardId, rating 1–4, ms}]}` → **py-fsrs** computes the next state and due date → `UpdateItem` per card, plus DAY/STREAK/LB.
+- `POST /api/v1/reviews {items:[{cardId, rating 1–4, ms}] (≤ 50, each card once), tz, requestId}` → **py-fsrs** computes the next state and due date → one transaction: an `Update` per card conditional on its previous `due`, plus DAY/STREAK/LB and `REQ#` (as for sessions). Cards that are not the learner's or not due (> now + 1 min) are skipped and counted in `skipped` (review #8). The client keeps ratings in a sessionStorage draft as they are made, so a reload never loses them.
 - Card **content is static** (built into the site as `cards/*.json`); the server stores only scheduling state.
 
 ### 4.5 Leaderboard (weekly, no XP)
@@ -226,7 +229,8 @@ sequenceDiagram
 | Lesson progress | `USER#{sub}` | `PROG#{lessonId}` | — | status, bestScore, attempts, completedAt |
 | SRS card | `USER#{sub}` | `CARD#{cardId}` | `LSI1SK=DUE#{iso}` | FSRS {stability, difficulty, state, reps, lapses, last, due} |
 | Day activity | `USER#{sub}` | `DAY#{yyyy-mm-dd}` | `ttl` 400 d | reviews, lessons, ms |
-| Streak | `USER#{sub}` | `STREAK` | — | current, longest, lastDate, tz |
+| Streak | `USER#{sub}` | `STREAK` | — | current, longest, lastDate, version |
+| Request record | `USER#{sub}` | `REQ#{requestId}` | `ttl` 7 d | kind, fingerprint (SHA-256 of the body), response (JSON), at |
 | Note | `USER#{sub}` | `NOTE#{lessonId}#{ulid}` | — | anchor, text, color |
 | Cert pointer | `USER#{sub}` | `CERT#{track}` | — | certId |
 | Leaderboard row | `LB#{yyyy-Www}` | `U#{sub}` | `GSI1PK=LB#{week}`, `GSI1SK={score:08d}#{sub}` (opted-in only) | pseudonym, score |
@@ -278,7 +282,7 @@ sequenceDiagram
 | PATCH | `/admin/comments/{id}` | admin | Hide / restore |
 | GET | `/admin/users` | admin | Paged directory |
 
-**Conventions**: errors use RFC 9457 `application/problem+json`; cursor pagination (`next` = opaque base64 of `LastEvaluatedKey`); `Idempotency-Key` header on `POST /sessions` and `/reviews` (Powertools idempotency, TTL 1 h).
+**Conventions**: errors use RFC 9457 `application/problem+json`; cursor pagination (`next` = opaque base64 of `LastEvaluatedKey`); `requestId` body field on `POST /sessions` and `/reviews` (own `REQ#` record written inside the same transaction, TTL 7 d — chosen over Powertools idempotency, whose record is written separately from the changes).
 
 ---
 

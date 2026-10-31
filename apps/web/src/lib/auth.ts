@@ -237,4 +237,5 @@ export async function signOut(): Promise<void> {
   await fetch("/api/v1/auth/logout", { method: "POST", credentials: "same-origin", ...(await signedBody("")) }).catch(() => {});
   store.set(null);
   store.flag(false);
+  (await import("./outbox")).clearOutbox(); // unsent saves belong to this account, not the next one in this tab
 }

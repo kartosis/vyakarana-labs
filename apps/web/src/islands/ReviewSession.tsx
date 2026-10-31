@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "preact/hooks";
 import { getConfig } from "../lib/config";
 import { maybeSignedIn } from "../lib/auth";
 import { api, ApiError, tz } from "../lib/api";
+import { enqueue, flush, pending } from "../lib/outbox";
 import { Rich } from "./rich";
 
 type Card = { front: string; back: string; lesson: string };
@@ -14,12 +15,41 @@ const RATINGS = [
   { value: 4, label: "Easy", hint: "instant" },
 ] as const;
 
+type Rating = { cardId: string; rating: number; ms: number };
+const DRAFT_KEY = "vl:review-draft"; // ratings made but not yet handed to the outbox (survive a reload)
+const BATCH = 50; // the API takes at most 50 cards per request
+
+const draft = {
+  get(): Rating[] {
+    try {
+      return JSON.parse(sessionStorage.getItem(DRAFT_KEY) || "[]") as Rating[];
+    } catch {
+      return [];
+    }
+  },
+  set(r: Rating[]) {
+    try {
+      if (r.length) sessionStorage.setItem(DRAFT_KEY, JSON.stringify(r));
+      else sessionStorage.removeItem(DRAFT_KEY);
+    } catch {}
+  },
+};
+
+/** Turns the draft into outbox entries (each with its own request id), then sends everything pending. */
+async function saveAll(): Promise<boolean> {
+  const rated = draft.get();
+  for (let k = 0; k < rated.length; k += BATCH) enqueue("/api/v1/reviews", { items: rated.slice(k, k + BATCH), tz: tz() });
+  draft.set([]);
+  await flush("/api/v1/reviews");
+  return pending("/api/v1/reviews").length === 0;
+}
+
 /** Spaced repetition: the server schedules each card with FSRS; this island only shows and rates. */
 export default function ReviewSession({ cards }: { cards: Record<string, Card> }) {
   const [state, setState] = useState<"loading" | "closed" | "guest" | "empty" | "front" | "back" | "saving" | "done" | "error">("loading");
   const [queue, setQueue] = useState<Due[]>([]);
   const [i, setI] = useState(0);
-  const [ratings, setRatings] = useState<Array<{ cardId: string; rating: number; ms: number }>>([]);
+  const [ratings, setRatings] = useState<Rating[]>([]);
   const [msg, setMsg] = useState("");
   const shownAt = useRef(0);
   const focusRef = useRef<HTMLButtonElement>(null);
@@ -30,6 +60,7 @@ export default function ReviewSession({ cards }: { cards: Record<string, Card> }
       if (!cfg.accounts) return setState("closed");
       if (!maybeSignedIn()) return setState("guest");
       try {
+        await saveAll(); // ratings left by a reload or a failed save first, so those cards are not offered again
         const r = await api<{ cards: Due[] }>("/api/v1/reviews/due?limit=40");
         const known = r.cards.filter((c) => cards[c.cardId]);
         setQueue(known);
@@ -47,20 +78,21 @@ export default function ReviewSession({ cards }: { cards: Record<string, Card> }
     const ms = Math.round(performance.now() - shownAt.current);
     const next = [...ratings, { cardId: queue[i]!.cardId, rating: value, ms }];
     setRatings(next);
+    draft.set([...draft.get(), next[next.length - 1]!]);
     if (i + 1 < queue.length) {
       setI(i + 1);
       setState("front");
       shownAt.current = performance.now();
       return;
     }
+    await save();
+  }
+
+  async function save() {
     setState("saving");
-    try {
-      await api("/api/v1/reviews", { method: "POST", body: { items: next, tz: tz() } });
-      setState("done");
-    } catch (e) {
-      setMsg(e instanceof ApiError ? e.message : "Could not save your reviews.");
-      setState("error");
-    }
+    if (await saveAll()) return setState("done");
+    setMsg("Your ratings are kept in this tab but could not be saved yet. Check your connection and try again.");
+    setState("error");
   }
 
   if (state === "loading") return <p class="review-note">Loading your reviews…</p>;
@@ -79,7 +111,15 @@ export default function ReviewSession({ cards }: { cards: Record<string, Card> }
       </p>
     );
   if (state === "saving") return <p class="review-note" role="status">Saving…</p>;
-  if (state === "error") return <p class="review-note" role="alert">{msg}</p>;
+  if (state === "error")
+    return (
+      <div class="review-note" role="alert">
+        <p>{msg}</p>
+        {ratings.length > 0 && (
+          <button class="btn" type="button" onClick={save}>Try again</button>
+        )}
+      </div>
+    );
   if (state === "done")
     return (
       <div class="review-note" role="status">

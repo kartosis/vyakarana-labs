@@ -17,7 +17,7 @@ from .auth import Principal, principal_from_headers
 from .config import settings
 from .errors import ApiError, bad_request, unauthorized
 from .models import MergeIn, ReviewsIn, SessionIn, SessionTokensIn, SettingsIn, normalize_tz
-from .repo import Repo
+from .repo import Contended, Repo, RequestIdReused
 
 logger = Logger(service="vl-api")
 tracer = Tracer(service="vl-api")
@@ -90,6 +90,24 @@ def cookie_value(name: str) -> str | None:
 @app.exception_handler(ApiError)  # type: ignore[untyped-decorator]  # Powertools' decorator is untyped
 def _api_error(e: ApiError) -> Response[str]:
     return e.response()
+
+
+@app.exception_handler(RequestIdReused)  # type: ignore[untyped-decorator]
+def _reused(_: RequestIdReused) -> Response[str]:
+    return ApiError(
+        409,
+        "request-id-reused",
+        "Request id already used",
+        "This request id was used for different data. Send a new id for new data.",
+    ).response()
+
+
+@app.exception_handler(Contended)  # type: ignore[untyped-decorator]
+def _contended(_: Contended) -> Response[str]:
+    r = ApiError(503, "busy", "Busy", "Your data changed while saving. Try again; nothing was counted twice.")
+    out = r.response()
+    out.headers["Retry-After"] = "1"
+    return out
 
 
 # ---------------------------------------------------------------- health
