@@ -13,7 +13,7 @@ import { pramanaLink } from "../lib/pramana";
 interface Props {
   id: string;
   /** heading level for the sūtra line */
-  level?: 2 | 3 | 4;
+  level?: 1 | 2 | 3 | 4;
   compact?: boolean;
 }
 const { id, level = 3, compact = false } = Astro.props;

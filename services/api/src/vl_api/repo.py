@@ -9,7 +9,7 @@ from __future__ import annotations
 from collections.abc import Iterable, Iterator
 from datetime import datetime, timedelta
 from decimal import Decimal
-from typing import Any
+from typing import Any, cast
 
 from boto3.dynamodb.conditions import Key
 from botocore.exceptions import ClientError
@@ -45,7 +45,7 @@ def _num(v: Any) -> Any:
 
 
 def _conditional_failed(e: ClientError) -> bool:
-    return e.response.get("Error", {}).get("Code") == "ConditionalCheckFailedException"
+    return bool(e.response.get("Error", {}).get("Code") == "ConditionalCheckFailedException")
 
 
 def pk(sub: str) -> str:
@@ -69,7 +69,7 @@ class Repo:
         return list(self._query_all(KeyConditionExpression=Key("PK").eq(pk(sub))))
 
     def get(self, key_pk: str, key_sk: str) -> Item | None:
-        return self.t.get_item(Key={"PK": key_pk, "SK": key_sk}).get("Item")
+        return cast("Item | None", self.t.get_item(Key={"PK": key_pk, "SK": key_sk}).get("Item"))
 
     # ------------------------------------------------------------ profile
     def profile(self, sub: str, now: datetime) -> Item:
@@ -118,7 +118,7 @@ class Repo:
             ExpressionAttributeValues=values,
             ReturnValues="ALL_NEW",
         )
-        return out["Attributes"]
+        return cast("Item", out["Attributes"])
 
     # ------------------------------------------------------------ progress
     def progress(self, sub: str, now: datetime, tz: str) -> dict[str, Any]:

@@ -87,7 +87,7 @@ def cookie_value(name: str) -> str | None:
     return None
 
 
-@app.exception_handler(ApiError)
+@app.exception_handler(ApiError)  # type: ignore[untyped-decorator]  # Powertools' decorator is untyped
 def _api_error(e: ApiError) -> Response[str]:
     return e.response()
 
@@ -207,8 +207,10 @@ def post_session() -> Response[str]:
 @app.get(f"{PREFIX}/reviews/due")
 def get_due() -> Response[str]:
     p = me()
-    limit = min(int(app.current_event.get_query_string_value("limit", "50") or 50), 100)
-    return ok({"cards": repo().due_cards(p.sub, domain.utcnow(), limit)})
+    raw = app.current_event.get_query_string_value("limit", "") or "50"
+    if not raw.isdigit() or not 1 <= int(raw) <= 100:
+        raise ApiError(400, "invalid-limit", "limit must be a whole number from 1 to 100")
+    return ok({"cards": repo().due_cards(p.sub, domain.utcnow(), int(raw))})
 
 
 @app.post(f"{PREFIX}/reviews")

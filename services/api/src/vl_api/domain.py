@@ -53,13 +53,13 @@ _scheduler = Scheduler()
 
 def new_card_state(now: datetime) -> dict[str, object]:
     card = Card(due=now)
-    return card.to_dict()
+    return dict(card.to_dict())
 
 
 def review(state: dict[str, object], rating: int, now: datetime, ms: int) -> dict[str, object]:
     card = Card.from_dict(state)  # type: ignore[arg-type]
     updated, _log = _scheduler.review_card(card, Rating(rating), review_datetime=now, review_duration=ms)
-    return updated.to_dict()
+    return dict(updated.to_dict())
 
 
 def utcnow() -> datetime:

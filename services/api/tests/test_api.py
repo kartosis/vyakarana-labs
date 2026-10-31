@@ -146,3 +146,16 @@ def test_export_and_delete(call: Call, aws: Any) -> None:
     assert status == 200 and body["deletedItems"] >= 5
     assert call("GET", "/api/v1/me/export", token=t)[1]["items"] == []
     assert call("GET", "/api/v1/leaderboard/current")[1]["rows"] == []
+
+
+def test_review_limit_is_validated(call: Call) -> None:
+    """External review #14: a bad limit was a 500 (ValueError) or reached DynamoDB as 0 / negative."""
+    t = make_token()
+    for bad in ("abc", "0", "-5", "101", "1.5", ""):
+        status, body, _ = call("GET", "/api/v1/reviews/due", token=t, query=f"limit={bad}")
+        if bad == "":
+            assert status == 200  # empty means the default
+        else:
+            assert status == 400, (bad, status, body)
+    for good in ("1", "50", "100"):
+        assert call("GET", "/api/v1/reviews/due", token=t, query=f"limit={good}")[0] == 200
