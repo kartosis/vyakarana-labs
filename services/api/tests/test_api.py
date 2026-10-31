@@ -1,8 +1,12 @@
 from __future__ import annotations
 
+from datetime import timedelta
 from typing import Any
 
+import pytest
+
 from conftest import Call, make_token
+from vl_api import domain
 
 
 def session(
@@ -84,15 +88,43 @@ def test_practice_flow_updates_progress_streak_cards_and_leaderboard(call: Call)
     assert res["headers"]["Cache-Control"].startswith("public")
 
 
-def test_leaderboard_opt_out_hides_learner(call: Call) -> None:
+def test_leaderboard_opt_out_and_rename_apply_at_once(call: Call, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Review #4. The old test posted another session after opting out, which hid that the row only
+    disappeared on the learner's next activity. Now: no activity after the change."""
     a, b = make_token("a"), make_token("b")
+    real = domain.utcnow
+    earlier = real() - timedelta(weeks=3)
+    monkeypatch.setattr(domain, "utcnow", lambda: earlier)
+    call("POST", "/api/v1/sessions", session(), token=b)  # b also practised three weeks ago
+    monkeypatch.setattr(domain, "utcnow", real)
     call("POST", "/api/v1/sessions", session(), token=a)
     call("POST", "/api/v1/sessions", session(), token=b)
-    assert len(call("GET", "/api/v1/leaderboard/current")[1]["rows"]) == 2
+    past = f"/api/v1/leaderboard/{domain.iso_week(domain.local_date(earlier, 'Asia/Kolkata'))}"
+    now = "/api/v1/leaderboard/current"
+
+    def names(path: str) -> list[str]:
+        return [r["pseudonym"] for r in call("GET", path)[1]["rows"]]
+
+    def scores(path: str) -> dict[str, int]:
+        return {r["pseudonym"]: r["score"] for r in call("GET", path)[1]["rows"]}
+
+    b_name = call("GET", "/api/v1/me", token=b)[1]["pseudonym"]
+    assert len(names(now)) == 2 and names(past) == [b_name]
+    b_score = scores(now)[b_name]
+
     call("PATCH", "/api/v1/me", {"lbOptIn": False}, token=b)
-    call("POST", "/api/v1/sessions", session(completed=False), token=b)
-    rows = call("GET", "/api/v1/leaderboard/current")[1]["rows"]
-    assert len(rows) == 1
+    assert b_name not in names(now) and len(names(now)) == 1
+    assert names(past) == []  # earlier weeks too
+
+    call("PATCH", "/api/v1/me", {"pseudonym": "Pāṇini's pupil"}, token=a)
+    assert names(now) == ["Pāṇini's pupil"]
+
+    call("PATCH", "/api/v1/me", {"lbOptIn": True}, token=b)  # opting back in restores the rows, score intact
+    assert set(names(now)) == {"Pāṇini's pupil", b_name} and scores(now)[b_name] == b_score
+    assert names(past) == [b_name]
+
+    call("PATCH", "/api/v1/me", {"dailyGoal": 20}, token=b)  # unrelated settings leave the rows alone
+    assert len(names(now)) == 2
 
 
 def test_implausibly_fast_sessions_are_refused(call: Call) -> None:

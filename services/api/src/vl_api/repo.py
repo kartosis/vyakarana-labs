@@ -48,6 +48,10 @@ def _conditional_failed(e: ClientError) -> bool:
     return bool(e.response.get("Error", {}).get("Code") == "ConditionalCheckFailedException")
 
 
+def _opted_in(prof: Item) -> bool:
+    return bool(prof.get("settings", {}).get("lbOptIn", True))
+
+
 def pk(sub: str) -> str:
     return f"USER#{sub}"
 
@@ -95,6 +99,7 @@ class Repo:
 
     def update_settings(self, sub: str, s: SettingsIn, now: datetime) -> Item:
         prof = self.profile(sub, now)
+        before = (_opted_in(prof), prof.get("pseudonym"))
         settings = dict(prof.get("settings", {}))
         for field, alias in (
             ("script", "script"),
@@ -118,7 +123,10 @@ class Repo:
             ExpressionAttributeValues=values,
             ReturnValues="ALL_NEW",
         )
-        return cast("Item", out["Attributes"])
+        new = cast("Item", out["Attributes"])
+        if (_opted_in(new), new.get("pseudonym")) != before:
+            self._sync_leaderboard_rows(sub, new, now)  # review #4: at once, not on the next activity
+        return new
 
     # ------------------------------------------------------------ progress
     def progress(self, sub: str, now: datetime, tz: str) -> dict[str, Any]:
@@ -375,9 +383,8 @@ class Repo:
             ReturnValues="UPDATED_NEW",
         )
         score = int(out["Attributes"]["score"])
-        opted_in = bool(prof.get("settings", {}).get("lbOptIn", True))
         key = {"PK": f"LB#{week}", "SK": f"U#{sub}"}
-        if opted_in:
+        if _opted_in(prof):
             self.t.update_item(
                 Key=key,
                 UpdateExpression="SET GSI1PK = :g, GSI1SK = :s",
@@ -385,6 +392,55 @@ class Repo:
             )
         else:
             self.t.update_item(Key=key, UpdateExpression="REMOVE GSI1PK, GSI1SK")
+
+    def _leaderboard_weeks(self, sub: str, now: datetime) -> set[str]:
+        """Weeks that can still hold a leaderboard row for this learner. Every leaderboard bump follows a DAY#
+        bump for the same local date, so the DAY# items within the row lifetime (plus slack for TTL lag and
+        time zones) cover them all."""
+        since = (now - timedelta(days=LB_TTL_DAYS + 14)).date().isoformat()
+        days = self._query_all(
+            KeyConditionExpression=Key("PK").eq(pk(sub)) & Key("SK").between(f"DAY#{since}", "DAY#9999"),
+            ProjectionExpression="SK",
+        )
+        return {domain.iso_week(datetime.fromisoformat(d["SK"][4:]).date()) for d in days}
+
+    def _sync_leaderboard_rows(self, sub: str, prof: Item, now: datetime) -> None:
+        """Bring the learner's leaderboard rows in line with the profile (pseudonym; listed iff opted in)."""
+        name = prof.get("pseudonym", "śiṣya")
+        listed = _opted_in(prof)
+        for week in sorted(self._leaderboard_weeks(sub, now)):
+            key = {"PK": f"LB#{week}", "SK": f"U#{sub}"}
+            # optimistic: the sort key embeds the score, which a session may change meanwhile
+            for _ in range(3):
+                row = self.t.get_item(Key=key, ConsistentRead=True).get("Item")
+                if not row:
+                    break
+                score = int(row.get("score", 0))
+                try:
+                    if listed:
+                        self.t.update_item(
+                            Key=key,
+                            UpdateExpression="SET pseudonym = :p, GSI1PK = :g, GSI1SK = :s",
+                            ConditionExpression="#score = :n",
+                            ExpressionAttributeNames={"#score": "score"},
+                            ExpressionAttributeValues={
+                                ":p": name,
+                                ":g": f"LB#{week}",
+                                ":s": f"{score:08d}#{sub}",
+                                ":n": score,
+                            },
+                        )
+                    else:
+                        self.t.update_item(
+                            Key=key,
+                            UpdateExpression="SET pseudonym = :p REMOVE GSI1PK, GSI1SK",
+                            ConditionExpression="attribute_exists(PK)",
+                            ExpressionAttributeValues={":p": name},
+                        )
+                    break
+                except ClientError as e:
+                    if not _conditional_failed(e):
+                        raise
 
     def _bump_stats(self, now: datetime, **counts: int) -> None:
         adds = {k: v for k, v in counts.items() if v}
