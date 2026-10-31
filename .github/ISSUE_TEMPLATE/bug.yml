@@ -1,0 +1,21 @@
+name: Something does not work
+description: A page, tool, sign-in or saving problem
+labels: ["bug"]
+body:
+  - type: input
+    id: where
+    attributes:
+      label: Page
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: What you did, what you expected, what happened
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and device
+      placeholder: Firefox 144 on Windows 11

@@ -1,0 +1,25 @@
+name: Grammar or text error
+description: A sūtra, form, translation, citation or explanation that looks wrong
+labels: ["content"]
+body:
+  - type: input
+    id: where
+    attributes:
+      label: Page
+      description: The link to the lesson, sūtra page or tool
+      placeholder: https://sanskrit.identifyragas.com/course/ac-sandhi/guna/
+    validations:
+      required: true
+  - type: textarea
+    id: shown
+    attributes:
+      label: What the page says
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you believe is right, and your source
+      description: Give the source (e.g. Laghusiddhāntakaumudī 27, Kāśikā on 6.1.87, Vākyapadīya 1.73) and quote it if you can.
+    validations:
+      required: true

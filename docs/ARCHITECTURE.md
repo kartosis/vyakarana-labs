@@ -522,7 +522,7 @@ infra/terraform/
 | **M6** | Certificates, Darśana track, content waves M3–M13, analytics | Feature-complete v1 |
 | **M7** | Hardening: a11y audit, performance, load sanity, docs, ADRs, README | **Launch** |
 
-## 16. Architecture decision records (to write in `docs/adr/`)
+## 16. Architecture decision records — written 2026-10-31: see [`docs/adr/`](adr/README.md) (0001–0008)
 - **ADR-0001** Static-first Astro with islands
 - **ADR-0002** CloudFront → Lambda Function URL (OAC) instead of API Gateway ($0)
 - **ADR-0003** Single-table DynamoDB, provisioned, LSI for due cards

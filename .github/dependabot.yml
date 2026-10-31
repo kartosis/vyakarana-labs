@@ -1,0 +1,36 @@
+# Weekly, grouped dependency updates (ROADMAP P2; QUALITY.md §6). Each update arrives as a PR that must pass CI.
+version: 2
+updates:
+  - package-ecosystem: npm # pnpm workspace (pnpm-lock.yaml)
+    directory: /
+    schedule: { interval: weekly, day: monday }
+    open-pull-requests-limit: 5
+    groups:
+      astro:
+        patterns: ["astro", "@astrojs/*"]
+      development:
+        dependency-type: development
+      production:
+        dependency-type: production
+
+  - package-ecosystem: uv # services/api (uv.lock)
+    directory: /services/api
+    schedule: { interval: weekly, day: monday }
+    open-pull-requests-limit: 3
+    groups:
+      python:
+        patterns: ["*"]
+
+  - package-ecosystem: github-actions
+    directories: ["/", "/.github/actions/*"]
+    schedule: { interval: weekly, day: monday }
+    groups:
+      actions:
+        patterns: ["*"]
+
+  - package-ecosystem: terraform
+    directories: ["/infra/terraform/bootstrap", "/infra/terraform/envs/*", "/infra/terraform/modules/*"]
+    schedule: { interval: weekly, day: monday }
+    groups:
+      terraform:
+        patterns: ["*"]

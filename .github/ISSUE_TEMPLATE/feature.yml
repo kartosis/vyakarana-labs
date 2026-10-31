@@ -1,0 +1,10 @@
+name: Suggestion
+description: A lesson, tool or feature you would like
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would help you learn, and why
+    validations:
+      required: true

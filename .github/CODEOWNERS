@@ -1,0 +1,11 @@
+# Every change needs the owner's review once branch protection requires code-owner review (ROADMAP P2).
+# Security-sensitive paths are listed explicitly so they stay owned if the default line ever changes.
+*                                  @kartosis
+/infra/                            @kartosis
+/.github/                          @kartosis
+/scripts/check-workflows.mjs       @kartosis
+/services/api/src/vl_api/auth.py   @kartosis
+/services/api/src/vl_api/app.py    @kartosis
+/services/api/src/vl_api/repo.py   @kartosis
+/apps/web/src/lib/auth.ts          @kartosis
+/apps/web/src/lib/outbox.ts        @kartosis

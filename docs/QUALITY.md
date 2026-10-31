@@ -415,26 +415,27 @@ Alarms (≤ 10 free): API 5xx, Lambda errors/throttles, DynamoDB throttles, Clou
 | Repo | Branch protection, required checks | ☐ | `main` unprotected (API: 404) |
 | Repo | LICENSE, SECURITY.md, CODEOWNERS, PR/issue templates | ☐ | |
 | Repo | Dependabot, CodeQL, secret scanning + push protection | ☐ | public repo, all free |
-| CI | Engine typecheck + tests | ✅ | 338 tests |
+| CI | Engine typecheck + tests | ✅ | 342 tests |
 | CI | Site build, typecheck (tsc), CSP budget | ✅ | `astro check` missing (🔶) |
 | CI | ESLint/Prettier | ☐ | |
-| CI | axe (46 pages × 2 themes) | 🔶 | **currently failing** after M6 |
-| CI | Account e2e (stubbed Cognito, prod CSP) | ✅ | plain scripts → migrate to `@playwright/test` |
-| CI | Derivation e2e | 🔶 | committed, not yet passed |
+| CI | axe (46 pages × 2 themes) | ✅ | violations reported as `::error` annotations |
+| CI | Account e2e (stubbed Cognito, prod CSP) | ✅ | `accounts.cjs` + `accounts-edge.cjs` (review #5, #6, #18, deletion errors) + `integrity.cjs` (review #1, #9: retries, reloads, outbox); plain scripts → migrate to `@playwright/test` |
+| CI | Derivation e2e | ✅ | rāma, ramā, gaurī, lakṣmī under the production CSP |
 | CI | Cross-browser / mobile E2E, visual regression, Lighthouse, size budgets | ☐ | |
-| CI | API ruff + pytest (moto) | ✅ | 22 tests; mypy ☐; Windows ☐ |
+| CI | API ruff + strict mypy + pytest (moto) | ✅ | 35 tests incl. fault injection (lost response, failure before commit, concurrent change); Ubuntu and Windows |
 | CI | Contract tests / Schemathesis | ☐ | `openapi.yaml` planned |
 | CI | Content checks (sūtras, quotes) | 🔶 | run locally only; vendor dataset extract |
 | CI | Exercise checker | ✅ | |
-| CI | Terraform validate; PR plan | 🔶 | plan step lacks pipefail and Lambda zip (review #16, #17) |
-| CI | IaC scanning, policy-as-code, Access Analyzer | ☐ | |
+| CI | Terraform validate; PR plan | ✅ | pipefail on every step, Lambda built before plan (review #16, #17); `rewrite.test.mjs` for the CloudFront function |
+| CI | Workflow policy (`scripts/check-workflows.mjs` W1–W6) | ✅ | pipefail everywhere, permissions declared, Lambda before plan, deploy gated on green ci; actionlint/shellcheck still ☐ (P2) |
+| CI | IaC scanning, policy-as-code, Access Analyzer | 🔶 | policy-as-code ✅ (`infra/terraform/tests/test_iam_policies.py`); Checkov/Trivy and Access Analyzer ☐ (Access Analyzer needs AWS credentials: P4) |
 | CI | SAST/SCA/secrets/SBOM/provenance | ☐ | |
 | CI | Actions pinned by SHA, minimal permissions | 🔶 | `permissions: contents: read` at top; actions on tags |
 | CD | Staging environment | ☐ | |
-| CD | Build-once promotion, approvals | ☐ | deploy.yml rebuilds; not gated on CI |
+| CD | Build-once promotion, approvals | 🔶 | deploy runs only after a green ci run on main and deploys that commit; still rebuilds (build-once ☐); approvals = `prod` environment reviewers (owner) |
 | CD | WASM build (vidyut) | ✅ | cached composite action |
 | Security | Threat model, ASVS mapping, pentest | ☐ | |
-| Security | Review findings #1–#19 | ☐ | PROGRESS §10 |
+| Security | Review findings #1–#19 | 🔶 | all 19 + P3s fixed (exit review by a fresh agent pending) — PROGRESS §10 |
 | Ops | Alarms, Budgets | 🔶 | in Terraform, never deployed |
 | Ops | SLOs, synthetic checks, runbooks, backups/DR | ☐ | |
 | UAT | Personas, scenarios, beta | ☐ | |
