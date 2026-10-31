@@ -17,10 +17,12 @@ function handler(event) {
       var v = request.querystring[k];
       qs.push(encodeURIComponent(k) + (v.value ? "=" + encodeURIComponent(v.value) : ""));
     }
+    // Collapse leading slashes and backslashes: "//host/x" or "/\\host/x" in Location would leave the site.
+    var path = "/" + uri.replace(/^[\/\\]+/, "");
     return {
       statusCode: 301,
       statusDescription: "Moved Permanently",
-      headers: { location: { value: uri + "/" + (qs.length ? "?" + qs.join("&") : "") } },
+      headers: { location: { value: path + "/" + (qs.length ? "?" + qs.join("&") : "") } },
     };
   }
   return request;

@@ -28,6 +28,8 @@ jobs:
         run: pnpm --filter @vl/engine check
       - name: Engine — tests
         run: pnpm --filter @vl/engine test
+      - name: CloudFront function — tests
+        run: node --test infra/terraform/modules/site/rewrite.test.mjs
       - name: vidyut-prakriya WebAssembly (derivation stepper)
         uses: ./.github/actions/vidyut
       - name: Site — build (validates content schemas, sūtra references, MDX)
@@ -76,6 +78,9 @@ jobs:
       - name: Account flows with stubbed Cognito and API, production CSP enforced
         working-directory: apps/web
         run: node e2e/accounts.cjs /tmp/csp.json
+      - name: Account edge cases from the external review (#5, #6, #18, deletion errors), production CSP enforced
+        working-directory: apps/web
+        run: node e2e/accounts-edge.cjs /tmp/csp.json
       - name: Derivation tool (vidyut-prakriyā WebAssembly), production CSP enforced
         working-directory: apps/web
         run: node e2e/prakriya.cjs /tmp/csp.json

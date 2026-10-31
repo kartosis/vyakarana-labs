@@ -1,7 +1,7 @@
 /** @jsxImportSource preact */
 import { useEffect, useId, useRef, useState } from "preact/hooks";
 import { getConfig } from "../lib/config";
-import { AuthError, confirmCode, requestCode, type Pending } from "../lib/auth";
+import { AuthError, confirmCode, loadPending, requestCode, safeNext, savePending, type Pending } from "../lib/auth";
 import { api } from "../lib/api";
 
 type Step = "loading" | "closed" | "email" | "code" | "done";
@@ -25,20 +25,30 @@ export default function SignIn() {
   const codeRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    getConfig().then((c) => setStep(c.accounts ? "email" : "closed"));
+    getConfig().then((c) => {
+      if (!c.accounts) return setStep("closed");
+      // a reload in the middle of signing in: carry on where the learner was (external review #5)
+      const p = loadPending();
+      if (p) {
+        setPending(p);
+        setEmail(p.email);
+        setStep("code");
+      } else setStep("email");
+    });
   }, []);
   useEffect(() => {
     if (step === "code") codeRef.current?.focus();
   }, [step]);
 
-  const next = () => new URLSearchParams(location.search).get("next") ?? "/me/";
 
   async function onEmail(e: Event) {
     e.preventDefault();
     setBusy(true);
     setError(null);
     try {
-      setPending(await requestCode(email));
+      const p = await requestCode(email);
+      setPending(p);
+      savePending(p);
       setStep("code");
     } catch (err) {
       setError(err instanceof AuthError ? err.message : "Could not send a code. Try again.");
@@ -54,10 +64,10 @@ export default function SignIn() {
     setError(null);
     try {
       await confirmCode(pending, code);
+      savePending(null);
       await mergeGuestProgress();
       setStep("done");
-      const target = next();
-      location.assign(target.startsWith("/") && !target.startsWith("//") ? target : "/me/");
+      location.assign(safeNext(location.search, location.origin));
     } catch (err) {
       setError(err instanceof Error ? err.message : "That did not work. Try again.");
     } finally {
@@ -117,7 +127,29 @@ export default function SignIn() {
           <button
             type="button"
             class="btn btn--quiet"
+            disabled={busy}
+            onClick={async () => {
+              setBusy(true);
+              setError(null);
+              try {
+                const p = await requestCode(pending.email);
+                setPending(p);
+                savePending(p);
+                setCode("");
+              } catch (err) {
+                setError(err instanceof AuthError ? err.message : "Could not send a code. Try again.");
+              } finally {
+                setBusy(false);
+              }
+            }}
+          >
+            Send a new code
+          </button>
+          <button
+            type="button"
+            class="btn btn--quiet"
             onClick={() => {
+              savePending(null);
               setStep("email");
               setCode("");
               setError(null);

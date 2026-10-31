@@ -60,8 +60,19 @@ export default function Dashboard({ lessons }: { lessons: Lesson[] }) {
     }
   }
 
+  const [dataErr, setDataErr] = useState("");
+  const [delErr, setDelErr] = useState("");
+  const [deleting, setDeleting] = useState(false);
+
   async function exportData() {
-    const data = await api("/api/v1/me/export");
+    setDataErr("");
+    let data: unknown;
+    try {
+      data = await api("/api/v1/me/export");
+    } catch {
+      setDataErr("Your data could not be downloaded just now. Try again in a minute.");
+      return;
+    }
     const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: "application/json" }));
     const a = Object.assign(document.createElement("a"), { href: url, download: "vyakarana-labs-data.json" });
     a.click();
@@ -69,7 +80,16 @@ export default function Dashboard({ lessons }: { lessons: Lesson[] }) {
   }
 
   async function deleteAccount() {
-    await api("/api/v1/me", { method: "DELETE" });
+    setDelErr("");
+    setDeleting(true);
+    try {
+      await api("/api/v1/me", { method: "DELETE" });
+    } catch {
+      // nothing was deleted: say so, and leave the dialog open (external review, P3)
+      setDelErr("Your account was not deleted: the server could not be reached. Try again in a minute.");
+      setDeleting(false);
+      return;
+    }
     await signOut();
     location.assign("/");
   }
@@ -139,12 +159,16 @@ export default function Dashboard({ lessons }: { lessons: Lesson[] }) {
           <button class="btn btn--quiet" type="button" onClick={async () => { await signOut(); location.assign("/"); }}>Sign out</button>
           <button class="btn btn--quiet dash-danger" type="button" onClick={() => dialog.current?.showModal()}>Delete account</button>
         </p>
+        {dataErr && <p class="dash-error" role="alert">{dataErr}</p>}
         <dialog ref={dialog} class="dash-dialog" aria-labelledby={`${uid}-dd`}>
           <h3 id={`${uid}-dd`}>Delete your account?</h3>
           <p>This removes your progress, reviews, streak and leaderboard entries. It cannot be undone.</p>
+          {delErr && <p class="dash-error" role="alert">{delErr}</p>}
           <form method="dialog" class="dash-actions">
             <button class="btn btn--quiet" value="cancel">Keep my account</button>
-            <button class="btn dash-danger" type="button" onClick={deleteAccount}>Delete everything</button>
+            <button class="btn dash-danger" type="button" onClick={deleteAccount} disabled={deleting}>
+              {deleting ? "Deleting…" : "Delete everything"}
+            </button>
           </form>
         </dialog>
       </section>

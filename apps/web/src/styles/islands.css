@@ -288,6 +288,7 @@
   .dash-form .btn { justify-self: start; margin-block-start: var(--p-space-3); }
   .dash-saved { margin: 0; color: var(--s-color-text-soft); min-block-size: 1.5em; }
   .dash-danger { color: var(--s-color-rubric); border-color: var(--s-color-rubric); }
+  .dash-error { margin: var(--p-space-2) 0 0; color: var(--s-color-rubric); font-weight: 600; }
   .btn.dash-danger:not(.btn--quiet) { background: var(--s-color-rubric); color: var(--s-color-inverse-text); }
   .dash-dialog {
     max-inline-size: min(32rem, calc(100vw - 2rem));

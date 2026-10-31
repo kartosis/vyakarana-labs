@@ -10,6 +10,9 @@ import { getConfig } from "./config";
 
 const SESSION_KEY = "vl:session";
 const FLAG_KEY = "vl:signedIn";
+const PENDING_KEY = "vl:pending";
+/** How long a half-finished sign-in can be resumed after a reload (Cognito's own limits still apply). */
+const PENDING_TTL_MS = 15 * 60 * 1000;
 
 interface Stored {
   accessToken: string;
@@ -120,12 +123,60 @@ export async function requestCode(emailRaw: string): Promise<Pending> {
   } catch (e) {
     if (!(e instanceof AuthError) || e.code !== "UsernameExistsException") throw e;
   }
-  const r = await cognito<AuthResult>("InitiateAuth", {
-    AuthFlow: "USER_AUTH",
-    AuthParameters: { USERNAME: email, PREFERRED_CHALLENGE: "EMAIL_OTP" },
-  });
+  let r: AuthResult;
+  try {
+    r = await cognito<AuthResult>("InitiateAuth", {
+      AuthFlow: "USER_AUTH",
+      AuthParameters: { USERNAME: email, PREFERRED_CHALLENGE: "EMAIL_OTP" },
+    });
+  } catch (e) {
+    // A sign-up that was started but never confirmed (the page was closed before the code was entered): send the
+    // confirmation code again and let the learner finish signing up (external review #5).
+    if (e instanceof AuthError && e.code === "UserNotConfirmedException") {
+      await cognito("ResendConfirmationCode", { Username: email });
+      return { kind: "signup", email };
+    }
+    throw e;
+  }
   if (r.ChallengeName !== "EMAIL_OTP" || !r.Session) throw new AuthError("Unexpected", "Unexpected sign-in step.");
   return { kind: "signin", email, session: r.Session };
+}
+
+/** Keep a half-finished sign-in for this tab, so a reload can still finish it. */
+export function savePending(p: Pending | null): void {
+  try {
+    if (p) sessionStorage.setItem(PENDING_KEY, JSON.stringify({ p, at: Date.now() }));
+    else sessionStorage.removeItem(PENDING_KEY);
+  } catch {}
+}
+
+export function loadPending(): Pending | null {
+  try {
+    const raw = sessionStorage.getItem(PENDING_KEY);
+    if (!raw) return null;
+    const { p, at } = JSON.parse(raw) as { p: Pending; at: number };
+    if (Date.now() - at > PENDING_TTL_MS) {
+      sessionStorage.removeItem(PENDING_KEY);
+      return null;
+    }
+    return p;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Where to go after signing in: the `next` parameter if it resolves to this site, else the dashboard.
+ * Parsed with URL, so tricks like "/\\evil.example" (which browsers read as https://evil.example/) are refused
+ * (external review #6).
+ */
+export function safeNext(search: string, origin: string): string {
+  const raw = new URLSearchParams(search).get("next") ?? "/me/";
+  try {
+    const u = new URL(raw, origin);
+    if (u.origin === origin) return u.pathname + u.search + u.hash;
+  } catch {}
+  return "/me/";
 }
 
 /** Step 2: exchange the emailed code for tokens, then hand the refresh token to the API cookie. */
@@ -161,10 +212,19 @@ export async function accessToken(): Promise<string | null> {
   if (s && s.expiresAt > Date.now()) return s.accessToken;
   if (!store.flag()) return null;
   const { signedBody } = await import("./api");
-  const res = await fetch("/api/v1/auth/refresh", { method: "POST", credentials: "same-origin", ...(await signedBody("")) });
+  let res: Response;
+  try {
+    res = await fetch("/api/v1/auth/refresh", { method: "POST", credentials: "same-origin", ...(await signedBody("")) });
+  } catch {
+    return null; // offline: stay signed in, try again later
+  }
   if (!res.ok) {
-    store.flag(false);
-    store.set(null);
+    // Only a rejected refresh token ends the session; an outage (5xx, 429) keeps it for the next attempt
+    // (external review #18).
+    if (res.status >= 400 && res.status < 500 && res.status !== 429) {
+      store.flag(false);
+      store.set(null);
+    }
     return null;
   }
   const t = (await res.json()) as { accessToken: string; expiresIn: number };
