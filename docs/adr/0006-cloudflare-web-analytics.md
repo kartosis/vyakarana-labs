@@ -14,3 +14,4 @@ Use **Cloudflare Web Analytics** (cookieless, aggregate, free). The repository v
 
 - One switch; workflow rule W6 (`scripts/check-workflows.mjs`) keeps the two uses on the same variable.
 - The token is validated at build (32 hex characters), so a bad value fails the build instead of reaching the markup.
+- **Trade-off (P1 exit review X15):** the beacon is a third-party script on our origin, so it could read anything in that origin's storage, including the short-lived access token in sessionStorage. Accepted because the token lives at most an hour, the refresh token stays in an HttpOnly cookie no script can read, the CSP allows only Cloudflare's beacon host, and the switch is off by default. Subresource Integrity is not possible (Cloudflare updates the file in place). Revisit if the beacon is ever loaded on sign-in pages from a less trusted host.

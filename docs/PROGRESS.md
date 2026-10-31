@@ -302,21 +302,21 @@ Reviewed `git diff 3d1c082..d08eeab`; API 38, engine 342, IAM 41 tests passed fo
 
 | X | Sev | Finding | Fix | Status |
 |---|---|---|---|---|
-| X1 | P2 | `safeNext` returns `u.pathname`; `/.//evil.example`, `/a/..//evil.example`, `/%2e//evil.example`, `https://site//evil.example` normalise to `//evil.example` → off-site (#6 still open) | reject/collapse a pathname starting `//` or `/\`; e2e cases | open |
-| X2 | P2 | after `DELETE /me`, a still-valid access token (≤ 60 min, e.g. another tab's outbox) recreates PROFILE + data + a public leaderboard row; undeletable (Cognito user gone) | tombstone `DELETED` written first; `profile()` refuses (401) when tombstoned; read-mark writes go through `profile()`; every transaction checks PROFILE exists; Cognito `UserNotFound` on delete = success (X13) | open |
-| X3 | P2 | browser data crosses accounts: (a) lesson page mirrors the whole account list into guest `vl:read`, merged into the next account on sign-in; (b) `vl:review-draft` survives sign-out → sent with the next user's token; (c) outbox cleared only by explicit sign-out in the same tab, entries have no owner | owner `sub` on outbox entries and the draft (send only matching); clear outbox, draft and the account mirror whenever the signed-in flag goes false; account mirror under its own key; guest `vl:read` cleared after a successful merge | open |
-| X4 | P2 | opt-out whose row sync fails is never repaired (sync only when the value changed) | sync whenever the request carries `lbOptIn` or `pseudonym` (idempotent) | open |
-| X5 | P2 | deploy role trusts `environment:prod`, and the environment has no branch policy → any branch's workflow can deploy | DEPLOY.md: create `prod` with a custom deployment-branch policy = `main` only; owner action U8b | open |
-| X6 | P3 | deploy role wildcards: `lambda:*`/`s3:*` on `*` (non-project functions, state bucket history), `vl-app-*` role could trust an external principal | deny state-bucket version deletes / bucket config changes now; scope resources to `vl-*` in P5 (needs a real apply to verify) | open |
-| X7 | P3 | plan role (ReadOnlyAccess, any branch) can read DynamoDB items and Cognito users (PII) | explicit deny of data-plane reads (DynamoDB items, Cognito users, log events) | open |
-| X8 | P3 | `limit` uses `isdigit()`: `²` or 5000 digits → 502 | `re.fullmatch(r"[0-9]{1,3}")` | open |
-| X9 | P3 | outbox drops any 4xx; refresh signs out on any 4xx → CloudFront/OAC 403/404 loses saves or signs out | allowlists: drop on 400/409/422; sign out on 400/401 | open |
-| X10 | P3 | re-running an old green `ci` run redeploys an old commit | gate: SHA must be the tip of `main` (W4 check) | open |
-| X11 | P3 | `RAJ_KVIP` too narrow: sam + rājñī (samrājñī), sam + rāṭtsu now get anusvāra | add rājñ- forms and rāṭtsu; tests | open |
-| X12 | P3 | quick mark/unmark sends two entries at once; server may apply them in reverse | coalesce per lesson (latest wins) and send in order | open |
-| X13 | P3 | Dashboard says "nothing was deleted" on any failure; lost-response retry fails forever (UserNotFound → 502) | server treats UserNotFound as success; softer message | open |
-| X14 | P3 | `review.astro` embeds cards of every exercise file regardless of module status | filter by open modules; extend check-published | open |
-| X15 | P3 | `_once` retries every cancellation reason at once, no backoff; beacon can read the origin's sessionStorage token (trade-off) | retry only conflict/condition/throttle reasons with jittered backoff; record the beacon trade-off in ADR-0006 | open |
+| X1 | P2 | `safeNext` returns `u.pathname`; `/.//evil.example`, `/a/..//evil.example`, `/%2e//evil.example`, `https://site//evil.example` normalise to `//evil.example` → off-site (#6 still open) | reject/collapse a pathname starting `//` or `/\`; e2e cases | ✅ c8f74e0 |
+| X2 | P2 | after `DELETE /me`, a still-valid access token (≤ 60 min, e.g. another tab's outbox) recreates PROFILE + data + a public leaderboard row; undeletable (Cognito user gone) | tombstone `DELETED` written first; `profile()` refuses (401) when tombstoned; read-mark writes go through `profile()`; every transaction checks PROFILE exists; Cognito `UserNotFound` on delete = success (X13) | ✅ e7e7d3b |
+| X3 | P2 | browser data crosses accounts: (a) lesson page mirrors the whole account list into guest `vl:read`, merged into the next account on sign-in; (b) `vl:review-draft` survives sign-out → sent with the next user's token; (c) outbox cleared only by explicit sign-out in the same tab, entries have no owner | owner `sub` on outbox entries and the draft (send only matching); clear outbox, draft and the account mirror whenever the signed-in flag goes false; account mirror under its own key; guest `vl:read` cleared after a successful merge | ✅ c8f74e0 |
+| X4 | P2 | opt-out whose row sync fails is never repaired (sync only when the value changed) | sync whenever the request carries `lbOptIn` or `pseudonym` (idempotent) | ✅ e7e7d3b |
+| X5 | P2 | deploy role trusts `environment:prod`, and the environment has no branch policy → any branch's workflow can deploy | DEPLOY.md: create `prod` with a custom deployment-branch policy = `main` only; owner action U8b | ✅ f213017 (owner: U6b) |
+| X6 | P3 | deploy role wildcards: `lambda:*`/`s3:*` on `*` (non-project functions, state bucket history), `vl-app-*` role could trust an external principal | deny state-bucket version deletes / bucket config changes now; scope resources to `vl-*` in P5 (needs a real apply to verify) | ✅ f213017 (state bucket; resource scoping → P5) |
+| X7 | P3 | plan role (ReadOnlyAccess, any branch) can read DynamoDB items and Cognito users (PII) | explicit deny of data-plane reads (DynamoDB items, Cognito users, log events) | ✅ f213017 |
+| X8 | P3 | `limit` uses `isdigit()`: `²` or 5000 digits → 502 | `re.fullmatch(r"[0-9]{1,3}")` | ✅ e7e7d3b |
+| X9 | P3 | outbox drops any 4xx; refresh signs out on any 4xx → CloudFront/OAC 403/404 loses saves or signs out | allowlists: drop on 400/409/422; sign out on 400/401 | ✅ c8f74e0 |
+| X10 | P3 | re-running an old green `ci` run redeploys an old commit | gate: SHA must be the tip of `main` (W4 check) | ✅ f213017 |
+| X11 | P3 | `RAJ_KVIP` too narrow: sam + rājñī (samrājñī), sam + rāṭtsu now get anusvāra | add rājñ- forms and rāṭtsu; tests | ✅ f8aa191 |
+| X12 | P3 | quick mark/unmark sends two entries at once; server may apply them in reverse | coalesce per lesson (latest wins) and send in order | ✅ c8f74e0 |
+| X13 | P3 | Dashboard says "nothing was deleted" on any failure; lost-response retry fails forever (UserNotFound → 502) | server treats UserNotFound as success; softer message | ✅ e7e7d3b |
+| X14 | P3 | `review.astro` embeds cards of every exercise file regardless of module status | filter by open modules; extend check-published | ✅ f8aa191 |
+| X15 | P3 | `_once` retries every cancellation reason at once, no backoff; beacon can read the origin's sessionStorage token (trade-off) | retry only conflict/condition/throttle reasons with jittered backoff; record the beacon trade-off in ADR-0006 | ✅ e7e7d3b (+ beacon trade-off recorded in ADR-0006) |
 
 ## 10c. Derivation tool review (independent agent, 2026-10-31) — triage
 
