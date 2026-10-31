@@ -29,7 +29,7 @@
 **▶▶ RESUME HERE (S3-resume, 2026-10-31)** — plan = **`docs/ROADMAP.md`**, standard = **`docs/QUALITY.md`**. P0 is done (CI green, run 41149389213). P1 = the external review fixes (§10 has a Status column). Each group: reproduce with a failing test → fix → CI green → §10 status + log → checkpoint.
 1. **Done in P1 so far**: g engine (8a3d1ea), h publishing (43c7428), f + j API/dev env (ed9c8dd), d auth/UX + rewrite.js (f30f8c8, CI green run 41149889582), i CI/IaC (1215a62), c leaderboard privacy (dca7176, CI green; deploy now fires via `workflow_run` and is skipped while the AWS role var is unset), **b session integrity (5e6458c)**: `requestId` + `REQ#` record inside one guarded `TransactWriteItems`, 409 on reuse, 503 `busy` after 4 cancelled tries, reviews ≤ 50 / each card once / only due (else `skipped`), client outbox (`lib/outbox.ts`) + review draft; 35 API tests, `e2e/integrity.cjs` 15 checks.
 2. **Also done**: a IAM (eef20e9: `vl-app-*` roles + `vl-app-boundary` permissions boundary required, PassRole only to Lambda, explicit denies on `vl-github-*` and on boundary edits/removal, plan role state read-only; **API role gained `dynamodb:ConditionCheckItem`, which P1-b's transactions need — would have failed every save in production**; `infra/terraform/tests/test_iam_policies.py` 41 checks from the HCL, in CI), e read marks (2c71cf4: `POST /progress/read`, `GET /progress/lessons`, lesson page syncs through the outbox; integrity.cjs F, two browsers), k analytics (d08eeab: Cloudflare beacon from `PUBLIC_CF_BEACON_TOKEN`, validated, same variable as Terraform's CSP switch — workflow rule W6; privacy page truthful either way; `e2e/beacon.cjs`).
-3. **▶ Next: P1 exit** — independent reviewer agent over `git diff 3d1c082..HEAD` (everything since the review was received) for P1/P2 defects; fix findings with tests; then ROADMAP **P2** (repo foundations: branch protection + required checks, LICENSE/SECURITY/CODEOWNERS, Dependabot/CodeQL/secret scanning, ESLint/Prettier/`astro check`, actionlint/shellcheck/tflint in CI (as CI steps — this sandbox may not download binaries), SHA-pinned actions).
+3. **▶ Next: P1 exit fixes** — the independent exit review found real defects (§10b X1–X15); the Derivation tool review (§10c D1–D12). Fix X1–X4 first (security/data), then X5–X15, then D1–D12, each test-first; then ROADMAP **P2** (drafts already committed: Dependabot, CODEOWNERS, templates, ADRs).
 4. After P2: M6 polish (reviewer agent on the Derivation tool) → LSK ch 5 Ajanta-puṃliṅga (LSK 115–214) using the stepper.
 
 - ✅ pnpm monorepo root + `@vl/engine` (lipi: IAST/Deva/SLP1/HK; varṇa: Śivasūtras, 1.1.71 pratyāhāra incl. ṇ ambiguity, savarṇa 1.1.9–10, guṇa/vṛddhi, SK articulation table) — 81 Vitest tests green.
@@ -294,6 +294,42 @@ Verdicts below were checked by reading the **current** code on 2026-10-30 (S3), 
 | cond. | — | `rewrite.js` reflects `//example.org/course` into Location | Conditional (depends on CloudFront keeping `//`) | Collapse leading slashes / refuse URIs starting with `//` before redirecting | ✅ f30f8c8 |
 
 **Assessment**: the review is careful and accurate; its severities are right. #1 and #2 must be fixed before any production deploy; #3, #4 (privacy), #6 (open redirect) and the CI gaps (#16, #17, deploy gating) should go with them. The grammar-engine items (#10–#12) are real and quick. The review's validation results (dependency audits clean, link check clean, 128 sūtras and 65 quotations matched, axe clean) are consistent with our own checks.
+
+## 10b. P1 exit review (independent agent, 2026-10-31) — triage
+
+Reviewed `git diff 3d1c082..d08eeab`; API 38, engine 342, IAM 41 tests passed for it. Verdict: most fixes real; **#6 not closed; deleted accounts can come back; browser data crosses accounts**. Fix order: X1–X4 (P2) → X5–X15 → then the Derivation tool review (§10c).
+
+| X | Sev | Finding | Fix | Status |
+|---|---|---|---|---|
+| X1 | P2 | `safeNext` returns `u.pathname`; `/.//evil.example`, `/a/..//evil.example`, `/%2e//evil.example`, `https://site//evil.example` normalise to `//evil.example` → off-site (#6 still open) | reject/collapse a pathname starting `//` or `/\`; e2e cases | open |
+| X2 | P2 | after `DELETE /me`, a still-valid access token (≤ 60 min, e.g. another tab's outbox) recreates PROFILE + data + a public leaderboard row; undeletable (Cognito user gone) | tombstone `DELETED` written first; `profile()` refuses (401) when tombstoned; read-mark writes go through `profile()`; every transaction checks PROFILE exists; Cognito `UserNotFound` on delete = success (X13) | open |
+| X3 | P2 | browser data crosses accounts: (a) lesson page mirrors the whole account list into guest `vl:read`, merged into the next account on sign-in; (b) `vl:review-draft` survives sign-out → sent with the next user's token; (c) outbox cleared only by explicit sign-out in the same tab, entries have no owner | owner `sub` on outbox entries and the draft (send only matching); clear outbox, draft and the account mirror whenever the signed-in flag goes false; account mirror under its own key; guest `vl:read` cleared after a successful merge | open |
+| X4 | P2 | opt-out whose row sync fails is never repaired (sync only when the value changed) | sync whenever the request carries `lbOptIn` or `pseudonym` (idempotent) | open |
+| X5 | P2 | deploy role trusts `environment:prod`, and the environment has no branch policy → any branch's workflow can deploy | DEPLOY.md: create `prod` with a custom deployment-branch policy = `main` only; owner action U8b | open |
+| X6 | P3 | deploy role wildcards: `lambda:*`/`s3:*` on `*` (non-project functions, state bucket history), `vl-app-*` role could trust an external principal | deny state-bucket version deletes / bucket config changes now; scope resources to `vl-*` in P5 (needs a real apply to verify) | open |
+| X7 | P3 | plan role (ReadOnlyAccess, any branch) can read DynamoDB items and Cognito users (PII) | explicit deny of data-plane reads (DynamoDB items, Cognito users, log events) | open |
+| X8 | P3 | `limit` uses `isdigit()`: `²` or 5000 digits → 502 | `re.fullmatch(r"[0-9]{1,3}")` | open |
+| X9 | P3 | outbox drops any 4xx; refresh signs out on any 4xx → CloudFront/OAC 403/404 loses saves or signs out | allowlists: drop on 400/409/422; sign out on 400/401 | open |
+| X10 | P3 | re-running an old green `ci` run redeploys an old commit | gate: SHA must be the tip of `main` (W4 check) | open |
+| X11 | P3 | `RAJ_KVIP` too narrow: sam + rājñī (samrājñī), sam + rāṭtsu now get anusvāra | add rājñ- forms and rāṭtsu; tests | open |
+| X12 | P3 | quick mark/unmark sends two entries at once; server may apply them in reverse | coalesce per lesson (latest wins) and send in order | open |
+| X13 | P3 | Dashboard says "nothing was deleted" on any failure; lost-response retry fails forever (UserNotFound → 502) | server treats UserNotFound as success; softer message | open |
+| X14 | P3 | `review.astro` embeds cards of every exercise file regardless of module status | filter by open modules; extend check-published | open |
+| X15 | P3 | `_once` retries every cancellation reason at once, no backoff; beacon can read the origin's sessionStorage token (trade-off) | retry only conflict/condition/throttle reasons with jittered backoff; record the beacon trade-off in ADR-0006 | open |
+
+## 10c. Derivation tool review (independent agent, 2026-10-31) — triage
+
+| D | Sev | Finding | Fix | Status |
+|---|---|---|---|---|
+| D1 | P1 | `detectScheme` reads capitalised Latin as Harvard-Kyoto ("Rama" → ṛama, "Agni" → āgni) and SLP1 as HK ("kfzRa" → kṛśṛa); the learner never sees how the stem was read. Same heuristic grades typed practice answers | engine: capitalised plain words → IAST, SLP1-only letters → SLP1 (tests); tool: input-scheme select + visible "Declining: राम rāma (read as IAST)" | open |
+| D2 | P2 | non-sūtra codes: vārttika `8.4.29.1`, 4-part Aṣṭādhyāyī splits, `anyatra` "label,text,url", blank debug steps | label "vārttika on 8.4.29" linking the parent sūtra; first field of anyatra; drop blank steps | open |
+| D3 | P2 | nyāp box auto-ticks for avī, tantrī, tarī, lakṣmī, hrī, dhī, śrī, bhī; offered for any feminine stem | default off for that list; show only for ā/ī stems; say it is ticked automatically; "such as ṭāp…" | open |
+| D4 | P2 | misleading states: invalid input shows "Type a stem"; chars vidyut rejects (ḻ ' ẖ ḫ) → 24 dashes; load failure claims "not part of this build" in production, no retry; stem ending ḥ/ṃ | distinct messages (empty / invalid char named / no forms / load failed + Retry); pre-check SLP1 set; warn on final ḥ/ṃ | open |
+| D5 | P2 | a11y: choosing a form is not announced, 24 tab stops; status paragraphs inserted with text (silent); "changed" by colour only (1.2:1) | one persistent live region; roving tabindex in the table; underline + hidden "(changed)" | open |
+| D6 | P2 | MIT notice not shipped with the WASM (only .js/.wasm); bundled crates unlisted | copy vidyut LICENSE + generated third-party notices to /vidyut/; link from Sources | open |
+| D7 | P2 | "Decline any noun stem" overclaims (bhagavat without the u-marker, "rājā" as a stem) | "a simple noun stem" + limits sentence; lead wording | open |
+| D8 | P2 | table overflows phones (no overflow-x outside .prose) | `.prakriya .table-wrap{overflow-x:auto}` | open |
+| D9–D12 | P3 | variants count derivations not forms; highlight spans whole joined chunk; dark contrast on highlight; role="list", lang on names, caption, aria-describedby, noscript, about.astro "will come", name spelling, debounce | as listed | open |
 
 ## 9. Session log (append-only)
 
