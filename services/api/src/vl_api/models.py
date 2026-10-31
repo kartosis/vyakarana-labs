@@ -55,6 +55,19 @@ class MergeIn(Strict):
     read: list[LessonId] = Field(default_factory=list, max_length=500)
 
 
+class ReadIn(Strict):
+    """Mark a lesson as read (or not) while signed in: review #7."""
+
+    lesson_id: LessonId = Field(alias="lessonId")
+    read: bool
+    # Present when sent through the client outbox; marks are idempotent, so it is accepted and not stored.
+    request_id: str | None = Field(
+        default=None,
+        alias="requestId",
+        pattern=r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+    )
+
+
 class ReviewIn(Strict):
     card_id: CardId = Field(alias="cardId")
     rating: Literal[1, 2, 3, 4]  # Again, Hard, Good, Easy

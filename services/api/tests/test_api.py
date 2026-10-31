@@ -380,3 +380,50 @@ def test_review_batch_limit(call: Call) -> None:
     t = make_token()
     many = reviews(*[(f"c{i}", 3) for i in range(51)])
     assert call("POST", "/api/v1/reviews", many, token=t)[0] == 400
+
+
+# ---------------------------------------------------------------- review #7: "Mark as read" when signed in
+def lessons(call: Call, t: str) -> dict[str, str]:
+    status, body, _ = call("GET", "/api/v1/progress/lessons", token=t)
+    assert status == 200
+    return dict(body["lessons"])
+
+
+def test_mark_and_unmark_read(call: Call) -> None:
+    t = make_token()
+    mark = {"lessonId": "varnamala/sounds", "read": True}
+    assert call("POST", "/api/v1/progress/read", mark, token=t)[1] == {
+        "lessonId": "varnamala/sounds",
+        "status": "read",
+    }
+    assert call("POST", "/api/v1/progress/read", mark, token=t)[1]["status"] == "read"  # idempotent
+    assert lessons(call, t) == {"varnamala/sounds": "read"}
+    unmark = {"lessonId": "varnamala/sounds", "read": False}
+    assert call("POST", "/api/v1/progress/read", unmark, token=t)[1]["status"] == "none"
+    assert call("POST", "/api/v1/progress/read", unmark, token=t)[1]["status"] == "none"
+    assert lessons(call, t) == {}
+
+
+def test_read_mark_never_overrides_practice(call: Call) -> None:
+    t = make_token()
+    call("POST", "/api/v1/sessions", session(), token=t)
+    lid = "samjna/pratyahara"
+    assert (
+        call("POST", "/api/v1/progress/read", {"lessonId": lid, "read": True}, token=t)[1]["status"]
+        == "completed"
+    )
+    assert (
+        call("POST", "/api/v1/progress/read", {"lessonId": lid, "read": False}, token=t)[1]["status"]
+        == "completed"
+    )
+    assert lessons(call, t) == {lid: "completed"}
+    assert call("GET", "/api/v1/progress", token=t)[1]["lessons"][lid]["attempts"] == 1
+
+
+def test_read_marks_need_sign_in_and_valid_ids(call: Call) -> None:
+    assert call("POST", "/api/v1/progress/read", {"lessonId": "a/b", "read": True})[0] == 401
+    assert call("GET", "/api/v1/progress/lessons")[0] == 401
+    t = make_token()
+    assert call("POST", "/api/v1/progress/read", {"lessonId": "../x", "read": True}, token=t)[0] == 400
+    with_id = {"lessonId": "a/b", "read": True, "requestId": str(uuid.uuid4())}  # sent through the outbox
+    assert call("POST", "/api/v1/progress/read", with_id, token=t)[0] == 200

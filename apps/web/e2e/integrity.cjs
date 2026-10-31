@@ -1,4 +1,4 @@
-// Browser tests for saving practice and reviews safely (external review #1 client half, #9).
+// Browser tests for saving practice, reviews and read marks safely (external review #1 client half, #7, #9).
 // Every save carries a request id that is kept, with the exact body, in a per-tab outbox until the server
 // confirms it; retries (button, reload) resend the same id, so the server can count it once.
 // Stubbed Cognito and API, production CSP enforced. Usage: node e2e/integrity.cjs <csp.json>
@@ -171,6 +171,56 @@ const reviewPosts = (posts) => posts.filter((p) => p[0] === '/api/v1/reviews').m
     await page.waitForTimeout(800);
     check('E signing out empties the outbox', before === 1 && (await outbox(page)).length === 0, `${before} before`);
     await close(ctx);
+  }
+
+  // F — review #7: signed in, "Mark as read" is saved to the account and shows on another device
+  {
+    const server = { 'samjna/pratyahara': 'completed' }; // one account, two browsers
+    const api = (m, p, body) => {
+      if (p === '/api/v1/progress/lessons') return [200, { lessons: { ...server } }];
+      if (p === '/api/v1/progress/read') {
+        const cur = server[body.lessonId];
+        if (body.read && !cur) server[body.lessonId] = 'read';
+        if (!body.read && cur === 'read') delete server[body.lessonId];
+        return [200, { lessonId: body.lessonId, status: server[body.lessonId] ?? 'none' }];
+      }
+      return base(m, p);
+    };
+    const button = (page) => page.$eval('[data-mark-read]', (el) => [el.getAttribute('aria-pressed'), el.textContent.trim(), el.disabled]);
+    const railRead = (page, key) => page.$eval(`.rail-lessons a[href$="/course/${key}/"]`, (a) => a.classList.contains('is-read')).catch(() => null);
+    const A = await context(b, api);
+    const B = await context(b, api);
+    await A.page.goto(BASE + '/course/varnamala/sounds/');
+    await A.page.waitForTimeout(800);
+    await A.page.click('[data-mark-read]');
+    await A.page.waitForTimeout(800);
+    const sent = A.posts.filter((p) => p[0] === '/api/v1/progress/read').map((p) => p[1]);
+    check('F device A: mark is sent to the account', sent.length === 1 && sent[0].lessonId === 'varnamala/sounds' && sent[0].read === true && server['varnamala/sounds'] === 'read',
+      JSON.stringify(sent));
+    await B.page.goto(BASE + '/course/varnamala/sounds/');
+    await B.page.waitForTimeout(1200);
+    check('F device B: the lesson shows as read', JSON.stringify(await button(B.page)) === JSON.stringify(['true', 'Marked as read', false]), JSON.stringify(await button(B.page)));
+    check('F device B: the course rail shows it too', (await railRead(B.page, 'varnamala/sounds')) === true);
+    check('F device B: a completed lesson counts as read in the rail', (await railRead(B.page, 'samjna/pratyahara')) === true);
+    await B.page.click('[data-mark-read]');
+    await B.page.waitForTimeout(800);
+    await A.page.reload();
+    await A.page.waitForTimeout(1200);
+    check('F unmark on B shows on A', JSON.stringify(await button(A.page)) === JSON.stringify(['false', 'Mark as read', false]) && !('varnamala/sounds' in server),
+      JSON.stringify(await button(A.page)));
+    await A.page.goto(BASE + '/course/samjna/pratyahara/');
+    await A.page.waitForTimeout(1200);
+    check('F a practised/completed lesson stays marked (button disabled)', JSON.stringify(await button(A.page)) === JSON.stringify(['true', 'Marked as read', true]), JSON.stringify(await button(A.page)));
+    await close(A.ctx); await close(B.ctx);
+
+    // guests: unchanged, this browser only
+    const G = await context(b, api, () => {});
+    await G.page.goto(BASE + '/course/varnamala/script/');
+    await G.page.waitForTimeout(500);
+    await G.page.click('[data-mark-read]');
+    const local = await G.page.evaluate(() => JSON.parse(localStorage.getItem('vl:read') || '[]'));
+    check('F guest: kept in this browser, nothing sent', local.includes('varnamala/script') && G.posts.length === 0, JSON.stringify(local));
+    await close(G.ctx);
   }
 
   console.log(log.join('\n'));

@@ -202,6 +202,39 @@ class Repo:
             "due": due,
         }
 
+    def lesson_statuses(self, sub: str) -> dict[str, str]:
+        """Status of every lesson the learner has touched (read, practised, completed): one narrow query."""
+        items = self._query_all(
+            KeyConditionExpression=Key("PK").eq(pk(sub)) & Key("SK").begins_with("PROG#"),
+            ProjectionExpression="SK, #st",
+            ExpressionAttributeNames={"#st": "status"},
+        )
+        return {it["SK"][5:]: str(it.get("status", "read")) for it in items}
+
+    def set_read(self, sub: str, lesson_id: str, read: bool, now: datetime) -> str:
+        """Mark or unmark a lesson as read. Never touches a lesson that has been practised or completed.
+        Returns the lesson's status afterwards ("none" when there is no record)."""
+        key = {"PK": pk(sub), "SK": f"PROG#{lesson_id}"}
+        try:
+            if read:
+                self.t.put_item(
+                    Item={**key, "status": "read", "readAt": now.isoformat(), "attempts": 0},
+                    ConditionExpression="attribute_not_exists(SK)",
+                )
+                return "read"
+            self.t.delete_item(
+                Key=key,
+                ConditionExpression="#st = :read",
+                ExpressionAttributeNames={"#st": "status"},
+                ExpressionAttributeValues={":read": "read"},
+            )
+            return "none"
+        except ClientError as e:
+            if not _conditional_failed(e):
+                raise
+        current = self.t.get_item(Key=key, ConsistentRead=True).get("Item")
+        return str(current.get("status", "read")) if current else "none"
+
     def merge_read(self, sub: str, lesson_ids: Iterable[str], now: datetime) -> int:
         """Guest 'mark as read' history → account. Server data always wins."""
         added = 0

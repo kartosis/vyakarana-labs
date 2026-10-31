@@ -191,6 +191,7 @@ sequenceDiagram
 
 ### 4.3 Guest → account merge
 - `POST /api/v1/progress/merge {read:[lessonId…], lastLesson}` → conditional `PutItem` per lesson (`attribute_not_exists`) so server data always wins.
+- **Signed in, "Mark as read"** (review #7, fixed 2026-10-31): `POST /api/v1/progress/read {lessonId, read}` → mark = conditional `PutItem` (`attribute_not_exists`), unmark = conditional `DeleteItem` (`status = read`), so practice and completion are never overwritten; sent through the client outbox. The lesson page reads `GET /api/v1/progress/lessons` (one `begins_with(PROG#)` query, statuses only) and shows the account's lessons plus marks still waiting to be sent; practised/completed lessons count as read and cannot be unmarked.
 
 ### 4.4 Reviews (spaced repetition, FSRS)
 - `GET /api/v1/reviews/due?limit=50` → **Query on LSI1** (`PK=USER#sub`, `LSI1SK ≤ DUE#now`).
@@ -267,6 +268,8 @@ sequenceDiagram
 | GET | `/me/export` | access | Data export |
 | GET | `/progress` | access | All lesson progress + streak |
 | POST | `/progress/merge` | access | Guest merge |
+| GET | `/progress/lessons` | access | Status of each touched lesson (read marks across devices) |
+| POST | `/progress/read` | access | Mark / unmark a lesson as read |
 | POST | `/sessions` | access | Batched practice results |
 | GET | `/reviews/due` | access | Due cards |
 | POST | `/reviews` | access | Review ratings → FSRS |

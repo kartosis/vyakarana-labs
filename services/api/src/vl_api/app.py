@@ -16,7 +16,7 @@ from . import domain
 from .auth import Principal, principal_from_headers
 from .config import settings
 from .errors import ApiError, bad_request, unauthorized
-from .models import MergeIn, ReviewsIn, SessionIn, SessionTokensIn, SettingsIn, normalize_tz
+from .models import MergeIn, ReadIn, ReviewsIn, SessionIn, SessionTokensIn, SettingsIn, normalize_tz
 from .repo import Contended, Repo, RequestIdReused
 
 logger = Logger(service="vl-api")
@@ -201,6 +201,21 @@ def get_progress() -> Response[str]:
     p = me()
     tz = normalize_tz(app.current_event.get_query_string_value("tz", "UTC") or "UTC")
     return ok(repo().progress(p.sub, domain.utcnow(), tz))
+
+
+@app.get(f"{PREFIX}/progress/lessons")
+def get_lesson_statuses() -> Response[str]:
+    p = me()
+    return ok({"lessons": repo().lesson_statuses(p.sub)})
+
+
+@app.post(f"{PREFIX}/progress/read")
+def post_read() -> Response[str]:
+    p = me()
+    r = body(ReadIn)
+    return ok(
+        {"lessonId": r.lesson_id, "status": repo().set_read(p.sub, r.lesson_id, r.read, domain.utcnow())}
+    )
 
 
 @app.post(f"{PREFIX}/progress/merge")
