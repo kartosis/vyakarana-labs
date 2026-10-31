@@ -81,9 +81,11 @@ export interface Pratyahara {
  * @param first  first member sound (SLP1)
  * @param it     closing it-marker (SLP1)
  * @param itSutra optional sūtra number of the closing it-marker; defaults to the first one after `first`.
+ * @param firstSutra optional sūtra number of the first sound; matters only for h, taught in sūtras 5 and 14.
+ *                   Pāṇini's own names start from the first occurrence (hal = h of hayavaraṭ), the default.
  */
-export function expandPratyahara(first: string, it: string, itSutra?: number): Pratyahara {
-  const start = SLOTS.find((s) => !s.isIt && s.sound === first);
+export function expandPratyahara(first: string, it: string, itSutra?: number, firstSutra?: number): Pratyahara {
+  const start = SLOTS.find((s) => !s.isIt && s.sound === first && (firstSutra === undefined || s.sutra === firstSutra));
   if (!start) throw new Error(`"${first}" is not taught in the Śivasūtras`);
   const end = SLOTS.find(
     (s) => s.isIt && s.sound === it && s.index > start.index && (itSutra === undefined || s.sutra === itSutra),
@@ -226,7 +228,10 @@ export function articulation(s: string): Articulation {
     S: [["talu"], "vivrta"], z: [["murdhan"], "vivrta"],
     s: [["danta"], "vivrta"], h: [["kantha"], "vivrta"],
   };
-  const [sthana, abhyantara] = table[s]!;
+  const row = table[s];
+  // ḻ (SLP1 L) is a Vedic sound that the transliteration accepts but the Śivasūtras do not teach.
+  if (!row) throw new Error(`"${s}" is not taught in the Śivasūtras, so no Pāṇinian articulation is given`);
+  const [sthana, abhyantara] = row;
   return { sthana, abhyantara, ghosa, mahaprana };
 }
 

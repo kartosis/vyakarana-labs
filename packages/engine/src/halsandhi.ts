@@ -38,6 +38,8 @@ const nasalOf = (c: string) => ROWS[rowOf(c)]![4]!;
 const voicedAspirate = (c: string) => ROWS[rowOf(c)]![3]!;
 const v = (c: string) => fromSlp1(c, "iast");
 const T_ROW = "tTdDn";
+/** Forms of rāj with the suffix kvip (samrāṭ, samrājau, samrājaḥ …), the only context of 8.3.25 mo rāji samaḥ kvau. */
+const RAJ_KVIP = /^rA(j|w|wsu|q(ByAm|BiH|ByaH)|j(O|aH|am|A|e|oH|Am|i))$/;
 const C_ROW = "cCjJY";
 const W_ROW = "wWqQR";
 /** s and the t-row ("stu") mapped to ś and the c-row ("ścu") / ṣ and the ṭ-row ("ṣṭu") */
@@ -134,7 +136,7 @@ const RULES: RuleDef[] = [
     sutra: "8.3.23",
     run: ({ pre, post }) => {
       if (pre.at(-1) !== "m" || !isConsonant(post[0]!)) return null;
-      if (pre === "sam" && /^rA[jw]/.test(post)) return null; // 8.3.25 samrāṭ
+      if (pre === "sam" && RAJ_KVIP.test(post)) return null; // 8.3.25 samrāṭ (not saṃrājitā: Kāśikā)
       return { obligatory: { pre: pre.slice(0, -1) + "M", post }, note: "A word-final m before a consonant becomes anusvāra." };
     },
   },
@@ -255,7 +257,7 @@ const RULES: RuleDef[] = [
       if (!STOPS.includes(x) || !NASALS.includes(post[0]!)) return null;
       const out = { pre: pre.slice(0, -1) + nasalOf(x), post, suffix };
       // vārttika "pratyaye bhāṣāyāṃ nityam": before a suffix (the genitive plural nām is one) the nasal is compulsory
-      if (suffix || /^[nR]Am/.test(post)) return { obligatory: out, note: "A word-final consonant before a nasal becomes the nasal of its row; before a suffix this is compulsory (vārttika)." };
+      if (suffix || /^[nR]Am$/.test(post)) return { obligatory: out, note: "A word-final consonant before a nasal becomes the nasal of its row; before a suffix this is compulsory (vārttika)." };
       return { optional: out, note: "A word-final consonant before a nasal may become the nasal of its row.", byDefault: true };
     },
   },

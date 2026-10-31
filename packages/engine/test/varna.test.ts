@@ -107,3 +107,13 @@ describe("savarṇa (1.1.9–1.1.10)", () => {
     expect(articulation("k")).toMatchObject({ abhyantara: "sprsta", ghosa: false, mahaprana: false });
   });
 });
+
+describe("external review fixes (PROGRESS §10)", () => {
+  it("#10: a pratyāhāra starting at the h of the fourteenth sūtra contains only that h", () => {
+    expect(expandPratyahara("h", "l", 14, 14).sounds).toEqual(["h"]);
+    expect(expandPratyahara("h", "l").sounds.length).toBe(33); // hal, from the h of hayavaraṭ
+  });
+  it("P3: articulation of ḻ (not in the Śivasūtras) fails with a clear message", () => {
+    expect(() => articulation("L")).toThrow(/Śivasūtras/);
+  });
+});

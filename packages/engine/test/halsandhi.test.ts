@@ -156,3 +156,17 @@ describe("hal-sandhi: why nothing happens", () => {
     expect(note(a, b)).toContain(expected);
   });
 });
+
+describe("external review fixes (PROGRESS §10)", () => {
+  it("#11: 8.3.25 keeps m only before rāj with kvip; saṃrājitā etc. take anusvāra (Kāśikā on 8.3.25)", () => {
+    expect(join("sam", "rāṭ").result).toBe("samrāṭ");
+    expect(join("sam", "rājau").result).toBe("samrājau");
+    expect(join("sam", "rājaḥ").result).toBe("samrājaḥ");
+    // anusvāra, not m; the engine writes it with a space after a finished word, the Kāśikā joins the upasarga
+    for (const w of ["rājitā", "rājitum", "rājitavyam"]) expect(join("sam", w).result.replace(" ", "")).toBe(`saṃ${w}`);
+  });
+  it("#12: only the bare ending nām counts as a suffix; tad + nāma has both forms", () => {
+    expect(join("tad", "nāma").all).toEqual(["tannāma", "tadnāma"]);
+    expect(join("ṣaṭ", "nām").all).toEqual(["ṣaṇṇām"]);
+  });
+});

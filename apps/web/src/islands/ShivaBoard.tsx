@@ -44,7 +44,8 @@ export default function ShivaBoard({ initial = ["a", "c"], presets = true, label
     if (start === null || end === null) return null;
     const s = SLOTS[start]!;
     const e = SLOTS[end]!;
-    return expandPratyahara(s.sound, e.sound, e.sutra);
+    // pass the start sūtra too: h is taught twice (sūtras 5 and 14), and the learner chose one of them
+    return expandPratyahara(s.sound, e.sound, e.sutra, s.sutra);
   }, [start, end]);
 
   const choose = (slot: Slot) => {
@@ -58,6 +59,7 @@ export default function ShivaBoard({ initial = ["a", "c"], presets = true, label
 
   const inRange = (i: number) => start !== null && end !== null && i >= start && i < end && !SLOTS[i]!.isIt;
   const ambiguous = result && result.it === "R";
+  const secondH = start !== null && SLOTS[start]!.sound === "h" && SLOTS[start]!.sutra === 14;
 
   return (
     <section class="shiva" aria-label={label}>
@@ -110,6 +112,12 @@ export default function ShivaBoard({ initial = ["a", "c"], presets = true, label
                 <li><Sa slp={isConsonant(s) ? `${s}a` : s} /></li>
               ))}
             </ul>
+            {secondH && (
+              <p class="shiva-note">
+                You started from the h of the fourteenth sūtra. Pāṇini's own names that begin with h, such as hal, start
+                from the h of hayavaraṭ (sūtra 5), so hal names every consonant.
+              </p>
+            )}
             {ambiguous && (
               <p class="shiva-note">
                 ṇ closes two sūtras (1 and 6). Pāṇini's aṇ normally stops at the first; only in 1.1.69 does it run to the
