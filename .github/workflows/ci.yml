@@ -23,9 +23,9 @@ jobs:
     name: Engine tests and site build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: pnpm
@@ -48,12 +48,12 @@ jobs:
         run: node apps/web/scripts/check-published.mjs
       - name: CSP — inline hashes fit CloudFront's header limit
         run: node scripts/csp-hashes.mjs apps/web/dist /tmp/csp.json
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: site
           path: apps/web/dist
           retention-days: 7
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: vidyut-wasm
           path: apps/web/public/vidyut
@@ -63,9 +63,9 @@ jobs:
     name: Browser tests (accessibility, CSP, account flows)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: pnpm
@@ -116,8 +116,8 @@ jobs:
         shell: bash
         working-directory: services/api
     steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v6
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v7
       - run: uv sync --frozen
       - run: uv run ruff check src tests
       - run: uv run ruff format --check src tests
@@ -132,8 +132,8 @@ jobs:
     name: Terraform validate
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: hashicorp/setup-terraform@v3
+      - uses: actions/checkout@v7
+      - uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: "<2.0.0"
       - name: Format (advisory — lists files as a warning annotation)
@@ -144,7 +144,7 @@ jobs:
         run: |
           [[ -o pipefail ]] || { echo "::error title=pipefail::run steps do not have pipefail"; exit 1; }
           if (false | tee /dev/null); then echo "::error title=pipefail::false | tee succeeded"; exit 1; fi
-      - uses: astral-sh/setup-uv@v6
+      - uses: astral-sh/setup-uv@v7
       - name: IAM policy checks (no self-escalation, boundary required, plan role read-only; review #2, #3)
         run: uv run --no-project --with python-hcl2==7.3.1 --with pytest==8.4.2 pytest -q -p no:cacheprovider infra/terraform/tests
       - name: Validate bootstrap
@@ -168,16 +168,16 @@ jobs:
       TF_VAR_alert_email: ${{ vars.ALERT_EMAIL }}
       TF_VAR_cf_beacon_token: ${{ vars.CF_BEACON_TOKEN }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: aws-actions/configure-aws-credentials@v4
+      - uses: actions/checkout@v7
+      - uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ vars.AWS_PLAN_ROLE }}
           aws-region: ${{ vars.AWS_REGION }}
-      - uses: hashicorp/setup-terraform@v3
+      - uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: "<2.0.0"
           terraform_wrapper: false
-      - uses: astral-sh/setup-uv@v6
+      - uses: astral-sh/setup-uv@v7
       - name: Build the Lambda package the plan reads (review #17)
         working-directory: services/api
         run: ./build.sh

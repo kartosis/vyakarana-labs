@@ -71,18 +71,18 @@ jobs:
       TF_VAR_cf_beacon_token: ${{ vars.CF_BEACON_TOKEN }}
       TF_DIR: infra/terraform/envs/prod
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ needs.gate.outputs.sha }}
 
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter @vl/engine test
-      - uses: astral-sh/setup-uv@v6
+      - uses: astral-sh/setup-uv@v7
       - name: API — test and package
         working-directory: services/api
         run: |
@@ -98,11 +98,11 @@ jobs:
           # same variable as TF_VAR_cf_beacon_token: the beacon tag and the CSP that allows it switch together
           PUBLIC_CF_BEACON_TOKEN: ${{ vars.CF_BEACON_TOKEN }}
 
-      - uses: aws-actions/configure-aws-credentials@v4
+      - uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ vars.AWS_DEPLOY_ROLE }}
           aws-region: ${{ vars.AWS_REGION }}
-      - uses: hashicorp/setup-terraform@v3
+      - uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: "<2.0.0"
           terraform_wrapper: false
