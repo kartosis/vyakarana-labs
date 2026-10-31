@@ -1,13 +1,22 @@
 name: deploy
 
+# Deploys only a commit whose `ci` run on main finished green, and deploys exactly that commit
+# (external review: deploy gating). A manual run re-checks CI for the commit it is given.
 on:
-  push:
+  workflow_run:
+    workflows: [ci]
+    types: [completed]
     branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: read
+  actions: read   # read the ci run for the commit
   id-token: write # OIDC → AWS, no stored keys
+
+defaults:
+  run:
+    shell: bash # -eo pipefail (review #16)
 
 concurrency:
   group: deploy-prod
@@ -17,7 +26,11 @@ jobs:
   deploy:
     name: Build and deploy to AWS
     # Stays dormant until the bootstrap outputs are saved as repository variables.
-    if: vars.AWS_DEPLOY_ROLE != ''
+    # Automatic runs need a green ci run on main; manual runs are checked by the first step.
+    if: >-
+      vars.AWS_DEPLOY_ROLE != '' && (
+        (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push')
+        || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'))
     runs-on: ubuntu-latest
     environment:
       name: prod
@@ -26,8 +39,18 @@ jobs:
       TF_VAR_alert_email: ${{ vars.ALERT_EMAIL }}
       TF_VAR_cf_beacon_token: ${{ vars.CF_BEACON_TOKEN }}
       TF_DIR: infra/terraform/envs/prod
+      SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
     steps:
+      - name: Require a green ci run on main for this commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          c=$(gh run list -R "$GITHUB_REPOSITORY" --workflow ci --branch main --commit "$SHA" --event push \
+                --json conclusion -q 'map(.conclusion) | first // "none"')
+          if [ "$c" != success ]; then echo "::error title=deploy gate::ci for $SHA on main is '$c', not success"; exit 1; fi
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
 
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4

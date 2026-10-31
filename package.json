@@ -3,11 +3,16 @@
   "private": true,
   "description": "Vyākaraṇa Labs — interactive Sanskrit grammar in Laghusiddhāntakaumudī order, grounded in Pāṇini, Patañjali and Bhartṛhari.",
   "packageManager": "pnpm@10.28.0",
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "dev": "pnpm --filter @vl/web dev",
     "build": "pnpm --filter @vl/engine build && pnpm --filter @vl/web build",
     "test": "pnpm -r test",
     "check": "pnpm -r check"
+  },
+  "devDependencies": {
+    "yaml": "2.9.1"
   }
 }

@@ -8,6 +8,12 @@ on:
 permissions:
   contents: read
 
+# Every run step gets `bash --noprofile --norc -eo pipefail` (GitHub's implicit shell has no pipefail, so
+# `terraform plan | tee plan.txt` could never fail — review #16). Checked by scripts/check-workflows.mjs (W1).
+defaults:
+  run:
+    shell: bash
+
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
@@ -24,6 +30,8 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - name: Workflow policy (pipefail everywhere, Lambda built before plan, deploy only after green CI)
+        run: node scripts/check-workflows.mjs
       - name: Engine — type check
         run: pnpm --filter @vl/engine check
       - name: Engine — tests
@@ -122,6 +130,10 @@ jobs:
         run: |
           files=$(terraform fmt -check -recursive -list=true infra/terraform || true)
           if [ -n "$files" ]; then echo "::warning title=terraform fmt::run 'terraform fmt -recursive infra/terraform' — $(echo $files | tr '\n' ' ')"; fi
+      - name: Shell has pipefail (a failing command piped into tee must fail the step)
+        run: |
+          [[ -o pipefail ]] || { echo "::error title=pipefail::run steps do not have pipefail"; exit 1; }
+          if (false | tee /dev/null); then echo "::error title=pipefail::false | tee succeeded"; exit 1; fi
       - name: Validate bootstrap
         run: |
           terraform -chdir=infra/terraform/bootstrap init -backend=false -input=false
@@ -152,7 +164,12 @@ jobs:
         with:
           terraform_version: "<2.0.0"
           terraform_wrapper: false
-      - working-directory: infra/terraform/envs/prod
+      - uses: astral-sh/setup-uv@v6
+      - name: Build the Lambda package the plan reads (review #17)
+        working-directory: services/api
+        run: ./build.sh
+      - name: Terraform plan
+        working-directory: infra/terraform/envs/prod
         run: |
           terraform init -input=false -backend-config="bucket=${{ vars.TF_STATE_BUCKET }}"
           terraform plan -input=false -lock=false -no-color | tee plan.txt
