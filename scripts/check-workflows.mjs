@@ -5,7 +5,8 @@
 //       (GitHub's implicit shell is `bash -e` WITHOUT pipefail, so `terraform plan | tee plan.txt` can never fail — #16)
 //   W2  every workflow declares top-level `permissions` (least privilege by default)
 //   W3  the PR plan job builds the Lambda package before `terraform plan` (the plan reads services/api/dist/vl-api.zip — #17)
-//   W4  deploy runs only after a green `ci` run on main, and deploys exactly the commit CI tested
+//   W4  deploy runs only after a green `ci` run on main, only for the current tip of main, and deploys exactly the
+//       commit CI tested (a `gate` job decides; the `deploy` job, in the prod environment, follows it)
 //   W5  composite actions give every `run:` step `shell: bash`
 //   W6  deploy hands the analytics token to both the site build and Terraform from the same variable, so the
 //       beacon tag and the CSP that allows it switch together (review #19)
@@ -47,7 +48,7 @@ else {
   else if (build < 0 || build > tfplan) fail("ci.yml", "W3 plan job must build the Lambda package (services/api/build.sh) before `terraform plan`");
 }
 
-// W4 — deploy gating
+// W4 — deploy gating: a `gate` job decides (green ci on main, and still the tip of main), `deploy` follows it
 const deploy = workflows["deploy.yml"];
 if (!deploy) fail("deploy.yml", "W4 missing");
 else {
@@ -56,21 +57,28 @@ else {
   if (on.push) fail("deploy.yml", "W4 triggered by `push` — would deploy before CI has passed");
   if (!wr || !(wr.workflows ?? []).includes("ci") || !(wr.types ?? []).includes("completed") || !(wr.branches ?? []).includes("main"))
     fail("deploy.yml", "W4 must be triggered by `workflow_run` of `ci`, types [completed], branches [main]");
-  for (const [id, job] of Object.entries(deploy.jobs ?? {})) {
-    const cond = String(job.if ?? "");
-    if (!/github\.event\.workflow_run\.conclusion\s*==\s*'success'/.test(cond))
-      fail("deploy.yml", `W4 job \`${id}\` does not require \`github.event.workflow_run.conclusion == 'success'\``);
-    const checkout = (job.steps ?? []).find((s) => String(s.uses ?? "").startsWith("actions/checkout@"));
-    if (!/workflow_run\.head_sha/.test(String(checkout?.with?.ref ?? "")))
-      fail("deploy.yml", `W4 job \`${id}\` must check out \`github.event.workflow_run.head_sha\` (the commit CI tested)`);
-    const gate = (job.steps ?? []).some((s) => typeof s.run === "string" && /gh run list[^\n]*--workflow[= ]ci/.test(s.run));
-    if (!gate) fail("deploy.yml", `W4 job \`${id}\` has no step confirming a green \`ci\` run for the commit (covers manual runs too)`);
+  const gate = deploy.jobs?.gate;
+  const job = deploy.jobs?.deploy;
+  if (!gate || !job) fail("deploy.yml", "W4 needs two jobs: `gate` (decides) and `deploy` (needs gate)");
+  else {
+    if (!/github\.event\.workflow_run\.conclusion\s*==\s*'success'/.test(String(gate.if ?? "")))
+      fail("deploy.yml", "W4 job `gate` must require `github.event.workflow_run.conclusion == 'success'`");
+    const runs = (gate.steps ?? []).map((st) => String(st.run ?? "")).join("\n");
+    if (!/gh run list[^\n]*--workflow[= ]ci/.test(runs))
+      fail("deploy.yml", "W4 job `gate` must confirm a green `ci` run for the commit (covers manual runs too)");
+    if (!/commits\/main/.test(runs) || !/\$SHA/.test(runs))
+      fail("deploy.yml", "W4 job `gate` must deploy only the current tip of main (re-running an old ci run must not roll back)");
+    if (![].concat(job.needs ?? []).includes("gate") || !/needs\.gate\.outputs\.go\s*==\s*'true'/.test(String(job.if ?? "")))
+      fail("deploy.yml", "W4 job `deploy` must need `gate` and run only if `needs.gate.outputs.go == 'true'`");
+    const checkout = (job.steps ?? []).find((st) => String(st.uses ?? "").startsWith("actions/checkout@"));
+    if (!/needs\.gate\.outputs\.sha/.test(String(checkout?.with?.ref ?? "")))
+      fail("deploy.yml", "W4 job `deploy` must check out `needs.gate.outputs.sha` (the commit CI tested)");
   }
 }
 
 // W6 — analytics token reaches the build and Terraform together
 if (deploy) {
-  for (const [id, job] of Object.entries(deploy.jobs ?? {})) {
+  for (const [id, job] of Object.entries(deploy.jobs ?? {}).filter(([k]) => k === "deploy")) {
     const tf = String(job.env?.TF_VAR_cf_beacon_token ?? "");
     const build = (job.steps ?? []).find((st) => typeof st.run === "string" && /@vl\/web build/.test(st.run));
     const pub = String(build?.env?.PUBLIC_CF_BEACON_TOKEN ?? job.env?.PUBLIC_CF_BEACON_TOKEN ?? "");

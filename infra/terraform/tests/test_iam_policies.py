@@ -238,3 +238,46 @@ def test_boundary_covers_the_api_role() -> None:
     for s in api:
         for a in s["actions"]:
             assert any(matches(b["actions"], a) for b in boundary if effect(b) == "Allow"), a
+
+
+# ---------------------------------------------------------------- P1 exit review X7: the plan role reads no user data
+@pytest.mark.parametrize(
+    ("action", "resource"),
+    [
+        ("dynamodb:GetItem", f"arn:aws:dynamodb:us-east-1:{ACCOUNT}:table/vl-main"),
+        ("dynamodb:Query", f"arn:aws:dynamodb:us-east-1:{ACCOUNT}:table/vl-main/index/GSI1"),
+        ("dynamodb:Scan", f"arn:aws:dynamodb:us-east-1:{ACCOUNT}:table/vl-main"),
+        ("dynamodb:BatchGetItem", f"arn:aws:dynamodb:us-east-1:{ACCOUNT}:table/vl-main"),
+        ("dynamodb:ExportTableToPointInTime", f"arn:aws:dynamodb:us-east-1:{ACCOUNT}:table/vl-main"),
+        ("cognito-idp:ListUsers", f"arn:aws:cognito-idp:us-east-1:{ACCOUNT}:userpool/us-east-1_X"),
+        ("cognito-idp:AdminGetUser", f"arn:aws:cognito-idp:us-east-1:{ACCOUNT}:userpool/us-east-1_X"),
+        ("logs:GetLogEvents", f"arn:aws:logs:us-east-1:{ACCOUNT}:log-group:/aws/lambda/vl-api:log-stream:x"),
+        ("logs:FilterLogEvents", f"arn:aws:logs:us-east-1:{ACCOUNT}:log-group:/aws/lambda/vl-api"),
+        ("logs:StartQuery", f"arn:aws:logs:us-east-1:{ACCOUNT}:log-group:/aws/lambda/vl-api"),
+    ],
+)
+def test_plan_role_cannot_read_learner_data(action: str, resource: str) -> None:
+    assert applying(PLAN, action, resource, "Deny"), f"{action} on {resource} is not explicitly denied"
+
+
+# ---------------------------------------------------------------- X6: the deploy role cannot rewrite state history
+@pytest.mark.parametrize(
+    ("action", "resource"),
+    [
+        ("s3:DeleteObjectVersion", f"arn:aws:s3:::vyakarana-labs-tfstate-{ACCOUNT}/prod/terraform.tfstate"),
+        ("s3:PutBucketVersioning", f"arn:aws:s3:::vyakarana-labs-tfstate-{ACCOUNT}"),
+        ("s3:PutLifecycleConfiguration", f"arn:aws:s3:::vyakarana-labs-tfstate-{ACCOUNT}"),
+        ("s3:DeleteBucket", f"arn:aws:s3:::vyakarana-labs-tfstate-{ACCOUNT}"),
+        ("s3:PutBucketPolicy", f"arn:aws:s3:::vyakarana-labs-tfstate-{ACCOUNT}"),
+        ("s3:PutBucketPublicAccessBlock", f"arn:aws:s3:::vyakarana-labs-tfstate-{ACCOUNT}"),
+        ("s3:PutEncryptionConfiguration", f"arn:aws:s3:::vyakarana-labs-tfstate-{ACCOUNT}"),
+    ],
+)
+def test_deploy_role_cannot_rewrite_state_history_or_bucket(action: str, resource: str) -> None:
+    assert applying(DEPLOY, action, resource, "Deny"), f"{action} on {resource}"
+
+
+def test_deploy_role_can_still_use_state_and_lock() -> None:
+    obj = f"arn:aws:s3:::vyakarana-labs-tfstate-{ACCOUNT}/prod/terraform.tfstate.tflock"
+    for a in ["s3:GetObject", "s3:PutObject", "s3:DeleteObject"]:
+        assert applying(DEPLOY, a, obj, "Allow") and not applying(DEPLOY, a, obj, "Deny"), a

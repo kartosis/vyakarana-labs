@@ -72,8 +72,17 @@ gh variable set TF_STATE_BUCKET -R $R --body "<state_bucket output>"
 gh variable set AWS_PLAN_ROLE   -R $R --body "<plan_role_arn output>"
 gh variable set AWS_DEPLOY_ROLE -R $R --body "<deploy_role_arn output>"
 gh variable set ALERT_EMAIL     -R $R --body "<email for budget and alarm mail>"
-gh api -X PUT "repos/$R/environments/prod"   # the deploy role only trusts this environment
+# The deploy role trusts any job that runs in the "prod" environment, so only `main` may use it:
+'{"deployment_branch_policy":{"protected_branches":false,"custom_branch_policies":true}}' |
+  gh api -X PUT "repos/$R/environments/prod" --input -
+gh api -X POST "repos/$R/environments/prod/deployment-branch-policies" -f name=main -f type=branch
+gh api "repos/$R/environments/prod" --jq .deployment_branch_policy   # expect custom_branch_policies: true
 ```
+
+**Why the branch policy matters:** without it, a workflow pushed on *any* branch could declare
+`environment: prod` and receive deploy credentials, skipping every check in `deploy.yml`. With it, only jobs
+from `main` can enter `prod`. (Same setting in the web UI: **Settings → Environments → prod → Deployment
+branches and tags → Selected branches and tags → add `main`**.)
 
 Optional: in **Settings → Environments → prod**, add yourself as a required reviewer so each deploy waits for your click.
 

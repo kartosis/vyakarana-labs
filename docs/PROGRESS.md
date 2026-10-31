@@ -246,6 +246,7 @@ IaC: Terraform (remote state S3 + lock) · CI/CD: GitHub Actions + OIDC role · 
 | U4 | **SES**: verify domain (DKIM), request **production access** (sandbox only emails verified addresses) | P8 / P11 | ☐ |
 | U5 | Cloudflare DNS for `identifyragas.com`: add ACM validation CNAME + `sanskrit` CNAME → CloudFront (**DNS-only / grey cloud**) | P8 / P11 | ☐ |
 | U6 | GitHub repo secrets/vars: `AWS_ROLE_ARN`, `AWS_REGION` | P9 | ☐ |
+| U6b | When creating the GitHub environment `prod` (DEPLOY.md §4): **restrict it to the `main` branch** (deployment branch policy) — otherwise a workflow on any branch could take deploy credentials (P1 exit review X5) | P9 | ☐ |
 | U7 | **Choose licences** (ROADMAP P2): code (MIT or Apache-2.0?) and lesson content (CC BY-SA 4.0, or all rights reserved?) — third-party notices (vidyut MIT, ashtadhyayi.com data credit, fonts OFL) are added either way | P2 | ☐ |
 | U8 | **Approve branch protection** on `main` (PR required, required checks = all CI jobs, code-owner review, linear history, no force-push) — changes how every later change lands | P2 | ☐ |
 | U9 | Turn on **private vulnerability reporting**, secret scanning + push protection, Dependabot alerts, CodeQL default setup (repo Settings → Security) — the issue form's "report privately" link needs the first | P2 | ☐ |

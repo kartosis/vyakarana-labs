@@ -23,15 +23,46 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  deploy:
-    name: Build and deploy to AWS
+  gate:
+    name: Deploy only a green, current commit of main
     # Stays dormant until the bootstrap outputs are saved as repository variables.
-    # Automatic runs need a green ci run on main; manual runs are checked by the first step.
     if: >-
       vars.AWS_DEPLOY_ROLE != '' && (
         (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push')
         || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'))
     runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      go: ${{ steps.check.outputs.go }}
+      sha: ${{ steps.check.outputs.sha }}
+    steps:
+      - id: check
+        name: Green ci on main for this commit, and still the tip of main
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+        run: |
+          c=$(gh run list -R "$GITHUB_REPOSITORY" --workflow ci --branch main --commit "$SHA" --event push \
+                --json conclusion -q 'map(.conclusion) | first // "none"')
+          if [ "$c" != success ]; then echo "::error title=deploy gate::ci for $SHA on main is '$c', not success"; exit 1; fi
+          # Re-running an old green ci run must not roll production back (P1 exit review X10).
+          tip=$(gh api "repos/$GITHUB_REPOSITORY/commits/main" -q .sha)
+          if [ "$tip" != "$SHA" ]; then
+            echo "::notice title=deploy gate::$SHA is no longer the tip of main ($tip); its own ci run deploys it"
+            echo "go=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "go=true" >> "$GITHUB_OUTPUT"
+          fi
+          echo "sha=$SHA" >> "$GITHUB_OUTPUT"
+
+  deploy:
+    name: Build and deploy to AWS
+    needs: gate
+    if: needs.gate.outputs.go == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    # The deploy role trusts only jobs in this environment; restrict the environment to `main`
+    # (Settings → Environments → prod → Deployment branches, DEPLOY.md §4): P1 exit review X5.
     environment:
       name: prod
       url: ${{ steps.urls.outputs.site_url }}
@@ -39,18 +70,10 @@ jobs:
       TF_VAR_alert_email: ${{ vars.ALERT_EMAIL }}
       TF_VAR_cf_beacon_token: ${{ vars.CF_BEACON_TOKEN }}
       TF_DIR: infra/terraform/envs/prod
-      SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
     steps:
-      - name: Require a green ci run on main for this commit
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          c=$(gh run list -R "$GITHUB_REPOSITORY" --workflow ci --branch main --commit "$SHA" --event push \
-                --json conclusion -q 'map(.conclusion) | first // "none"')
-          if [ "$c" != success ]; then echo "::error title=deploy gate::ci for $SHA on main is '$c', not success"; exit 1; fi
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          ref: ${{ needs.gate.outputs.sha }}
 
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4

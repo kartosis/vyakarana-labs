@@ -189,6 +189,30 @@ resource "aws_iam_role_policy" "plan_state" {
   policy = data.aws_iam_policy_document.state_ro.json
 }
 
+# ReadOnlyAccess also reads data: learners' records, sign-in emails, log lines. A plan needs only resource
+# descriptions (DescribeTable, DescribeUserPool, DescribeLogGroups …), never the data (P1 exit review X7).
+data "aws_iam_policy_document" "plan_no_user_data" {
+  statement {
+    sid    = "NeverReadLearnerData"
+    effect = "Deny"
+    actions = [
+      "dynamodb:GetItem", "dynamodb:BatchGetItem", "dynamodb:Query", "dynamodb:Scan", "dynamodb:PartiQLSelect",
+      "dynamodb:ExportTableToPointInTime", "dynamodb:GetRecords", "dynamodb:GetShardIterator",
+      "cognito-idp:ListUsers", "cognito-idp:ListUsersInGroup", "cognito-idp:AdminGetUser",
+      "cognito-idp:AdminListGroupsForUser", "cognito-idp:AdminListDevices", "cognito-idp:AdminListUserAuthEvents",
+      "logs:GetLogEvents", "logs:FilterLogEvents", "logs:StartQuery", "logs:GetQueryResults", "logs:StartLiveTail",
+      "logs:GetLogRecord",
+    ]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_role_policy" "plan_no_user_data" {
+  name   = "no-user-data"
+  role   = aws_iam_role.plan.id
+  policy = data.aws_iam_policy_document.plan_no_user_data.json
+}
+
 # ---------------------------------------------------------------- permissions boundary for app roles
 # Every role the deploy role creates (named vl-app-*) must carry this boundary, so whatever policy is
 # attached to it, the role can never do more than the app needs — and never anything in IAM or STS (review #2).
@@ -307,6 +331,18 @@ data "aws_iam_policy_document" "deploy" {
     effect    = "Deny"
     actions   = ["iam:*"]
     resources = ["arn:aws:iam::${data.aws_caller_identity.me.account_id}:role/vl-github-*"]
+  }
+  statement {
+    # Terraform needs the state objects and its lock file; never their history or the bucket's settings
+    # (bootstrap owns the bucket). P1 exit review X6.
+    sid    = "NeverRewriteState"
+    effect = "Deny"
+    actions = [
+      "s3:DeleteObjectVersion", "s3:PutBucketVersioning", "s3:PutLifecycleConfiguration", "s3:DeleteBucket",
+      "s3:PutBucketPolicy", "s3:DeleteBucketPolicy", "s3:PutBucketPublicAccessBlock", "s3:PutEncryptionConfiguration",
+      "s3:PutBucketOwnershipControls", "s3:PutBucketAcl", "s3:PutObjectAcl", "s3:PutObjectVersionAcl",
+    ]
+    resources = [aws_s3_bucket.state.arn, "${aws_s3_bucket.state.arn}/*"]
   }
   statement {
     sid       = "NeverRemoveBoundary"
