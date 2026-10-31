@@ -1,5 +1,6 @@
 ---
 /** Course contents in LSK order. Desktop: sticky rail. Mobile: a disclosure above the lesson. */
+import { publishedLessons } from "../lib/published";
 import { getCollection } from "astro:content";
 
 interface Props {
@@ -8,7 +9,7 @@ interface Props {
 }
 const { currentModule, currentLesson } = Astro.props;
 const modules = (await getCollection("modules")).sort((a, b) => a.data.order - b.data.order);
-const lessons = await getCollection("lessons");
+const lessons = await publishedLessons();
 const byModule = (m: string) =>
   lessons.filter((l) => l.data.module === m).sort((a, b) => a.data.order - b.data.order);
 const lessonSlug = (id: string) => id.split("/").pop();

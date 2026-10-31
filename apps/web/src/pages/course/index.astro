@@ -1,9 +1,10 @@
 ---
+import { publishedLessons } from "../../lib/published";
 import { getCollection } from "astro:content";
 import Base from "../../layouts/Base.astro";
 
 const modules = (await getCollection("modules")).sort((a, b) => a.data.order - b.data.order);
-const lessons = await getCollection("lessons");
+const lessons = await publishedLessons();
 const byModule = (m: string) =>
   lessons.filter((l) => l.data.module === m).sort((a, b) => a.data.order - b.data.order);
 ---

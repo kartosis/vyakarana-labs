@@ -1,11 +1,12 @@
 ---
+import { publishedLessons } from "../../../lib/published";
 import { getCollection, getEntry, render } from "astro:content";
 import Base from "../../../layouts/Base.astro";
 import CourseRail from "../../../components/CourseRail.astro";
 import SutraRef from "../../../components/SutraRef.astro";
 
 export async function getStaticPaths() {
-  const lessons = await getCollection("lessons");
+  const lessons = await publishedLessons();
   return lessons.map((entry) => ({
     params: { module: entry.data.module, lesson: entry.id.split("/").pop()! },
     props: { entry },
@@ -19,7 +20,7 @@ if (!mod) throw new Error(`Unknown module ${entry.data.module}`);
 
 // Previous / next across the whole course, in LSK order.
 const modules = (await getCollection("modules")).sort((a, b) => a.data.order - b.data.order);
-const all = (await getCollection("lessons")).sort((a, b) => {
+const all = (await publishedLessons()).sort((a, b) => {
   const ma = modules.findIndex((m) => m.id === a.data.module);
   const mb = modules.findIndex((m) => m.id === b.data.module);
   return ma - mb || a.data.order - b.data.order;

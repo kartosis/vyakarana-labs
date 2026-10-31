@@ -1,4 +1,5 @@
 ---
+import { publishedLessons } from "../../lib/published";
 import { getCollection } from "astro:content";
 import Base from "../../layouts/Base.astro";
 import SutraFolio from "../../components/SutraFolio.astro";
@@ -12,7 +13,7 @@ export async function getStaticPaths() {
 const { sutra } = Astro.props;
 const id = sutra.id;
 const [a] = id.split(".");
-const allLessons = await getCollection("lessons");
+const allLessons = await publishedLessons();
 const lessons = allLessons.filter((l) => l.data.sutras.includes(id));
 // lessons that cite the sūtra in passing (SutraRef / SutraFolio in the body) without teaching it
 const citedIn = allLessons.filter((l) => !lessons.includes(l) && (l.body ?? "").includes(`id="${id}"`));
