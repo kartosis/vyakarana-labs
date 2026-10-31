@@ -46,6 +46,11 @@ variable "alarm_topic_arn" {
   type = string
 }
 
+variable "permissions_boundary" {
+  description = "ARN of vl-app-boundary (bootstrap); the deploy role may create roles only with it"
+  type        = string
+}
+
 data "aws_cloudfront_origin_request_policy" "all_viewer_except_host" {
   name = "Managed-AllViewerExceptHostHeader"
 }
@@ -62,8 +67,9 @@ data "aws_iam_policy_document" "assume" {
 }
 
 resource "aws_iam_role" "api" {
-  name               = "${var.name}-api"
-  assume_role_policy = data.aws_iam_policy_document.assume.json
+  name                 = "${var.name}-app-api"
+  assume_role_policy   = data.aws_iam_policy_document.assume.json
+  permissions_boundary = var.permissions_boundary
 }
 
 data "aws_iam_policy_document" "api" {
@@ -72,6 +78,7 @@ data "aws_iam_policy_document" "api" {
     actions = [
       "dynamodb:GetItem", "dynamodb:PutItem", "dynamodb:UpdateItem", "dynamodb:DeleteItem",
       "dynamodb:Query", "dynamodb:BatchWriteItem", "dynamodb:BatchGetItem",
+      "dynamodb:ConditionCheckItem", # ConditionCheck inside TransactWriteItems (sessions, reviews)
     ]
     resources = [var.table_arn, "${var.table_arn}/index/*"]
   }

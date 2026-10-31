@@ -1,7 +1,8 @@
 # One-time bootstrap, run locally with your own AWS credentials (local state).
-# Creates: the remote-state bucket, GitHub's OIDC identity provider, and two roles that
-# GitHub Actions assumes — "plan" (read-only, for pull requests) and "deploy" (main branch,
-# environment "prod"). No long-lived AWS keys are ever stored in GitHub.
+# Creates: the remote-state bucket, GitHub's OIDC identity provider, two roles that GitHub Actions
+# assumes — "plan" (read-only, for pull requests) and "deploy" (main branch, environment "prod") — and the
+# permissions boundary every app role must carry. No long-lived AWS keys are ever stored in GitHub.
+# Policy checks: infra/terraform/tests/test_iam_policies.py (run in CI).
 
 terraform {
   required_version = ">= 1.10"
@@ -141,6 +142,35 @@ data "aws_iam_policy_document" "state_rw" {
   }
 }
 
+# Pull-request plans read the state and never change it (review #3); `terraform plan -lock=false` writes nothing.
+data "aws_iam_policy_document" "state_ro" {
+  statement {
+    sid       = "ListState"
+    actions   = ["s3:ListBucket"]
+    resources = [aws_s3_bucket.state.arn]
+  }
+  statement {
+    sid       = "ReadState"
+    actions   = ["s3:GetObject"]
+    resources = ["${aws_s3_bucket.state.arn}/*"]
+  }
+  statement {
+    sid    = "NeverWriteState"
+    effect = "Deny"
+    actions = [
+      "s3:PutObject", "s3:DeleteObject", "s3:DeleteObjectVersion", "s3:PutObjectAcl", "s3:PutObjectVersionAcl",
+      "s3:RestoreObject", "s3:PutObjectRetention", "s3:PutObjectLegalHold",
+    ]
+    resources = ["${aws_s3_bucket.state.arn}/*"]
+  }
+  statement {
+    sid       = "NeverChangeStateBucket"
+    effect    = "Deny"
+    actions   = ["s3:PutBucket*", "s3:DeleteBucket*", "s3:PutLifecycleConfiguration", "s3:PutEncryptionConfiguration"]
+    resources = [aws_s3_bucket.state.arn]
+  }
+}
+
 # ---------------------------------------------------------------- plan role (PRs)
 resource "aws_iam_role" "plan" {
   name                 = "vl-github-plan"
@@ -154,14 +184,59 @@ resource "aws_iam_role_policy_attachment" "plan_readonly" {
 }
 
 resource "aws_iam_role_policy" "plan_state" {
-  name   = "terraform-state"
+  name   = "terraform-state-read"
   role   = aws_iam_role.plan.id
-  policy = data.aws_iam_policy_document.state_rw.json
+  policy = data.aws_iam_policy_document.state_ro.json
+}
+
+# ---------------------------------------------------------------- permissions boundary for app roles
+# Every role the deploy role creates (named vl-app-*) must carry this boundary, so whatever policy is
+# attached to it, the role can never do more than the app needs — and never anything in IAM or STS (review #2).
+data "aws_iam_policy_document" "app_boundary" {
+  statement {
+    sid = "AppData"
+    actions = [
+      "dynamodb:GetItem", "dynamodb:BatchGetItem", "dynamodb:Query", "dynamodb:PutItem", "dynamodb:UpdateItem",
+      "dynamodb:DeleteItem", "dynamodb:BatchWriteItem", "dynamodb:ConditionCheckItem",
+    ]
+    resources = [
+      "arn:aws:dynamodb:*:${data.aws_caller_identity.me.account_id}:table/vl-*",
+      "arn:aws:dynamodb:*:${data.aws_caller_identity.me.account_id}:table/vl-*/index/*",
+    ]
+  }
+  statement {
+    sid       = "AppUsers"
+    actions   = ["cognito-idp:AdminDeleteUser", "cognito-idp:AdminGetUser", "cognito-idp:AdminUserGlobalSignOut"]
+    resources = ["arn:aws:cognito-idp:*:${data.aws_caller_identity.me.account_id}:userpool/*"]
+  }
+  statement {
+    sid       = "AppLogs"
+    actions   = ["logs:CreateLogStream", "logs:PutLogEvents"]
+    resources = ["arn:aws:logs:*:${data.aws_caller_identity.me.account_id}:log-group:/aws/lambda/vl-*"]
+  }
+  statement {
+    sid       = "AppTracing"
+    actions   = ["xray:PutTraceSegments", "xray:PutTelemetryRecords"]
+    resources = ["*"]
+  }
+  statement {
+    sid       = "NeverIdentity"
+    effect    = "Deny"
+    actions   = ["iam:*", "sts:*", "organizations:*", "account:*"]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_policy" "app_boundary" {
+  name        = "vl-app-boundary"
+  description = "Permissions boundary for roles the deploy pipeline creates (vl-app-*)"
+  policy      = data.aws_iam_policy_document.app_boundary.json
 }
 
 # ---------------------------------------------------------------- deploy role (main → prod)
-# Scoped to the services this project uses. IAM is limited to roles/policies named vl-*,
-# so the deploy role cannot grant itself or anything else broader access.
+# Scoped to the services this project uses. In IAM it may manage only app roles (vl-app-*), each carrying the
+# vl-app-boundary permissions boundary, and pass them only to Lambda. It can never change itself, the plan role
+# or the boundary (explicit denies), so it cannot grant itself or anything else broader access (review #2).
 data "aws_iam_policy_document" "deploy" {
   statement {
     sid = "ProjectServices"
@@ -174,14 +249,43 @@ data "aws_iam_policy_document" "deploy" {
     resources = ["*"]
   }
   statement {
-    sid = "ProjectIam"
+    sid = "AppRolesRead"
     actions = [
-      "iam:CreateRole", "iam:DeleteRole", "iam:GetRole", "iam:UpdateRole", "iam:TagRole", "iam:UntagRole",
-      "iam:UpdateAssumeRolePolicy", "iam:PutRolePolicy", "iam:GetRolePolicy", "iam:DeleteRolePolicy",
-      "iam:AttachRolePolicy", "iam:DetachRolePolicy", "iam:ListRolePolicies", "iam:ListAttachedRolePolicies",
-      "iam:ListInstanceProfilesForRole", "iam:PassRole",
+      "iam:GetRole", "iam:GetRolePolicy", "iam:ListRolePolicies", "iam:ListAttachedRolePolicies",
+      "iam:ListInstanceProfilesForRole", "iam:ListRoleTags",
     ]
-    resources = ["arn:aws:iam::${data.aws_caller_identity.me.account_id}:role/vl-*"]
+    resources = ["arn:aws:iam::${data.aws_caller_identity.me.account_id}:role/vl-app-*"]
+  }
+  statement {
+    sid = "AppRolesManage"
+    actions = [
+      "iam:DeleteRole", "iam:UpdateRole", "iam:UpdateRoleDescription", "iam:UpdateAssumeRolePolicy",
+      "iam:TagRole", "iam:UntagRole",
+    ]
+    resources = ["arn:aws:iam::${data.aws_caller_identity.me.account_id}:role/vl-app-*"]
+  }
+  statement {
+    sid = "AppRolesOnlyWithBoundary"
+    actions = [
+      "iam:CreateRole", "iam:PutRolePolicy", "iam:DeleteRolePolicy", "iam:AttachRolePolicy",
+      "iam:DetachRolePolicy", "iam:PutRolePermissionsBoundary",
+    ]
+    resources = ["arn:aws:iam::${data.aws_caller_identity.me.account_id}:role/vl-app-*"]
+    condition {
+      test     = "StringEquals"
+      variable = "iam:PermissionsBoundary"
+      values   = [aws_iam_policy.app_boundary.arn]
+    }
+  }
+  statement {
+    sid       = "PassAppRolesToLambda"
+    actions   = ["iam:PassRole"]
+    resources = ["arn:aws:iam::${data.aws_caller_identity.me.account_id}:role/vl-app-*"]
+    condition {
+      test     = "StringEquals"
+      variable = "iam:PassedToService"
+      values   = ["lambda.amazonaws.com"]
+    }
   }
   statement {
     sid       = "ServiceLinkedRoles"
@@ -197,6 +301,27 @@ data "aws_iam_policy_document" "deploy" {
     sid       = "ReadIam"
     actions   = ["iam:GetPolicy", "iam:GetPolicyVersion", "iam:ListPolicies", "iam:GetOpenIDConnectProvider"]
     resources = ["*"]
+  }
+  statement {
+    sid       = "NeverPipelineRoles"
+    effect    = "Deny"
+    actions   = ["iam:*"]
+    resources = ["arn:aws:iam::${data.aws_caller_identity.me.account_id}:role/vl-github-*"]
+  }
+  statement {
+    sid       = "NeverRemoveBoundary"
+    effect    = "Deny"
+    actions   = ["iam:DeleteRolePermissionsBoundary"]
+    resources = ["*"]
+  }
+  statement {
+    sid    = "NeverEditBoundary"
+    effect = "Deny"
+    actions = [
+      "iam:CreatePolicyVersion", "iam:DeletePolicy", "iam:DeletePolicyVersion", "iam:SetDefaultPolicyVersion",
+      "iam:TagPolicy", "iam:UntagPolicy",
+    ]
+    resources = [aws_iam_policy.app_boundary.arn]
   }
 }
 
@@ -222,6 +347,7 @@ resource "aws_iam_role_policy" "deploy_state" {
 output "state_bucket" { value = aws_s3_bucket.state.bucket }
 output "plan_role_arn" { value = aws_iam_role.plan.arn }
 output "deploy_role_arn" { value = aws_iam_role.deploy.arn }
+output "app_boundary_arn" { value = aws_iam_policy.app_boundary.arn }
 output "next_steps" {
   value = <<-EOT
     Set these GitHub repository variables (Settings → Secrets and variables → Actions → Variables):

@@ -466,7 +466,7 @@ infra/terraform/
 | Workflow | Trigger | Steps |
 |---|---|---|
 | `ci.yml` | PR | pnpm install → lint/typecheck → Vitest (engine) → Astro build + content checks → Playwright smoke + **axe** → ruff + mypy + pytest (moto) → terraform fmt/validate/tflint → `terraform plan` (read-only OIDC role) posted to the PR |
-| `deploy.yml` | push to `main` | build web → `aws s3 sync` (hashed assets immutable; HTML short TTL) → CloudFront invalidation `/*` → build Lambda zips → `terraform apply` (deploy OIDC role, environment `prod`) |
+| `deploy.yml` | green `ci` run on `main` (`workflow_run`) | build web → build Lambda zip → `terraform apply` (deploy OIDC role, environment `prod`; IAM only on `vl-app-*` roles with the `vl-app-boundary` permissions boundary) → `aws s3 sync` (hashed assets immutable; HTML short TTL) → CloudFront invalidation `/*` |
 | `wasm.yml` | manual / vidyut tag bump | `wasm-pack` build → size check → commit artifact to `apps/web/public/wasm/` |
 
 ## 12. Observability & $0 guardrails

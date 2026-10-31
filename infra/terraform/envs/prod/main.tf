@@ -22,6 +22,8 @@ provider "aws" {
   }
 }
 
+data "aws_caller_identity" "me" {}
+
 locals {
   analytics = var.cf_beacon_token != ""
   accounts  = var.accounts_enabled
@@ -74,6 +76,9 @@ module "api" {
   client_id        = module.auth[0].client_id
   distribution_arn = module.site.distribution_arn
   alarm_topic_arn  = module.guardrails.alarm_topic_arn
+
+  # created by ../../bootstrap; the deploy role can create the app role only with this boundary
+  permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.me.account_id}:policy/vl-app-boundary"
 }
 
 module "guardrails" {

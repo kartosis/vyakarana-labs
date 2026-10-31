@@ -37,8 +37,19 @@ aws sts get-caller-identity   # shows your account id → you are connected
 
 ## 3. Bootstrap (once)
 
-Creates the Terraform state bucket, GitHub's OIDC identity provider and the two roles GitHub Actions
-uses. No AWS keys are ever stored in GitHub.
+Creates the Terraform state bucket, GitHub's OIDC identity provider, the two roles GitHub Actions
+uses and the permissions boundary for app roles. No AWS keys are ever stored in GitHub.
+
+What the two roles may do (checked in CI by `infra/terraform/tests/test_iam_policies.py`):
+- **`vl-github-plan`** (pull requests): AWS read-only, and the state bucket read-only — it can never write
+  or delete state.
+- **`vl-github-deploy`** (only jobs in the GitHub environment `prod`): the project's services; in IAM only
+  roles named `vl-app-*`, created and edited only with the `vl-app-boundary` permissions boundary (which
+  grants nothing in IAM or STS) and passed only to Lambda. It cannot change itself, the plan role or the
+  boundary.
+
+Because the bootstrap uses your own credentials and local state, the pipeline can never change these roles;
+to change them, edit `bootstrap/main.tf` and run `terraform apply` there again.
 
 ```powershell
 cd infra\terraform\bootstrap
