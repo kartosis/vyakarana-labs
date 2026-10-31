@@ -27,6 +27,8 @@ async function hydrateAll(p) {
   });
   await p.waitForTimeout(300);
 }
+/** In GitHub Actions, also emit an annotation: readable through the check-runs API without downloading logs. */
+const annotate = (msg) => { if (process.env.GITHUB_ACTIONS) console.log(`::error title=axe::${msg.replace(/\r?\n/g, ' ')}`); };
 (async () => {
   const b = await chromium.launch();
   let violations = 0;
@@ -34,13 +36,21 @@ async function hydrateAll(p) {
     const ctx = await b.newContext({ colorScheme: scheme });
     for (const u of urls) {
       const p = await ctx.newPage();
-      await p.goto(BASE + u, { waitUntil: 'networkidle' });
-      await hydrateAll(p);
-      const r = await new AxeBuilder({ page: p }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
-      for (const v of r.violations) {
+      try {
+        await p.goto(BASE + u, { waitUntil: 'networkidle' });
+        await hydrateAll(p);
+        const r = await new AxeBuilder({ page: p }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
+        for (const v of r.violations) {
+          violations++;
+          const targets = v.nodes.slice(0, 3).map((n) => n.target.join(' '));
+          console.log(`[${scheme}] ${u} :: ${v.id} (${v.impact}) x${v.nodes.length}: ${v.help}`);
+          for (const t of targets) console.log('    ', t);
+          annotate(`[${scheme}] ${u} ${v.id} (${v.impact}) x${v.nodes.length}: ${v.help} | ${targets.join(' | ')}`);
+        }
+      } catch (e) {
         violations++;
-        console.log(`[${scheme}] ${u} :: ${v.id} (${v.impact}) x${v.nodes.length}: ${v.help}`);
-        for (const n of v.nodes.slice(0, 3)) console.log('    ', n.target.join(' '));
+        console.log(`[${scheme}] ${u} :: audit failed: ${e.message}`);
+        annotate(`[${scheme}] ${u} audit failed: ${String(e.message).slice(0, 300)}`);
       }
       await p.close();
     }

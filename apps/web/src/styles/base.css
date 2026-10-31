@@ -96,6 +96,13 @@
     padding: 0.45em 0.6em;
     min-block-size: 2.75rem;
   }
+  select {
+    background: var(--s-color-surface);
+    border: 1px solid var(--s-color-border);
+    border-radius: var(--s-radius-control);
+    padding-inline: 0.5rem;
+    min-block-size: 2.75rem;
+  }
   input:not([type="range"]):user-invalid {
     border-color: var(--s-color-rubric);
   }
