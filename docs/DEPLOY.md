@@ -1,7 +1,8 @@
 # Deploying Vyākaraṇa Labs
 
 Everything runs on AWS free-tier services and is created by Terraform. You do steps 1–5 **once**
-(about 30 minutes). After that, every push to `main` builds and deploys automatically.
+(about 30 minutes). After that, every commit on `main` whose CI run is green is deployed automatically.
+The owner's checklist, including GitHub settings and decisions, is `docs/OWNER-SETUP.md`.
 
 Commands are for **Windows PowerShell**. Run them from the repository folder.
 
@@ -20,6 +21,10 @@ aws --version; terraform version; gh --version
 
 ## 2. AWS account (once)
 
+0. **Account plan.** Accounts created since July 2025 start on the **Free plan**, which ends after 6 months or when
+   the credits run out; AWS then closes the account and deletes its data after 90 days. For a live site choose the
+   **Paid plan**: Billing and Cost Management → **Upgrade plan** → **Upgrade account**. Credits and the *always
+   free* allowances stay; the stack's $0.01 budget alert warns at the first cent of real spend.
 1. Sign in to the AWS console as the root user. Turn on **MFA** for root (Account → Security credentials).
 2. Open **IAM Identity Center** → Enable → create a user for yourself → assign the
    **AdministratorAccess** permission set on your account. Use this user from now on, not root.

@@ -241,15 +241,17 @@ IaC: Terraform (remote state S3 + lock) · CI/CD: GitHub Actions + OIDC role · 
 
 ## 7. User-side setup (what Kartik must do)
 
+Step-by-step for every item: **`docs/OWNER-SETUP.md`** (parts A–F).
+
 | # | Item | When | Status |
 |---|---|---|---|
 | U1 | Create **empty** GitHub repo **`kartosis/vyakarana-labs`** (no README/licence) | now | ✅ |
 | U1b | Grant the **Claude GitHub App** access to `vyakarana-labs` | now | ✅ |
-| U2 | AWS account with MFA on root; IAM Identity Center admin user; **AWS Budgets** alert | before P8 | ☐ |
+| U2 | AWS account **on the Paid plan** (new accounts' Free plan closes after 6 months), MFA on root, IAM Identity Center admin user — OWNER-SETUP.md §D | before P4 | ☐ |
 | U3 | Bootstrap Terraform state bucket (script provided) + GitHub OIDC role (Terraform provided) | P8 | ☐ |
 | U4 | **SES**: verify domain (DKIM), request **production access** (sandbox only emails verified addresses) | P8 / P11 | ☐ |
 | U5 | Cloudflare DNS for `identifyragas.com`: add ACM validation CNAME + `sanskrit` CNAME → CloudFront (**DNS-only / grey cloud**) | P8 / P11 | ☐ |
-| U6 | GitHub repo secrets/vars: `AWS_ROLE_ARN`, `AWS_REGION` | P9 | ☐ |
+| U6 | GitHub repository variables `AWS_REGION`, `TF_STATE_BUCKET`, `AWS_PLAN_ROLE`, `AWS_DEPLOY_ROLE`, `ALERT_EMAIL` (no secrets: OIDC) — OWNER-SETUP.md §E | P4 | ☐ |
 | U6b | When creating the GitHub environment `prod` (DEPLOY.md §4): **restrict it to the `main` branch** (deployment branch policy) — otherwise a workflow on any branch could take deploy credentials (P1 exit review X5) | P9 | ☐ |
 | U7 | **Choose licences** (ROADMAP P2): code (MIT or Apache-2.0?) and lesson content (CC BY-SA 4.0, or all rights reserved?) — third-party notices (vidyut MIT, ashtadhyayi.com data credit, fonts OFL) are added either way | P2 | ☐ |
 | U8 | **Approve branch protection** on `main` (PR required, required checks = all CI jobs, code-owner review, linear history, no force-push) — changes how every later change lands | P2 | ☐ |
