@@ -36,6 +36,11 @@ jobs:
         run: pnpm --filter @vl/engine check
       - name: Engine — tests
         run: pnpm --filter @vl/engine test
+      - uses: astral-sh/setup-uv@v6
+      - name: Content — sūtras and quotes match the sources (extract of the ashtadhyayi.com dataset; refresh with scripts/extract-sources.py)
+        run: |
+          uv run --no-project --with pyyaml==6.0.3 python scripts/check-sutras.py data/sources-extract
+          uv run --no-project --with pyyaml==6.0.3 python scripts/check-sources.py data/sources-extract
       - name: Site — unit tests (Derivation tool logic)
         run: pnpm --filter @vl/web test
       - name: CloudFront function — tests

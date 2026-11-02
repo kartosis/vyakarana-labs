@@ -415,16 +415,17 @@ Alarms (≤ 10 free): API 5xx, Lambda errors/throttles, DynamoDB throttles, Clou
 | Repo | Branch protection, required checks | ☐ | `main` unprotected (API: 404) |
 | Repo | LICENSE, SECURITY.md, CODEOWNERS, PR/issue templates | ☐ | |
 | Repo | Dependabot, CodeQL, secret scanning + push protection | ☐ | public repo, all free |
-| CI | Engine typecheck + tests | ✅ | 342 tests |
+| CI | Engine typecheck + tests | ✅ | 381 tests |
+| CI | Site unit tests (Vitest) | ✅ | `apps/web/test/` — Derivation tool logic (26); islands to follow (P3) |
 | CI | Site build, typecheck (tsc), CSP budget | ✅ | `astro check` missing (🔶) |
 | CI | ESLint/Prettier | ☐ | |
-| CI | axe (46 pages × 2 themes) | ✅ | violations reported as `::error` annotations |
+| CI | axe (47 pages × 2 themes) | ✅ | WCAG 2.0/2.1 A+AA and 2.2 AA tags (2.1 A added 2026-11-02: Label in Name); violations as `::error` annotations |
 | CI | Account e2e (stubbed Cognito, prod CSP) | ✅ | `accounts.cjs` + `accounts-edge.cjs` (review #5, #6, #18, deletion errors) + `integrity.cjs` (review #1, #9: retries, reloads, outbox); plain scripts → migrate to `@playwright/test` |
 | CI | Derivation e2e | ✅ | rāma, ramā, gaurī, lakṣmī under the production CSP |
 | CI | Cross-browser / mobile E2E, visual regression, Lighthouse, size budgets | ☐ | |
 | CI | API ruff + strict mypy + pytest (moto) | ✅ | 35 tests incl. fault injection (lost response, failure before commit, concurrent change); Ubuntu and Windows |
 | CI | Contract tests / Schemathesis | ☐ | `openapi.yaml` planned |
-| CI | Content checks (sūtras, quotes) | 🔶 | run locally only; vendor dataset extract |
+| CI | Content checks (sūtras, quotes) | ✅ | against `data/sources-extract/` (168 KB extract of the ashtadhyayi.com dataset, `scripts/extract-sources.py`); fails until the extract covers new sūtras/quotes |
 | CI | Exercise checker | ✅ | |
 | CI | Terraform validate; PR plan | ✅ | pipefail on every step, Lambda built before plan (review #16, #17); `rewrite.test.mjs` for the CloudFront function |
 | CI | Workflow policy (`scripts/check-workflows.mjs` W1–W6) | ✅ | pipefail everywhere, permissions declared, Lambda before plan, deploy gated on green ci; actionlint/shellcheck still ☐ (P2) |
