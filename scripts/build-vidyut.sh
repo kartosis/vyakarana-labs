@@ -15,4 +15,10 @@ git -C "$WORK/vidyut" checkout --quiet "$VIDYUT_COMMIT"
 mkdir -p "$OUT"
 cp "$WORK/pkg/vidyut_prakriya.js" "$WORK/pkg/vidyut_prakriya_bg.wasm" "$OUT/"
 echo "$VIDYUT_COMMIT" > "$OUT/version.txt"
+# Licence notices travel with the copy we serve (MIT, Apache-2.0): every crate compiled for wasm32 and the text of
+# its licence. vidyut itself ships no LICENSE file at this commit; its Cargo.toml declares MIT (review D6).
+(cd "$WORK/vidyut/vidyut-prakriya" && cargo metadata --format-version 1 --filter-platform wasm32-unknown-unknown --features serde) \
+  > "$WORK/metadata.json"
+python3 "$(dirname "$0")/third-party-notices.py" "$WORK/metadata.json" vidyut-prakriya > "$OUT/THIRD-PARTY.txt"
+grep -q "^vidyut-prakriya .* licence: MIT" "$OUT/THIRD-PARTY.txt"
 ls -l "$OUT"

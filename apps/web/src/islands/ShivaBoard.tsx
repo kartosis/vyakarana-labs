@@ -84,14 +84,11 @@ export default function ShivaBoard({ initial = ["a", "c"], presets = true, label
                     ].join(" ")}
                     aria-pressed={isStart || isEnd}
                     aria-disabled={disabled}
-                    aria-label={
-                      slot.isIt
-                        ? `marker ${iast(slot.sound)}, closes sūtra ${ss.n}`
-                        : `${iast(recited(slot))}, sūtra ${ss.n}`
-                    }
                     onClick={() => !disabled && choose(slot)}
                   >
+                    {/* the visible letter is the name; the rest is context (WCAG 2.5.3 label in name) */}
                     <Sa slp={recited(slot)} />
+                    <span class="visually-hidden">{slot.isIt ? `, marker, closes sūtra ${ss.n}` : `, sūtra ${ss.n}`}</span>
                   </button>
                 );
               })}

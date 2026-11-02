@@ -39,7 +39,7 @@ const annotate = (msg) => { if (process.env.GITHUB_ACTIONS) console.log(`::error
       try {
         await p.goto(BASE + u, { waitUntil: 'networkidle' });
         await hydrateAll(p);
-        const r = await new AxeBuilder({ page: p }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
+        const r = await new AxeBuilder({ page: p }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']).analyze();
         for (const v of r.violations) {
           violations++;
           const targets = v.nodes.slice(0, 3).map((n) => n.target.join(' '));

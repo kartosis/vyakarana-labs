@@ -10,7 +10,7 @@ const current = (href: string) => (path.startsWith(href) ? "page" : undefined);
 ---
 <header class="site-header">
   <div class="site-header-inner">
-    <a class="brand" href="/" aria-label="Vyākaraṇa Labs, home">
+    <a class="brand" href="/">
       <span class="brand-mark" lang="sa" aria-hidden="true">व्या</span>
       <span class="brand-name">Vyākaraṇa Labs</span>
     </a>
@@ -222,7 +222,8 @@ const current = (href: string) => (path.startsWith(href) ? "page" : undefined);
       .site-nav ul { padding-block: var(--p-space-1); }
     }
     @media (width < 26rem) {
-      .brand-name { display: none; }
+      /* hidden from sight only: it stays the link's name for screen readers (WCAG 2.5.3, 4.1.2) */
+      .brand-name { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
     }
   }
 </style>

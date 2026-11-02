@@ -426,7 +426,7 @@
   .prakriya { container: prakriya / inline-size; display: grid; gap: var(--p-space-5); }
   .prakriya-in {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1fr 1fr;
     align-items: end;
     gap: var(--p-space-3);
     padding: var(--p-space-5);
@@ -434,15 +434,23 @@
     border-radius: var(--s-radius-control);
   }
   .prakriya-field { display: grid; gap: var(--p-space-1); margin: 0; }
+  .prakriya-in > .prakriya-field:first-child { grid-column: 1 / -1; } /* the stem gets the full row */
   .prakriya-field label { font-weight: 700; font-size: var(--s-text-small); }
   .prakriya-field input { font-size: 1.3rem; inline-size: 100%; min-block-size: 3.25rem; }
   .prakriya-field select { font-size: 1rem; inline-size: 100%; min-block-size: 3.25rem; }
   .prakriya-check { grid-column: 1 / -1; margin: 0; display: flex; gap: 0.5rem; align-items: baseline; }
   .prakriya-hint { grid-column: 1 / -1; margin: 0; font-size: var(--s-text-small); color: var(--s-color-text-soft); max-inline-size: 62ch; }
-  @container prakriya (inline-size < 30rem) {
+  /* what the stem was read as (review D1): reserve its line so the form does not jump while typing */
+  .prakriya-reading { grid-column: 1 / -1; margin: 0; min-block-size: 1.6em; font-size: 1.05rem; }
+  .prakriya-reading .sa-iast { font-size: 0.9em; color: var(--s-color-text-soft); }
+  .prakriya-reading-scheme { font-size: var(--s-text-small); color: var(--s-color-text-soft); }
+  @container prakriya (inline-size < 26rem) {
     .prakriya-in { grid-template-columns: 1fr; }
   }
   .prakriya-status { margin: 0; color: var(--s-color-text-soft); font-style: italic; }
+  .prakriya-status:empty { display: none; }
+  /* on phones the table scrolls by itself instead of the page (review D8) */
+  .prakriya .table-wrap { overflow-x: auto; }
   .prakriya-table { inline-size: 100%; border-collapse: collapse; }
   .prakriya-table th { text-align: start; font-weight: 600; font-size: var(--s-text-small); vertical-align: top; padding: 0.4rem 0.5rem; }
   .prakriya-table thead th { border-block-end: 2px solid var(--s-color-rubric); }
@@ -464,6 +472,8 @@
   .prakriya-cell:hover { background: var(--s-color-leaf); border-color: var(--s-color-hairline); }
   .prakriya-cell[aria-pressed="true"] { background: var(--s-color-mark); border-color: var(--s-color-mark-strong); }
   .prakriya-cell .sa-iast { font-size: 0.8em; color: var(--s-color-text-soft); }
+  /* on the highlight, soft and faint text fall below 4.5:1 in the dark theme (review D11) */
+  .prakriya-cell[aria-pressed="true"] :is(.sa-iast, .prakriya-or) { color: var(--s-color-text); }
   .prakriya-or, .prakriya-none { color: var(--s-color-text-faint); }
   .prakriya-steps-wrap { display: grid; gap: var(--p-space-3); }
   .prakriya-steps-wrap > :is(h2, h3) { margin: 0; }
@@ -475,7 +485,7 @@
   .prakriya-steps li {
     counter-increment: pstep;
     display: grid;
-    grid-template-columns: 2rem 6.5rem 1fr;
+    grid-template-columns: 2rem 9.5rem 1fr;
     gap: var(--p-space-3);
     align-items: baseline;
     padding-block: var(--p-space-2);
@@ -487,7 +497,18 @@
   .prakriya-terms { font-size: 1.25rem; line-height: 1.4; }
   .prakriya-terms .sa-iast { font-size: 0.75em; color: var(--s-color-text-soft); }
   .prakriya-plus { color: var(--s-color-text-faint); }
-  .prakriya-term.is-changed { background: var(--s-color-mark); border-radius: 2px; padding-inline: 0.1em; }
+  /* a change is shown by shape as well as colour (review D5): underlined, and named for screen readers */
+  .prakriya-term.is-changed,
+  .prakriya-part.is-changed {
+    background: var(--s-color-mark);
+    border-radius: 2px;
+    text-decoration: underline 2px;
+    text-underline-offset: 0.22em;
+    text-decoration-skip-ink: none;
+  }
+  .prakriya-term.is-changed { padding-inline: 0.1em; }
+  .prakriya-term.is-changed .sa-iast, .prakriya-part.is-changed { color: var(--s-color-text); }
+  .prakriya-term.is-partly-changed .sa-deva { text-decoration: underline dotted 2px; text-underline-offset: 0.22em; }
   @container prakriya (inline-size < 30rem) {
     .prakriya-steps li { grid-template-columns: 1.5rem 1fr; }
     .prakriya-terms { grid-column: 2; }

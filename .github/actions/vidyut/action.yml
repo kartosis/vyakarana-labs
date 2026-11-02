@@ -7,7 +7,7 @@ runs:
       uses: actions/cache@v4
       with:
         path: apps/web/public/vidyut
-        key: vidyut-wasm-${{ hashFiles('scripts/build-vidyut.sh') }}
+        key: vidyut-wasm-${{ hashFiles('scripts/build-vidyut.sh', 'scripts/third-party-notices.py') }}
     - if: steps.cache.outputs.cache-hit != 'true'
       shell: bash
       run: rustup target add wasm32-unknown-unknown

@@ -5,18 +5,25 @@ import PrakriyaStepper from "../../islands/PrakriyaStepper.tsx";
 
 const known = (await getCollection("sutras")).map((s) => s.id);
 ---
-<Base title="Derivation" kind="tool" description="Decline any noun stem in all twenty-four forms and step through the derivation of each, sūtra by sūtra.">
+<Base title="Derivation" kind="tool" description="Decline a simple noun stem in all twenty-four forms and step through the derivation of each, rule by rule.">
   <div class="page-narrow">
     <header class="page-head">
       <p class="crumbs"><a href="/tools/">Tools</a></p>
       <h1>Derivation</h1>
       <p class="lead">
-        Type a stem and choose its gender. You get its full declension, and for any form the prakriyā: every sūtra the
-        grammar applies, in order, from stem and ending to the finished word. The derivations come from
-        vidyut-prakriyā, an open implementation of the Aṣṭādhyāyī by Ambuda; sūtras taught on this site link to their
-        pages, the rest to Pramāṇa.
+        Type a stem and choose its gender. You get its full declension, and for any form the prakriyā: each rule
+        vidyut-prakriyā applies, in order, from stem and ending to the finished word. vidyut-prakriyā is an open
+        implementation of the Aṣṭādhyāyī by Ambuda; sūtras taught on this site link to their pages, the rest to Pramāṇa.
+      </p>
+      <p>
+        It declines the stem exactly as you type it and does not know how the stem was formed. A stem made with a
+        suffix that carries a marker, such as <i lang="sa-Latn">bhagavat</i> (with matup, whose u gives the
+        nominative <i lang="sa-Latn">bhagavān</i>), may be declined as a plain stem, so check such forms against a grammar; and a
+        finished word typed as a stem (<i lang="sa-Latn">rājā</i> rather than <i lang="sa-Latn">rājan</i>) is declined
+        as if it were one.
       </p>
     </header>
+    <noscript><p class="prakriya-status">The Derivation tool runs in your browser and needs JavaScript.</p></noscript>
     <PrakriyaStepper client:load known={known} />
   </div>
 </Base>

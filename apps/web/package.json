@@ -8,7 +8,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "test": "echo \"(web) no unit tests yet\"",
+    "test": "vitest run",
     "e2e": "node e2e/a11y.cjs && node e2e/accounts.cjs /tmp/csp.json",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
@@ -27,6 +27,7 @@
   "devDependencies": {
     "@axe-core/playwright": "4.14.0",
     "playwright": "1.63.0",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "vitest": "^5.0.5"
   }
 }

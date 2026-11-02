@@ -36,6 +36,8 @@ jobs:
         run: pnpm --filter @vl/engine check
       - name: Engine — tests
         run: pnpm --filter @vl/engine test
+      - name: Site — unit tests (Derivation tool logic)
+        run: pnpm --filter @vl/web test
       - name: CloudFront function — tests
         run: node --test infra/terraform/modules/site/rewrite.test.mjs
       - name: vidyut-prakriya WebAssembly (derivation stepper)
