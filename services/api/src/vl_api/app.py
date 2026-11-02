@@ -278,6 +278,7 @@ def get_leaderboard(week: str) -> Response[str]:
 
 
 @logger.inject_lambda_context(clear_state=True)
-@tracer.capture_lambda_handler
+# Never record responses in traces: they carry refresh/ID tokens and account exports (second exit review Y1).
+@tracer.capture_lambda_handler(capture_response=False)
 def handler(event: dict[str, Any], context: Any) -> dict[str, Any]:
     return app.resolve(event, context)

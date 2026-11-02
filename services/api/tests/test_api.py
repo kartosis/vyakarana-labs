@@ -539,7 +539,86 @@ def test_invalid_transaction_is_not_retried(call: Call, monkeypatch: pytest.Monk
             "TransactWriteItems",
         )
 
+    t = make_token("invalid")
+    assert call("GET", "/api/v1/me", token=t)[0] == 200  # profile first, so the fault reaches _once (Y11)
     monkeypatch.setattr(Repo, "_transact", invalid)
     with pytest.raises(ClientError):
-        call("POST", "/api/v1/sessions", session(), token=make_token())
+        call("POST", "/api/v1/sessions", session(), token=t)
     assert calls["n"] == 1
+
+
+# ---------------------------------------------------------------- Y7, Y11: conflicts are retried
+def cancelled(*codes: str) -> Any:
+    from botocore.exceptions import ClientError
+
+    return ClientError(
+        {
+            "Error": {"Code": "TransactionCanceledException", "Message": "x"},
+            "CancellationReasons": [{"Code": c} for c in codes],
+        },
+        "TransactWriteItems",
+    )
+
+
+def test_session_transaction_conflict_is_retried_and_counted_once(
+    call: Call, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from vl_api.repo import Repo
+
+    t = make_token("conflict")
+    assert call("GET", "/api/v1/me", token=t)[0] == 200
+    real = Repo._transact
+    seen = {"n": 0}
+
+    def once(self: Repo, items: list[dict[str, Any]]) -> None:
+        seen["n"] += 1
+        if seen["n"] == 1:
+            raise cancelled(*["TransactionConflict"] + ["None"] * (len(items) - 1))
+        real(self, items)
+
+    monkeypatch.setattr(Repo, "_transact", once)
+    status, body, _ = call("POST", "/api/v1/sessions", session(), token=t)
+    assert status == 200 and body["firstCompletion"] is True and seen["n"] == 2
+    assert totals(call, t) == (1, 5, 2, 14)
+
+
+def test_concurrent_first_requests_do_not_fail(call: Call, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Profile creation is a transaction; a TransactionConflict with a concurrent first request is no 500."""
+    from vl_api.repo import Repo
+
+    real = Repo._transact
+    seen = {"n": 0}
+
+    def conflict_first(self: Repo, items: list[dict[str, Any]]) -> None:
+        seen["n"] += 1
+        if seen["n"] == 1:
+            raise cancelled("TransactionConflict", "None", "None")
+        real(self, items)
+
+    monkeypatch.setattr(Repo, "_transact", conflict_first)
+    status, me, _ = call("GET", "/api/v1/me", token=make_token("twin"))
+    assert status == 200 and me["pseudonym"]
+
+
+# ---------------------------------------------------------------- Y6: deletion and export read consistently
+def test_delete_and_export_list_items_with_consistent_reads(
+    call: Call, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from vl_api.repo import Repo
+
+    t = make_token("consistent")
+    call("POST", "/api/v1/sessions", session(), token=t)
+    real = Repo._query_all
+    kinds: list[bool] = []
+
+    def spy(self: Repo, **kw: Any) -> Any:
+        if kw.get("KeyConditionExpression") is not None and "IndexName" not in kw:
+            kinds.append(bool(kw.get("ConsistentRead")))
+        return real(self, **kw)
+
+    monkeypatch.setattr(Repo, "_query_all", spy)
+    call("GET", "/api/v1/me/export", token=t)
+    assert kinds and all(kinds), kinds
+    kinds.clear()
+    delete_account(call, t)
+    assert kinds and all(kinds), kinds

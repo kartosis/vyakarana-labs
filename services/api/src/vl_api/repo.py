@@ -142,8 +142,9 @@ class Repo:
                 return
             kw["ExclusiveStartKey"] = page["LastEvaluatedKey"]
 
-    def user_items(self, sub: str) -> list[Item]:
-        return list(self._query_all(KeyConditionExpression=Key("PK").eq(pk(sub))))
+    def user_items(self, sub: str, consistent: bool = False) -> list[Item]:
+        """All of a learner's items; `consistent` for export and deletion, which must miss nothing (Y6)."""
+        return list(self._query_all(KeyConditionExpression=Key("PK").eq(pk(sub)), ConsistentRead=consistent))
 
     def get(self, key_pk: str, key_sk: str) -> Item | None:
         return cast("Item | None", self.t.get_item(Key={"PK": key_pk, "SK": key_sk}).get("Item"))
@@ -153,34 +154,39 @@ class Repo:
         item = self.get(pk(sub), "PROFILE")
         if item:
             return item
-        item = {
-            "PK": pk(sub),
-            "SK": "PROFILE",
-            "pseudonym": domain.new_pseudonym(),
-            "settings": {"script": "deva", "theme": "system", "dailyGoal": 10, "lbOptIn": True},
-            "role": "learner",
-            "createdAt": now.isoformat(),
-        }
-        userdir = {"PK": f"USERDIR#{now:%Y-%m}", "SK": f"{now.isoformat()}#{sub}", "sub": sub}
-        try:
-            self._transact(
-                [
-                    _put(self.t.name, item, "attribute_not_exists(PK)"),
-                    _put(self.t.name, userdir, "attribute_not_exists(PK)"),
-                    self._alive_check(sub),
-                ]
-            )
-        except ClientError as e:
-            codes = _cancel_codes(e)
-            if len(codes) == 3 and codes[2] == "ConditionalCheckFailed":
-                raise AccountDeleted from e
-            if not codes or codes[0] != "ConditionalCheckFailed":
-                raise
-            # created meanwhile by a concurrent first request
-            return cast(
-                "Item", self.t.get_item(Key={"PK": pk(sub), "SK": "PROFILE"}, ConsistentRead=True)["Item"]
-            )
-        return item
+        for attempt in range(TX_ATTEMPTS):
+            created = now if attempt == 0 else domain.utcnow()
+            item = {
+                "PK": pk(sub),
+                "SK": "PROFILE",
+                "pseudonym": domain.new_pseudonym(),
+                "settings": {"script": "deva", "theme": "system", "dailyGoal": 10, "lbOptIn": True},
+                "role": "learner",
+                "createdAt": created.isoformat(),
+            }
+            userdir = {"PK": f"USERDIR#{created:%Y-%m}", "SK": f"{created.isoformat()}#{sub}", "sub": sub}
+            try:
+                self._transact(
+                    [
+                        _put(self.t.name, item, "attribute_not_exists(PK)"),
+                        _put(self.t.name, userdir, "attribute_not_exists(PK)"),
+                        self._alive_check(sub),
+                    ]
+                )
+                return item
+            except ClientError as e:
+                codes = _cancel_codes(e)
+                if len(codes) == 3 and codes[2] == "ConditionalCheckFailed":
+                    raise AccountDeleted from e
+                if not codes or not set(codes) <= RETRYABLE:
+                    raise
+            # created meanwhile by a concurrent first request (ConditionalCheckFailed), or a conflict or
+            # throttling with one (second exit review Y7): read it, else try again after a pause
+            existing = self.t.get_item(Key={"PK": pk(sub), "SK": "PROFILE"}, ConsistentRead=True).get("Item")
+            if existing:
+                return cast("Item", existing)
+            time.sleep(random.uniform(0, 0.02 * 2**attempt))  # noqa: S311 (jitter, not cryptography)
+        raise Contended
 
     def update_settings(self, sub: str, s: SettingsIn, now: datetime) -> Item:
         prof = self.profile(sub, now)
@@ -466,7 +472,7 @@ class Repo:
 
     # ------------------------------------------------------------ account lifecycle
     def export(self, sub: str) -> list[Item]:
-        return [plain(it) for it in self.user_items(sub) if it["SK"] != TOMBSTONE]
+        return [plain(it) for it in self.user_items(sub, consistent=True) if it["SK"] != TOMBSTONE]
 
     def delete_user(self, sub: str, now: datetime) -> int:
         """Delete everything of the account. The tombstone goes first, so a request still carrying a valid
@@ -479,7 +485,7 @@ class Repo:
                 "ttl": int((now + TOMBSTONE_TTL).timestamp()),
             }
         )
-        items = [it for it in self.user_items(sub) if it["SK"] != TOMBSTONE]
+        items = [it for it in self.user_items(sub, consistent=True) if it["SK"] != TOMBSTONE]
         weeks = set()
         created = None
         for it in items:

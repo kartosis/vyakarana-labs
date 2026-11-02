@@ -281,3 +281,18 @@ def test_deploy_role_can_still_use_state_and_lock() -> None:
     obj = f"arn:aws:s3:::vyakarana-labs-tfstate-{ACCOUNT}/prod/terraform.tfstate.tflock"
     for a in ["s3:GetObject", "s3:PutObject", "s3:DeleteObject"]:
         assert applying(DEPLOY, a, obj, "Allow") and not applying(DEPLOY, a, obj, "Deny"), a
+
+
+# ---------------------------------------------------------------- second exit review Y1: traces are not readable
+@pytest.mark.parametrize("action", ["xray:BatchGetTraces", "xray:GetTraceSummaries", "xray:GetTraceGraph"])
+def test_plan_role_cannot_read_traces(action: str) -> None:
+    assert applying(PLAN, action, "*", "Deny"), action
+
+
+def test_api_function_never_traces_responses() -> None:
+    fn = resources(load(TF / "modules/api/main.tf"), "aws_lambda_function")["api"]
+    env = fn["environment"][0]["variables"]
+    assert env.get("POWERTOOLS_TRACER_CAPTURE_RESPONSE") == "false"
+    app = (REPO / "services/api/src/vl_api/app.py").read_text(encoding="utf-8")
+    assert "capture_lambda_handler(capture_response=False)" in app
+    assert "capture_method" not in app or "capture_response=False" in app

@@ -123,12 +123,14 @@ resource "aws_lambda_function" "api" {
   timeout          = 10
 
   environment {
+    # POWERTOOLS_TRACER_CAPTURE_RESPONSE: traces never carry response bodies (tokens, exports), review Y1
     variables = {
-      TABLE_NAME              = var.table_name
-      USER_POOL_ID            = var.user_pool_id
-      CLIENT_ID               = var.client_id
-      POWERTOOLS_SERVICE_NAME = "vl-api"
-      POWERTOOLS_LOG_LEVEL    = "INFO"
+      TABLE_NAME                         = var.table_name
+      USER_POOL_ID                       = var.user_pool_id
+      CLIENT_ID                          = var.client_id
+      POWERTOOLS_SERVICE_NAME            = "vl-api"
+      POWERTOOLS_LOG_LEVEL               = "INFO"
+      POWERTOOLS_TRACER_CAPTURE_RESPONSE = "false"
     }
   }
 

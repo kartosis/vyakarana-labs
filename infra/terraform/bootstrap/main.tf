@@ -202,6 +202,7 @@ data "aws_iam_policy_document" "plan_no_user_data" {
       "cognito-idp:AdminListGroupsForUser", "cognito-idp:AdminListDevices", "cognito-idp:AdminListUserAuthEvents",
       "logs:GetLogEvents", "logs:FilterLogEvents", "logs:StartQuery", "logs:GetQueryResults", "logs:StartLiveTail",
       "logs:GetLogRecord",
+      "xray:BatchGetTraces", "xray:GetTraceSummaries", "xray:GetTraceGraph", "xray:GetTimeSeriesServiceStatistics",
     ]
     resources = ["*"]
   }
