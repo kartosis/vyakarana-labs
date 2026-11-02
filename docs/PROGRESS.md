@@ -334,6 +334,25 @@ Reviewed `git diff 3d1c082..d08eeab`; API 38, engine 342, IAM 41 tests passed fo
 | D8 | P2 | table overflows phones (no overflow-x outside .prose) | `.prakriya .table-wrap{overflow-x:auto}` | ✅ ebf69f9 |
 | D9–D12 | P3 | variants count derivations not forms; highlight spans whole joined chunk; dark contrast on highlight; role="list", lang on names, caption, aria-describedby, noscript, about.astro "will come", name spelling, debounce | as listed | ✅ ebf69f9 — except the IAST of it-markers (su~ shown as sum̐): kept, because m̐ is the site-wide IAST for candrabindu in lessons checked against LSK (e.g. kām̐skān); changing it only in the tool would make the two disagree |
 
+## 10d. Second exit review (independent agent, 2026-11-02, `d08eeab..9f0cbbb`) — triage
+
+All suites passed for it. X/D items closed except where a Y below says "partly".
+
+| Y | Sev | Finding | Fix | Status |
+|---|---|---|---|---|
+| Y1 | P2 | X-Ray records every handler response (Powertools default): refresh/access/ID tokens, exports; plan role (ReadOnlyAccess: `xray:BatchGetTraces`) can read them | `capture_response=False` + `POWERTOOLS_TRACER_CAPTURE_RESPONSE=false`; deny X-Ray trace reads to the plan role; tests | open |
+| Y2 | P2 | D1 regression in practice grading: HK answers with only an initial capital (`ka Aste`, `A`, `Atman`, `Adeza`) now read as IAST and marked wrong | grading accepts an answer if any Latin reading (detected, HK, IAST, SLP1) matches; engine `answerMatches` + tests; detection heuristic kept for the tool | open |
+| Y3 | P2 | owner stamping awaits a token refresh; when it fails (offline, 5xx, CDN 403) ratings never reach the draft, practice save throws 401, read marks drop | stamp synchronously from the stored token's `sub` (even expired) or the account id remembered at sign-in (`vl:account`, cleared with the flag) | open |
+| Y4 | P3 | `send()` never checks the entry's owner (only `flush` does); account mirror not owner-stamped | `post()` drops and refuses on owner mismatch; mirror stores its owner | open |
+| Y5 | P3 | tip-of-main check only in `gate`; re-running only `deploy` reuses old outputs → rollback | repeat the check as the deploy job's first step (W4) | open |
+| Y6 | P3 | `delete_user`/export list items with an eventually consistent Query | `ConsistentRead=True` | open |
+| Y7 | P3 | transactional profile creation: concurrent first requests → TransactionConflict → 500 | treat conflict/throttling like "created meanwhile": re-read, retry with backoff | open |
+| Y8 | P3 | double-click while a refresh is in flight rates a card twice → 400 drops the whole batch | re-entry guard in `rate`; draft de-duplicated by card (last rating wins) | open |
+| Y9 | P3 | expired token + quick mark/unmark: two refreshes resolve out of order → reversed sends | synchronous stamping (Y3) keeps click order | open |
+| Y10 | P3 | `.prakriya-status:empty{display:none}` removes the live region from the accessibility tree | collapse without display:none | open |
+| Y11 | P3 | X15 test injects before the profile exists (never reaches `_once`) | create the profile first; add TransactionConflict-retry test | open |
+| Y12 | P3 | check-published passes silently if /review/ is missing | fail when absent | open |
+
 ## 9. Session log (append-only)
 
 - **2026-10-29 · S1** — Read all 7 references (§4). Asked Round 1 (§2). User asked for persistent progress saving → created memory file `/areas/sanskrit-grammar-app.md` + this file + `CLAUDE.md` + `scripts/checkpoint.sh`. Next: Round 2 + repo name.
