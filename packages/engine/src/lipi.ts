@@ -295,3 +295,19 @@ export function normalizeAnswer(text: string, from: Scheme = detectScheme(text))
     .replace(/\s+/g, " ")
     .trim();
 }
+
+/**
+ * Practice grading (second exit review Y2): does the learner's answer match one of the accepted answers (written in
+ * IAST)? Spaces and the avagraha are optional (śivo 'rcyaḥ = śivo rcyaḥ = śivorcyaḥ). Latin input is accepted when any
+ * reading of it — the detected scheme, Harvard-Kyoto, IAST or SLP1 — matches, because detection alone cannot tell
+ * Harvard-Kyoto "Atman" (ātman) from a capitalised IAST word; detection stays a display aid.
+ */
+export function answerMatches(given: string, answers: readonly string[]): boolean {
+  const squash = (s: string) => s.replace(/[\s']+/g, "");
+  const typed = given.trim();
+  if (!typed) return false;
+  const want = new Set(answers.map((a) => squash(normalizeAnswer(a, "iast"))));
+  const detected = detectScheme(typed);
+  const readings: Scheme[] = detected === "deva" ? ["deva"] : [detected, "hk", "iast", "slp1"];
+  return readings.some((s) => want.has(squash(normalizeAnswer(typed, s))));
+}

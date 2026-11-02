@@ -1,6 +1,6 @@
 /** @jsxImportSource preact */
 import { useEffect, useId, useMemo, useRef, useState } from "preact/hooks";
-import { normalizeAnswer, detectScheme, transliterate } from "@vl/engine";
+import { answerMatches, detectScheme, transliterate } from "@vl/engine";
 import { getConfig } from "../lib/config";
 import { maybeSignedIn } from "../lib/auth";
 import { ApiError, tz } from "../lib/api";
@@ -31,12 +31,8 @@ function shuffle<T>(xs: T[]): T[] {
   return a;
 }
 
-/** Typed answers are compared as phonemes (SLP1), so Devanagari, IAST and Harvard-Kyoto all count. */
-const matches = (given: string, answers: string[]) => {
-  // spaces and the avagraha are optional in writing: śivo 'rcyaḥ = śivo rcyaḥ = śivorcyaḥ
-  const g = normalizeAnswer(given).replace(/[\s']+/g, "");
-  return answers.some((a) => normalizeAnswer(a, "iast").replace(/[\s']+/g, "") === g);
-};
+/** Typed answers are compared as phonemes, in any script the learner uses (engine answerMatches). */
+const matches = (given: string, answers: string[]) => answerMatches(given, answers);
 
 export default function PracticeSession({ lessonId, items, cards }: { lessonId: string; items: Item[]; cards: string[] }) {
   const uid = useId();
