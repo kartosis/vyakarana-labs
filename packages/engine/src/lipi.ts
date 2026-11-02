@@ -265,10 +265,22 @@ export function transliterate(text: string, from: Scheme, to: Scheme): string {
   return fromSlp1(toSlp1(text, from), to);
 }
 
-/** Heuristic scheme detection for free-form learner input. */
+/**
+ * Heuristic scheme detection for free-form learner input. Tools that act on the reading also show it and let the
+ * learner choose the scheme, because some inputs are ambiguous (SLP1 "SrI" is Harvard-Kyoto ṣrī).
+ *   1. Devanagari; 2. IAST diacritics;
+ *   3. only capitalised ordinary words ("Rama", "Agni"): IAST without diacritics, not Harvard-Kyoto's long or
+ *      retroflex letters (Derivation tool review D1);
+ *   4. letters only SLP1 uses — f F x X (vocalic r, l), w W q Q (retroflex stops), K C P B (aspirates), E O (ai, au),
+ *      Y (ñ) — mean SLP1;
+ *   5. Harvard-Kyoto capitals; 6. otherwise IAST.
+ */
 export function detectScheme(text: string): Scheme {
   if (/[ऀ-ॿ]/.test(text)) return "deva";
   if (/[āīūṛṝḷḹṅñṭḍṇśṣṃḥ]/i.test(text)) return "iast";
+  const words = text.split(/[^A-Za-z~']+/).filter(Boolean);
+  if (words.length && words.every((w) => /^[A-Z]?[a-z~']*$/.test(w)) && /[A-Z]/.test(text)) return "iast";
+  if (/[fFxXwWqQKCPBEOY]/.test(text)) return "slp1";
   if (/[AIURMHGJTDNSz]|lR/.test(text)) return "hk";
   return "iast";
 }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { detectScheme, normalizeAnswer, transliterate } from "../src/lipi.js";
+import { detectScheme, normalizeAnswer, toSlp1, transliterate } from "../src/lipi.js";
 
 describe("lipi: IAST ↔ SLP1 ↔ Devanagari", () => {
   const cases: Array<[iast: string, slp1: string, deva: string]> = [
@@ -64,5 +64,32 @@ describe("candrabindu on a semivowel; jihvāmūlīya and upadhmānīya", () => {
     expect(transliterate("कुप्वोः ᳵकᳶपौ च", "deva", "iast")).toBe("kupvoḥ ẖkaḫpau ca");
     expect(transliterate("नॄंᳶपाहि", "deva", "slp1")).toBe("nFMVpAhi");
     expect(transliterate("nFMVpAhi", "slp1", "deva")).toBe("नॄंᳶपाहि");
+  });
+});
+
+describe("scheme detection for learner input (Derivation tool review D1)", () => {
+  const read = (t: string) => toSlp1(t, detectScheme(t));
+  it.each([
+    ["Rama", "rama"], ["Agni", "agni"], ["Indra", "indra"], ["Sita", "sita"], ["Deva", "deva"], ["Hari", "hari"],
+    ["Tapas", "tapas"], ["Rama Lakshmana", "rama lakshmana"], ["Kṛṣṇa", "kfzRa"],
+  ])("a capitalised plain word is IAST: %s → %s", (typed, slp) => {
+    expect(detectScheme(typed)).toBe("iast");
+    expect(read(typed)).toBe(slp);
+  });
+  it.each([
+    ["kfzRa", "kfzRa"], ["nO", "nO"], ["vfkza", "vfkza"], ["BagavatI", "BagavatI"], ["devEH", "devEH"], ["agniH Kalu", "agniH Kalu"],
+  ])("letters only SLP1 uses (f x w q, capital aspirates, E O Y) mean SLP1: %s", (typed, slp) => {
+    expect(detectScheme(typed)).toBe("slp1");
+    expect(read(typed)).toBe(slp);
+  });
+  it.each([
+    ["rAmaH", "rAmaH"], ["kRSNa", "kfzRa"], ["zivaH", "SivaH"], ["lakSmI", "lakzmI"], ["gaGgA", "gaNgA"],
+  ])("Harvard-Kyoto is still read as Harvard-Kyoto: %s", (typed, slp) => {
+    expect(detectScheme(typed)).toBe("hk");
+    expect(read(typed)).toBe(slp);
+  });
+  it("plain lowercase stays IAST; a capital that is only initial cannot be told from IAST (Bagavati)", () => {
+    expect(detectScheme("rama")).toBe("iast");
+    expect(detectScheme("Bagavati")).toBe("iast");
   });
 });
