@@ -286,13 +286,60 @@ const reviewPosts = (posts) => posts.filter((p) => p[0] === '/api/v1/reviews').m
     await L.page.goto(BASE + '/course/varnamala/sounds/');
     await L.page.waitForTimeout(1200);
     const keys = await L.page.evaluate(() => [localStorage.getItem('vl:read'), localStorage.getItem('vl:read:account')]);
-    check("G signed in, the account's lessons are kept apart from guest marks", keys[0] === '["varnamala/script"]' && keys[1] === '["samjna/pratyahara"]', JSON.stringify(keys));
+    const mirror = JSON.parse(keys[1] || 'null');
+    check("G signed in, the account's lessons are kept apart from guest marks, stamped with the account", keys[0] === '["varnamala/script"]' &&
+      mirror?.owner === 'user-a' && JSON.stringify(mirror?.lessons) === '["samjna/pratyahara"]', JSON.stringify(keys));
     await L.page.goto(BASE + '/me/');
     await L.page.waitForSelector('.dash-stats', { timeout: 10000 }).catch(() => {});
     await L.page.click('button:has-text("Sign out")');
     await L.page.waitForTimeout(800);
     check("G signing out removes the account's lesson list", (await L.page.evaluate(() => localStorage.getItem('vl:read:account'))) === null);
     await close(L.ctx);
+  }
+
+  // H — second exit review Y3, Y4, Y8, Y9: the token expires mid-session and the refresh fails for a while
+  {
+    let refreshOk = false;
+    const expiring = new Function(`localStorage.setItem('vl:signedIn', '1'); localStorage.setItem('vl:account', 'user-a');
+      if (!sessionStorage.getItem('vl:h')) { sessionStorage.setItem('vl:h', '1');
+        sessionStorage.setItem('vl:session', JSON.stringify({ accessToken: ${JSON.stringify(jwt('user-a'))}, expiresAt: Date.now() + 2500 })); }`);
+    const api = (m, p, body) =>
+      p === '/api/v1/auth/refresh' ? (refreshOk ? [200, { accessToken: jwt('user-a'), expiresIn: 3600 }] : [503, { title: 'unavailable' }]) :
+      p === '/api/v1/reviews/due' ? [200, { cards: DUE.slice(0, 2) }] :
+      p === '/api/v1/reviews' ? [200, { reviewed: body.items.length, correct: 1, skipped: 0 }] : base(m, p);
+    const R = await context(b, api, expiring);
+    await R.page.goto(BASE + '/review/');
+    await R.page.waitForSelector('text=Show answer', { timeout: 10000 }).catch(() => {});
+    await R.page.waitForTimeout(3000); // the access token has expired; refreshing it fails
+    await R.page.click('text=Show answer');
+    await R.page.dblclick('.review-rate >> text=Good'); // Y8: a double click rates once
+    await R.page.click('text=Show answer');
+    await R.page.click('.review-rate >> text=Again');
+    await R.page.waitForTimeout(1200);
+    const kept = await R.page.evaluate(() => [JSON.parse(sessionStorage.getItem('vl:review-draft') || 'null'), JSON.parse(sessionStorage.getItem('vl:outbox') || '[]')]);
+    const keptItems = [...(kept[0]?.items ?? []), ...kept[1].flatMap((e) => e.body.items ?? [])];
+    check('H Y3 ratings made while the refresh fails are kept for this account', keptItems.map((i) => i.cardId).sort().join(',') === 'prat.ac,prat.hal' &&
+      kept[1].every((e) => e.owner === 'user-a'), JSON.stringify(kept).slice(0, 200));
+    check('H Y3 the page says they are kept, not saved', /kept in this tab/.test(await R.page.textContent('.review-note')), await R.page.textContent('.review-note'));
+    refreshOk = true;
+    await R.page.click('.review-note button:text-is("Try again")').catch(() => {});
+    await R.page.waitForSelector('text=2 reviewed', { timeout: 10000 }).catch(() => {});
+    const r = reviewPosts(R.posts);
+    check('H Y3 once the refresh works, both ratings are saved; Y8 each card once', r.length === 1 && r[0].items.map((i) => i.cardId).join(',') === 'prat.ac,prat.hal', JSON.stringify(r.map((x) => x.items)));
+    await close(R.ctx);
+
+    // Y4: a save is never sent with another account's token, even by "Try saving again"
+    refreshOk = false;
+    const P = await context(b, (m, p) => (p === '/api/v1/sessions' ? [503, { title: 'unavailable' }] : base(m, p)));
+    await practise(P.page);
+    await P.page.waitForSelector('button:text-is("Try saving again")', { timeout: 10000 }).catch(() => {});
+    await P.page.evaluate((t) => sessionStorage.setItem('vl:session', JSON.stringify({ accessToken: t, expiresAt: Date.now() + 3600e3 })), jwt('user-b'));
+    const before = sessionPosts(P.posts).length;
+    await P.page.click('button:text-is("Try saving again")').catch(() => {});
+    await P.page.waitForTimeout(1200);
+    check("H Y4 another account's token never carries this save", sessionPosts(P.posts).length === before && (await outbox(P.page)).length === 0,
+      `${sessionPosts(P.posts).length - before} sent, ${(await outbox(P.page)).length} left`);
+    await close(P.ctx);
   }
 
   console.log(log.join('\n'));

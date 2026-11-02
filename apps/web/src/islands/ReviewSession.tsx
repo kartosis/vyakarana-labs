@@ -1,7 +1,7 @@
 /** @jsxImportSource preact */
 import { useEffect, useRef, useState } from "preact/hooks";
 import { getConfig } from "../lib/config";
-import { accountSub, maybeSignedIn } from "../lib/auth";
+import { maybeSignedIn, ownerSub } from "../lib/auth";
 import { api, ApiError, tz } from "../lib/api";
 import { enqueue, flush, pending } from "../lib/outbox";
 import { REVIEW_DRAFT_KEY } from "../lib/keys";
@@ -37,12 +37,15 @@ const draft = {
   },
 };
 
+/** One rating per card (the last), so a repeated rating can never make the API refuse a whole batch (Y8). */
+const lastPerCard = (rs: Rating[]): Rating[] => [...new Map(rs.map((r) => [r.cardId, r])).values()];
+
 /** Turns this account's draft into outbox entries (each with its own request id), then sends everything waiting. */
 async function saveAll(): Promise<boolean> {
-  const owner = await accountSub();
+  const owner = ownerSub();
   if (!owner) return false;
-  const rated = draft.get(owner);
-  for (let k = 0; k < rated.length; k += BATCH) await enqueue("/api/v1/reviews", { items: rated.slice(k, k + BATCH), tz: tz() });
+  const rated = lastPerCard(draft.get(owner));
+  for (let k = 0; k < rated.length; k += BATCH) enqueue("/api/v1/reviews", { items: rated.slice(k, k + BATCH), tz: tz() });
   draft.set(owner, []);
   await flush("/api/v1/reviews");
   return (await pending("/api/v1/reviews")).length === 0;
@@ -56,6 +59,7 @@ export default function ReviewSession({ cards }: { cards: Record<string, Card> }
   const [ratings, setRatings] = useState<Rating[]>([]);
   const [msg, setMsg] = useState("");
   const shownAt = useRef(0);
+  const rated = useRef(-1); // index of the card last rated
   const focusRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -79,11 +83,14 @@ export default function ReviewSession({ cards }: { cards: Record<string, Card> }
   useEffect(() => focusRef.current?.focus(), [state, i]);
 
   async function rate(value: number) {
+    if (rated.current === i) return; // a second click on the same card (Y8)
+    rated.current = i;
     const ms = Math.round(performance.now() - shownAt.current);
     const next = [...ratings, { cardId: queue[i]!.cardId, rating: value, ms }];
     setRatings(next);
-    const owner = await accountSub();
-    if (owner) draft.set(owner, [...draft.get(owner), next[next.length - 1]!]);
+    // kept at once, stamped with the account without any network call (Y3)
+    const owner = ownerSub();
+    if (owner) draft.set(owner, lastPerCard([...draft.get(owner), next[next.length - 1]!]));
     if (i + 1 < queue.length) {
       setI(i + 1);
       setState("front");

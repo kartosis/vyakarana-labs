@@ -448,7 +448,8 @@
     .prakriya-in { grid-template-columns: 1fr; }
   }
   .prakriya-status { margin: 0; color: var(--s-color-text-soft); font-style: italic; }
-  .prakriya-status:empty { display: none; }
+  /* empty: out of the layout but still in the accessibility tree, so its next message is announced (Y10) */
+  .prakriya-status:empty { position: absolute; }
   /* on phones the table scrolls by itself instead of the page (review D8) */
   .prakriya .table-wrap { overflow-x: auto; }
   .prakriya-table { inline-size: 100%; border-collapse: collapse; }

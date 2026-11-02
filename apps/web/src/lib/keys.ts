@@ -8,11 +8,13 @@ export const OUTBOX_KEY = "vl:outbox"; // sessionStorage: saves waiting for the 
 export const REVIEW_DRAFT_KEY = "vl:review-draft"; // sessionStorage: ratings not yet handed to the outbox
 export const READ_ACCOUNT_KEY = "vl:read:account"; // localStorage: the account's lessons, mirrored for display
 export const READ_GUEST_KEY = "vl:read"; // localStorage: "Mark as read" while signed out
+export const ACCOUNT_KEY = "vl:account"; // localStorage: the signed-in account's id (token sub), for stamping saves
 
 export function clearAccountData(): void {
   try {
     sessionStorage.removeItem(OUTBOX_KEY);
     sessionStorage.removeItem(REVIEW_DRAFT_KEY);
     localStorage.removeItem(READ_ACCOUNT_KEY);
+    localStorage.removeItem(ACCOUNT_KEY);
   } catch {}
 }

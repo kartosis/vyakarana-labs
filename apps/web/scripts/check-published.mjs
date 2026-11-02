@@ -30,7 +30,10 @@ for (const m of course.modules.filter((m) => m.status !== "open")) {
 }
 // review cards of draft modules (data/exercises/<module>/*.yaml) must not reach /review/
 const exercisesDir = join(root, "data/exercises");
-const review = existsSync(join(dist, "review/index.html")) ? readFileSync(join(dist, "review/index.html"), "utf8") : "";
+// the review page must exist, or the check below would pass without looking at anything (second exit review Y12)
+const reviewPath = join(dist, "review/index.html");
+if (!existsSync(reviewPath)) problems.push("review page not found at review/index.html: cannot check its cards");
+const review = existsSync(reviewPath) ? readFileSync(reviewPath, "utf8") : "";
 let draftCards = 0;
 for (const m of course.modules.filter((m) => m.status !== "open")) {
   const dir = join(exercisesDir, m.id);

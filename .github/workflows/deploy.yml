@@ -71,6 +71,15 @@ jobs:
       TF_VAR_cf_beacon_token: ${{ vars.CF_BEACON_TOKEN }}
       TF_DIR: infra/terraform/envs/prod
     steps:
+      # Re-running only this job reuses gate's saved outputs, so check again that its commit is still the tip of
+      # main (second exit review Y5): never roll production back.
+      - name: Still the tip of main
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SHA: ${{ needs.gate.outputs.sha }}
+        run: |
+          tip=$(gh api "repos/$GITHUB_REPOSITORY/commits/main" -q .sha)
+          if [ "$tip" != "$SHA" ]; then echo "::error title=deploy gate::$SHA is no longer the tip of main ($tip); not deploying"; exit 1; fi
       - uses: actions/checkout@v4
         with:
           ref: ${{ needs.gate.outputs.sha }}

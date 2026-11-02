@@ -7,7 +7,7 @@
  *   - a localStorage flag remembers that a cookie exists, so guests never trigger refresh calls.
  */
 import { getConfig } from "./config";
-import { clearAccountData } from "./keys";
+import { ACCOUNT_KEY, clearAccountData } from "./keys";
 
 const SESSION_KEY = "vl:session";
 const FLAG_KEY = "vl:signedIn";
@@ -206,17 +206,27 @@ export async function confirmCode(p: Pending, code: string): Promise<void> {
   if (!a) throw new AuthError("Unexpected", "Sign-in did not finish. Ask for a new code.");
   store.set({ accessToken: a.AccessToken, expiresAt: Date.now() + (a.ExpiresIn - 60) * 1000 });
   store.flag(true);
+  rememberAccount(a.AccessToken);
   if (a.RefreshToken) {
     const { api } = await import("./api");
     await api("/api/v1/auth/session", { method: "POST", body: { refreshToken: a.RefreshToken } });
   }
 }
 
-/** A valid access token, refreshing through the HttpOnly cookie when needed. */
+/** A valid access token, refreshing through the HttpOnly cookie when needed (one refresh at a time). */
 export async function accessToken(): Promise<string | null> {
   const s = store.get();
   if (s && s.expiresAt > Date.now()) return s.accessToken;
   if (!store.flag()) return null;
+  // concurrent callers share one refresh, so they cannot resolve out of order (second exit review Y9)
+  refreshing ??= refresh().finally(() => {
+    refreshing = null;
+  });
+  return refreshing;
+}
+let refreshing: Promise<string | null> | null = null;
+
+async function refresh(): Promise<string | null> {
   const { signedBody } = await import("./api");
   let res: Response;
   try {
@@ -236,7 +246,41 @@ export async function accessToken(): Promise<string | null> {
   }
   const t = (await res.json()) as { accessToken: string; expiresIn: number };
   store.set({ accessToken: t.accessToken, expiresAt: Date.now() + (t.expiresIn - 60) * 1000 });
+  rememberAccount(t.accessToken);
   return t.accessToken;
+}
+
+/** The `sub` claim of an access token (only read, never trusted: the API verifies tokens); "?" if not a JWT. */
+function subOf(token: string): string {
+  try {
+    const payload = token.split(".")[1]!.replace(/-/g, "+").replace(/_/g, "/");
+    const sub = (JSON.parse(atob(payload)) as { sub?: unknown }).sub;
+    return typeof sub === "string" && sub ? sub : "?";
+  } catch {
+    return "?"; // not a JWT (only in stubbed tests): one unknown owner, still never mixed with a real account
+  }
+}
+
+function rememberAccount(token: string): void {
+  try {
+    localStorage.setItem(ACCOUNT_KEY, subOf(token));
+  } catch {}
+}
+
+/**
+ * The signed-in account's id, without any network call: from this tab's access token even if expired, else the
+ * id remembered at sign-in. Used to stamp saves the moment they are made, so a failing refresh can never lose them
+ * (second exit review Y3); sending still needs a token of the same account (`accountSub`). Null when signed out.
+ */
+export function ownerSub(): string | null {
+  if (!store.flag()) return null;
+  const s = store.get();
+  if (s?.accessToken) return subOf(s.accessToken);
+  try {
+    return localStorage.getItem(ACCOUNT_KEY);
+  } catch {
+    return null;
+  }
 }
 
 export async function signOut(): Promise<void> {
@@ -246,15 +290,8 @@ export async function signOut(): Promise<void> {
   store.flag(false); // also clears this account's outbox, review draft and lesson list
 }
 
-/** The signed-in account's id (the access token's `sub`), refreshing the token when needed; null when signed out. */
+/** The account of a usable access token (refreshing it when needed); null when signed out or unreachable. */
 export async function accountSub(): Promise<string | null> {
   const token = await accessToken();
-  if (!token) return null;
-  try {
-    const payload = token.split(".")[1]!.replace(/-/g, "+").replace(/_/g, "/");
-    const sub = (JSON.parse(atob(payload)) as { sub?: unknown }).sub;
-    return typeof sub === "string" && sub ? sub : "?";
-  } catch {
-    return "?"; // not a JWT (only in stubbed tests): one unknown owner, still never mixed with a real account
-  }
+  return token ? subOf(token) : null;
 }

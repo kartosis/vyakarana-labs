@@ -100,7 +100,7 @@ export default function PracticeSession({ lessonId, items, cards }: { lessonId: 
     setPhase("saving");
     const completed = pct >= PASS;
     try {
-      saving.current ??= await enqueue("/api/v1/sessions", {
+      saving.current ??= enqueue("/api/v1/sessions", {
         lessonId,
         attempts,
         completed,

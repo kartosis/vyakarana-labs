@@ -62,6 +62,8 @@ const reading = (page) => page.$eval('.prakriya-reading', (e) => e.textContent.r
         check(`cell ${k} = ${v}`, (rows[r]?.[c] ?? '').split(' / ').includes(v), rows[r]?.[c]);
       }
     }
+    // Y10: the status region stays in the accessibility tree while empty, so its next message is announced
+    check('Y10 the empty status region is not display:none', (await page.$eval('.prakriya-status[role=status]', (e) => getComputedStyle(e).display)) !== 'none');
     check('D1 the reading of the stem is shown', /Declining.*rāma.*\(read as IAST\)/.test(await reading(page)), await reading(page));
 
     // D5: one tab stop in the table, arrow keys move, Enter/click announces the derivation

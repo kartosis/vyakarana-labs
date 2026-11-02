@@ -70,6 +70,10 @@ else {
       fail("deploy.yml", "W4 job `gate` must deploy only the current tip of main (re-running an old ci run must not roll back)");
     if (![].concat(job.needs ?? []).includes("gate") || !/needs\.gate\.outputs\.go\s*==\s*'true'/.test(String(job.if ?? "")))
       fail("deploy.yml", "W4 job `deploy` must need `gate` and run only if `needs.gate.outputs.go == 'true'`");
+    // re-running only `deploy` reuses gate's old outputs, so deploy repeats the tip check itself (second exit review Y5)
+    const first = (job.steps ?? [])[0];
+    if (!/commits\/main/.test(String(first?.run ?? "")) || !/needs\.gate\.outputs\.sha|\$SHA/.test(JSON.stringify(first ?? {})))
+      fail("deploy.yml", "W4 job `deploy` must first re-check that gate's commit is still the tip of main");
     const checkout = (job.steps ?? []).find((st) => String(st.uses ?? "").startsWith("actions/checkout@"));
     if (!/needs\.gate\.outputs\.sha/.test(String(checkout?.with?.ref ?? "")))
       fail("deploy.yml", "W4 job `deploy` must check out `needs.gate.outputs.sha` (the commit CI tested)");

@@ -94,24 +94,27 @@ const lessonKey = `${entry.data.module}/${slug}`;
   // mark/unmark is sent in order (X12); the page shows the account's lessons plus marks still waiting.
   // A lesson that has been practised or completed always counts as read, and cannot be unmarked.
   import { getConfig } from "../../../lib/config";
-  import { maybeSignedIn } from "../../../lib/auth";
+  import { maybeSignedIn, ownerSub } from "../../../lib/auth";
   import { api } from "../../../lib/api";
   import { enqueue, flush, pending, send } from "../../../lib/outbox";
   import { READ_ACCOUNT_KEY, READ_GUEST_KEY } from "../../../lib/keys";
 
   const READ_PATH = "/api/v1/progress/read";
   let signedIn = maybeSignedIn(); // confirmed against the site config below
-  const key = () => (signedIn ? READ_ACCOUNT_KEY : READ_GUEST_KEY);
+  // guest marks: a plain list; the account's mirror: { owner, lessons }, shown only to that account (Y4)
   const read = (): string[] => {
     try {
-      return JSON.parse(localStorage.getItem(key()) ?? "[]");
+      if (!signedIn) return JSON.parse(localStorage.getItem(READ_GUEST_KEY) ?? "[]");
+      const m = JSON.parse(localStorage.getItem(READ_ACCOUNT_KEY) ?? "null") as { owner?: string; lessons?: string[] } | null;
+      return m && m.owner === ownerSub() && Array.isArray(m.lessons) ? m.lessons : [];
     } catch {
       return [];
     }
   };
   const write = (v: string[]) => {
     try {
-      localStorage.setItem(key(), JSON.stringify(v));
+      if (signedIn) localStorage.setItem(READ_ACCOUNT_KEY, JSON.stringify({ owner: ownerSub(), lessons: v }));
+      else localStorage.setItem(READ_GUEST_KEY, JSON.stringify(v));
     } catch {}
   };
   let locked = new Set<string>(); // practised or completed in the account
@@ -155,7 +158,11 @@ const lessonKey = `${entry.data.module}/${slug}`;
       else done.delete(k);
       write([...done]);
       paint();
-      if (signedIn) enqueue(READ_PATH, { lessonId: k, read: on }, k).then(send).catch(() => {}); // kept and retried
+      if (signedIn) {
+        try {
+          send(enqueue(READ_PATH, { lessonId: k, read: on }, k)).catch(() => {}); // kept, retried, in click order
+        } catch {} // signed out meanwhile
+      }
     }),
   );
   paint();
